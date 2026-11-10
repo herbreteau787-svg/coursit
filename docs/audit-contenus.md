@@ -6,7 +6,7 @@ Suivi de l'intervention « enrichissement du contenu » : sources, manques, modi
 
 - Plateforme unique : `plateforme_de_r_vision_tssr_ais_ccna.html`
 - Sauvegarde AVANT modifications : `sauvegarde_plateforme_2026-11-09.html`
-- Serveur de test : `python -m http.server 8741 --directory "C:\Users\Léo\Documents\Site-Cours IT"`
+- Serveur de test : `python -m http.server 8741 --directory "C:\Users\<user>\Documents\Site-Cours IT"`
 - Adresse : http://localhost:8741/plateforme_de_r_vision_tssr_ais_ccna.html
 - Les deux dossiers sources n'ont pas été modifiés ; aucune seconde plateforme créée.
 
