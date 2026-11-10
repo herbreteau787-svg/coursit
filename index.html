@@ -464,6 +464,24 @@
                         { h: "PowerShell pour aller vite", t: "Une fois le module ActiveDirectory installé (via les outils RSAT), Get-ADUser claire.martin lit un compte, New-ADUser le crée, Set-ADUser le modifie. La console graphique reste très bien pour apprendre ; PowerShell démultiplie quand il y a des dizaines de comptes (renvoi au CP6 pour les scripts)." }
                     ]}
                 ],
+                guiSteps: [
+                    { title: "Ouvrir Active Directory Users and Computers (ADUC)", action: "Cliquez sur Demarrer - Outils d'administration Windows - Active Directory Users and Computers. Ou tapez dsa.msc dans la recherche.", observation: "Une fenetre s'ouvre avec un arbre a gauche (lab.lan) et un panneau vide a droite. Si le DC n'est pas promu, l'outil sera absent - terminez d'abord le labo TSSR 01.", mockup: 'mockup-aduc' },
+                    { title: "Creer une unite d'organisation (OU)", action: "Clic droit sur lab.lan - New - Organizational Unit. Tapez Compta dans Name, laissez Protect container coche, cliquez OK.", observation: "La nouvelle UO Compta apparait dans l'arborescence sous lab.lan avec une icone de dossier.", mockup: 'mockup-aduc' },
+                    { title: "Creer un utilisateur dans l'OU Compta", action: "Clic droit sur Compta - New - User. First Name = Claire, Last Name = Martin, User logon name = claire.martin. Next. Mot de passe : Azerty1*, cochez User must change password at next logon. Next, Finish.", observation: "Le compte claire.martin apparait dans le panneau droit de l'OU Compta avec une icone utilisateur.", mockup: 'mockup-aduc' },
+                    { title: "Creer un groupe de securite et ajouter le compte", action: "Clic droit sur Compta - New - Group. Name = GG-Compta, Scope = Global, Type = Security. OK. Double-cliquez sur GG-Compta - Members - Add - claire.martin - Check Names - OK - Apply.", observation: "Le compte claire.martin apparait dans la liste des membres de GG-Compta." },
+                    { title: "Verifier en PowerShell (methode 2)", action: "Ouvrez PowerShell en admin et executez les commandes ci-dessous. Comparez avec ce que vous voyez dans ADUC.", observation: "Get-ADUser retourne le compte cree, Get-ADGroupMember liste les membres du groupe - les memes donnees que la console graphique.", cli: [
+                        "Import-Module ActiveDirectory",
+                        "Get-ADUser claire.martin | Select Name, SamAccountName, Enabled",
+                        "Get-ADGroupMember GG-Compta | Select Name, ObjectClass",
+                        "Get-ADOrganizationalUnit -Filter {Name -eq 'Compta'} | Select DistinguishedName"
+                    ] },
+                    { title: "Ouvrir la GPMC et creer une GPO", action: "Demarrer - tapez gpmc.msc - validez. Dans Forest - Domains - lab.lan, clic droit - Create a GPO in this domain, and Link it here... Nommez-la USER-MotDePasse-Politique. OK.", observation: "La GPO apparait liee au domaine lab.lan. C'est un conteneur de reglages, encore vide.", mockup: 'mockup-gpmc' },
+                    { title: "Editer la GPO et configurer un parametre", action: "Clic droit sur la GPO - Edit. Computer Configuration - Policies - Windows Settings - Security Settings - Account Policies - Password Policy. Double-cliquez Minimum password length, tapez 12, OK. Fermez.", observation: "Le parametre est enregistre dans la GPO. Sur les postes cibles, il s'appliquera apres gpupdate /force." },
+                    { title: "Verifier l'application avec gpresult", action: "Sur un poste client, tapez : gpupdate /force puis gpresult /R. Cherchez USER-MotDePasse-Politique dans les Applied Group Policy Objects.", observation: "gpresult /R liste les GPO appliquees. Si la GPO est absente, verifiez le lien, le Security Filtering et l'OU du poste.", cli: [
+                        "gpupdate /force",
+                        "gpresult /R | findstr /i MotDePasse"
+                    ] }
+                ],
                 deepDive: [
                     { t: "Méthodologie terrain — intégrer un nouveau collaborateur en moins de 10 minutes", p: [
                         "En entreprise, l'arrivée d'un collaborateur suit une procédure documentée (un runbook). L'objectif : que la personne ouvre sa session, trouve ses lecteurs réseau et son imprimante sans appeler le support.",
@@ -532,6 +550,38 @@
                         { h: "Se connecter à distance avec SSH", t: "ssh alice@10.0.0.5 ouvre une session chiffrée sur le serveur. Au-delà du mot de passe, l'usage professionnel repose sur une paire de clés : la clé publique est posée sur le serveur, la clé privée reste sur votre machine, gardée secrète. Plus pratique à l'usage et plus solide face aux tentatives d'attaque par mot de passe." },
                         { h: "Lire les journaux", t: "journalctl -u ssh affiche les messages du service SSH (ajoutez -f pour suivre en direct) ; les applications écrivent très souvent dans /var/log. Les journaux sont le premier réflexe du diagnostic : ils disent ce qui s'est réellement passé, quand et pourquoi." }
                     ]}
+                ],
+                guiSteps: [
+                    { title: "Ouvrir un terminal Linux et se reperer", action: "Connectez-vous en SSH (ou ouvrez un terminal sur votre VM). Le prompt admin@SRV-LNX01:~$ indique votre identite et votre emplacement.", observation: "Le prompt vert confirme votre compte (admin) et le serveur (SRV-LNX01). Le tilde (~) = votre dossier personnel /home/admin.", mockup: 'mockup-linux-terminal' },
+                    { title: "Explorer l'arborescence", action: "Tapez les commandes ci-dessous pour vous deplacer et lire le contenu des repertoires systeme. Chaque commande a un role precis : pwd indique ou vous etes, ls liste le contenu, cd se deplace.", observation: "/etc contient les fichiers de configuration, /var les donnees variables (journaux), /home les dossiers utilisateurs.", cli: [
+                        "pwd",
+                        "ls -la /etc/ | head -n 10",
+                        "ls /var/log/",
+                        "cd /home/admin && pwd"
+                    ] },
+                    { title: "Verifier l'etat du systeme", action: "Tapez ces commandes pour evaluer le disque, la memoire et les services. C'est le premier reflexe de tout administrateur Linux.", observation: "df -h montre l'espace disque par partition. systemctl --failed liste les services en echec (idealement : 0).", cli: [
+                        "df -h | grep -v tmpfs",
+                        "free -h",
+                        "systemctl --failed"
+                    ], mockup: 'mockup-linux-terminal' },
+                    { title: "Gerer un service avec systemctl", action: "Installez et demarrez le serveur SSH. Chaque sous-commande a un role : status = etat, enable = au demarrage, start = maintenant.", observation: "systemctl status ssh affiche active (running) en vert si le service tourne correctement.", cli: [
+                        "sudo apt update && sudo apt install openssh-server -y",
+                        "sudo systemctl enable --now ssh",
+                        "sudo systemctl status ssh"
+                    ] },
+                    { title: "Lire les journaux avec journalctl", action: "journalctl est le journal centralise de systemd. L'option -u filtre par service, -n limite le nombre de lignes, -f suit en temps reel (comme tail -f).", observation: "Les messages du service SSH apparaissent, avec date, heure, niveau de gravite.", cli: [
+                        "journalctl -u ssh -n 10 --no-pager",
+                        "journalctl --since today --no-pager | tail -n 15"
+                    ] },
+                    { title: "Verifier les ports en ecoute", action: "ss -tulpn liste les ports ouverts par les services. C'est le premier outil d'audit reseau sous Linux : t=tcp, u=udp, l=listen, p=process, n=numeric.", observation: "ssh ecoute sur le port 22, postgresql sur 5432, etc. Si un port attendu est absent, le service correspondant ne tourne pas.", cli: [
+                        "ss -tulpn"
+                    ] },
+                    { title: "Creer un fichier et modifier les droits", action: "Creer un script et lui donner les droits d'execution (chmod +x). La commande ls -l affiche les droits sous forme rwxrwxrwx.", observation: "ls -l script.sh montre -rwxr--r-- (755) apres chmod 755. Le x indique que le fichier est executable.", cli: [
+                        "echo '#!/bin/bash' > script.sh",
+                        "echo 'echo Bonjour' >> script.sh",
+                        "chmod 755 script.sh",
+                        "ls -l script.sh && ./script.sh"
+                    ] }
                 ],
                 deepDive: [
                     { t: "Méthodologie terrain — prendre la main sur un serveur et diagnostiquer", p: [
@@ -3429,6 +3479,223 @@
                 );
             }
 
+            // --- MAQUETTES D'INTERFACES PROFESSIONNELLES (réorientation pédagogique : GUI d'abord) ---
+            if (type === 'mockup-aduc') {
+                return (
+                    <div className="w-full bg-slate-900 text-white p-4 rounded-lg overflow-x-auto">
+                        <h4 className="text-xs uppercase font-bold text-sky-400 mb-1">Figure : Active Directory Users and Computers (ADUC)</h4>
+                        <p className="text-[11px] text-slate-300 mb-2"><strong className="text-amber-300">Ce que vous voyez :</strong> à gauche l'arborescence du domaine (dossiers = unités d'organisation), à droite les objets contenus dans l'élément sélectionné. Ouvrez-la via <em>Démarrer → Outils d'administration → Active Directory Users and Computers</em> ou <code>dsa.msc</code>.</p>
+                        <svg viewBox="0 0 640 320" role="img" aria-label="Maquette ADUC : arborescence à gauche avec Domaine, UO, Users ; détails à droite" className="w-full h-auto text-xs rounded border border-slate-700">
+                            <rect x="0" y="0" width="640" height="28" fill="#1e3a5f" />
+                            <text x="8" y="18" fill="white" fontSize="11" fontWeight="bold">Active Directory Users and Computers</text>
+                            <rect x="0" y="28" width="640" height="24" fill="#2d4a6f" />
+                            <text x="8" y="44" fill="#a0c0e0" fontSize="10">Fichier  Action  Affichage  Aide</text>
+                            <rect x="0" y="52" width="240" height="268" fill="#1a1a2e" stroke="#333" />
+                            <text x="8" y="68" fill="#e0a020" fontSize="10" fontWeight="bold">▸ lab.lan</text>
+                            <text x="24" y="84" fill="#60c060" fontSize="10">📁 Builtin</text>
+                            <text x="24" y="100" fill="#60c060" fontSize="10">📁 Computers</text>
+                            <rect x="18" y="106" width="210" height="16" fill="#2a4a6e" rx="2" />
+                            <text x="24" y="118" fill="#60c060" fontSize="10">📁 Domain Controllers</text>
+                            <text x="24" y="136" fill="#60c060" fontSize="10">📁 Users</text>
+                            <text x="24" y="152" fill="#60c060" fontSize="10">📁 Compta ◄ UO créée par vous</text>
+                            <text x="24" y="168" fill="#60c060" fontSize="10">📁 Direction</text>
+                            <text x="24" y="184" fill="#60c060" fontSize="10">📁 Informatique</text>
+                            <rect x="240" y="52" width="400" height="268" fill="#0d0d1a" stroke="#333" />
+                            <text x="250" y="70" fill="#a0c0e0" fontSize="10" fontWeight="bold">Objets dans Compta :</text>
+                            <text x="250" y="88" fill="#c0d0e0" fontSize="10">👤 claire.martin        Utilisateur</text>
+                            <text x="250" y="104" fill="#c0d0e0" fontSize="10">👤 jean.dupont         Utilisateur</text>
+                            <text x="250" y="120" fill="#c0d0e0" fontSize="10">👥 GG-Compta           Groupe de sécurité</text>
+                            <text x="250" y="136" fill="#c0d0e0" fontSize="10">👤 SRV-PAIE$           Ordinateur</text>
+                            <text x="250" y="160" fill="#8090a0" fontSize="9">Double-cliquez sur un objet pour voir ses propriétés</text>
+                            <text x="250" y="176" fill="#8090a0" fontSize="9">(onglets : Général, Compte, Membre de, ...)</text>
+                            <rect x="250" y="220" width="380" height="80" fill="#1a2a1e" stroke="#2a5a3e" rx="4" />
+                            <text x="260" y="238" fill="#60e080" fontSize="10" fontWeight="bold">💡 Ce qu'il faut observer :</text>
+                            <text x="260" y="254" fill="#b0d0b0" fontSize="10">- L'arborescence reflète votre organisation (par service)</text>
+                            <text x="260" y="268" fill="#b0d0b0" fontSize="10">- Les icônes : 👤 utilisateur, 👥 groupe, 📁 UO, 🖥️ ordinateur</text>
+                            <text x="260" y="282" fill="#b0d0b0" fontSize="10">- Clic droit sur une UO → New → User pour créer un compte</text>
+                        </svg>
+                    </div>
+                );
+            }
+
+            if (type === 'mockup-servermanager') {
+                return (
+                    <div className="w-full bg-slate-900 text-white p-4 rounded-lg overflow-x-auto">
+                        <h4 className="text-xs uppercase font-bold text-sky-400 mb-1">Figure : Server Manager (Gestionnaire de serveur)</h4>
+                        <p className="text-[11px] text-slate-300 mb-2"><strong className="text-amber-300">Ce que vous voyez :</strong> le point d'entrée de Windows Server pour installer des rôles (AD DS, DHCP, DNS, Hyper-V...), gérer les services et voir l'état du serveur. Ouvrez-le via <em>Démarrer → Gestionnaire de serveur</em> (il s'ouvre automatiquement au démarrage).</p>
+                        <svg viewBox="0 0 640 300" role="img" aria-label="Maquette Server Manager : tableau de bord avec vignettes rôles et fonctionnalités" className="w-full h-auto text-xs rounded border border-slate-700">
+                            <rect x="0" y="0" width="640" height="28" fill="#1e3a5f" />
+                            <text x="8" y="18" fill="white" fontSize="11" fontWeight="bold">Server Manager — Gestionnaire de serveur</text>
+                            <rect x="0" y="28" width="180" height="272" fill="#1a1a2e" stroke="#333" />
+                            <text x="8" y="48" fill="#e0a020" fontSize="10" fontWeight="bold">Tableau de bord</text>
+                            <text x="8" y="64" fill="#a0c0e0" fontSize="10">Serveur local (2)</text>
+                            <text x="8" y="80" fill="#a0c0e0" fontSize="10">Tous les serveurs</text>
+                            <text x="8" y="96" fill="#a0c0e0" fontSize="10">File and Storage</text>
+                            <text x="8" y="112" fill="#a0c0e0" fontSize="10">DNS</text>
+                            <text x="8" y="128" fill="#a0c0e0" fontSize="10">Active Directory (1)</text>
+                            <text x="8" y="152" fill="#e08030" fontSize="10" fontWeight="bold">Configure this server:</text>
+                            <text x="8" y="168" fill="#c0d0e0" fontSize="10">Add roles and features</text>
+                            <rect x="180" y="28" width="460" height="80" fill="#0d0d1a" stroke="#333" />
+                            <text x="190" y="48" fill="#e0a020" fontSize="10" fontWeight="bold">PROPERTIES</text>
+                            <text x="190" y="64" fill="#c0d0e0" fontSize="10">Computer Name: SRV-DC01    Domain: lab.lan</text>
+                            <text x="190" y="80" fill="#c0d0e0" fontSize="10">Workgroup: Workgroup     NIC: Ethernet (172.16.10.10)</text>
+                            <rect x="180" y="108" width="460" height="90" fill="#0d0d1a" stroke="#333" />
+                            <text x="190" y="128" fill="#e0a020" fontSize="10" fontWeight="bold">ROLES AND FEATURES</text>
+                            <text x="190" y="144" fill="#60e060" fontSize="10">✓ Active Directory Domain Services</text>
+                            <text x="190" y="160" fill="#60e060" fontSize="10">✓ DNS Server</text>
+                            <text x="190" y="176" fill="#8090a0" fontSize="10">+ Add roles and features (pour installer DHCP, Hyper-V...)</text>
+                            <rect x="180" y="198" width="460" height="60" fill="#1a2a1e" stroke="#2a5a3e" rx="4" />
+                            <text x="190" y="216" fill="#60e080" fontSize="10" fontWeight="bold">💡 Ce qu'il faut observer :</text>
+                            <text x="190" y="232" fill="#b0d0b0" fontSize="10">- Le nom du serveur et le domaine en haut (vous confirmez que vous êtes sur le bon serveur)</text>
+                            <text x="190" y="248" fill="#b0d0b0" fontSize="10">- "Add roles and features" est l'assistant qui installe AD DS, DHCP, Hyper-V...</text>
+                        </svg>
+                    </div>
+                );
+            }
+
+            if (type === 'mockup-gpmc') {
+                return (
+                    <div className="w-full bg-slate-900 text-white p-4 rounded-lg overflow-x-auto">
+                        <h4 className="text-xs uppercase font-bold text-sky-400 mb-1">Figure : Group Policy Management Console (GPMC)</h4>
+                        <p className="text-[11px] text-slate-300 mb-2"><strong className="text-amber-300">Ce que vous voyez :</strong> l'arborescence du domaine avec les UO, et les GPO liées à chaque niveau. Ouvrez-la via <code>gpmc.msc</code>. Pour éditer une GPO : clic droit → Edit, ce qui ouvre l'éditeur de stratégies.</p>
+                        <svg viewBox="0 0 640 300" role="img" aria-label="Maquette GPMC : arborescence du domaine, UO avec GPO liées, éditeur" className="w-full h-auto text-xs rounded border border-slate-700">
+                            <rect x="0" y="0" width="640" height="28" fill="#1e3a5f" />
+                            <text x="8" y="18" fill="white" fontSize="11" fontWeight="bold">Group Policy Management</text>
+                            <rect x="0" y="28" width="280" height="272" fill="#1a1a2e" stroke="#333" />
+                            <text x="8" y="48" fill="#e0a020" fontSize="10" fontWeight="bold">▸ Forest: lab.lan</text>
+                            <text x="20" y="64" fill="#a0c0e0" fontSize="10">▸ Domains</text>
+                            <text x="32" y="80" fill="#a0c0e0" fontSize="10">▸ lab.lan</text>
+                            <rect x="36" y="86" width="230" height="16" fill="#2a4a6e" rx="2" />
+                            <text x="42" y="98" fill="#c0d0e0" fontSize="10">Default Domain Policy (lié au domaine)</text>
+                            <text x="32" y="116" fill="#60c060" fontSize="10">📁 Compta</text>
+                            <text x="44" y="132" fill="#8090a0" fontSize="9">— No GPO linked yet</text>
+                            <text x="32" y="150" fill="#60c060" fontSize="10">📁 Informatique</text>
+                            <text x="44" y="166" fill="#80c0e0" fontSize="9">— COMPUTER-WSUS-Config</text>
+                            <rect x="280" y="28" width="360" height="272" fill="#0d0d1a" stroke="#333" />
+                            <text x="290" y="48" fill="#e0a020" fontSize="10" fontWeight="bold">Linked Group Policy Objects</text>
+                            <text x="290" y="66" fill="#c0d0e0" fontSize="10">Default Domain Policy    Enforced: No</text>
+                            <text x="290" y="84" fill="#c0d0e0" fontSize="10">Link Order: 1</text>
+                            <rect x="290" y="100" width="340" height="70" fill="#1a2a1e" stroke="#2a5a3e" rx="4" />
+                            <text x="300" y="118" fill="#60e080" fontSize="10" fontWeight="bold">💡 Ce qu'il faut observer :</text>
+                            <text x="300" y="134" fill="#b0d0b0" fontSize="10">- Les GPO liées à chaque UO apparaissent ici</text>
+                            <text x="300" y="150" fill="#b0d0b0" fontSize="10">- Clic droit sur une UO → "Create a GPO in this domain"</text>
+                            <text x="300" y="164" fill="#b0d0b0" fontSize="10">- Clic droit sur la GPO → "Edit" ouvre l'éditeur de stratégies</text>
+                            <rect x="290" y="180" width="340" height="80" fill="#1a1a3e" stroke="#333" rx="4" />
+                            <text x="300" y="198" fill="#8090e0" fontSize="10" fontWeight="bold">⚠️ Ordre d'application (LSDOU) :</text>
+                            <text x="300" y="214" fill="#b0b0d0" fontSize="10">1. Local (poste)  2. Site  3. Domaine  4. OU</text>
+                            <text x="300" y="230" fill="#b0b0d0" fontSize="10">La plus spécifique (OU) l'emporte en cas de conflit.</text>
+                            <text x="300" y="246" fill="#b0b0d0" fontSize="10">gpupdate /force applique immédiatement.</text>
+                        </svg>
+                    </div>
+                );
+            }
+
+            if (type === 'mockup-linux-terminal') {
+                return (
+                    <div className="w-full bg-slate-900 text-white p-4 rounded-lg overflow-x-auto">
+                        <h4 className="text-xs uppercase font-bold text-sky-400 mb-1">Figure : Terminal Linux — première session de diagnostic</h4>
+                        <p className="text-[11px] text-slate-300 mb-2"><strong className="text-amber-300">Ce que vous voyez :</strong> le prompt <code>admin@SRV-LNX01:~$</code> signifie que vous êtes connecté avec le compte <code>admin</code> sur le serveur <code>SRV-LNX01</code>. Le symbole <code>~</code> indique votre répertoire personnel (<code>/home/admin</code>). Le curseur clignote après le <code>$</code>.</p>
+                        <svg viewBox="0 0 640 340" role="img" aria-label="Maquette terminal Linux : prompt, commandes, résultat" className="w-full h-auto text-xs rounded border border-slate-700">
+                            <rect x="0" y="0" width="640" height="340" fill="#0a0a0a" stroke="#333" />
+                            <rect x="0" y="0" width="640" height="24" fill="#2d2d2d" />
+                            <circle cx="14" cy="12" r="5" fill="#ff6060" /><circle cx="30" cy="12" r="5" fill="#ffc040" /><circle cx="46" cy="12" r="5" fill="#40e040" />
+                            <text x="60" y="16" fill="#a0a0a0" fontSize="10">admin@SRV-LNX01: ~ — Terminal</text>
+                            <text x="10" y="44" fill="#40e040" fontSize="11" fontFamily="monospace">admin@SRV-LNX01:~$ whoami</text>
+                            <text x="10" y="60" fill="#e0e0e0" fontSize="11" fontFamily="monospace">admin</text>
+                            <text x="10" y="84" fill="#40e040" fontSize="11" fontFamily="monospace">admin@SRV-LNX01:~$ hostname</text>
+                            <text x="10" y="100" fill="#e0e0e0" fontSize="11" fontFamily="monospace">SRV-LNX01</text>
+                            <text x="10" y="124" fill="#40e040" fontSize="11" fontFamily="monospace">admin@SRV-LNX01:~$ df -h | grep -v tmpfs</text>
+                            <text x="10" y="140" fill="#e0e0e0" fontSize="11" fontFamily="monospace">Filesystem      Size  Used Avail Use% Mounted on</text>
+                            <text x="10" y="156" fill="#e0e0e0" fontSize="11" fontFamily="monospace">/dev/sda1         30G   12G   18G  40% /</text>
+                            <text x="10" y="180" fill="#40e040" fontSize="11" fontFamily="monospace">admin@SRV-LNX01:~$ systemctl --failed</text>
+                            <text x="10" y="196" fill="#e0e0e0" fontSize="11" fontFamily="monospace">0 loaded units listed. ← aucun service en échec</text>
+                            <text x="10" y="220" fill="#40e040" fontSize="11" fontFamily="monospace">admin@SRV-LNX01:~$ ss -tulpn | head -5</text>
+                            <text x="10" y="236" fill="#e0e0e0" fontSize="11" fontFamily="monospace">Netid State  Local Address:Port  Process</text>
+                            <text x="10" y="252" fill="#e0e0e0" fontSize="11" fontFamily="monospace">tcp   LISTEN 0.0.0.0:22            sshd</text>
+                            <text x="10" y="268" fill="#e0e0e0" fontSize="11" fontFamily="monospace">tcp   LISTEN 127.0.0.1:5432       postgres</text>
+                            <text x="10" y="300" fill="#8090a0" fontSize="10">💡 Ce qu'il faut observer :</text>
+                            <text x="10" y="316" fill="#b0c0b0" fontSize="10">- Le prompt vert confirme votre identité (admin) et le serveur (SRV-LNX01)</text>
+                            <text x="10" y="330" fill="#b0c0b0" fontSize="10">- df -h montre l'espace disque (40% utilisé = tout va bien)</text>
+                        </svg>
+                    </div>
+                );
+            }
+
+            if (type === 'mockup-cisco-cli') {
+                return (
+                    <div className="w-full bg-slate-900 text-white p-4 rounded-lg overflow-x-auto">
+                        <h4 className="text-xs uppercase font-bold text-sky-400 mb-1">Figure : Cisco IOS CLI — configuration d'un VLAN</h4>
+                        <p className="text-[11px] text-slate-300 mb-2"><strong className="text-amber-300">Ce que vous voyez :</strong> le prompt change selon le mode. <code>Switch&gt;</code> = mode utilisateur, <code>Switch#</code> = mode privilégié (après <code>enable</code>), <code>Switch(config)#</code> = mode configuration (après <code>configure terminal</code>). C'est la hiérarchie de modes qui déroute les débutants.</p>
+                        <svg viewBox="0 0 640 340" role="img" aria-label="Maquette Cisco CLI : modes utilisateur, privilégié, configuration" className="w-full h-auto text-xs rounded border border-slate-700">
+                            <rect x="0" y="0" width="640" height="340" fill="#0a0a0a" stroke="#333" />
+                            <rect x="0" y="0" width="640" height="24" fill="#2d2d2d" />
+                            <circle cx="14" cy="12" r="5" fill="#ff6060" /><circle cx="30" cy="12" r="5" fill="#ffc040" /><circle cx="46" cy="12" r="5" fill="#40e040" />
+                            <text x="60" y="16" fill="#a0a0a0" fontSize="10">Switch — Console</text>
+                            <text x="10" y="48" fill="#c0c0c0" fontSize="11" fontFamily="monospace">Switch&gt; enable</text>
+                            <text x="10" y="60" fill="#8090a0" fontSize="9" fontStyle="italic">← on passe du mode utilisateur au mode privilégié (prompt devient #)</text>
+                            <text x="10" y="76" fill="#c0c0c0" fontSize="11" fontFamily="monospace">Switch# configure terminal</text>
+                            <text x="10" y="88" fill="#8090a0" fontSize="9" fontStyle="italic">← on entre en mode configuration (prompt devient (config)#)</text>
+                            <text x="10" y="104" fill="#c0c0c0" fontSize="11" fontFamily="monospace">Switch(config)# hostname SW-ACC1</text>
+                            <text x="10" y="116" fill="#8090a0" fontSize="9" fontStyle="italic">← on renomme l'équipement (le prompt change immédiatement)</text>
+                            <text x="10" y="132" fill="#c0c0c0" fontSize="11" fontFamily="monospace">SW-ACC1(config)# vlan 10</text>
+                            <text x="10" y="144" fill="#8090a0" fontSize="9" fontStyle="italic">← on crée le VLAN 10</text>
+                            <text x="10" y="160" fill="#c0c0c0" fontSize="11" fontFamily="monospace">SW-ACC1(config-vlan)# name COMPTA</text>
+                            <text x="10" y="172" fill="#8090a0" fontSize="9" fontStyle="italic">← on lui donne un nom (meilleure lisibilité)</text>
+                            <text x="10" y="188" fill="#c0c0c0" fontSize="11" fontFamily="monospace">SW-ACC1(config-vlan)# exit</text>
+                            <text x="10" y="200" fill="#8090a0" fontSize="9" fontStyle="italic">← on revient au niveau précédent</text>
+                            <text x="10" y="216" fill="#c0c0c0" fontSize="11" fontFamily="monospace">SW-ACC1(config)# interface fa0/1</text>
+                            <text x="10" y="228" fill="#8090a0" fontSize="9" fontStyle="italic">← on sélectionne le port à configurer</text>
+                            <text x="10" y="244" fill="#c0c0c0" fontSize="11" fontFamily="monospace">SW-ACC1(config-if)# switchport mode access</text>
+                            <text x="10" y="256" fill="#c0c0c0" fontSize="11" fontFamily="monospace">SW-ACC1(config-if)# switchport access vlan 10</text>
+                            <text x="10" y="268" fill="#8090a0" fontSize="9" fontStyle="italic">← on affecte le port au VLAN 10</text>
+                            <text x="10" y="284" fill="#c0c0c0" fontSize="11" fontFamily="monospace">SW-ACC1(config-if)# end</text>
+                            <text x="10" y="296" fill="#c0c0c0" fontSize="11" fontFamily="monospace">SW-ACC1# show vlan brief</text>
+                            <text x="10" y="308" fill="#e0e0e0" fontSize="11" fontFamily="monospace">VLAN Name         Status    Ports</text>
+                            <text x="10" y="320" fill="#e0e0e0" fontSize="11" fontFamily="monospace">10   COMPTA       active    Fa0/1</text>
+                        </svg>
+                    </div>
+                );
+            }
+
+            if (type === 'mockup-hyperv') {
+                return (
+                    <div className="w-full bg-slate-900 text-white p-4 rounded-lg overflow-x-auto">
+                        <h4 className="text-xs uppercase font-bold text-sky-400 mb-1">Figure : Hyper-V Manager — interface de gestion des VM</h4>
+                        <p className="text-[11px] text-slate-300 mb-2"><strong className="text-amber-300">Ce que vous voyez :</strong> à gauche les serveurs Hyper-V, au centre les VM (avec leur état Running/Off), à droite le panneau d'actions (Start, Connect, Checkpoint...). Ouvrez-le via <code>HV Manager</code> ou <em>Outils d'administration → Hyper-V Manager</em>.</p>
+                        <svg viewBox="0 0 640 300" role="img" aria-label="Maquette Hyper-V Manager : serveurs, VM, actions" className="w-full h-auto text-xs rounded border border-slate-700">
+                            <rect x="0" y="0" width="640" height="28" fill="#1e3a5f" />
+                            <text x="8" y="18" fill="white" fontSize="11" fontWeight="bold">Hyper-V Manager</text>
+                            <rect x="0" y="28" width="160" height="272" fill="#1a1a2e" stroke="#333" />
+                            <text x="8" y="48" fill="#e0a020" fontSize="10" fontWeight="bold">Hyper-V Manager</text>
+                            <text x="8" y="66" fill="#a0c0e0" fontSize="10">▸ SRV-HV (host)</text>
+                            <text x="20" y="82" fill="#a0c0e0" fontSize="10">VMs</text>
+                            <text x="20" y="98" fill="#a0c0e0" fontSize="10">Checkpoints</text>
+                            <text x="20" y="114" fill="#a0c0e0" fontSize="10">Virtual Switches</text>
+                            <rect x="160" y="28" width="280" height="272" fill="#0d0d1a" stroke="#333" />
+                            <text x="170" y="48" fill="#e0a020" fontSize="10" fontWeight="bold">Virtual Machines</text>
+                            <text x="170" y="68" fill="#60e060" fontSize="10">▶ VM-CLI01        Running</text>
+                            <text x="170" y="84" fill="#8090a0" fontSize="10">○ VM-TEST         Off</text>
+                            <text x="170" y="100" fill="#8090a0" fontSize="10">○ VM-SRV-DNS      Off</text>
+                            <text x="170" y="124" fill="#a0c0e0" fontSize="10">CPU: 2 vCPU  Memory: 4 GB</text>
+                            <text x="170" y="140" fill="#a0c0e0" fontSize="10">Disk: D:\VHD\VM-CLI01.vhdx (60 GB dynamic)</text>
+                            <text x="170" y="156" fill="#a0c0e0" fontSize="10">Switch: LAN-EXT (External)</text>
+                            <rect x="440" y="28" width="200" height="272" fill="#1a1a2e" stroke="#333" />
+                            <text x="450" y="48" fill="#e0a020" fontSize="10" fontWeight="bold">Actions</text>
+                            <text x="450" y="68" fill="#80c0e0" fontSize="10">New → Virtual Machine...</text>
+                            <text x="450" y="86" fill="#80c0e0" fontSize="10">▶ Start</text>
+                            <text x="450" y="104" fill="#80c0e0" fontSize="10">⏹ Turn Off</text>
+                            <text x="450" y="122" fill="#80c0e0" fontSize="10">🔗 Connect...</text>
+                            <text x="450" y="140" fill="#80c0e0" fontSize="10">📸 Checkpoint</text>
+                            <rect x="160" y="200" width="280" height="80" fill="#1a2a1e" stroke="#2a5a3e" rx="4" />
+                            <text x="170" y="218" fill="#60e080" fontSize="10" fontWeight="bold">💡 Ce qu'il faut observer :</text>
+                            <text x="170" y="234" fill="#b0d0b0" fontSize="10">- L'état Running = la VM est démarrée et utilisable</text>
+                            <text x="170" y="250" fill="#b0d0b0" fontSize="10">- Le panneau Actions propose Start, Connect, Checkpoint</text>
+                            <text x="170" y="266" fill="#b0d0b0" fontSize="10">- "Connect" ouvre la console graphique de la VM</text>
+                        </svg>
+                    </div>
+                );
+            }
+
             return null;
         };
 
@@ -3936,6 +4203,35 @@
                         </div>
                     ))}
                 </div>
+
+                {/* Procédures GUI pas-à-pas (guiSteps) : interface d'abord, CLI ensuite */}
+                {course.guiSteps && course.guiSteps.length > 0 && (
+                    <div className="space-y-4">
+                        <h3 className="text-xs uppercase font-bold text-brand-500 tracking-wider">Procédures pas à pas — suivez l'ordre, cliquez, observez</h3>
+                        <p className="text-[11px] text-slate-500 dark:text-slate-400">Chaque étape indique <strong>où cliquer</strong>, <strong>ce que vous voyez</strong> et <strong>ce qu'il faut observer</strong>. Suivez dans l'ordre sur votre VM de labo.</p>
+                        {course.guiSteps.map((step, si) => (
+                            <div key={si} className="space-y-2 p-4 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-900/30">
+                                <h4 className="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                                    <span className="w-6 h-6 rounded-full bg-brand-600 text-white text-xs flex items-center justify-center font-bold">{si + 1}</span>
+                                    {step.title}
+                                </h4>
+                                <p className="text-xs text-slate-700 dark:text-slate-300 leading-relaxed pl-8">{step.action}</p>
+                                {step.observation && (
+                                    <div className="pl-8 text-xs text-sky-700 dark:text-sky-300 bg-sky-500/5 border-l-4 border-sky-500/30 pl-4 py-1.5 rounded">
+                                        <span className="font-bold">👁️ Observez : </span>{step.observation}
+                                    </div>
+                                )}
+                                {step.mockup && <DynamicSVGDiagram type={step.mockup} />}
+                                {step.cli && step.cli.length > 0 && (
+                                    <div className="ml-8 rounded-lg overflow-hidden border border-slate-700">
+                                        <div className="bg-slate-800 px-3 py-1 text-[10px] font-bold uppercase text-slate-300">Méthode 2 — ligne de commande (équivalent)</div>
+                                        <pre className="bg-slate-950 p-3 text-[11px] text-emerald-400 font-mono whitespace-pre-wrap break-words leading-relaxed">{step.cli.join('\n')}</pre>
+                                    </div>
+                                )}
+                            </div>
+                        ))}
+                    </div>
+                )}
 
                 {/* Approfondissement pédagogique (deepDive) : théorie étendue, commandes intégrées, encadrés pro */}
                 {course.deepDive && course.deepDive.length > 0 && (
