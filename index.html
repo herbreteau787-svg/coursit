@@ -464,6 +464,35 @@
                         { h: "PowerShell pour aller vite", t: "Une fois le module ActiveDirectory installé (via les outils RSAT), Get-ADUser claire.martin lit un compte, New-ADUser le crée, Set-ADUser le modifie. La console graphique reste très bien pour apprendre ; PowerShell démultiplie quand il y a des dizaines de comptes (renvoi au CP6 pour les scripts)." }
                     ]}
                 ],
+                deepDive: [
+                    { t: "Méthodologie terrain — intégrer un nouveau collaborateur en moins de 10 minutes", p: [
+                        "En entreprise, l'arrivée d'un collaborateur suit une procédure documentée (un runbook). L'objectif : que la personne ouvre sa session, trouve ses lecteurs réseau et son imprimante sans appeler le support.",
+                        "L'ordre des opérations compte : on prépare l'OU et les groupes AVANT de créer le compte, pour que les GPO s'appliquent dès la première ouverture de session."
+                    ],
+                    cmd: [
+                        "# Vérifier que l'OU existe",
+                        "Get-ADOrganizationalUnit -Filter \"Name -eq 'Compta'\"",
+                        "# Créer le compte dans la bonne OU, mot de passe à changer à la première connexion",
+                        "New-ADUser -Name 'Claire Martin' -SamAccountName claire.martin -UserPrincipalName claire.martin@lab.lan -Path 'OU=Compta,DC=lab,DC=lan' -AccountPassword (ConvertTo-SecureString 'Init2026!' -AsPlainText -Force) -ChangePasswordAtLogon $true -Enabled $true",
+                        "# Ajouter aux groupes du service",
+                        "Add-ADGroupMember -Identity 'GG-Compta' -Members claire.martin",
+                        "# Contrôle final",
+                        "Get-ADUser claire.martin -Properties Department, MemberOf | Select Name, Enabled, Department"
+                    ],
+                    box: 'admin', boxText: "Conseil d'administrateur : ne créez jamais un compte en dehors d'une OU. Un compte posé à la racine du domaine échappe aux GPO liées aux OU et devient invisible pour vos délégations d'administration. Si vous héritez d'un annuaire mal rangé, documentez la convention de nommage des OU avant toute migration." },
+                    { t: "Erreurs fréquentes vues en support", p: [
+                        "Le compte est créé mais l'utilisateur « n'a pas de lecteur réseau » : la GPO de mappage est liée à une OU dont l'utilisateur ne dépend pas, ou le poste n'a pas exécuté gpupdate /force.",
+                        "« Le compte est verrouillé » alors que l'utilisateur dit taper le bon mot de passe : Caps Lock, pavé numérique désactivé, ou un mot de passe stocké obsolète dans le gestionnaire d'identifiants Windows. Vider le gestionnaire d'identifiants règle 80 % de ces tickets.",
+                        "Deux comptes portent le même nom (mariage, changement de nom) : ne jamais renommer un compte SANS vérifier ses ACL, sinon les droits NTFS restent liés à l'ancien SamAccountName."
+                    ],
+                    box: 'warn', boxText: "Erreur fréquente : créer un compte avec « l'utilisateur doit changer son mot de passe » MAIS désactiver en même temps « le mot de passe n'expire jamais ». La politique de domaine écrase ce réglage et le ticket revient trois mois plus tard. Décidez une politique par profil (standard, comptes de service) et tenez-vous-y." },
+                    { t: "Pour l'examen — ce que le correcteur cherche", p: [
+                        "Le vocabulaire : OU (rangement) ≠ groupe (droits) ≠ GPO (configuration). Confondre ces trois notions est la première cause d'échec.",
+                        "L'ordre LSDOU doit être récité sans hésiter : Local, Site, Domaine, OU — et savoir qu'en cas de conflit, la plus spécifique (OU) s'applique.",
+                        "Kerberos se résume en une phrase : le contrôleur de domaine délivre des tickets, l'utilisateur ne renvoie jamais son mot de passe aux services."
+                    ],
+                    box: 'remember', boxText: "À retenir : AD = annuaire (NTDS.dit) + authentification (Kerberos) + politiques (GPO). Les OU rangent, les groupes donnent les droits (modèle AGDLP), les GPO configurent. PowerShell (module RSAT ActiveDirectory) devient indispensable dès 10 comptes." }
+                ],
                 exercices: [
                     { enonce: "Une nouvelle collaboratrice, Claire Martin, rejoint le service Compta. Décrivez les étapes de son intégration côté Active Directory.", correction: "1) Identifier (ou créer) l'OU Compta. 2) Créer le compte claire.martin dans cette OU avec mot de passe à changer à la première connexion. 3) L'ajouter aux groupes de son service et au groupe de base des utilisateurs. 4) Vérifier le compte (affichage de la console ou Get-ADUser claire.martin). 5) Remettre les identifiants et la charte informatique à la collaboratrice. La logique : ranger, nommer, grouper, puis vérifier." },
                     { enonce: "Au niveau du domaine, une GPO interdit les clés USB. Sur l'OU « Postes_Atelier », une GPO les autorise. Un poste de cette OU peut-il utiliser une clé USB ?", correction: "Oui, en principe : la GPO de l'OU est plus spécifique et appliquée en dernier (ordre LSDOU), donc en cas de conflit elle l'emporte sur celle du domaine. Limites à vérifier : blocage de l'héritage sur l'OU, GPO de domaine marquée « forcer » ou réglages différents sur l'ordinateur et l'utilisateur. En pratique on teste : gpupdate /force puis gpresult pour voir ce qui a réellement été appliqué." }
@@ -504,9 +533,45 @@
                         { h: "Lire les journaux", t: "journalctl -u ssh affiche les messages du service SSH (ajoutez -f pour suivre en direct) ; les applications écrivent très souvent dans /var/log. Les journaux sont le premier réflexe du diagnostic : ils disent ce qui s'est réellement passé, quand et pourquoi." }
                     ]}
                 ],
+                deepDive: [
+                    { t: "Méthodologie terrain — prendre la main sur un serveur et diagnostiquer", p: [
+                        "Sur un serveur Linux de production, l'administrateur travaille presque toujours en SSH. Les trois premières commandes d'une session de diagnostic sont toujours les mêmes : qui suis-je / où suis-je / quel est l'état du système.",
+                        "La logique est la même que côté Windows : état → journaux → configuration → relance. On ne redémarre JAMAIS un service avant d'avoir lu le dernier message d'erreur du journal."
+                    ],
+                    cmd: [
+                        "# Carte d'identité de la session",
+                        "whoami && hostname && uname -a",
+                        "# Espace disque : première cause de panne de service",
+                        "df -h | grep -v tmpfs",
+                        "# État des services et ports en écoute",
+                        "systemctl --failed",
+                        "ss -tulpn | head -n 15",
+                        "# Journal du service SSH (exemple)",
+                        "journalctl -u ssh -n 20 --no-pager"
+                    ],
+                    box: 'admin', boxText: "Conseil d'administrateur : surveillez d'abord le disque (df -h). Un /var/log plein empêche les services d'écrire leurs journaux, bloque les bases de données et fait échouer les mises à jour — et le diagnostic devient impossible. Mettez en place logrotate dès l'installation du serveur." },
+                    { t: "Erreurs fréquentes côté Linux", p: [
+                        "Éditer un fichier de configuration avec les droits root et commettre une faute de frappe : le service ne redémarre plus. Réflexe : cp fichier fichier.bak avant modification, et test de syntaxe quand il existe (sshd -t, nginx -t, named-checkconf).",
+                        "Chmod 777 « pour que ça marche » : le fichier devient modifiable par tous. Sur un dossier de script exposé, c'est une faille. La bonne réponse est de poser les droits sur le groupe propriétaire (chgrp + chmod g+rwx).",
+                        "Utiliser kill -9 en premier : il empêche le service de fermer proprement ses fichiers et ses connexions. Toujours kill -15 (SIGTERM) d'abord, kill -9 seulement si le processus ignore le SIGTERM."
+                    ],
+                    box: 'warn', boxText: "Erreur fréquente : modifier /etc/fstab sans tester. Une erreur de syntaxe empêche le démarrage. Réflexe : mount -a pour valider sans redémarrer, et vérifier que mount | grep le point de montage avant de redémarrer la machine." },
+                    { t: "Cas d'entreprise — le serveur de fichiers saturé un vendredi soir", p: [
+                        "Situation : les utilisateurs signalent des copies de fichiers qui échouent. df -h révèle /srv/partage à 100 %. Personne ne sait ce qui a grossi.",
+                        "Résolution : du -h --max-depth=1 /srv/partage | sort -h localise le répertoire « SAV » : 400 Go de copies de sauvegarde oubliées par un script de test. Suppression des copies anciennes, extension temporaire via LVM (lvextend + resize2fs), puis mise en place d'un quota et d'une alerte Zabbix à 85 %.",
+                        "Leçon : une alerte disque à 85 % évite la panne à 100 %. Le ticket du vendredi soir coûte 3 heures ; l'alerte proactive coûte 10 minutes de configuration."
+                    ],
+                    box: 'case', boxText: "Ce cas illustre la chaîne complète : diagnostic (du), correction immédiate (suppression + extension LVM), prévention (quota + supervision). C'est exactement la triade diagnostic → correction → prévention attendue en entreprise." },
+                    { t: "Pour l'examen — réflexes du correcteur", p: [
+                        "Savoir décoder 755 et 640 sans calculatrice (r=4, w=2, x=1) et choisir chmod ou chown selon la demande.",
+                        "Citer la différence apt/dnf et la logique update (rafraîchir les listes) → upgrade (appliquer).",
+                        "Expliquer SSH : clé publique sur le serveur, clé privée sur le client, et pourquoi PasswordAuthentication no durcit le service."
+                    ],
+                    box: 'remember', boxText: "À retenir : /etc = configuration, /var = données variables, /home = utilisateurs. Droits 755 = scripts/public, 640 = données sensibles, 700 = privé. systemctl status → journalctl -u → config → relance : l'ordre du diagnostic, toujours." }
+                ],
                 exercices: [
                     { enonce: "Un script doit être exécutable par son propriétaire seul, sans aucun droit pour les autres. Quels droits posez-vous et avec quelle commande ?", correction: "Droits 700 : lecture + écriture + exécution pour le propriétaire, rien pour le groupe ni les autres (7 = r+w+x, 0 = aucun). Commande : chmod 700 script.sh. Vérification : ls -l doit afficher -rwx------. On aurait pu écrire chmod u+rwx,go-rwx script.sh, même résultat." },
-                    { enonce: "Le service SSH ne démarre plus après une mise à jour. Ordonnez votre démarche de diagnostic.", correction: "1) systemctl status ssh : état du service et dernier message d'erreur. 2) journalctl -u ssh : détails historisés des échecs. 3) Vérification de la configuration du serveur SSH — sur OpenSSH, la commande sshd -t, lancée en admin, valide la syntaxe du fichier de configuration sans démarrer le service. 4) systemctl restart ssh pour tester. 5) Si tout échoue, comparer avec la sauvegarde de configuration précédente. L'ordre suit la logique : état → journaux → config → relance." }
+                    { enonce: "Le service SSH ne démarre plus après une mise à jour. Ordonnez votre démarche de diagnostic.", correction: "1) systemctl status ssh : état du service et dernier message d'erreur. 2) journalctl -u ssh : détails historisés des échecs. 3) Vérification de la configuration du serveur SSH - sur OpenSSH, la commande sshd -t, lancée en admin, valide la syntaxe du fichier de configuration sans démarrer le service. 4) systemctl restart ssh pour tester. 5) Si tout échoue, comparer avec la sauvegarde de configuration précédente. L'ordre suit la logique : état → journaux → config → relance." }
                 ],
                 resume: "Sur Linux, la ligne de commande est l'interface normale d'administration : arborescence standard, droits 755/640, gestionnaire de paquets (apt/dnf), services pilotés par systemctl, connexion à distance par SSH et diagnostic par les journaux (journalctl, /var/log).",
                 suite: "CP4 — Réseau IP : ces serveurs ne restent utiles que s'ils communiquent.",
@@ -544,9 +609,43 @@
                         { h: "Trois outils à la main", t: "ping teste la joignabilité d'une cible, tracert (Windows) ou traceroute (Linux) montre le chemin emprunté, nslookup interroge le DNS. Trois commandes, trois questions : ça va ? par où ? qui traduit le nom ?" }
                     ]}
                 ],
+                deepDive: [
+                    { t: "Méthodologie terrain — diagnostiquer un poste sans écran (à distance)", p: [
+                        "En support niveau 1/2, 70 % des incidents se résolvent avec trois réflexes : afficher la configuration, tester la joignabilité, lire les journaux. L'ordre des couches (physique → IP → nom) s'applique aussi à distance.",
+                        "Sur une machine Windows jointe au domaine, le service d'assistance utilise PowerShell à distance (WinRM) pour exécuter ces vérifications sans se déplacer."
+                    ],
+                    cmd: [
+                        "# Étape 1 : que voit le poste ?",
+                        "Get-NetIPConfiguration | Select InterfaceAlias, IPv4Address, IPv4DefaultGateway",
+                        "Get-DnsClientServerAddress -AddressFamily IPv4",
+                        "# Étape 2 : tester la chaîne complète (lien → passerelle → Internet → nom)",
+                        "Test-NetConnection -ComputerName SRV-DC01.lab.lan -Port 445",
+                        "# Étape 3 : journaux applicatifs récents",
+                        "Get-EventLog -LogName System -Newest 15 | Where-Object { $_.EntryType -eq 'Error' } | Select TimeGenerated, EventID, Source"
+                    ],
+                    box: 'admin', boxText: "Conseil d'administrateur : documentez vos diagostics dans le ticket au fur et à mesure (commande exécutée + résultat). Un ticket qui raconte l'escalade couche par couche est une preuve de travail et un support de formation pour le suivant." },
+                    { t: "Erreurs fréquentes en support", p: [
+                        "Redémarrer avant de diagnostiquer : le symptôme disparaît, la cause reste. Le poste qui « refait la panne » trois jours plus tard coûte trois tickets au lieu d'un.",
+                        "Changer le DNS « pour voir » sans noter la valeur d'origine : dans un domaine AD, le DNS doit pointer vers le contrôleur de domaine, pas vers 8.8.8.8 — sinon Kerberos cesse de fonctionner et la session prend 10 minutes.",
+                        "Confondre l'adresse 169.254.x.x (échec DHCP) et une erreur de câble : la première est un symptôme de service, la seconde un symptôme de couche 1. Le voyant du port du switch tranche."
+                    ],
+                    box: 'warn', boxText: "Erreur fréquente : tester uniquement avec ping. Un pare-feu peut bloquer l'ICMP sur un serveur parfaitement fonctionnel. Testez le port réel du service (Test-NetConnection -Port 445 pour SMB, -Port 443 pour HTTPS) avant de conclure à une panne." },
+                    { t: "Cas d'entreprise — la paie bloquée à 9 h le jour des salaires", p: [
+                        "Situation : le 25 du mois, le service comptable appelle — « plus personne ne peut ouvrir le logiciel de paie ». L'application est sur un serveur, les postes sont sur le même LAN.",
+                        "Résolution type : vérifier d'abord si le SERVEUR est joignable (ping + port applicatif), puis si c'est un problème de nom (le poste résout srv-paie via le DNS AD), puis les journaux du serveur (service applicatif arrêté dans la nuit par une mise à jour Windows auto-redémarrée).",
+                        "Leçon retenue par la PME : exclure le serveur applicatif des redémarrages automatiques via GPO, et ajouter un test de supervision synthétique (ouverture de session) toutes les 5 minutes, qui aurait alerté à 3 h du matin."
+                    ],
+                    box: 'case', boxText: "Ce cas illustre l'escalade par couches appliquée à un service : le réseau allait bien (ping serveur OK), le nom résolvait bien (DNS AD OK), c'était le service applicatif éteint par un reboot planifié. Trois tickets évités si la supervision avait alerté la nuit." },
+                    { t: "Pour l'examen — réflexes du correcteur", p: [
+                        "Connnaître les plages privées RFC 1918 par cœur (10/8, 172.16/12, 192.168/16) et l'adresse de repli APIPA 169.254.x.x.",
+                        "Savoir réciter l'escalade : couche 1 (câble) → adresse IP → passerelle → routage → DNS. Chaque échec localise la couche fautive.",
+                        "Savoir expliquer DORA (DHCP) en une phrase et citer deux types d'enregistrements DNS (A, CNAME) et leur rôle."
+                    ],
+                    box: 'remember', boxText: "À retenir : IP + masque définissent le réseau ; DHCP distribue ; DNS traduit ; la passerelle sort du réseau. Le diagnostic s'escalade du câble vers le nom, jamais dans le désordre. ping / tracert / nslookup = trois questions : ça va ? par où ? qui traduit ?" }
+                ],
                 exercices: [
-                    { enonce: "Découpez le réseau 192.168.1.0/24 en quatre sous-réseaux /26. Donnez plage, adresse réseau et adresse de diffusion de chacun.", correction: "Un /24 découpé en /26 donne quatre blocs de 64 adresses : 192.168.1.0–192.168.1.63 (réseau .0, diffusion .63), .64–.127 (réseau .64, diffusion .127), .128–.191 (réseau .128, diffusion .191), .192–.255 (réseau .192, diffusion .255). Chaque bloc fournit 62 adresses utilisables (64 moins l'adresse réseau et l'adresse de diffusion). Méthode : incrément = 256 − 192 = 64." },
-                    { enonce: "Un collègue dit : « Internet ne marche pas ». Ordonnez vos vérifications et nommez la cause ciblée à chaque étape.", correction: "1) Lien : voyant, câble, Wi-Fi associé (couche 1). 2) IP : ipconfig /all — une adresse 169.254.x.x pointe un échec DHCP. 3) ping passerelle : échec = problème local/VLAN ; réussite = on continue. 4) ping sur une IP publique connue (par ex. 8.8.8.8, DNS public de Google) : échec = routage/NAT vers Internet. 5) nom de domaine : échec seulement à cette étape = DNS. Chaque étape élimine une couche, on ne « règle » jamais dans le désordre." }
+                    { enonce: "Découpez le réseau 192.168.1.0/24 en quatre sous-réseaux /26. Donnez plage, adresse réseau et adresse de diffusion de chacun.", correction: "Un /24 découpé en /26 donne quatre blocs de 64 adresses : 192.168.1.0-192.168.1.63 (réseau .0, diffusion .63), .64-.127 (réseau .64, diffusion .127), .128-.191 (réseau .128, diffusion .191), .192-.255 (réseau .192, diffusion .255). Chaque bloc fournit 62 adresses utilisables (64 moins l'adresse réseau et l'adresse de diffusion). Méthode : incrément = 256 - 192 = 64." },
+                    { enonce: "Un collègue dit : « Internet ne marche pas ». Ordonnez vos vérifications et nommez la cause ciblée à chaque étape.", correction: "1) Lien : voyant, câble, Wi-Fi associé (couche 1). 2) IP : ipconfig /all - une adresse 169.254.x.x pointe un échec DHCP. 3) ping passerelle : échec = problème local/VLAN ; réussite = on continue. 4) ping sur une IP publique connue (par ex. 8.8.8.8, DNS public de Google) : échec = routage/NAT vers Internet. 5) nom de domaine : échec seulement à cette étape = DNS. Chaque étape élimine une couche, on ne « règle » jamais dans le désordre." }
                 ],
                 resume: "Une adresse IP + un masque définissent ce qui est directement joignable ; DHCP distribue la configuration, DNS traduit les noms, la passerelle sort des sous-réseaux. Le diagnostic s'escalade du câble vers le nom, une couche à la fois.",
                 suite: "CP5 — Serveurs virtualisés : héberger ces services proprement.",
@@ -2826,6 +2925,188 @@
             { type: "Sauvegarde", en: "RTO", fr: "délai de reprise cible (RTO)", def: "Durée maximale acceptable pour remettre un service en marche après l'incident.", exEn: "The RTO for the ERP is four hours.", exFr: "Le RTO de l'ERP est de quatre heures." }
         ];
 
+        // --- FICHES DEPANNAGE PROFESSIONNELLES (symptome -> diagnostic -> cause -> resolution -> prevention) ---
+        const DEPANNAGE_DATA = [
+            {
+                id: 'dep-win-boot', parcours: 'TSSR', titre: 'Windows — le poste ne démarre plus (boucle de réparation)',
+                symptome: "Le poste affiche « Préparation de la réparation automatique » en boucle, ou un écran bleu (INACCESSIBLE_BOOT_DEVICE) après une mise à jour ou un arrêt brutal.",
+                contexte: "Poste Windows 10/11 joint au domaine, utilisateur bloqué sans aucune donnée accessible. Le support doit choisir entre réparation in-place et réimagerie.",
+                diagnostic: [
+                    "1. Démarrer sur l'environnement de récupération (F11 ou 3 échecs de démarrage) → Dépannage → Options avancées.",
+                    "2. Commande prompt : lancer « sfc /scannow /offbootdir=C:\\ /offwindir=C:\\Windows » pour vérifier les fichiers système.",
+                    "3. Lancer « chkdsk C: /f » si le système de fichiers est suspect (arrêt brutal, erreurs disque dans les journaux).",
+                    "4. Désactiver la dernière mise à jour : « dism /image:C:\\ /get-packages » puis « dism /image:C:\\ /remove-package /packagename:... »."
+                ],
+                cause: "Le plus souvent : mise à jour Windows interrompue, pilote de stockage incompatible, ou secteur du système de fichiers endommagé.",
+                resolution: [
+                    "Si une mise à jour récente est suspectée : désinstaller le dernier correctif cumulatif depuis les options avancées.",
+                    "Si le système de fichiers est cassé : chkdsk puis redémarrage ; si récurrent, image disque à des fins d'analyse puis réimagerie via WDS/MDT (l'utilisateur récupère son profil depuis le serveur).",
+                    "Ne jamais réinstaller sans avoir récupéré les données : monter le disque sur une autre machine ou via un live Linux et copier le profil utilisateur."
+                ],
+                prevention: "Sauvegarde régulière du profil (redirection Documents vers le serveur), points de restauration avant les mises à jour, et surveillance du disque (SMART) dans la supervision."
+            },
+            {
+                id: 'dep-win-domaine', parcours: 'TSSR', titre: 'Windows — « Aucun accès réseau » sur un poste joint au domaine',
+                symptome: "Le poste affiche « Pas d'accès réseau » ou « Non connecté », l'utilisateur ne peut pas ouvrir une session du domaine (session locale seulement).",
+                contexte: "Un seul poste est touché (les autres fonctionnent) : le problème est local au poste, pas au réseau d'infrastructure.",
+                diagnostic: [
+                    "1. ipconfig /all : présence d'une adresse 169.254.x.x = échec DHCP ; sinon passerelle et DNS corrects ?",
+                    "2. ping vers la passerelle : échec = couche locale (câble, pilote, VLAN du port). Réussite = continuer.",
+                    "3. Test du port 445 vers le DC : « Test-NetConnection SRV-DC01.lab.lan -Port 445 ».",
+                    "4. « nltest /dsgetdc:lab.lan » : trouve-t-il un contrôleur de domaine ? Un échec pointe le DNS ou le canal sécurisé."
+                ],
+                cause: "Le plus souvent : câble/port switch désactivé, pilote de carte réseau planté, service DHCP qui ne répond pas sur ce segment, ou serveur DNS du poste mal pointé.",
+                resolution: [
+                    "Adresse 169.254 : vérifier le switch (port en err-disable ?) puis relancer le DHCP (« ipconfig /release » puis « /renew »).",
+                    "Carte suspecte : « Restart-NetAdapter » ou réinstaller le pilote.",
+                    "Canal sécurisé cassé (« The trust relationship failed ») : retirer et réintégrer le poste au domaine, ou Reset-ComputerMachinePassword."
+                ],
+                prevention: "Surveiller les ports err-disable dans la supervision, verrouiller la configuration DHCP du segment, et provisionner un compte admin local de secours (LAPS) pour l'intervention hors domaine."
+            },
+            {
+                id: 'dep-win-gpo', parcours: 'TSSR', titre: 'Windows — une GPO ne s\'applique pas',
+                symptome: "Une stratégie nouvellement créée (fond d'écran, lecteur mappé, interdiction USB) n'apparaît pas sur les postes cibles après gpupdate /force.",
+                contexte: "Contexte de domaine classique : la GPO est créée dans GPMC mais reste invisible dans gpresult /R côté client.",
+                diagnostic: [
+                    "1. Sur le poste : « gpresult /R » — la GPO apparaît-elle dans « Objets de stratégie appliqués » ou dans « non appliqués » (avec la raison) ?",
+                    "2. Vérifier le lien : la GPO est-elle liée à la bonne OU, et au bon niveau utilisateur OU ordinateur ?",
+                    "3. Vérifier le Security Filtering : « Utilisateurs authentifiés » doit être présent (sauf ciblage de groupe précis).",
+                    "4. Vérifier la réplication SYSVOL : « repadmin /replsummary » — une GPO créée sur DC1 peut ne pas encore exister sur DC2."
+                ],
+                cause: "Le plus souvent : GPO liée à la mauvaise OU, ciblage WMI qui exclut le poste, héritage bloqué sur l'OU, ou réplication SYSVOL pas encore effectuée entre DC.",
+                resolution: [
+                    "Lier la GPO à la bonne OU et vérifier l'ordre des liens (le plus bas dans l'arborescence gagne).",
+                    "Désactiver la configuration inutile (User ou Computer Settings) sur les GPO qui ne s'appliquent qu'à moitié — accélère le traitement.",
+                    "Forcer l'héritage si une OU parente le bloque, ou utiliser « Enforced » sur la GPO de domaine si nécessaire."
+                ],
+                prevention: "Convention de nommage des GPO (COMPUTER-xxx / USER-xxx), commentaires GPMC systématiques, et un environnement de test (OU Pilote) avant la production."
+            },
+            {
+                id: 'dep-ad-kerberos', parcours: 'TSSR', titre: 'AD — ouverture de session très lente ou échecs Kerberos',
+                symptome: "Les utilisateurs mettent plusieurs minutes à ouvrir leur session, ou reçoivent « L'horloge du client et du serveur diffèrent » / erreurs Kerberos ( événement 4 ou 7).",
+                contexte: "Plusieurs postes touchés simultanément = problème d'infrastructure (heure, DNS ou réplication) ; un seul poste = problème local.",
+                diagnostic: [
+                    "1. Vérifier l'heure du poste et du DC : « w32tm /query /status » — un écart supérieur à 5 minutes casse Kerberos.",
+                    "2. Tester le DNS : « nslookup lab.lan » doit retourner le DC ; « nslookup _ldap._tcp.lab.lan » teste les enregistrements SRV.",
+                    "3. Vérifier la réplication AD : « repadmin /replsummary » sur un DC.",
+                    "4. Purger les tickets Kerberos du poste : « klist purge » puis relancer la session."
+                ],
+                cause: "Le plus souvent : désynchronisation horaire (source NTP absente du DC), poste pointant vers un DNS externe au lieu du DC, ou réplication AD en échec entre contrôleurs.",
+                resolution: [
+                    "Heure : configurer le DC racine comme source NTP fiable (« w32tm /config /syncfromflags:domhier ») et réinstaller la resynchronisation client.",
+                    "DNS : repointer le client vers le DC via GPO ou Set-DnsClientServerAddress.",
+                    "Réplication : corriger la cause (DNS entre DC, réseau inter-sites) puis « repadmin /syncall /AdeP »."
+                ],
+                prevention: "Surveiller l'écart d'horloge et l'état de réplication dans Zabbix (compteurs repadmin), et verrouiller la configuration DNS des postes par GPO (impossible de pointer ailleurs)."
+            },
+            {
+                id: 'dep-linux-service', parcours: 'AIS', titre: 'Linux — un service ne démarre plus',
+                symptome: "« systemctl status nginx » (ou tout autre service) retourne « failed » après une mise à jour ou une modification de configuration.",
+                contexte: "Serveur Linux Debian/RHEL en production ; la fenêtre d'intervention est courte, il faut restaurer le service vite mais proprement.",
+                diagnostic: [
+                    "1. « systemctl status <service> » : lire le DERNIER message d'erreur (souvent explicite : file not found, permission denied, bind: address already in use).",
+                    "2. « journalctl -u <service> -n 30 --no-pager » : historique détaillé des échecs.",
+                    "3. Tester la syntaxe de la configuration si l'outil le permet : nginx -t, sshd -t, named-checkconf, mysqld --validate-config.",
+                    "4. Vérifier l'espace disque et les permissions : « df -h », « ls -l » sur les fichiers référencés (cert, log, socket)."
+                ],
+                cause: "Le plus souvent : erreur de syntaxe introduite dans la configuration, port déjà occupé par un autre processus, permissions incorrectes sur un fichier (certificat, socket), ou disque plein.",
+                resolution: [
+                    "Restaurer la sauvegarde de configuration (fichier.bak) puis redémarrer : le service revient, et on corrige ensuite en testant la nouvelle conf.",
+                    "Port occupé : « ss -tulpn | grep <port> » identifie le processus ; l'arrêter ou changer le port.",
+                    "Disque plein : purger les journaux (journalctl --vacuum-size=100M) ou les fichiers volumineux, puis relancer."
+                ],
+                prevention: "Toujours « cp conf conf.bak » avant modification, tester la config avant le restart, et mettre en place une alerte Zabbix sur les services critiques (systemd unit failed)."
+            },
+            {
+                id: 'dep-linux-disk', parcours: 'AIS', titre: 'Linux — disque plein, services en échec',
+                symptome: "Plusieurs services échouent simultanément (base de données, SSH ne peut plus écrire), les journaux montrent « No space left on device ».",
+                contexte: "Incident classique de fin de semaine : un fichier ou un journal a saturé une partition. Diagnostic rapide exigé.",
+                diagnostic: [
+                    "1. « df -h » : identifier la partition pleine (souvent / ou /var).",
+                    "2. « du -h --max-depth=1 /var | sort -h » : descendre jusqu'au répertoire coupable.",
+                    "3. « lsof +L1 » : fichiers supprimés mais encore ouverts par un processus (l'espace n'est libéré qu'au restart du processus)."
+                ],
+                cause: "Le plus souvent : journaux sans rotation, sauvegardes locales oubliées, core dumps, ou une base de données qui a gonflé.",
+                resolution: [
+                    "Purger les journaux : « journalctl --vacuum-size=100M » et vérifier logrotate.",
+                    "Fichier supprimé encore ouvert : « systemctl restart <service> » libère l'espace.",
+                    "Extension LVM si possible : « lvextend -r -L +5G /dev/vg/lv » — la panne ne repart pas tant que la cause n'est pas traitée."
+                ],
+                prevention: "Alerte Zabbix à 85 % d'occupation par partition, logrotate vérifié à l'installation, et quota sur les répertoires d'upload."
+            },
+            {
+                id: 'dep-net-dhcp', parcours: 'AIS', titre: 'Réseau — postes en 169.254.x.x (pas d\'adresse DHCP)',
+                symptome: "Un ou plusieurs postes affichent une adresse 169.254.x.x (APIPA) et ne joignent ni le LAN ni Internet.",
+                contexte: "Si un seul poste : problème local. Si tout un étage : le serveur DHCP ou le relais du segment est en cause.",
+                diagnostic: [
+                    "1. Autres postes du même segment touchés ? (croiser avec la supervision)",
+                    "2. Le port du switch est-il up et dans le bon VLAN ? (« show interfaces status »).",
+                    "3. Le serveur DHCP tourne-t-il et a-t-il des baux disponibles ? (« Get-DhcpServerv4ScopeStatistics » ou « dhcpd -T »).",
+                    "4. Capturer la trame Discover : le poste émet-il ? le serveur répond-il ? (wireshark ou mise en miroir SPAN)."
+                ],
+                cause: "Le plus souvent : port switch désactivé ou mauvais VLAN, étendue DHCP saturée, serveur DHCP arrêté ou non autorisé dans l'AD, relais (helper-address) manquant sur le routeur du segment.",
+                resolution: [
+                    "Étendue saturée : réduire le bail ou ajouter une plage, puis « ipconfig /release && ipconfig /renew » sur les postes.",
+                    "Relais absent : « ip helper-address <serveur> » sur l'interface du routeur du segment.",
+                    "Port err-disable : « shutdown / no shutdown » après avoir corrigé la cause (souvent port-security)."
+                ],
+                prevention: "Alerte Zabbix quand l'étendue dépasse 90 % de baux alloués, supervision des services DHCP/DNS sur le serveur, et test de validation après toute modification de VLAN."
+            },
+            {
+                id: 'dep-net-lenteur', parcours: 'AIS', titre: 'Réseau — lenteur sur un lien (duplex, câble, saturation)',
+                symptome: "Les transferts de fichiers sont lents sur un segment, des erreurs CRC montent sur les compteurs d'interface, les utilisateurs parlent de « réseau qui coupe ».",
+                contexte: "La lenteur chronique est plus fréquente que la panne franche : elle ne déclenche pas d'alerte et dure parfois des mois.",
+                diagnostic: [
+                    "1. Compteurs d'erreurs : « show interfaces » (Cisco) — CRC, late collision, input errors qui montent = couche 1/2.",
+                    "2. Vitesse et duplex des deux extrémités : « show interfaces status » — un côté full, l'autre half = mismatch.",
+                    "3. Charge du lien : « show interfaces summary » — 100 % de bande passante en continu = saturation, pas une panne.",
+                    "4. Test par iperf entre deux machines du segment : isoler le lien des applications."
+                ],
+                cause: "Le plus souvent : câble endommagé ou trop long, duplex mal négocié, connecteur poussiéreux, ou lien saturé par un flux légitime (sauvegarde en journée).",
+                resolution: [
+                    "Forcer le duplex identique des deux côtés (ou laisser Auto partout), remplacer le câble/patch cord.",
+                    "Saturation : déplacer les sauvegardes la nuit, mettre en place QoS, ou passer le lien en EtherChannel/agrégation.",
+                    "Mise à niveau du lien (1G → 10G) si le monitoring montre une croissance continue."
+                ],
+                prevention: "Superviser les erreurs CRC et la bande passante par interface dans Zabbix, et photographier/documenter les licences de câblage à chaque intervention."
+            },
+            {
+                id: 'dep-cisco-port', parcours: 'CCNA', titre: 'Cisco — port en err-disable après branchement',
+                symptome: "Le port d'un switch passe en « err-disabled » dès qu'un équipement est branché : le voyant est orange et le trafic ne passe plus.",
+                contexte: "Incident fréquent après l'activation de port-security, de BPDU guard ou de DHCP snooping sur les ports d'accès.",
+                diagnostic: [
+                    "1. « show interfaces status err-disable » : liste les ports et la cause (psecure-violation, bpduguard, dhcp-rate-limit).",
+                    "2. « show port-security interface fa0/5 » : quelle violation a déclenché l'arrêt.",
+                    "3. Vérifier ce qui est branché : un second switch ou une VM en mode bridge émet des BPDU — c'est interdit sur un port protégé."
+                ],
+                cause: "Le plus souvent : violation de port-security (MAC non autorisée), BPDU reçue sur un port avec BPDU guard, ou trop de trames DHCP (loop détectée).",
+                resolution: [
+                    "Corriger la cause au niveau de l'équipement branché (MAC autorisée, pas de switch caché), puis « shutdown » / « no shutdown » sur le port.",
+                    "Activer la récupération automatique : « errdisable recovery cause psecure-violation » + « errdisable recovery interval 300 ».",
+                    "Si le besoin est légitime (IP-phone + PC), augmenter « switchport port-security maximum 2 »."
+                ],
+                prevention: "BPDU guard + port-security sur tous les ports d'accès comme standard, errdisable recovery configuré, et supervision des logs %PORT_SECURITY."
+            },
+            {
+                id: 'dep-sauvegarde-veeam', parcours: 'TSSR', titre: 'Sauvegarde — job Veeam en échec toutes les nuits',
+                symptome: "Le job de sauvegarde Veeam échoue avec « Processing VM Error: Failed to create snapshot » ou des erreurs de connexion à l'hyperviseur.",
+                contexte: "La sauvegarde est la dernière ligne de défense : un job qui échoue trois nuits de suite doit être traité comme un incident majeur, pas comme un « avertissement ».",
+                diagnostic: [
+                    "1. Lire le rapport du job dans la console Veeam : quelle VM, quelle étape (snapshot ? transfert ? repository ?).",
+                    "2. Sur l'hyperviseur : vérifier l'espace du datastore pour le snapshot (VMware) ou l'espace du volume des checkpoints (Hyper-V).",
+                    "3. Vérifier les credentials : mot de passe du compte d'administration expiré ? Changement de mot de passe root/local admin ?",
+                    "4. Vérifier le repository : disque plein, partage inaccessible, ou repository en mode « déconnecté »."
+                ],
+                cause: "Le plus souvent : manque d'espace pour le snapshot, credentials expirés après un changement de mot de passe, ou repository plein.",
+                resolution: [
+                    "Snapshot impossible : libérer l'espace datastore ou déplacer la VM ; vérifier que les VMware Tools/Hyper-V Integration Services sont à jour (quiescence).",
+                    "Credentials : mettre à jour le compte dans Veeam (Credentials Manager) et relancer le job.",
+                    "Repository plein : étendre le disque ou purger les anciens points de restauration selon la politique de rétention."
+                ],
+                prevention: "Alerte Zabbix sur l'échec de job (webhook Veeam → Zabbix), rapport quotidien par mail, et test de restauration trimestriel documenté (le seul test qui compte)."
+            }
+        ];
+
         // --- MOTEUR DE SCHÉMAS DYNAMIQUES SVG (FONC-07 / SECTION 6) ---
         const DynamicSVGDiagram = ({ type }) => {
             if (type === 'topologie-duplex-mismatch') {
@@ -3656,6 +3937,43 @@
                     ))}
                 </div>
 
+                {/* Approfondissement pédagogique (deepDive) : théorie étendue, commandes intégrées, encadrés pro */}
+                {course.deepDive && course.deepDive.length > 0 && (
+                    <div className="space-y-4">
+                        <h3 className="text-xs uppercase font-bold text-brand-500 tracking-wider">Approfondissement - lecture étendue et pratique</h3>
+                        {course.deepDive.map((b, bi) => (
+                            <div key={bi} className="space-y-2">
+                                <h4 className="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                                    <span className="w-1.5 h-4 rounded bg-brand-500 inline-block"></span>
+                                    {b.t}
+                                </h4>
+                                {(b.p || []).map((par, pi) => (
+                                    <p key={pi} className="text-xs text-slate-700 dark:text-slate-300 leading-relaxed pl-4">{par}</p>
+                                ))}
+                                {b.cmd && b.cmd.length > 0 && (
+                                    <div className="ml-4 rounded-lg overflow-hidden border border-slate-700">
+                                        <div className="bg-slate-800 px-3 py-1 text-[10px] font-bold uppercase text-slate-300">En pratique — commandes à exécuter (VM ou labo)</div>
+                                        <pre className="bg-slate-950 p-3 text-[11px] text-emerald-400 font-mono whitespace-pre-wrap break-words leading-relaxed">{b.cmd.join('\n')}</pre>
+                                    </div>
+                                )}
+                                {b.box && (
+                                    <div className={`ml-4 p-3 rounded-lg border text-xs leading-relaxed ${
+                                        b.box === 'remember' ? 'bg-sky-500/10 border-sky-500/30 text-sky-800 dark:text-sky-200' :
+                                        b.box === 'warn' ? 'bg-red-500/10 border-red-500/30 text-red-800 dark:text-red-200' :
+                                        b.box === 'admin' ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-800 dark:text-emerald-200' :
+                                        'bg-amber-500/10 border-amber-500/30 text-amber-800 dark:text-amber-200'
+                                    }`}>
+                                        <span className="font-bold uppercase text-[10px] block mb-1">
+                                            {b.box === 'remember' ? '📌 À retenir' : b.box === 'warn' ? '⚠️ Erreur fréquente' : b.box === 'admin' ? '🛡️ Conseil d’administrateur' : '💼 Cas d’entreprise'}
+                                        </span>
+                                        {b.boxText}
+                                    </div>
+                                )}
+                            </div>
+                        ))}
+                    </div>
+                )}
+
                 {/* Exercices */}
                 <div className="space-y-3">
                     <h3 className="text-xs uppercase font-bold text-brand-500 tracking-wider">Exercices pratiques — cherchez d'abord, révélez ensuite</h3>
@@ -3673,22 +3991,7 @@
                     )}
                 </div>
 
-                {/* Renvois (plan de fiche 4.2 : QCM, labo, cheat sheet) */}
-                <div className="pt-4 border-t border-slate-200 dark:border-slate-700 flex flex-wrap gap-3">
-                    <span className="text-xs font-bold text-slate-400 uppercase tracking-wider w-full">Renvois utiles</span>
-                    <button onClick={() => onOpenTab('qcm')} className="px-3 py-1.5 bg-brand-600 text-white text-xs font-semibold rounded hover:bg-brand-700 transition-colors">
-                        ✍️ Banque QCM
-                    </button>
-                    <button onClick={() => onOpenTab('labs')} className="px-3 py-1.5 bg-slate-100 dark:bg-slate-700 text-xs font-semibold rounded hover:bg-slate-200 text-slate-800 dark:text-slate-200">
-                        🧪 Labo guidé
-                    </button>
-                    <button onClick={() => onOpenTab('commands')} className="px-3 py-1.5 bg-slate-100 dark:bg-slate-700 text-xs font-semibold rounded hover:bg-slate-200 text-slate-800 dark:text-slate-200">
-                        ⚙️ Cheat Sheets & Commandes
-                    </button>
-                    <button onClick={() => onOpenTab('glossary')} className="px-3 py-1.5 bg-slate-100 dark:bg-slate-700 text-xs font-semibold rounded hover:bg-slate-200 text-slate-800 dark:text-slate-200">
-                        📖 Glossaire
-                    </button>
-                </div>
+                {/* Renvois supprimés : QCM, Labos, Commandes et Glossaire restent dans la navigation principale */}
 
                 {/* Évaluation */}
                 <div className="space-y-3">
@@ -4961,6 +5264,83 @@
                 );
             };
 
+            // Rendu Onglet Dépannage (fiches professionnelles)
+            const renderDepannageTab = () => {
+                const filtered = DEPANNAGE_DATA.filter(d => {
+                    if (labParcours !== 'Tous' && d.parcours !== labParcours) return false;
+                    if (!labSearch) return true;
+                    const q = normText(labSearch);
+                    return normText([d.titre, d.symptome, d.contexte, d.cause, ...(d.diagnostic || []), ...(d.resolution || [])].join(' ')).includes(q);
+                });
+                const byParcours = (p) => DEPANNAGE_DATA.filter(d => d.parcours === p).length;
+                const parcoursBadge = (p) => ({
+                    "TSSR": "bg-sky-500/10 text-sky-500",
+                    "AIS": "bg-purple-500/10 text-purple-500",
+                    "CCNA": "bg-brand-500/10 text-brand-500"
+                }[p] || "bg-slate-500/10 text-slate-400");
+                return (
+                    <div className="space-y-6">
+                        <div className="bg-white dark:bg-slate-800 rounded-xl p-4 md:p-6 border border-slate-200 dark:border-slate-700 space-y-4">
+                            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-3 border-b border-slate-200 dark:border-slate-700 pb-3">
+                                <div>
+                                    <h2 className="text-xl font-bold text-slate-900 dark:text-white">Fiches de dépannage professionnelles</h2>
+                                    <p className="text-xs text-slate-500 dark:text-slate-400">{DEPANNAGE_DATA.length} fiches — symptôme → diagnostic → cause → résolution → prévention. TSSR {byParcours('TSSR')} · AIS {byParcours('AIS')} · CCNA {byParcours('CCNA')}</p>
+                                </div>
+                                <div className="w-full md:w-72">
+                                    <input
+                                        type="text"
+                                        placeholder="🔍 Symptôme, service, cause..."
+                                        value={labSearch}
+                                        onChange={(e) => setLabSearch(e.target.value)}
+                                        className="w-full bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-1.5 text-xs text-slate-900 dark:text-slate-100 focus:outline-none focus:border-brand-500"
+                                    />
+                                </div>
+                            </div>
+                            <div className="flex gap-2 flex-wrap">
+                                {['Tous', 'TSSR', 'AIS', 'CCNA'].map(p => (
+                                    <button key={p} onClick={() => setLabParcours(p)} className={`px-2.5 py-1 text-[11px] font-bold rounded-lg border ${labParcours === p ? 'bg-brand-600 text-white border-brand-600' : 'bg-slate-100 dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-200'}`}>{p === 'Tous' ? 'Tous' : p}</button>
+                                ))}
+                            </div>
+                            {filtered.length === 0 && (
+                                <div className="text-center text-xs text-slate-500 py-8">Aucune fiche ne correspond à votre recherche.</div>
+                            )}
+                            <div className="grid grid-cols-1 xl:grid-cols-2 gap-5">
+                                {filtered.map((d, idx) => (
+                                    <div key={idx} className="p-4 bg-slate-50 dark:bg-slate-900/50 rounded-xl border border-slate-200 dark:border-slate-700 space-y-3">
+                                        <div className="flex flex-wrap items-center gap-2">
+                                            <span className={`px-2 py-0.5 text-[10px] font-bold rounded-full ${parcoursBadge(d.parcours)}`}>{d.parcours}</span>
+                                        </div>
+                                        <h3 className="text-sm font-bold text-slate-900 dark:text-white">{d.titre}</h3>
+                                        <div className="p-2.5 bg-red-500/10 border-l-4 border-red-500/50 rounded text-xs text-slate-700 dark:text-slate-300">
+                                            <span className="font-bold uppercase text-[10px] text-red-600 dark:text-red-400 block mb-0.5">Symptôme</span>{d.symptome}
+                                        </div>
+                                        <p className="text-xs text-slate-600 dark:text-slate-400"><span className="font-bold text-slate-700 dark:text-slate-200">Contexte : </span>{d.contexte}</p>
+                                        <div>
+                                            <span className="text-[10px] font-bold uppercase text-sky-600 dark:text-sky-400 block mb-1">Diagnostic (dans l'ordre)</span>
+                                            <ol className="list-decimal pl-5 text-xs text-slate-700 dark:text-slate-300 space-y-1">
+                                                {(d.diagnostic || []).map((s, si) => <li key={si}>{s}</li>)}
+                                            </ol>
+                                        </div>
+                                        <div className="p-2.5 bg-amber-500/10 border-l-4 border-amber-500/50 rounded text-xs text-slate-700 dark:text-slate-300">
+                                            <span className="font-bold uppercase text-[10px] text-amber-600 dark:text-amber-400 block mb-0.5">Cause la plus fréquente</span>{d.cause}
+                                        </div>
+                                        <div>
+                                            <span className="text-[10px] font-bold uppercase text-emerald-600 dark:text-emerald-400 block mb-1">Résolution</span>
+                                            <ul className="list-disc pl-5 text-xs text-slate-700 dark:text-slate-300 space-y-1">
+                                                {(d.resolution || []).map((s, si) => <li key={si}>{s}</li>)}
+                                            </ul>
+                                        </div>
+                                        <div className="p-2.5 bg-emerald-500/10 border border-emerald-500/30 rounded text-xs text-slate-700 dark:text-slate-200">
+                                            <span className="font-bold uppercase text-[10px] text-emerald-600 dark:text-emerald-400 block mb-0.5">🛡️ Prévention</span>{d.prevention}
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+                );
+            };
+
             // Rendu Onglet Examen Blanc
             const renderExam = () => (
                 <div className="max-w-3xl mx-auto bg-white dark:bg-slate-800 rounded-xl p-6 border border-slate-200 dark:border-slate-700 space-y-6">
@@ -5110,6 +5490,7 @@
                                     { id: 'labs', label: '🧪 Labos Guidés' },
                                     { id: 'exam', label: '⏱️ Examen Blanc' },
                                     { id: 'commands', label: '⚙️ Commandes' },
+                                    { id: 'depannage', label: '\u{1F9F0} Dépannage' },
                                     { id: 'glossary', label: '📖 Glossaire' },
                                     { id: 'vocab', label: '🌐 Vocabulaire Anglais' }
                                 ].map(tab => (
@@ -5137,6 +5518,7 @@
                         {currentTab === 'labs' && renderLabs()}
                         {currentTab === 'exam' && renderExam()}
                         {currentTab === 'commands' && renderCommandsTab()}
+                        {currentTab === 'depannage' && renderDepannageTab()}
                         {currentTab === 'glossary' && renderGlossaryTab()}
                         {currentTab === 'vocab' && renderVocabTab()}
                     </main>
