@@ -446,6 +446,462 @@
                 links: { qcmId: 131, labId: 'lab-1', cheatSheetCat: 'Services IP' }
             },
             {
+                id: 'ccna-v2-2-1',
+                certif: 'CCNA',
+                parcours: 'CCNA',
+                code: '2.1',
+                title: "VLAN et trunks 802.1Q : segmenter un commuté",
+                niveau: 'Débutant à intermédiaire',
+                prerequis: "Les sujets 1.1 (commutation) et 1.3 (sous-réseaux) : un VLAN se comprend bien comme un sous-réseau logique posé sur l'infrastructure physique.",
+                objectifs: [
+                    "Expliquer ce qu'apporte un VLAN : cloisonnement couche 2, domaines de diffusion réduits, sécurité",
+                    "Créer des VLAN, affecter des ports d'accès nommés, vérifier avec show vlan brief",
+                    "Configurer un trunk 802.1Q, comprendre le tag, le VLAN natif et la liste autorisée",
+                    "Reconnaître les pannes classiques : trunk d'un seul côté, VLAN natif différent, VLAN manquant",
+                    "Décrire le routage inter-VLAN (router-on-a-stick et SVI de switch couche 3)"
+                ],
+                lessons: [
+                    { title: "Leçon 1 — Pourquoi segmenter en VLAN", parts: [
+                        { h: "Le problème du réseau à plat", t: "Un commutateur relie tout le monde au niveau 2 : une trame de diffusion (broadcast) envoyée par un poste atteint les 400 autres postes du plateau. ARP, DHCP, les annonces Windows s'accumulent : c'est la tempête silencieuse qui ralentit tout le monde. Le VLAN (Virtual LAN) découpe logiquement ce commutateur en îlots : un broadcast VLAN 10 ne sort jamais du VLAN 10." },
+                        { h: "Un VLAN = un domaine de diffusion = (souvent) un sous-réseau", t: "La règle d'architecture : un VLAN correspond à un sous-réseau IP (VLAN 10 = 192.168.10.0/24, VLAN 20 = 192.168.20.0/24). Deux postes de VLAN différents peuvent être branchés sur le même switch : ils ne communiqueront jamais directement — il faut un routeur ou un switch couche 3 pour passer de l'un à l'autre." },
+                        { h: "Ce que ça apporte en entreprise", t: "Sécurité : la comptabilité et les invités ne partagent plus le même espace broadcast — impossible d'écouter le trafic de l'autre VLAN. Performance : moins de broadcast, moins de charge CPU sur les postes. Organisation : l'affectation se fait par port, par adresse MAC ou par 802.1x, indépendamment de la prise murale où branche l'utilisateur." },
+                        { h: "Les plages de VLAN", t: "VLAN 1 : par défaut, tous les ports y vivent à la sortie d'usine — on ne l'utilise pas en production. VLANs normaux : 2-1001. VLANs étendus : 1006-4094 (réservés en interne aux protocoles, utilisables avec VTP v3 ou en mode transparent). Les VLAN 1002-1005 sont historiquement réservés (Token Ring, FDDI)." }
+                    ]},
+                    { title: "Leçon 2 — Créer des VLAN et affecter des ports d'accès", parts: [
+                        { h: "Créer le VLAN et le nommer", t: "Sur IOS : vlan 10 puis name RH créent le VLAN avec un nom explicite. Un VLAN créé mais non affecté à un port reste inutilisé. Le nommage compte : dans trois ans, 'show vlan brief' doit se lire comme un plan d'adressage, pas comme une devinette." },
+                        { h: "Le port d'accès", t: "switchport mode access fixe le port dans un seul VLAN ; switchport access vlan 10 l'y range. C'est le mode des ports vers les postes, imprimantes, caméras. Un poste connecté à un port d'accès VLAN 10 reçoit une IP du sous-réseau du VLAN 10 — vérifiez que le serveur DHCP a bien un pool (ou un relais) pour ce sous-réseau." },
+                        { h: "Vérifier", t: "show vlan brief affiche la table VLAN/port : chaque VLAN, son nom, son état (active) et les ports membres. show interfaces switchport détaille un port : mode access, VLAN d'accès, VLAN voix. C'est la première commande à lancer avant toute accusation de 'panne réseau'." },
+                        { h: "Le VLAN voix", t: "Sur un port de poste, switchport voice vlan 50 attribue un second VLAN dédié à un téléphone IP : le PC et le téléphone partagent le même port mais vivent dans deux VLAN — la voix est isolée des données et priorisée en amont." }
+                    ]},
+                    { title: "Leçon 3 — Le trunk 802.1Q et le tag", parts: [
+                        { h: "Pourquoi un trunk", t: "Entre deux commutateurs, il faudrait sinon un câble par VLAN. Le trunk multiplexe tous les VLAN sur un seul lien : chaque trame part avec une étiquette de 4 octets (le tag 802.1Q) qui porte le VLAN d'origine, et le commutateur en face retire l'étiquette avant de délivrer la trame sur les ports d'accès du bon VLAN." },
+                        { h: "Le VLAN natif", t: "Sur un trunk 802.1Q, une trame du VLAN natif circule non étiquetée. Par défaut c'est le VLAN 1 — mauvaise idée : on le change des deux côtés (switchport trunk native vlan 99) vers un VLAN dédié, inutilisé par le trafic utile. Un mismatch de VLAN natif entre deux extrémités fait circuler des trames d'un VLAN vers un autre sans erreur visible : c'est un trou de sécurité silencieux (attaque du VLAN hopping par double tag)." },
+                        { h: "La liste des VLAN autorisés", t: "switchport trunk allowed vlan 10,20,30 limite le trunk aux seuls VLAN utiles. Par défaut, un trunk accepte tous les VLAN 1-4094 : un VLAN de test créé sur un switch se propage partout. En production on restreint explicitement, et on ajoute au besoin : switchport trunk allowed vlan add 40." },
+                        { h: "DTP, la négociation automatique", t: "Dynamic Trunking Protocol négocie le mode trunk automatiquement (dynamic auto / dynamic desirable). Les combinaisons trunk + desirable et desirable + desirable forment un trunk ; auto + auto ne fait rien. En production : switchport nonegotiate et modes explicits des deux côtés — on veut du déterminisme, pas de la déduction." }
+                    ]},
+                    { title: "Leçon 4 — Le routage inter-VLAN", parts: [
+                        { h: "Router-on-a-stick", t: "Un seul lien routeur-switch, configuré en trunk côté switch, avec une sous-interface par VLAN côté routeur : interface G0/0.10, encapsulation dot1Q 10, ip address 192.168.10.1 255.255.255.0. Le routeur route entre les sous-réseaux ; tout le trafic inter-VLAN passe par ce lien unique — simple à comprendre, gourmand en débit sur ce lien." },
+                        { h: "Le switch couche 3 et les SVI", t: "Sur un switch multicoche (Catalyst 3650/3850), une interface vlan 10 avec une IP joue la passerelle du VLAN 10 : c'est une SVI (Switch Virtual Interface). Le routage inter-VLAN se fait dans le switch, sans routeur externe, à la vitesse du backplane. ip routing active la fonction. C'est le design standard des réseaux d'entreprise modernes." },
+                        { h: "Vérifier le chemin complet", t: "Le poste doit pinguer sa passerelle SVI, puis la passerelle du VLAN distant. show ip route sur le switch L3 doit montrer les réseaux connectés (C) de chaque VLAN. Un ping inter-VLAN qui échoue alors que les deux passerelles répondent = chercher une ACL entre les deux." }
+                    ]}
+                ],
+                guiSteps: [
+                    { title: "Créer les VLAN dans Packet Tracer", action: "Ouvrez SW1 (switch 2960) > onglet Config > VLAN Database : cliquez Add et créez le VLAN 10 nommé RH, puis le VLAN 20 nommé IT. En bas, la ligne de commande équivalente s'affiche au fur et à mesure.", observation: "La table VLAN se remplit : VLAN 1 (default), 10 RH, 20 IT. Comparez avec 'show vlan brief' dans l'onglet CLI : même information, deux vues." },
+                    { title: "Affecter les ports d'accès", action: "Toujours dans Config > FastEthernet0/1 (connecté à PC-RH) : mettez le port Access et sélectionnez le VLAN 10. Répétez pour Fa0/2 vers PC-IT en VLAN 20.", observation: "PC-RH reçoit maintenant une IP du pool du VLAN 10 s'il y a un serveur DHCP ; sinon configurez des IP statiques 192.168.10.2/24 et 192.168.20.2/24. Le ping entre les deux PC échoue : les VLAN s'isolent, normal." },
+                    { title: "Monter le trunk vers SW2", action: "Sur le lien Gi0/1 entre SW1 et SW2 : Config > GigabitEthernet0/1 > mode Trunk. Vérifiez sur SW2 que le port opposé est aussi en trunk.", observation: "'show interfaces trunk' sur les deux switchs : le port est en trunking, les VLAN 10 et 20 listés comme autorisés et actifs. Un trunk configuré d'un seul côté est la panne classique (l'autre côté reste en dynamic auto)." },
+                    { title: "Router entre les VLAN avec un routeur sur bâton", action: "Sur R1 : interface G0/0.10, encapsulation dot1Q 10, ip address 192.168.10.1 255.255.255.0 ; interface G0/0.20, encapsulation dot1Q 20, ip address 192.168.20.1 255.255.255.0 ; no shutdown sur G0/0. Donnez aux PC les passerelles .1 de leurs VLAN.", observation: "PC-RH ping 192.168.20.2 : la trame monte le trunk taguée VLAN 10, le routeur dé-tague, route, re-tague en VLAN 20, redescend. 'show ip route' sur R1 affiche les deux réseaux en C (connectés)." }
+                ],
+                deepDive: [
+                    { t: "VTP : le protocole de propagation des VLAN — et pourquoi le désactiver", p: [
+                        "VLAN Trunking Protocol propage les créations/suppressions de VLAN sur tous les switches d'un domaine VTP : mode server (crée/modifie), client (reçoit), transparent (ignore et relaie).",
+                        "Le danger : chaque modification incrémente le numéro de révision. Un switch de test branché en mode server avec une révision supérieure écrase la base VLAN de tout le domaine — les ports se retrouvent dans des VLAN inexistants, tout tombe.",
+                        "Le réflexe moderne : vtp mode transparent partout (les VLANs sont configurés manuellement sur chaque switch), ou VTP v3 (mot de passe, révision protégée) dans les grands parcs."
+                    ],
+                    cmd: [
+                        "vtp mode transparent",
+                        "show vtp status",
+                        "! vérifier les VLAN réellement présents, indépendamment de VTP",
+                        "show vlan brief"
+                    ],
+                    box: 'warn', boxText: "Panne légendaire : un switch reconditionné branché sur le réseau de prod en mode VTP server vide la table VLAN du domaine entier (révision plus haute = écrasement). Toujours vérifier 'show vtp status' (mode et révision) avant de brancher un switch d'occasion, et préférer le mode transparent." },
+                    { t: "Diagnostic pas à pas d'un 'ça ne passe plus entre les étages'", p: [
+                        "Couche 1 : show interfaces status — le lien entre SW1/SW2 est-il up/up ?",
+                        "Couche 2 VLAN : show vlan brief des deux côtés — le VLAN 20 existe-t-il sur SW2 ? (S'il a été créé sur SW1 uniquement, les trames taguées sont simplement jetées côté SW2.)",
+                        "Trunk : show interfaces trunk des deux côtés — mode trunk, VLAN autorisés identiques, VLAN natif identique.",
+                        "Couche 3 : les deux PC pinguent-ils leur passerelle respective ? Si oui, le problème est au routage ou dans une ACL, pas dans les VLAN."
+                    ],
+                    cmd: [
+                        "show interfaces gi0/1 status",
+                        "show interfaces trunk",
+                        "show vlan brief",
+                        "ping 192.168.10.1   ! depuis PC-RH : teste le VLAN 10 et la passerelle"
+                    ],
+                    box: 'remember', boxText: "À retenir : un VLAN absent d'un des deux commutateurs ne produit AUCUN message d'erreur — les trames taguées arrivent sur un trunk qui ne porte pas ce VLAN et sont discrètement perdues. 'show interfaces trunk' le révèle : le VLAN doit apparaître dans la colonne des VLAN autorisés ET actifs." },
+                    { t: "Cas d'entreprise — le nouveau service RH", p: [
+                        "Situation : l'entreprise ouvre un service RH au 2e étage (30 postes). Le plan : VLAN 30, sous-réseau 192.168.30.0/24, passerelle .1 sur le switch couche 3 du bâtiment.",
+                        "Déploiement : créer le VLAN 30 sur SW-ETAGE2 (vlan 30 / name RH), affecter les 30 ports d'accès, autoriser le VLAN 30 sur les trunks montants vers le cœur, créer l'interface vlan 30 avec 192.168.30.1/24, prévoir le relais DHCP vers le serveur central (ip helper-address).",
+                        "Vérification : un poste du service RH obtient une IP en 192.168.30.x, ping sa passerelle, ping le serveur RH (retour au réseau existant via routage). 'show interfaces trunk' confirme le VLAN 30 actif sur tout le chemin."
+                    ],
+                    box: 'case', boxText: "Un VLAN qui traverse N commutateurs doit exister ET être autorisé sur CHAQUE trunk du chemin. La checklist : VLAN créé partout ? autorisé sur chaque trunk ? sous-interface ou SVI configurée pour la passerelle ? relais DHCP en place ?" }
+                ],
+                exercices: [
+                    { enonce: "Un technicien a configuré un trunk entre SW1 et SW2 : côté SW1 en 'switchport mode trunk', côté SW2 laissé par défaut (dynamic auto). Le VLAN 10 passe, le VLAN 20 ne passe pas. Expliquez et corrigez.", correction: "Avec SW1 en trunk et SW2 en dynamic auto, DTP négocie un trunk : les VLAN déjà connus de SW2 passent. Le VLAN 20 n'existe pas sur SW2 : les trames taguées VLAN 20 arrivent sur un trunk qui ne liste pas ce VLAN et sont perdues silencieusement. Correction : créer le VLAN 20 sur SW2 (vlan 20 / name ...), vérifier 'show interfaces trunk' côté SW2 (le VLAN 20 doit être autorisé et actif), et pour aller au bout : forcer le trunk des deux côtés et limiter les VLAN autorisés (switchport trunk allowed vlan 10,20 avec le même VLAN natif des deux côtés)." },
+                    { enonce: "Pourquoi un ping entre PC-RH (VLAN 10) et PC-IT (VLAN 20) échoue-t-il sans routeur, alors que les deux postes sont branchés sur le même commutateur physique ?", correction: "Le commutateur de niveau 2 ne route pas : il fait suivre les trames entre ports du MÊME VLAN uniquement. Un VLAN délimite un domaine de diffusion distinct ; les trames du VLAN 10 ne franchissent jamais la frontière vers le VLAN 20 sans équipement de niveau 3. Il faut une passerelle par VLAN : un routeur sur bâton (sous-interfaces dot1Q) ou une SVI sur un switch couche 3. Ce cloisonnement est justement la fonction sécurité du VLAN : isolation couche 2." }
+                ],
+                resume: "Le VLAN segmente le réseau au niveau 2 : un VLAN = un domaine de diffusion = un sous-réseau. Les ports d'accès rangent les hôtes ; le trunk 802.1Q transporte tous les VLAN avec un tag entre commutateurs ; le VLAN natif doit être identique des deux côtés et ne doit pas être le VLAN 1 ; le routage inter-VLAN exige une passerelle par VLAN (sous-interfaces routeur ou SVI). Vérification systématique : show vlan brief, show interfaces trunk des deux côtés.",
+                suite: "Le sujet 2.2 traite la redondance de niveau 2 (STP, Rapid-PVST+, EtherChannel) : sans STP, les liaisons redondantes entre commutateurs créent des boucles.",
+                evaluation: [
+                    { q: "Un VLAN définit avant tout :", options: [ "Un sous-réseau IP obligatoire", "Un domaine de diffusion de niveau 2", "Un segment physique", "Une zone de sécurité pare-feu" ], answer: 1, exp: "Correct : le VLAN découpe les domaines de diffusion au niveau 2. On lui associe ensuite un sous-réseau IP par convention d'architecture." },
+                    { q: "Sur un trunk 802.1Q, quelle trame circule sans tag ?", options: [ "Celle du VLAN 1 uniquement", "Celle du VLAN d'accès", "Celle du VLAN natif", "Les broadcasts" ], answer: 2, exp: "Correct : les trames du VLAN natif traversent le trunk non étiquetées — d'où l'importance d'un VLAN natif identique des deux côtés et différent du VLAN 1." },
+                    { q: "Quelle séquence crée un trunk propre entre deux switches ?", options: [ "switchport mode dynamic auto des deux côtés", "switchport mode trunk d'un côté, auto de l'autre, en laissant DTP négocier", "switchport mode trunk + switchport nonegotiate des deux côtés", "switchport access vlan 99 des deux côtés" ], answer: 2, exp: "Correct : modes explicites des deux côtés et DTP coupé — le trunk est déterministe et on ajoute switchport trunk allowed vlan pour filtrer." },
+                    { q: "Le VLAN 30 est créé sur SW1 uniquement. Que se passe-t-il pour ses trames sur le trunk vers SW2 ?", options: [ "SW2 les accepte et les envoie au VLAN 30 inexistant : erreur", "Elles sont perdues silencieusement (VLAN absent de SW2)", "SW2 crée automatiquement le VLAN 30", "Le trunk se ferme" ], answer: 1, exp: "Correct : un trunk n'accepte que les VLAN connus du commutateur ; aucun message d'erreur n'est produit — d'où la vérification 'show vlan brief' sur chaque commutateur du chemin." },
+                    { q: "Une SVI (interface vlan 10 avec IP) sert à :", options: [ "Étiqueter les trames sur un trunk", "Jouer la passerelle du VLAN 10 sur un switch couche 3", "Créer le VLAN 10 automatiquement", "Remplacer le trunk 802.1Q" ], answer: 1, exp: "Correct : l'interface virtuelle VLAN du switch L3 route entre VLAN à la vitesse du backplane — le design standard du routage inter-VLAN." }
+                ]
+            },
+            {
+                id: 'ccna-v2-2-2',
+                certif: 'CCNA',
+                parcours: 'CCNA',
+                code: '2.2',
+                title: "STP, redondance et EtherChannel : des boucles aux agrégations",
+                niveau: 'Intermédiaire',
+                prerequis: "Le sujet 2.1 (VLAN et trunks) : STP s'exécute par VLAN en mode PVST+/rapid PVST, et les boucles naissent des liaisons trunk redondantes.",
+                objectifs: [
+                    "Expliquer pourquoi une boucle de niveau 2 est catastrophique (broadcast storm, table MAC instable, trames dupliquées)",
+                    "Décrire l'élection du pont racine (priorité la plus basse, puis MAC la plus basse) et les rôles root/designated/blocked",
+                    "Suivre les états de port STP et la convergence 802.1D (30-50 s) contre RSTP (quelques secondes)",
+                    "Sécuriser STP : PortFast, BPDU Guard, Root Guard, et comprendre leur usage respectif",
+                    "Configurer un EtherChannel LACP et savoir pourquoi il ne se forme pas quand les liens diffèrent"
+                ],
+                lessons: [
+                    { title: "Leçon 1 — La boucle de niveau 2, l'ennemi silencieux", parts: [
+                        { h: "Trois symptômes d'une boucle", t: "Une boucle L2 (deux chemins entre deux commutateurs) produit : (1) des tempêtes de broadcast — une trame de diffusion tourne en boucle et sature tous les liens ; (2) l'instabilité de la table MAC — le commutateur voit la même MAC apparaître sur plusieurs ports ; (3) des trames dupliquées — les hôtes reçoivent tout en double. Le réseau ralentit puis meurt, souvent sans un seul message d'erreur dans les logs." },
+                        { h: "Pourquoi le TTL ne sauve pas", t: "Les trames Ethernet de niveau 2 n'ont pas de TTL (contrairement aux paquets IP) : une trame de broadcast boucle indéfiniment. C'est tout le problème que STP vient résoudre : couper préventivement les chemins redondants au niveau 2 tout en gardant la redondance physique pour la panne." },
+                        { h: "Le mécanisme de STP", t: "Spanning Tree Protocol (IEEE 802.1D) élit un pont racine (root bridge), puis chaque commutateur calcule son meilleur chemin vers la racine. Les ports sur le meilleur chemin deviennent root port (un par switch) ou designated port (un par segment) et forwarded ; les autres passent en blocking : la topologie logique devient un arbre — sans boucle — en gardant les liens bloqués en réserve." }
+                    ]},
+                    { title: "Leçon 2 — L'élection du pont racine", parts: [
+                        { h: "Qui devient racine", t: "Chaque commutateur envoie des BPDU (Bridge Protocol Data Units, toutes les 2 s par défaut — Hello Time) qui portent son Bridge ID = priorité + MAC. Est élu racine le Bridge ID le plus bas : priorité d'abord (32768 par défaut, multiple de 4096, moins = mieux placé), puis MAC la plus basse en cas d'égalité." },
+                        { h: "Imposer sa racine", t: "spanning-tree vlan 10 root primary abaisse automatiquement la priorité (24576, ou 4096 sous la priorité courante) pour que le commutateur cœur gagne l'élection ; root secondary (28672) prépare le secours. On choisit comme racine le commutateur le plus central : tous les chemins de l'arbre en découlent, et une racine mal placée concentre le trafic au mauvais endroit." },
+                        { h: "Les rôles de ports après élection", t: "Root port : le port qui mène à la racine au moindre coût (coût cumulé des liens : 4 pour 1 Gbps, 19 pour 100 Mbps). Designated port : sur chaque segment, le port côté qui envoie la meilleure BPDU — les ports de la racine sont tous designated. Les autres ports deviennent non-designated (blocking) : c'est la réserve de secours." },
+                        { h: "Un STP par VLAN", t: "PVST+ et Rapid PVST+ exécutent une instance STP par VLAN : le VLAN 10 peut avoir SW1 comme racine et le VLAN 20 SW2 — le trafic se répartit. Coût : autant d'instances que de VLAN (CPU, BPDU). MSTP (802.1s) regroupe les VLAN en quelques instances pour alléger les très grands parcs." }
+                    ]},
+                    { title: "Leçon 3 — De 802.1D à RSTP : la convergence", parts: [
+                        { h: "Les états de port 802.1D", t: "Blocking (n'accepte que les BPDU) → Listening (participe à l'élection, ~15 s) → Learning (remplit sa table MAC, ~15 s) → Forwarding. Total au démarrage : 30-50 s. Un poste qui se branche attend ce délai complet avant de passer du lien au trafic : un DHCP timeout en résulte parfois." },
+                        { h: "Rapid STP (802.1w)", t: "RSTP fusionne blocking/listening en discarding, ajoute les rôles alternate (chemin de secours vers la racine) et backup (secours sur un segment partagé), et surtout propose/accorde entre voisins : la convergence tombe à quelques secondes, voire quasi immédiate sur les ports edge. Sur tout parc moderne : spanning-tree mode rapid-pvst." },
+                        { h: "Les protections", t: "PortFast (spanning-tree portfast) : passe un port d'accès immédiatement en forwarding — réservé aux ports vers des hôtes. BPDU Guard (spanning-tree bpduguard enable) : err-disable le port si une BPDU y arrive (quelqu'un a branché un switch !). Root Guard (spanning-tree guard root) : rejette toute annonce d'un meilleur pont racine — protège les ports descendant vers d'autres switches. Loop Guard : détecte la perte unidirectionnelle de BPDUs (lien à demi-mort)." },
+                        { h: "UplinkFast/BackboneFast", t: "Améliorations Cisco héritées de l'époque 802.1D : UplinkFast accélère la bascule quand un lien vers la racine tombe ; BackboneFast détecte indirectement les changements de topologie en amont. Avec RSTP, elles sont intégrées de fait — plus besoin de les configurer." }
+                    ]},
+                    { title: "Leçon 4 — EtherChannel : agréger les liens", parts: [
+                        { h: "Le principe", t: "Un EtherChannel groupe 2 à 8 liens physiques entre deux commutateurs en un seul canal logique (interface Port-Channel). Les protocoles STP ne voient qu'un lien : plus de blocage par redondance, et la charge se répartit (src-dst-mac, src-dst-ip...). Pour la STP, le coût du canal correspond à un seul lien de cette vitesse." },
+                        { h: "PAgP et LACP", t: "Deux protocoles de négociation : PAgP (propriétaire Cisco : modes desirable/auto) et LACP (standard IEEE 802.3ad : modes active/passive). LACP active initie la négociation, passive attend. Pour qu'un canal se forme : active+active, active+passive ou passive+passive ne marche pas (côté LACP). Le réflexe : LACP active des deux côtés." },
+                        { h: "La règle d'homogénéité", t: "Tous les liens du canal doivent être identiques : même vitesse, même duplex, même mode access/trunk, mêmes VLAN autorisés. Une seule différence et le canal ne se forme pas (les liens restent individuels, avec risque de boucle côté STP). Vérification : show etherchannel summary — la lettre P (ports bundled) doit apparaître sur chaque membre ; I/S = inutilisé/suspendu." },
+                        { h: "Le load-balancing", t: "port-channel load-balance src-dst-ip répartit les flux selon les IP source/destination — adapté au trafic routé ; src-dst-mac au trafic commuté. Attention : la répartition est par flux, pas par paquet — un unique gros transfert n'exploitera qu'un seul lien du canal." }
+                    ]}
+                ],
+                guiSteps: [
+                    { title: "Observer l'élection racine par défaut", action: "Dans Packet Tracer, montez un triangle SW1-SW2-SW3 (trunks 802.1Q entre chaque paire). Sur SW2, ouvrez le CLI : show spanning-tree. Relevez le Root ID et comparez-le aux Bridge ID des trois commutateurs (show spanning-tree bridge).", observation: "À priorité égale (32768), c'est la MAC la plus basse qui gagne : souvent SW1 par chance. Un port de SW3 apparaît en ALTN/BKN : c'est le chemin sacrifié par STP pour casser la boucle." },
+                    { title: "Imposer SW1 comme racine et passer en rapid-pvst", action: "Sur SW1 : spanning-tree vlan 1 root primary. Sur les trois commutateurs : spanning-tree mode rapid-pvst. Revenez sur SW2 : show spanning-tree.", observation: "Root ID = Bridge ID de SW1, tous les ports de SW1 sont designated (FWD). Sur SW3, le port alternatif garde la boucle coupée. En cas de coupure du lien SW1-SW3 (shutdown), le port alternatif passe FWD en quelques secondes : testez." },
+                    { title: "Protéger les ports d'accès", action: "Sur un port vers un PC : spanning-tree portfast puis spanning-tree bpduguard enable. Branchez ensuite un switch illégal sur ce port et observez.", observation: "Le port passe err-disabled dès la première BPDU reçue : le switch pirate est neutralisé. PortFast sans BPDU Guard aurait laissé le port en forwarding immédiat — et la boucle possible le temps que STP réagisse." },
+                    { title: "Monter un EtherChannel LACP", action: "Ajoutez deux liens Gigabit entre SW1 et SW2. Sur chaque commutateur : interface range gi0/1-2 puis channel-group 1 mode active et switchport mode trunk. Vérifiez avec show etherchannel 1 summary.", observation: "Les deux ports affichent la lettre P (in the bundle) et l'interface Po1 apparaît en trunk. Coupez un lien : le trafic continue sur l'autre, sans recalcul STP — la redondance devient transparente." }
+                ],
+                deepDive: [
+                    { t: "Coûts de chemin STP : le calcul complet", p: [
+                        "Chaque vitesse de lien a un coût STP : 100 Mbps = 19, 1 Gbps = 4, 10 Gbps = 2 (nouvelles valeurs 802.1t : 100 000 / 20 000 / 2 000).",
+                        "Le root port est le port dont le coût cumulé vers la racine est le plus bas : SW3 voit la racine à coût 4 via SW1 et à coût 8 via SW2 → le port vers SW1 devient root port.",
+                        "En cas d'égalité de coût : le plus faible Bridge ID du voisin gagne, puis le plus faible port ID (numéro de port). Ces critères secondaires départagent les topologies symétriques."
+                    ],
+                    cmd: [
+                        "show spanning-tree           ! Root ID, Bridge ID, rôles et états des ports",
+                        "show spanning-tree detail    ! coûts cumulés, timers, compteur de TOPCHANGE",
+                        "show spanning-tree summary   ! mode actif (rapid pvst), PortFast/Guard par défaut"
+                    ],
+                    box: 'remember', boxText: "À retenir : root port = meilleur chemin vers la racine (un par switch) ; designated port = un par segment, côté racine ; les autres bloquent. Coût 1 Gbps = 4, 100 Mbps = 19. Racine : priorité la plus basse, puis MAC la plus basse." },
+                    { t: "Diagnostiquer une tempête de broadcast", p: [
+                        "Symptômes : LED de trafic clignotant en sync sur tous les ports, latence qui grimpe, table MAC instable (show mac address-table : la même MAC saute de port en port), CPU commutateur à 100%.",
+                        "Réflexe : identifier le(s) port(s) bloqués normalement par STP. show spanning-tree : un port censé être ALTN est-il passé FWD ? Un switch récent branché avec une priorité plus basse a déplacé la racine.",
+                        "Cause fréquente : PortFast + BPDU Guard absent sur un port où un mini-switch a été branché — STP n'a pas eu le temps de réagir à la boucle physique créée par l'utilisateur."
+                    ],
+                    cmd: [
+                        "show processes cpu | include CPU   ! charge du switch",
+                        "show mac address-table             ! instabilité = MAC qui migre",
+                        "show spanning-tree                 ! ports ALTN manquants ?",
+                        "show spanning-tree detail | include ieee|occur|From"
+                    ],
+                    box: 'warn', boxText: "Panne classique : l'utilisateur branche son mini-switch sous son bureau (deux câbles vers deux prises murales) et crée une boucle. La prévention : PortFast + BPDU Guard sur tous les ports d'accès, et errdisable recovery pour réactiver après correction." },
+                    { t: "Cas d'entreprise — l'agrégation cœur-distribution", p: [
+                        "Situation : le lien cœur-distribution (1 Gbps) sature en fin de journée. Deux liens supplémentaires existent physiquement mais STP en bloque deux sur trois (redondance sans agrégation).",
+                        "Action : agréger les trois liens en un EtherChannel LACP (channel-group 1 mode active des deux côtés, vérification show etherchannel summary : tous les ports en P).",
+                        "Résultat : ~3 Gbps cumulés, répartition par flux (src-dst-ip), et la panne d'un lien membre ne déclenche plus de recalcul STP complet : le trafic bascule sur les liens restants."
+                    ],
+                    box: 'case', boxText: "Trois liens sans EtherChannel = 1 seul lien utilisé (STP bloque les autres). Trois liens avec EtherChannel = 3 liens utilisés. La redondance seule ne donne pas la performance ; l'agrégation donne les deux." }
+                ],
+                exercices: [
+                    { enonce: "Quatre commutateurs forment un carré (SW-A racine en haut, SW-D en bas). Les liens sont tous en 1 Gbps. SW-C voit la racine à coût 8 via SW-B et à coût 4 via SW-A. Quel port SW-C met-il en root port et pourquoi l'autre chemin est-il bloqué ?", correction: "Le port vers SW-A devient root port : coût cumulé 4 (un seul saut 1 Gbps) contre 8 par SW-B. Sur le segment SW-C/SW-B, le port designated est celui côté du meilleur chemin vers la racine (SW-B, coût 4 total) ; le port de SW-C sur ce segment devient non-designated (blocking). STP obtient un arbre : aucun chemin dupliqué vers la racine, mais le lien bloqué reprendra le service si le lien SW-C/SW-A tombe — c'est la redondance logique." },
+                    { enonce: "Un administrateur constate que son EtherChannel ne se forme pas : show etherchannel summary montre les deux ports en 'I' (independent). Il a configuré Gi0/1 en trunk avec VLANs autorisés 10,20 et Gi0/2 en trunk avec VLANs autorisés 10,20,30. Expliquez et corrigez.", correction: "Un EtherChannel exige des membres strictement homogènes : même vitesse, duplex, mode trunk et liste de VLAN autorisés. Le VLAN 30 en plus sur Gi0/2 rompt l'homogénéité : le canal refuse de se former et les ports restent indépendants — avec en prime un risque de boucle car STP voit deux liens parallèles. Correction : aligner les listes (switchport trunk allowed vlan 10,20 sur les deux interfaces de la range), puis re-vérifier : les ports doivent passer de 'I' à 'P' (bundled) dans show etherchannel summary." }
+                ],
+                resume: "STP transforme une topologie redondante en arbre logique sans boucle : un pont racine élu (priorité puis MAC), des root/designated ports forwarded, le reste en blocking. RSTP accélère la convergence à quelques secondes ; PortFast, BPDU Guard et Root Guard sécurisent les bords. L'EtherChannel (LACP, liens homogènes) agrège plusieurs liens en un canal que STP voit comme un seul : redondance ET performance.",
+                suite: "Le sujet 3.1 monte au niveau 3 avec le routage IP et OSPF : quand la destination n'est plus dans le réseau local.",
+                evaluation: [
+                    { q: "Quels sont les trois ravages d'une boucle de niveau 2 ?", options: [ "Tempêtes de broadcast, table MAC instable, trames dupliquées", "Perte de paquets IP, TTL décrémenté, MTU réduite", "Chiffrement cassé, VLANs mélangés, DHCP en échec", "Latence réduite, débit doublé, CPU au repos" ], answer: 0, exp: "Correct : les trames de broadcast tournent en boucle (pas de TTL en Ethernet), la table MAC oscille entre ports, les hôtes reçoivent tout en double." },
+                    { q: "Comment est élu le pont racine STP ?", options: [ "Priorité la plus haute, puis MAC la plus haute", "Priorité la plus basse, puis MAC la plus basse", "Le switch le plus récent", "Le switch avec le plus de ports" ], answer: 1, exp: "Correct : le Bridge ID le plus bas gagne — on impose donc le cœur avec 'spanning-tree vlan X root primary' qui abaisse la priorité." },
+                    { q: "Quelle commande accélère la mise en forwarding d'un port vers un poste final ?", options: [ "spanning-tree guard root", "spanning-tree portfast", "channel-group 1 mode active", "switchport nonegotiate" ], answer: 1, exp: "Correct : PortFast saute les états listening/learning — à réserver aux ports d'accès vers des hôtes, idéalement avec BPDU Guard." },
+                    { q: "BPDU Guard sert à :", options: [ "Accélérer la convergence RSTP", "Désactiver un port qui reçoit une BPDU alors qu'il ne devrait pas", "Empêcher un switch aval de devenir racine", "Équilibrer un EtherChannel" ], answer: 1, exp: "Correct : le port d'accès qui reçoit soudain une BPDU (switch pirate branché) passe err-disabled. Root Guard, lui, protège l'élection de la racine." },
+                    { q: "Modes LACP formant un EtherChannel :", options: [ "passive + passive", "active + passive ou active + active", "desirable + auto", "on + on uniquement" ], answer: 1, exp: "Correct : en LACP, au moins un côté doit être active (le passive attend). Desirable/auto appartiennent à PAgP, propriétaire Cisco." },
+                    { q: "Pourquoi un lien membre d'un EtherChannel ne doit-il jamais différer des autres ?", options: [ "Pour l'esthétique de la config", "Parce que le canal ne se forme pas si vitesse, duplex, trunk ou VLANs diffèrent", "Parce que LACP l'interdit par licence", "Pour que STP bloque ce lien" ], answer: 1, exp: "Correct : l'homogénéité stricte est la condition de formation ; un écart laisse les liens indépendants — et STP voit alors des liens parallèles non agrégés." }
+                ]
+            },
+            {
+                id: 'ccna-v2-3-1',
+                certif: 'CCNA',
+                parcours: 'CCNA',
+                code: '3.1',
+                title: "Routage IP et OSPF : trouver le meilleur chemin",
+                niveau: 'Intermédiaire',
+                prerequis: "Le sujet 1.3 (sous-réseaux) est indispensable ; le 2.1 (VLAN, passerelles) aide à comprendre pourquoi un paquet doit être routé.",
+                objectifs: [
+                    "Distinguer routage statique et dynamique, et lire une table de routage (show ip route)",
+                    "Expliquer la logique link-state d'OSPF : LSDB commune, algorithme SPF de Dijkstra, métrique = coût",
+                    "Décrire la formation d'une adjacence : Hello, paramètres qui doivent correspondre, états Down/Init/2-Way/Full",
+                    "Comprendre le rôle du DR/BDR sur un segment multi-accès et l'élection",
+                    "Configurer OSPF multi-zones (areas), les interfaces passives et vérifier les voisins",
+                    "Diagnostiquer : voisin absent, route manquante, mauvaise zone"
+                ],
+                lessons: [
+                    { title: "Leçon 1 — La table de routage et le choix des routes", parts: [
+                        { h: "Que fait un routeur", t: "Un routeur reçoit un paquet, lit l'IP destination, la cherche dans sa table de routage et transmet par l'interface de sortie indiquée (next hop). S'il ne trouve rien et qu'aucune route par défaut n'existe : le paquet est détruit et un ICMP 'destination unreachable' peut être renvoyé." },
+                        { h: "Lire show ip route", t: "Chaque ligne commence par une lettre : C (connecté — le réseau est sur une interface locale), L (local — l'IP de l'interface), S (statique), O (OSPF), D (EIGRP), R (RIP), B (BGP). Une route ressemble à O 192.168.20.0/24 [110/65] via 10.0.12.2 — les crochets contiennent la distance administrative (110 pour OSPF) et la métrique (65) : c'est la hiérarchie de confiance et la préférence du chemin." },
+                        { h: "Distance administrative : qui croire ?", t: "Quand deux protocoles annoncent la même destination, le routeur choisit la distance administrative la plus basse : connecté 0, statique 1, eBGP 20, EIGRP 90, OSPF 110, RIP 120. C'est pour cela qu'une route statique écrase une route OSPF apprise pour la même destination — piège classique quand on teste un chemin parallèle." },
+                        { h: "La route statique et la route par défaut", t: "ip route 192.168.30.0 255.255.255.0 10.0.12.2 envoie ce réseau vers un next hop ; ip route 0.0.0.0 0.0.0.0 203.0.113.1 est la route par défaut (0.0.0.0/0) — le filet de sécurité vers Internet. Les routes statiques sont simples et prévisibles mais ne s'adaptent pas aux pannes : dès que le réseau grandit, on passe au routage dynamique." }
+                    ]},
+                    { title: "Leçon 2 — OSPF : la logique link-state", parts: [
+                        { h: "Chaque routeur connaît la carte complète", t: "OSPF est un protocole link-state : chaque routeur décrit ses liens (réseaux connectés, coûts) dans des LSA (Link-State Advertisements), inondés à tous les routeurs de la zone. Résultat : chaque routeur construit la même LSDB (Link-State Database) — une carte identique de la zone — et exécute l'algorithme SPF (Dijkstra) pour calculer ses propres meilleurs chemins. Contrairement à RIP (distance-vector : 'je connais une route à 3 sauts'), OSPF ne propage pas des rumeurs mais une topologie." },
+                        { h: "La métrique : le coût du lien", t: "La métrique OSPF est le coût, proportionnel à la bande passante (référence 100 Mbps : coût = 100 Mb / bande passante du lien ; 100 Mbps = 1, 1 Gbps = 1 après auto-reference, 10 Mbps = 10). Un chemin cumule les coûts ; SPF choisit le total le plus faible. On peut le modifier : ip ospf cost 10 sur une interface pour orienter le trafic." },
+                        { h: "Les zones (areas)", t: "OSPF découpe le domaine en zones numériques : la zone 0 (backbone) est obligatoire et centrale ; les autres zones s'y raccordent via un routeur ABR (Area Border Router). L'intérêt : les LSA ne débordent pas d'une zone — la zone 10 peut changer sans reconstruire la table SPF de la zone 20. Le dimensionnement usuel : 50 routeurs par zone maximum." },
+                        { h: "Les paquets et les adresses", t: "OSPF s'encapsule directement en IP (protocole 89) et parle en multicast : 224.0.0.5 (tous les routeurs OSPF) pour les Hello et les mises à jour générales, 224.0.0.6 (DR/BDR) pour les remontées des non-DR. Un routeur s'identifie par son Router ID (RID), une IPv4 32 bits : choisie en priorité configurée (router-id 1.1.1.1), sinon la plus haute IP de loopback, sinon la plus haute IP d'interface physique active." }
+                    ]},
+                    { title: "Leçon 3 — Voisins, adjacences et DR/BDR", parts: [
+                        { h: "Le Hello : le handshake", t: "Chaque interface OSPF envoie un Hello toutes les 10 s (broadcast/point-to-point ; 30 s en NBMA) avec son RID, sa zone, ses timers, son masque et son authentification. Deux routeurs deviennent voisins si les Hello s'accordent. Le Dead Interval (40 s = 4 × Hello) déclare un voisin mort sans nouvelles : accélérer les Hello accélère la détection de panne." },
+                        { h: "Ce qui doit correspondre", t: "Pour former une adjacence complète (état Full) : même zone, mêmes Hello/Dead timers, même type d'interface et MTU, mêmes options d'authentification, RID uniques. La bande passante, elle, n'a pas besoin de correspondre. Un voisin bloqué en ExStart/Exchange = différences de MTU — la panne la plus fourbe du lot." },
+                        { h: "Les états d'adjacence", t: "Down (pas de voisin) → Init (Hello reçu, unidirectionnel) → 2-Way (Hello mutuel — élection DR/BDR ici) → ExStart/Exchange/Loading (synchronisation des LSDB) → Full (adjacence complète, tables identiques). Sur un lien point-to-point : Full directement entre les deux. Sur Ethernet multi-accès : Full avec le DR et le BDR seulement ; les autres voisins restent en 2-Way." },
+                        { h: "DR et BDR", t: "Sur un segment Ethernet à n routeurs, n(n-1)/2 adjacences plein maillage seraient nécessaires. OSPF élit un Designated Router (représentant du segment) et un BDR (secours) : chacun s'adjoint au DR/BDR, les LSA transitent par eux. Élection : priorité d'interface la plus haute (ip ospf priority 0-255 ; 0 = jamais DR), puis RID le plus élevé. La priorité 0 sert à écarter un routeur peu dimensionné de l'élection." }
+                    ]},
+                    { title: "Leçon 4 — Configurer et vérifier OSPF", parts: [
+                        { h: "La configuration moderne", t: "router ospf 1 (numéro de processus, local), puis l'approche interface : interface G0/1 ; ip ospf 1 area 0 — chaque interface est déclarée dans sa zone. L'ancienne syntaxe network (network 192.168.10.0 0.0.0.255 area 0) fonctionne encore : elle active OSPF sur les interfaces correspondantes, mais l'approche interface est plus lisible et évite les surprises de masque générique." },
+                        { h: "Les interfaces passives", t: "On ne veut pas de Hello vers les réseaux d'utilisateurs : passive-interface G0/2 (ou passive-interface default puis no passive-interface entre routeurs). Sans cela, des voisins fantômes apparaissent, et surtout les réseaux d'accès polluent les tables de routage des voisins." },
+                        { h: "Vérifier en trois commandes", t: "show ip ospf neighbor : la santé des adjacences (état Full attendu, avec le rôle DR/BDR/DROTHER en fin de ligne). show ip route ospf : les routes apprises ([110/coût]). show ip ospf interface brief : zones, coûts, réseau (broadcast), DR/BDR par interface. Ces trois commandes résolvent 90% des pannes OSPF." },
+                        { h: "OSPFv3 en deux mots", t: "Pour IPv6, OSPFv3 reprend la logique (zones, SPF, DR/BDR) avec une LSDB séparée et une configuration par interface : ipv6 ospf 1 area 0 — le numéro de processus IPv6. Les voisins se découvrent via les adresses link-local fe80::, ce qui rend l'adressage interface plus simple et l'analyse plus piégeuse." }
+                    ]}
+                ],
+                guiSteps: [
+                    { title: "Configurer OSPF entre deux routeurs", action: "Dans Packet Tracer, reliez R1 et R2 (GigabitEthernet0/0 des deux côtés, réseau 10.0.12.0/30). Sur R1 : router ospf 1 ; router-id 1.1.1.1 ; puis interface G0/0 : ip ospf 1 area 0. Répliquez sur R2 avec router-id 2.2.2.2.", observation: "show ip ospf neighbor sur R1 : une ligne avec RID 2.2.2.2, état FULL, et le rôle (DR ou BDR sur ce segment Ethernet). L'adjacence est établie en quelques secondes." },
+                    { title: "Publier les réseaux d'utilisateurs", action: "Sur R1, ajoutez une interface loopback 1 avec 192.168.10.1/24 et déclarez-la : interface lo1 ; ip ospf 1 area 0. Sur R2, vérifiez la table de routage.", observation: "show ip route ospf sur R2 : une ligne O 192.168.10.0/24 [110/x] via 10.0.12.1 — le réseau est appris dynamiquement, sans route statique." },
+                    { title: "Casser l'adjacence pour comprendre les états", action: "Sur R2, changez le timer d'un côté : interface G0/0 ; ip ospf hello-interval 5 (R1 reste à 10). Attendez 40 s et observez.", observation: "show ip ospf neighbor ne liste plus le voisin : les Hello se rejettent (timers différents). show ip ospf interface G0/0 révèle le mismatch. Remettez 10 des deux côtés : l'adjacence revient en FULL — leçon : zone, timers et MTU doivent correspondre." },
+                    { title: "Multi-zones et ABR", action: "Ajoutez R3 : R2-R3 sur le réseau 10.0.23.0/30 en area 1 (interface G0/1 de R2 : ip ospf 1 area 1 ; R3 pareil). Ajoutez une loopback sur R3 en area 1 et vérifiez les routes sur R1.", observation: "show ip route ospf sur R1 affiche les réseaux de la zone 1 (via R2, l'ABR qui résume les zones). show ip ospf border-routers sur R3 liste l'ABR : la zone 0 est le pivot obligatoire." }
+                ],
+                deepDive: [
+                    { t: "Anatomie d'un voisin OSPF absent", p: [
+                        "Couche 1/3 : les interfaces sont-elles up/up avec des IP de même sous-réseau ? (ping entre routeurs)",
+                        "Zone : show ip ospf interface brief — les deux côtés déclarent-ils la même zone ?",
+                        "Timers/MTU/auth : hello/dead identiques ? MTU identique (un voisin bloqué en ExStart est presque toujours un MTU) ? authentification symétrique ?",
+                        "Passive : l'interface n'est-elle pas passive sur l'un des côtés ? (show ip ospf interface)"
+                    ],
+                    cmd: [
+                        "show ip ospf neighbor",
+                        "show ip ospf interface brief",
+                        "show ip ospf interface GigabitEthernet0/0   ! timers, MTU, DR/BDR, file d attente",
+                        "show ip protocols | section Router ID"
+                    ],
+                    box: 'remember', boxText: "À retenir pour l'examen et la prod : un voisin bloqué en EXSTART/EXCHANGE = différence de MTU ; voisins qui apparaissent puis disparaissent = timers Hello/Dead ; aucune adjacence sur Ethernet alors que tout semble bon = vérifier que les deux côtés annoncent bien la même zone." },
+                    { t: "Coût, référence de bande passante et chemins asymétriques", p: [
+                        "La métrique OSPF vient de la bande passante : coût = bande passante de référence (100 Mbps par défaut) ÷ bande passante du lien. Les liens 10 Gbps coûtent donc 0,01 — arrondi à 0 : d'où le réglage auto-cost reference-bandwidth 100000 (en Mb) pour rendre les liens rapides discriminants.",
+                        "Deux chemins à coût égal = répartition de charge (ECMP) ; à coût inégal, OSPF ne prend que le meilleur — pas de partage inégal comme EIGRP.",
+                        "Le coût se lit au plus près : show ip ospf interface GigabitEthernet0/0 affiche 'Cost: 1' ; ip ospf cost 50 force un chemin à être délaissé sans toucher à la topologie."
+                    ],
+                    cmd: [
+                        "router ospf 1",
+                        " auto-cost reference-bandwidth 100000",
+                        "interface GigabitEthernet0/1",
+                        " ip ospf cost 50",
+                        "show ip ospf interface brief   ! coût par interface"
+                    ],
+                    box: 'admin', boxText: "Conseil d'administrateur : réglez la reference-bandwidth à 100000 Mb sur TOUS les routeurs du domaine dès la mise en place — sinon les coûts des liens rapides sont écrasés à 1 et SPF ne distingue plus un 10 Gbps d'un 100 Mbps." },
+                    { t: "Cas d'entreprise — le site distant qui perd ses routes", p: [
+                        "Situation : le site de Lyon (R3, zone 1) ne joignait plus le siège ce matin à 9h. Le ticket dit 'plus d'accès aux applications'.",
+                        "Diagnostic : show ip ospf neighbor sur R3 : aucun voisin vers R2. show ip ospf interface G0/1 : la zone annonce 0 au lieu de 1 (reprise de config nocturne mal reportée). La zone mismatch rejette les Hello silencieusement.",
+                        "Action : re-déclarer l'interface en area 1 (ip ospf 1 area 1), l'adjacence repasse FULL en ~10 s ; les routes O reviennent dans show ip route. Documenter le plan de zones dans la base de connaissances pour éviter la reprise erronée."
+                    ],
+                    box: 'case', boxText: "Un mismatch de zone ne génère AUCUN log criant : les Hello sont simplement ignorés. Devant un 'voisin absent', la séparation zone/priorité 0/passive évite de blâmer la couche 1 en premier." }
+                ],
+                exercices: [
+                    { enonce: "Cinq routeurs sont sur le même segment Ethernet en zone 0. Combien d'adjacences FULL sans DR/BDR, et quel est l'apport du DR ?", correction: "Sans DR/BDR, le plein maillage exige n(n-1)/2 = 5×4/2 = 10 adjacences FULL, chacune synchronisant une LSDB complète — beaucoup de trafic de contrôle. Avec un DR et un BDR : chaque routeur devient FULL uniquement avec le DR et le BDR (2 adjacences par routeur ordinaire, DROTHER), les autres paires restent en 2-Way. Le DR centralise les LSA du segment : de 10 adjacences on tomne à 2 par routeur — le flooding est divisé d'autant." },
+                    { enonce: "Sur R1 : show ip route montre 'O 192.168.20.0/24 [110/65] via 10.0.12.2'. Expliquez chaque élément de cette ligne, puis dites ce qui se passerait si une route statique 'ip route 192.168.20.0 255.255.255.0 10.0.13.3' était ajoutée.", correction: "O : route apprise par OSPF ; 192.168.20.0/24 : destination ; [110/65] : distance administrative 110 (OSPF) et métrique 65 (coût cumulé du chemin) ; via 10.0.12.2 : next hop. Avec la route statique ajoutée : distance administrative 1 < 110, la table de routage remplace la route OSPF par la statique via 10.0.13.3 pour cette destination — le trafic change de chemin sans que OSPF soit 'en panne' : show ip route afficherait S. Pour un test temporaire propre : distance administrative ajustable (ip route ... 120) ou ip sla-track. C'est le piège classique des migrations où coexistent statiques et dynamiques." }
+                ],
+                resume: "Le routeur choisit chaque destination dans sa table de routage : connecté (0), statique (1), puis les protocoles dynamiques par distance administrative — OSPF (110). OSPF partage une carte identique de la zone (LSDB) et calcule par Dijkstra le chemin au moindre coût ; ses adjacences exigent zone, timers et MTU identiques ; DR/BDR allègent les segments Ethernet ; les zones découpent le domaine autour du backbone 0. Vérifications clés : show ip ospf neighbor, show ip route, show ip ospf interface brief.",
+                suite: "Le sujet 4.1 (NAT) montrera comment ces paquets routés sortent vers Internet avec des adresses traduites.",
+                evaluation: [
+                    { q: "Que contient la LSDB d'un routeur OSPF ?", options: [ "Ses seules routes meilleures", "La carte complète de la topologie de sa zone", "Les tables MAC des commutateurs", "Les distances administratives" ], answer: 1, exp: "Correct : chaque routeur de la zone maintient une copie identique de la base link-state, puis exécute SPF dessus — c'est la définition du link-state." },
+                    { q: "Quelle adresse multicast OSPF transporte les Hello ?", options: [ "224.0.0.1", "224.0.0.5", "224.0.0.6", "224.0.0.9" ], answer: 1, exp: "Correct : 224.0.0.5 (all OSPF routers) pour Hello et updates ; 224.0.0.6 est réservé aux DR/BDR ; 224.0.0.9 appartient à RIPv2." },
+                    { q: "Un voisin OSPF reste bloqué en ExStart/Exchange. Cause la plus probable ?", options: [ "Différence de MTU", "Priorité 0 sur les deux", "Zones différentes", "Passive interface" ], answer: 0, exp: "Correct : la synchronisation LSDB échoue quand les MTU diffèrent ; zones différentes ou interface passive empêchent même de devenir voisins." },
+                    { q: "Quelle paire de valeurs voit-on dans les crochets d'une route OSPF ?", options: [ "[métrique/zone]", "[distance administrative/métrique]", "[coût/poids]", "[priorité/coût]" ], answer: 1, exp: "Correct : O 10.0.0.0/24 [110/65] = AD 110 puis métrique 65. La distance administrative tranche entre protocoles, la métrique entre chemins du même protocole." },
+                    { q: "Qui devient DR sur un segment multi-accès ?", options: [ "La priorité la plus haute, puis le RID le plus élevé", "La priorité la plus basse puis la MAC la plus basse", "Le routeur le plus ancien", "Le routeur avec le plus d'interfaces" ], answer: 0, exp: "Correct : priorité d'interface (0-255, défaut 1) d'abord, puis RID ; la priorité 0 exclut un routeur de l'élection." },
+                    { q: "La zone 0 dans un domaine OSPF multi-zones est :", options: [ "Optionnelle si toutes les zones se joignent directement", "Le backbone obligatoire auquel les zones se raccordent", "Réservée aux réseaux d'utilisateurs", "La zone des routes externes" ], answer: 1, exp: "Correct : toute zone doit se raccorder à la zone 0 via un ABR ; c'est l'épine dorsale du domaine OSPF." }
+                ]
+            },
+            {
+                id: 'ccna-v2-4-1',
+                certif: 'CCNA',
+                parcours: 'CCNA',
+                code: '4.1',
+                title: "NAT et PAT : traduire les adresses vers Internet",
+                niveau: 'Intermédiaire',
+                prerequis: "Le sujet 1.3 (adressage IPv4, adresses privées/publiques RFC 1918) et une idée du routage (3.1).",
+                objectifs: [
+                    "Expliquer pourquoi NAT existe : épuisement IPv4, RFC 1918, économie d'adresses publiques",
+                    "Distinguer NAT statique, NAT dynamique et PAT (overload) et choisir selon le cas",
+                    "Définir inside local / inside global / outside et suivre la traduction d'un paquet",
+                    "Configurer PAT sur un routeur de sortie vers Internet et vérifier la table de traduction",
+                    "Diagnostiquer : traduction absente, pool épuisé, ACL de match manquante"
+                ],
+                lessons: [
+                    { title: "Leçon 1 — Pourquoi traduire les adresses", parts: [
+                        { h: "Le problème historique", t: "IPv4 offre ~4,3 milliards d'adresses, très insuffisant pour l'Internet mondial. En entreprise, les réseaux internes utilisent donc des plages privées (RFC 1918 : 10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16) — non routables sur Internet. NAT (Network Address Translation) traduit à la sortie ces adresses privées en une ou quelques adresses publiques : le routeur de bord réécrit l'IP source des paquets sortants et note la correspondance pour traduire les réponses en sens inverse." },
+                        { h: "Ce que NAT apporte (et ce qu'il ne fait pas)", t: "NAT économise les adresses publiques et masque la topologie interne — il n'est PAS une sécurité : il ne filtre rien, il réécrit. La frontière de sécurité reste le pare-feu et les ACL. ATTENDU aussi : NAT complique le fonctionnement des protocoles qui portent des IP dans la charge utile (FTP actif, SIP...) qui nécessitent des helpers ALG." },
+                        { h: "Les trois saveurs de NAT", t: "NAT statique : une correspondance 1-pour-1 permanente (un serveur interne publié sous une IP publique fixe). NAT dynamique : un pool d'adresses publiques attribuées à la volée aux flux sortants, première libre gagne. PAT (Port Address Translation), alias NAT overload : TOUS les flux internes sortent avec la même IP publique, différenciés par ports source différents — c'est le mode de la box Internet et du routeur d'entreprise." }
+                    ]},
+                    { title: "Leçon 2 — Le vocabulaire inside/outside", parts: [
+                        { h: "Les quatre termes", t: "Inside local : l'adresse privée du poste vu de l'intérieur (10.1.1.10). Inside global : l'adresse publique que prend ce même flux à la sortie (203.0.113.5). Outside local : l'adresse du serveur externe telle que vue de l'intérieur. Outside global : l'adresse réelle du serveur externe. En PAT simple, outside local = outside global (203.0.113.20 d'un site web) : seule la partie inside est traduite." },
+                        { h: "Suivre un paquet", t: "Le poste 10.1.1.10 ouvre une connexion vers 198.51.100.80:443. À la sortie : source devient 203.0.113.5:49152 (IP publique + port source choisi). Le routeur note la translation dans sa table. La réponse 198.51.100.80:443 → 203.0.113.5:49152 revient : le routeur lit sa table et restaure la destination 10.1.1.10:xxxx. Sans entrée dans la table, le paquet entrant est détruit — c'est aussi ce qui bloque les connexions entrantes non publiées." },
+                        { h: "Timeout et cycle de vie", t: "Chaque entrée PAT vit le temps du flux (défaut 86400 s pour les simples translations, quelques minutes pour les flux TCP fin de session). Un pool dynamique épuisé = plus aucune nouvelle sortie : les postes restent connectés en interne mais n'atteignent plus Internet — symptôme diagnostiqué avec show ip nat translations (table pleine) et debug ip nat." }
+                    ]},
+                    { title: "Leçon 3 — Configurer PAT sur un routeur de sortie", parts: [
+                        { h: "Les trois blocs de config", t: "(1) Définir qui sort : une ACL standard (access-list 10 permit 192.168.0.0 0.0.255.255). (2) Nommer l'interface publique comme source de traduction : interface G0/0 (côté Internet), ip nat outside ; les interfaces internes : ip nat inside. (3) Lier : ip nat inside source list 10 interface G0/0 overload — le mot-clé overload active le PAT (réutilisation de la même IP avec des ports)." },
+                        { h: "Variantes utiles", t: "Avec un pool : ip nat inside source list 10 pool PUBLIC overload (pool PUBLIC avec une plage d'IP publiques). Publier un serveur interne : ip nat inside source static tcp 10.1.1.100 443 203.0.113.5 443 — le serveur devient joignable depuis Internet sur ce port précis. La redirection de port d'une box est exactement ce NAT statique." },
+                        { h: "Vérifier et purger", t: "show ip nat translations liste les correspondances (inside local/global, outside, ports) ; show ip nat statistics donne les hits et l'usage du pool ; clear ip nat translation * purge la table après un changement de configuration (obligatoire sinon les anciennes entrées parasitent les tests)." }
+                    ]},
+                    { title: "Leçon 4 — Diagnostiquer NAT et IPv6 en toile de fond", parts: [
+                        { h: "La méthode de diagnostic", t: "Symptôme 'pas d'Internet mais réseau interne OK' : (1) la route par défaut existe-t-elle (show ip route 0.0.0.0) ? (2) l'ACL de NAT matche-t-elle le sous-réseau du poste (show access-lists — compteurs de hits qui montent) ? (3) la table de traduction s'emplie-t-elle (show ip nat translations verbose) ? (4) interfaces inside/outside bien déclarées (show ip nat statistics) ? Cette séquence localise la panne en deux minutes." },
+                        { h: "NAT et les protocoles qui portent des adresses", t: "FTP actif, SIP/VoIP, certains jeux P2P échouent à travers un NAT simple car l'IP interne voyage dans la charge utile. Solutions : ALG (application layer gateway) sur le routeur, ou passer en mode passif (FTP), ou SIP fixe/ALG sur l'équipement de bord. Reconnaître ce motif évite des heures de dépannage réseau pur." },
+                        { h: "IPv6 supprime le besoin de NAT", t: "IPv6 offre un espace d'adressage tel que chaque appareil peut avoir une adresse globale : la traduction d'adresses devient inutile (NAT66 reste possible mais non recommandé). À la place, NPTv6 ou simplement un firewalling adapté. Le réflexe futur : l'IPv6 rend la sortie directe, le filtrage en gère la sécurité." }
+                    ]}
+                ],
+                guiSteps: [
+                    { title: "Simuler une sortie Internet dans Packet Tracer", action: "Montez : PC1 (192.168.1.10/24) — R1 (G0/1 inside 192.168.1.1, G0/0 outside 203.0.113.2) — un serveur simulant Internet (198.51.100.80). Config PAT sur R1 : access-list 10 permit 192.168.1.0 0.0.0.255 ; interface G0/1 : ip nat inside ; interface G0/0 : ip nat outside ; ip nat inside source list 10 interface G0/0 overload.", observation: "Depuis PC1, ping 198.51.100.80 répond. Sur R1 : show ip nat translations affiche 'inside local 192.168.1.10 → inside global 203.0.113.2' avec les ports ICMP — la preuve de la traduction." },
+                    { title: "Observer la table de traduction en temps réel", action: "Sur R1, lancez debug ip nat (mode privilégié), puis depuis PC1 lancez une navigation web vers le serveur.", observation: "La console trace 'NAT: s=192.168.1.10->203.0.113.2, d=198.51.100.80 [xxxx]' à chaque paquet sortant puis la traduction inverse au retour — le mécanisme devient visuel. Désactivez debug ip nat ensuite (undebug all)." },
+                    { title: "Publier un serveur interne (NAT statique)", action: "Ajoutez un serveur web interne 192.168.1.100. Sur R1 : ip nat inside source static tcp 192.168.1.100 80 203.0.113.2 8080. Depuis le serveur Internet (198.51.100.80), ouvrez le navigateur vers http://203.0.113.2:8080.", observation: "La connexion entrante est traduite vers 192.168.1.100:80 : le serveur interne est publié sous le port externe 8080. C'est exactement la 'redirection de port' d'une box." },
+                    { title: "Casser volontairement l'ACL et diagnostiquer", action: "Modifiez l'ACL pour matcher un mauvais sous-réseau (access-list 10 permit 172.16.0.0 0.0.255.255). Depuis PC1, retentez le ping.", observation: "Le ping échoue alors que la route par défaut existe. show access-lists : les hits ne montent pas sur la ligne 10 — l'ACL ne matche pas le trafic : le NAT ne s'applique jamais. C'est la panne NAT la plus fréquente en examen et en prod." }
+                ],
+                deepDive: [
+                    { t: "Le paquet NAT pas à pas (PAT complet)", p: [
+                        "PC 192.168.1.10:1025 → 198.51.100.80:443 arrive sur le routeur (interface inside).",
+                        "Le routeur consulte l'ACL (match 192.168.1.0/24 ? oui) : NAT s'applique.",
+                        "Réécriture : source → 203.0.113.2:49213 (IP publique de G0/0, port source unique attribué).",
+                        "L'entrée est notée : inside local 192.168.1.10:1025 ↔ inside global 203.0.113.2:49213, protocole TCP, timeout démarré.",
+                        "La réponse 198.51.100.80:443 → 203.0.113.2:49213 revient sur outside : la table restaure la destination 192.168.1.10:1025 et délivre en inside."
+                    ],
+                    cmd: [
+                        "show ip nat translations        ! la table des correspondances",
+                        "show ip nat statistics           ! hits, misses, pool",
+                        "clear ip nat translation *       ! purge avant re-test",
+                        "debug ip nat                     ! trace en temps reel (desactiver ensuite)"
+                    ],
+                    box: 'remember', boxText: "À retenir : PAT = même IP publique pour tous, différenciés par ports source ; un paquet entrant sans entrée dans la table est détruit ; la ligne de config qui lie tout est 'ip nat inside source list <ACL> interface <publique> overload'." },
+                    { t: "Choisir le bon NAT selon le scénario", p: [
+                        "Box familiale / routeur PME : PAT — une seule IP publique pour des dizaines de postes.",
+                        "Publier un serveur web interne : NAT statique (1-pour-1) ou redirection de port sur une IP PAT partagée.",
+                        "Une plage publique louée et plusieurs services sortants : NAT dynamique avec pool — attention à l'épuisement du pool en pointe.",
+                        "Interconnexion de deux réseaux qui utilisent la même plage 192.168.1.0/24 des deux côtés : NAT statique de translation croisée (rare, douloureux — à traiter par renumérotation)."
+                    ],
+                    box: 'admin', boxText: "Conseil d'administrateur : documentez chaque NAT statique dans un tableau (IP interne, IP/port externe, service, responsable). Un NAT oublié est un trou d'accès oublié — l'audit des traductions fait partie de l'inventaire de sécurité." },
+                    { t: "Cas d'entreprise — samedi 18h : plus personne ne peut sortir", p: [
+                        "Situation : à 18h02, les premiers tickets arrivent : 'Internet inaccessible'. Le réseau interne fonctionne (partages, impression OK).",
+                        "Diagnostic en 4 temps : show ip route → la route par défaut existe ; show ip nat statistics → 'Total active translations: 64512' et un pool de 64 IP publiques saturé (misses qui grimpent) ; show ip nat translations → des milliers d'entrées temporaires vers une même destination douteuse.",
+                        "Cause : un poste infecté ouvrait des milliers de connexions (scanner sortant), épuisant le pool dynamique. Action : bloquer le poste en amont, clear ip nat translation *, passer l'accès en PAT sur l'IP de l'interface (overload) pendant l'investigation, puis traiter le poste (mis en quarantaine VLAN isolation).",
+                        "Prévention : plafonner le nombre de translations par hôte (le cas échéant via zone-based firewall), surveiller show ip nat statistics en supervision."
+                    ],
+                    box: 'case', boxText: "Quand 'tout le monde' perd Internet mais que l'interne fonctionne, la table NAT et son pool sont les premiers suspects : compteurs de hits, d'entrées actives et de misses racontent la panne en trois lignes." }
+                ],
+                exercices: [
+                    { enonce: "Une PMe dispose d'une seule adresse publique et de 40 postes. Quel type de NAT déployez-vous et pourquoi ? Décrivez la ligne de configuration IOS essentielle.", correction: "PAT (NAT overload) : une seule IP publique ne peut nourrir un NAT dynamique par flux 1-pour-1 (une IP par poste sortant simultané). PAT multiplexe sur les ports source : l'IP publique est partagée par tous, chaque flux recevant un port unique. Configuration : access-list 10 permit 192.168.0.0 0.0.255.255 (les réseaux internes), interfaces marquées ip nat inside / ip nat outside, puis ip nat inside source list 10 interface GigabitEthernet0/0 overload. Vérification : show ip nat translations doit montrer des lignes où toutes les inside global valent l'IP de G0/0 avec des ports distincts." },
+                    { enonce: "Un serveur web interne 10.1.1.100 doit être joignable depuis Internet sur l'adresse publique 203.0.113.5, port 443 seulement. Donnez la configuration et expliquez pourquoi un ping entrant depuis Internet ne fonctionne pas pour autant.", correction: "NAT statique de port : ip nat inside source static tcp 10.1.1.100 443 203.0.113.5 443. Le paquet entrant à destination de 203.0.113.5:443 est traduit vers 10.1.1.100:443. Le ping (ICMP) entrant échoue car aucune translation n'existe pour ICMP vers cette adresse : le routeur détruit les paquets entrants sans entrée de table NAT — et c'est souhaité : on publie exactement le service voulu, pas le serveur entier. Pour diagnostiquer l'accès : show ip nat translations | include 443 et compter les hits sur l'entrée statique." }
+                ],
+                resume: "NAT traduit les adresses privées RFC 1918 en adresses publiques à la sortie : statique (1-pour-1, publication de serveur), dynamique (pool), PAT/overload (une IP pour tous via les ports). Les paquets entrants sans entrée de table sont détruits. Vérifications : show ip nat translations/statistics, l'ACL de match, les interfaces inside/outside. IPv6 rend le NAT inutile : filtrage et adressage global.",
+                suite: "Le sujet 4.2 (ACL) complète la sortie Internet : filtrer précisément qui peut aller où.",
+                evaluation: [
+                    { q: "Quel NAT partage une seule adresse publique entre tous les postes via les ports ?", options: [ "NAT statique", "NAT dynamique simple", "PAT (overload)", "NAT 1-pour-1" ], answer: 2, exp: "Correct : le PAT réécrit les ports source pour multiplexer tous les flux sur l'IP publique — le mode des box et des routeurs d'entreprise." },
+                    { q: "Que devient un paquet entrant sans correspondance dans la table NAT ?", options: [ "Il est routé vers l'inside par défaut", "Il est détruit", "Il est traduit en broadcast", "Il déclenche une nouvelle entrée" ], answer: 1, exp: "Correct : seul un flux initié de l'intérieur (ou une entrée statique) crée la correspondance — c'est ce qui bloque naturellement les connexions entrantes non publiées." },
+                    { q: "Dans 'ip nat inside source list 10 interface G0/0 overload', que fait l'ACL 10 ?", options: [ "Elle filtre le trafic autorisé à sortir", "Elle définit les adresses internes qui seront traduites", "Elle publie un serveur", "Elle réserve des ports" ], answer: 1, exp: "Correct : l'ACL sélectionne les flux à traduire (le match) — ce n'est pas un filtrage de sécurité : sans match, pas de traduction, donc pas de sortie." },
+                    { q: "Plages privées RFC 1918 :", options: [ "10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16", "100.64.0.0/10 uniquement", "127.0.0.0/8 et 169.254.0.0/16", "Toutes les /24 en 192.168" ], answer: 0, exp: "Correct : ces trois plages alimentent les réseaux internes ; non routables sur Internet, elles doivent être traduites à la sortie." },
+                    { q: "Un poste interne ping un serveur Internet : réponse OK. Que lit-on dans show ip nat translations ?", options: [ "Rien : ICMP n'est pas traduit", "Une entrée inside local ↔ inside global (ports ICMP)", "Une entrée outside local différente de outside global", "Le pool complet" ], answer: 1, exp: "Correct : ICMP se traduit aussi (identifiants ICMP comme ports) : inside local 192.168.x.x → inside global = IP publique de l'interface outside." }
+                ]
+            },
+            {
+                id: 'ccna-v2-4-2',
+                certif: 'CCNA',
+                parcours: 'CCNA',
+                code: '4.2',
+                title: "ACL : filtrer le trafic avec précision",
+                niveau: 'Intermédiaire',
+                prerequis: "Le sujet 1.3 (sous-réseaux, wildcard masks proches des masques inverses) et le 3.1 (routage) : une ACL se pose sur le chemin des paquets d'un routeur.",
+                objectifs: [
+                    "Expliquer ce qu'une ACL fait et ne fait pas : filtrer, pas sécuriser à elle seule",
+                    "Distinguer ACL standard et étendue, et choisir leur emplacement (près de la source vs près de la destination)",
+                    "Écrire des ACL avec wildcard masks et lire l'ordre implicite deny any",
+                    "Appliquer une ACL sur une interface/direction et vérifier les compteurs de hits",
+                    "Diagnostiquer : trafic bloqué par une ligne oubliée, ACL inversée, direction erronée"
+                ],
+                lessons: [
+                    { title: "Leçon 1 — Le rôle d'une ACL", parts: [
+                        { h: "Une liste de règles lues de haut en bas", t: "Une ACL (Access Control List) est une suite de lignes de permit/deny évaluées dans l'ordre : la première ligne qui matche le paquet décide, et le reste de la liste est ignoré. À la fin de toute ACL s'ajoute un deny any implicite : si aucune ligne ne matche, le paquet est rejeté. Conséquence directe : l'ordre des lignes est une décision d'architecture — une ligne large en tête masque toutes les suivantes." },
+                        { h: "Standard ou étendue", t: "ACL standard (1-99, 1300-1999) : ne regarde que l'IP source — 'je bloque tout ce qui vient de 10.1.2.0/24'. ACL étendue (100-199, 2000-2699) : source ET destination, protocole et ports — 'j'interdis le telnet du bureau A vers le serveur B, mais j'autorise le HTTPS'. La règle de placement : standard près de la destination (elle ne sait pas viser), étendue près de la source (précise, elle économise le réseau en bloquant tôt)." },
+                        { h: "Le masque générique (wildcard)", t: "Le wildcard inverse le masque de sous-réseau : 0.0.0.255 sur une IP 192.168.1.0 signifie 'les trois premiers octets doivent correspondre, le dernier est libre' (= tout le /24). 0.0.0.0 = l'hôte exact (host), 255.255.255.255 = n'importe quelle adresse (any). Se familiariser avec ce masque est le prérequis numéro un pour écrire des ACL qui matchent ce qu'on vise vraiment." },
+                        { h: "Ce qu'une ACL n'est pas", t: "Une ACL filtre : elle ne chiffre pas, ne détecte pas d'attaque, ne remplace pas un pare-feu à états (elle est sans état : chaque paquet est jugé seul, sans mémoire de la connexion). Elle sert aussi d'outil de sélection pour NAT, le routage par politique, ou les files QoS — dans ces cas, elle ne bloque rien du tout, elle trie." }
+                    ]},
+                    { title: "Leçon 2 — Écrire et appliquer une ACL", parts: [
+                        { h: "La syntaxe étendue, ligne par ligne", t: "access-list 100 permit tcp 192.168.10.0 0.0.0.255 host 10.1.1.100 eq 443 se lit : 'autorise TCP, venant du réseau 192.168.10.0/24, vers l'hôte précis 10.1.1.100, port destination 443'. eq = égal ; gt/lt = supérieur/inférieur ; range pour une plage. Le protocole (tcp, udp, icmp, ip) précise la couche ; ip englobe tout." },
+                        { h: "Named ACL : la bonne pratique", t: "ip access-list extended BLOQUER-TELNET crée une ACL nommée — lisible, modifiable ligne par ligne (insertion par numéro de séquence : 30 deny tcp...). Les ACL numérotées historiques se rééditent entièrement : la version nommée évite de tout retaper et documente l'intention dans le nom." },
+                        { h: "L'application", t: "ip access-group BLOQUER-TELNET in (ou out) sur l'interface. Direction : in = le paquet est jugé en entrant dans l'interface (avant le routage) ; out = en sortant (après le routage). Une ACL par direction et par interface. La plupart des erreurs de prod sont des directions inversées : toujours redessiner le chemin du paquet avant d'écrire la règle." },
+                        { h: "Vérifier : les compteurs", t: "show access-lists affiche chaque ligne suivie de (x matches) : les hits montent quand une ligne matche. Une ACL qui ne matche nulle part est soit mal placée, soit mal orientée, soit masquée par une ligne au-dessus. show ip interface G0/1 confirme quelle ACL est attachée dans quelle direction." }
+                    ]},
+                    { title: "Leçon 3 — La méthode en cinq étapes et le VTY", parts: [
+                        { h: "La méthode d'écriture", t: "(1) Définir l'intention en une phrase métier ('le VLAN invité ne doit atteindre que la passerelle Internet et le proxy'). (2) La traduire en flux : sources, destinations, protocoles, ports. (3) Choisir standard/étendue et l'emplacement. (4) Écrire les lignes permit d'abord, en terminant par un deny explicite lisible (deny any / log). (5) Tester et surveiller les compteurs. Ce protocole évite 80% des ACLs 'bizarres' héritées." },
+                        { h: "Protéger l'accès de gestion", t: "access-class 5 in sur les lignes VTY (line vty 0 4) limite QUI peut ouvrir une session SSH/Telnet au routeur : access-list 5 permit host 10.1.1.50 (le poste d'admin). Sans cela, tout sous-réseau routé peut tenter la gestion du routeur. C'est le réflexe de durcissement le plus rentable qui existe." },
+                        { h: "Le log en fin de règle", t: "Ajouter log à une ligne deny fait générer un message à chaque match (IP source, destination, compteur). Indispensable pour comprendre ce qu'une ACL historique bloque réellement — à utiliser avec parcimonie (volume de logs) et jamais en pleine charge sans filtre." }
+                    ]}
+                ],
+                guiSteps: [
+                    { title: "Écrire une ACL nommée étendue", action: "Sur R1 dans Packet Tracer : ip access-list extended WEB-SEUL ; permit tcp 192.168.10.0 0.0.0.255 host 10.1.1.100 eq 80 ; deny ip 192.168.10.0 0.0.0.255 host 10.1.1.100 ; permit ip any any. Vérifiez avec show access-lists.", observation: "La liste affiche les trois lignes avec leurs numéros de séquence (10, 20, 30) et des compteurs (x matches) à zéro. La dernière ligne permit ip any any évite le deny any implicite de tout bloquer." },
+                    { title: "L'appliquer et observer les compteurs", action: "Appliquez sur l'interface côté VLAN 10 : interface G0/1 ; ip access-group WEB-SEUL in. Depuis un PC du VLAN 10, ouvrez http://10.1.1.100 puis tentez un ping 10.1.1.100.", observation: "Le HTTP passe (ligne 10 : matches qui montent), le ping est refusé (ligne 20). Le trafic vers les autres destinations matche la ligne 30. Les compteurs racontent précisément le destin de chaque type de flux." },
+                    { title: "Casser l'ordre des lignes pour comprendre", t: "Déplacez la ligne permit ip any any en tête (ip access-list re-sequence ou re-création : permit ip any any d'abord). Re-testez le ping vers 10.1.1.100.", observation: "Le ping PASSE maintenant : la première ligne large (permit any any) masque tout ce qui suit. Une ACL se lit de haut en bas et s'arrête au premier match — l'ordre est aussi important que le contenu." },
+                    { title: "Protéger le SSH du routeur", action: "Créez access-list standard 5 : permit host 192.168.10.50 (poste admin). Sur line vty 0 4 : access-class 5 in, transport input ssh. Testez depuis le poste autorisé puis depuis un autre.", observation: "Le poste non autorisé reçoit un refus immédiat (la session ne s'ouvre pas) ; le poste autorisé se connecte. La gestion du routeur n'est plus exposée à tout le réseau routé." }
+                ],
+                deepDive: [
+                    { t: "Le wildcard mask, calculé juste", p: [
+                        "Autoriser tout un /24 : 192.168.10.0 0.0.0.255 (les 24 premiers bits fixés).",
+                        "Autoriser une plage paire d'adresses (masque non contigu) : 0.0.0.254 fixe le dernier bit à 0 — les adresses paires seulement (usage rare, principalement pédagogique et QoS).",
+                        "Retenir les trois classiques : 0.0.0.0 = host exact ; 255.255.255.255 = any ; 0.0.0.255 = le /24 complet.",
+                        "La conversion masque→wildcard : soustraire chaque octet du masque à 255. (255.255.255.192 → 0.0.0.63)."
+                    ],
+                    cmd: [
+                        "! Exemples de wildcards courants",
+                        "access-list 10 permit 192.168.10.0 0.0.0.255   ! tout le /24",
+                        "access-list 10 permit host 10.1.1.50           ! un seul hote",
+                        "access-list 10 permit any                       ! toutes adresses"
+                    ],
+                    box: 'remember', boxText: "À retenir : wildcard = 255 - masque (octet par octet). host = 0.0.0.0, any = 255.255.255.255. L'ACL standard se juge sur la source seule ; l'étendue sur source, destination, protocole et ports." },
+                    { t: "Diagnostic d'un 'ça ne passe plus' après ACL", p: [
+                        "Lire show access-lists : quelle ligne matche ? Le deny any implicite ne se voit pas — ajouter deny ip any any log pour le révéler.",
+                        "Vérifier le point d'attache : show ip interface G0/1 — ACL entrante ou sortante ?",
+                        "Rejouer le paquet mentalement : de quelle interface il entre, avec quelle source/destination réelles à CE point du chemin (attention au NAT : avant/après traduction, l'IP source n'est pas la même).",
+                        "Rappel : une ACL out sur une interface ne filtre pas le trafic ORIGINÉ par le routeur lui-même (OSPF, SSH du routeur) — il faut alors la placer sur le trafic transiting."
+                    ],
+                    cmd: [
+                        "show access-lists WEB-SEUL     ! compteurs par ligne",
+                        "show ip interface G0/1          ! quelle ACL, quelle direction",
+                        "show running-config | section access-list"
+                    ],
+                    box: 'warn', boxText: "Erreur d'examen fréquente : oublier le deny any implicite. Une ACL avec uniquement des lignes permit pour un flux précis bloque TOUT le reste de l'interface. Terminer par permit ip any any (si l'intention est 'bloquer seulement X') ou assumer le deny final." },
+                    { t: "Cas d'entreprise — le VLAN invité", p: [
+                        "Situation : le SSID invité (VLAN 60) doit atteindre Internet et rien d'autre — ni les serveurs internes, ni les autres VLAN.",
+                        "ACL étendue sur l'interface VLAN 60 du routeur, en in : permit udp 192.168.60.0 0.0.0.255 host 192.168.60.1 eq 67 (DHCP vers la passerelle), deny ip 192.168.60.0 0.0.0.255 10.0.0.0 0.255.255.255 (tout l'interne), permit ip any any (sortie Internet).",
+                        "Résultat : DHCP OK, Internet OK, accès interne bloqué ; les compteurs de la ligne deny montent à chaque tentative — une sonde de monitoring externe qui scanne est immédiatement visible dans les hits."
+                    ],
+                    box: 'case', boxText: "Le réflexe professionnel : l'intention d'abord ('qui a le droit d'aller où'), la traduction en flux ensuite, l'ACL nommée en dernier — puis la vérification par compteurs. Une ACL non documentée devient une bombe à retardement pour le prochain technicien." }
+                ],
+                exercices: [
+                    { enonce: "Écrivez une ACL nommée qui : autorise le VLAN Compta (192.168.20.0/24) à joindre le serveur RH (10.1.1.100) en HTTPS uniquement ; refuse tout le reste du VLAN Compta vers 10.1.1.100 ; laisse passer tout le reste du trafic sans restriction. Précisez où l'appliquer.", correction: "ip access-list extended COMPTA-RH : permit tcp 192.168.20.0 0.0.0.255 host 10.1.1.100 eq 443 ; deny ip 192.168.20.0 0.0.0.255 host 10.1.1.100 ; permit ip any any. Placement : près de la source (étendue = bloquer tôt), sur l'interface G0/2 côté VLAN Compta, direction in. Vérification : show access-lists — les matches de la ligne 1 montent lors d'un HTTPS, ceux de la ligne 2 lors d'un ping refusé. La ligne 3 évite que le deny any implicite ne coupe le reste du réseau." },
+                    { enonce: "Un technicien applique 'access-class 15 in' sur line vty mais a défini l'ACL 15 avec 'permit ip any any'. Quel est l'effet et quelles sont les deux erreurs ?", correction: "L'effet : tout le monde peut encore ouvrir une session au routeur — l'ACL ne filtre rien. Erreur 1 : sur les VTY on utilise une ACL standard qui matche des hôtes sources (access-list 15 permit host x.x.x.x), pas un permit any ; la ligne 'permit ip any any' est une syntaxe d'ACL étendue, invalide ou inutile ici selon l'IOS. Erreur 2 : l'objectif était de restreindre la gestion aux postes admin : il faut lister les hôtes autorisés et rien d'autre (le deny implicite fera le reste). Correction : access-list 15 permit host 192.168.10.50 puis access-class 15 in sur line vty 0 4, avec transport input ssh." }
+                ],
+                resume: "Une ACL est une liste ordonnée de permit/deny, lue de haut en bas, close par un deny any implicite. Standard = source seule, près de la destination ; étendue = source/destination/protocole/ports, près de la source. Les wildcard masks ciblent les plages ; les compteurs de show access-lists vérifient le destin des paquets. Une ACL ne remplace pas un pare-feu à états mais sélectionne aussi NAT, QoS et VTY.",
+                suite: "La fiche domaine 4.0 (sécurité des services) complète le tableau : DHCP snooping, DAI et AAA protègent la couche 2 et les accès.",
+                evaluation: [
+                    { q: "Que se passe-t-il pour un paquet qui ne matche aucune ligne d'une ACL ?", options: [ "Il passe", "Il est rejeté (deny any implicite)", "Il est mis en file d'attente", "Il est traduit" ], answer: 1, exp: "Correct : toute ACL se termine par un deny any invisible — d'où l'importance d'un permit final si l'intention n'est pas de tout couper." },
+                    { q: "Quelle ACL se place au plus près de la source du trafic à filtrer ?", options: [ "Standard", "Étendue", "Les deux indifféremment", "Aucune : toujours près de la destination" ], answer: 1, exp: "Correct : l'ACL étendue sait viser précisément (destination/ports) — placée près de la source, elle bloque tôt et économise le réseau." },
+                    { q: "Le wildcard 0.0.0.255 appliqué à 192.168.10.0 signifie :", options: [ "Un seul hôte", "N'importe quelle adresse", "Tous les hôtes du /24", "Les adresses paires du /24" ], answer: 2, exp: "Correct : les 24 premiers bits sont fixés, le dernier octet est libre — tout le sous-réseau /24." },
+                    { q: "access-class 5 in sur line vty sert à :", options: [ "Filtrer le trafic IP d'une interface", "Limiter qui peut ouvrir une session de gestion sur le routeur", "Activer SSH", "Chiffrer le mot de passe" ], answer: 1, exp: "Correct : c'est le durcissement de base de la gestion — seuls les hôtes permitted par l'ACL 5 accèdent aux lignes VTY." },
+                    { q: "Une ACL out ne filtre pas :", options: [ "Le trafic transitant par l'interface", "Le trafic destiné au réseau de l'interface", "Le trafic généré par le routeur lui-même", "Les réponses aux requêtes" ], answer: 2, exp: "Correct : le trafic originaire du routeur (OSPF, SSH du routeur) ne traverse pas le filtre out — il faut le gérer autrement (placement, CoPP)." }
+                ]
+            },
+            {
                 id: 'ccna-v2-dom4',
                 certif: 'CCNA',
                 parcours: 'CCNA',
