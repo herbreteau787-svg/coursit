@@ -424,6 +424,38 @@
                         { h: "Le cadre de référence ITIL", t: "ITIL est un ensemble de bonnes pratiques de gestion des services informatiques, très utilisé dans les entreprises : notions d'incident, de demande, de changement… Ce cours reprend sa logique générale, sans prétendre remplacer la documentation complète." }
                     ]}
                 ],
+                guiSteps: [
+                    { title: "Ouvrir GLPI et creer un ticket", action: "Ouvrez le navigateur, tapez l'URL de votre serveur GLPI (ex : http://srv-glpi/glpi). Connectez-vous avec votre compte technicien. Cliquez sur l'onglet Assistance, puis le bouton + Tickets - Create a ticket.", observation: "Un formulaire s'ouvre : titre, description, categorie, priorite, demandeur. Ce formulaire est le point d'entree de tout incident." },
+                    { title: "Remplir un ticket proprement", action: "Titre : resume en 1 ligne (ex : Poste CLIENT-04 - plus d'acces Internet). Description : contexte (qui, quand, quoi), symptomes precis, actions deja essayees. Categorie : Reseau. Priorite : Moyenne. Demandeur : chercher l'utilisateur dans l'annuaire GLPI.", observation: "Le ticket est cree avec un numero unique (ex : #2026-0042). Ce numero est la reference pour toute l'intervention." },
+                    { title: "Suivre un ticket de la prise en charge a la resolution", action: "Ouvrez le ticket, changez le statut : Nouveau - En cours (accepte) - En attente - Resolu. Ajoutez un commentaire a chaque action. Quand c'est resolu, cliquez Resolu et remplissez le resume.", observation: "L'utilisateur recoit une notification a chaque changement de statut. Le delai de traitement est trace." },
+                    { title: "Exporter l'inventaire et documenter", action: "Dans GLPI, cliquez sur Gestion - Parc - Ordinateurs pour voir l'inventaire. Ajoutez un nouvel equipement si necessaire. Documentez la solution dans la base de connaissances (Accueil - Base de connaissances - Ajouter).", observation: "L'inventaire liste chaque poste avec son OS, son IP, son utilisateur. La base de connaissances est le memoire technique de l'equipe." }
+                ],
+                deepDive: [
+                    { t: "Methodologie - l'escalade par niveaux", p: [
+                        "Niveau 1 (centre de services) : accueil, qualification, resolution des incidents simples (mot de passe oublie, peripherique, applications bureautiques).",
+                        "Niveau 2 (technicien IT) : incidents techniques plus complexes (reseau, systeme, materiel). Le technicien peut se deplacer ou prendre la main a distance.",
+                        "Niveau 3 (expert/fournisseur) : problemes requirent une expertise approfondie ou l'intervention du constructeur."
+                    ],
+                    cmd: [
+                        "# Verifier la disponibilite d'un poste distant (PowerShell Remoting)",
+                        "Invoke-Command -ComputerName CLIENT-04 -ScriptBlock { Get-Service Spooler }",
+                        "# Prendre la main a distance (RDP)",
+                        "mstsc /v:CLIENT-04"
+                    ],
+                    box: 'remember', boxText: "A retenir : un ticket = une seule demande. Le delai de premiere reponse compte autant que le delai de resolution. Documenter chaque etape dans le ticket est une obligation professionnelle, pas une option." },
+                    { t: "Erreurs frequentes en centre de services", p: [
+                        "Ne pas qualifier le ticket : un ticket sans description precise devient impossible a reprendre par un autre technicien.",
+                        "Oublier de changer le statut : l'utilisateur ne sait pas si son probleme est pris en compte.",
+                        "Fermer sans verifier : tester la solution AVEC l'utilisateur avant de resoudre le ticket."
+                    ],
+                    box: 'warn', boxText: "Erreur frequente : repondre par email hors du ticket. L'historique se perd. Toute communication doit passer par le systeme de ticketing pour garder la tracabilite." },
+                    { t: "Cas d'entreprise - le lundi matin qui part en vrille", p: [
+                        "Situation : 15 appels entre 8h30 et 9h30, tous pour le meme probleme (imprimante reseau injoignable). Le centre de services est sature.",
+                        "Bonne pratique : qualifier rapidement (meme symptome ?), creer un ticket Pere et lier les 15 tickets enfants, corriger une seule fois, repondre a tous en meme temps.",
+                        "Lecon : quand plusieurs utilisateurs signalent le meme symptome, c'est un probleme d'infrastructure, pas un probleme utilisateur individuel."
+                    ],
+                    box: 'case', boxText: "Ce cas illustre la difference entre incident individuel et incident de masse. La bonne reponse est de categoriser, consolider et corriger globalement, pas de traiter 15 tickets individuellement." }
+                ],
                 exercices: [
                     { enonce: "Un utilisateur appelle, très énervé : « rien ne marche, votre informatique est nulle ! ». Listez les informations minimales à collecter avant d'écrire un ticket de qualité.", correction: "Le ticket doit contenir au minimum : identité et localisation de l'utilisateur, équipement concerné, heure de début du problème, description factuelle (« je peux ouvrir Word mais pas Internet »), message d'erreur exact, impact (une personne ? un service entier ?) et actions déjà tentées. Sur l'appel, ramenez l'émotion vers les faits : « je comprends votre agacement, décrivons précisément ce qui ne fonctionne plus ». Si c'est possible, proposez un contournement temporaire (autre poste) en gardant le ticket ouvert." },
                     { enonce: "Hiérarchisez : A) La comptabilité ne peut plus lancer le logiciel de facturation (18 personnes). B) L'écran du directeur a une ligne de pixels morte. C) Un stagiaire n'arrive pas à se connecter en Wi-Fi. Donnez un ordre et justifiez.", correction: "A en premier : beaucoup de personnes bloquées et un service métier critique — impact et urgence élevés. Ensuite C : un seul utilisateur, cause fréquente et contournable (câble réseau, reconnexion Wi-Fi), typiquement traité au niveau 1. Enfin B : gêne réelle mais sans blocage métier, priorité faible. L'ordre suit l'impact sur l'activité, pas le grade des personnes." }
@@ -659,6 +691,25 @@
                         { h: "Trois outils à la main", t: "ping teste la joignabilité d'une cible, tracert (Windows) ou traceroute (Linux) montre le chemin emprunté, nslookup interroge le DNS. Trois commandes, trois questions : ça va ? par où ? qui traduit le nom ?" }
                     ]}
                 ],
+                guiSteps: [
+                    { title: "Configurer une adresse IP statique sur Windows", action: "Ouvrez Parametres - Reseau - Ethernet - Modifier les options d'adaptateur. Clic droit sur Ethernet - Proprietes - Protocole Internet version 4 (TCP/IPv4) - Proprietes. Cochez Utiliser l'adresse IP suivante et saisissez : IP 192.168.1.10, masque 255.255.255.0, passerelle 192.168.1.254, DNS 192.168.1.1. Validez par OK.", observation: "Le reseau est configure avec une IP fixe. Verifiez avec ipconfig /all que toutes les valeurs sont correctes." },
+                    { title: "Verifier la connectivite couche par couche", action: "Ouvrez une invite de commandes et testez dans l'ordre : 1) ipconfig /all (affichage), 2) ping 192.168.1.254 (passerelle), 3) ping 8.8.8.8 (Internet), 4) nslookup www.google.fr (DNS).", observation: "Chaque etape valide une couche. Si le ping passerelle echoue, le probleme est local (cable, VLAN). Si le ping Internet echoue mais la passerelle repond, c'est le routage ou le NAT.", cli: [
+                        "ipconfig /all",
+                        "ping 192.168.1.254",
+                        "ping 8.8.8.8",
+                        "nslookup www.google.fr"
+                    ] },
+                    { title: "Configurer une adresse IP sous Linux", action: "Ouvrez un terminal et tapez les commandes ci-dessous. ip a affiche les interfaces, ip route montre la table de routage, nmcli configure une interface via NetworkManager.", observation: "ip a montre l'adresse IP et le masque sur chaque interface. ip route montre la route par defaut (via la passerelle).", cli: [
+                        "ip a",
+                        "ip route",
+                        "sudo ip addr add 192.168.1.20/24 dev ens33",
+                        "sudo ip route add default via 192.168.1.254"
+                    ] },
+                    { title: "Decouper un reseau - methode pratique", action: "Prenez une feuille et calculez : le reseau 192.168.1.0/24 doit etre decoupe en 4 sous-reseaux egaux. Empruntez 2 bits au champ hote (2^2 = 4 sous-reseaux). Le nouveau masque est /26 (255.255.255.192). L'increment est 64.", observation: "Les 4 sous-reseaux sont : .0-.63, .64-.127, .128-.191, .192-.255. Chaque bloc a 62 hotes utilisables (64 - 2).", cli: [
+                        "# Verification avec un outil en ligne ou PowerShell",
+                        "# L'increment est toujours 256 - valeur du dernier octet du masque = 256 - 192 = 64"
+                    ] }
+                ],
                 deepDive: [
                     { t: "Méthodologie terrain — diagnostiquer un poste sans écran (à distance)", p: [
                         "En support niveau 1/2, 70 % des incidents se résolvent avec trois réflexes : afficher la configuration, tester la joignabilité, lire les journaux. L'ordre des couches (physique → IP → nom) s'applique aussi à distance.",
@@ -733,6 +784,41 @@
                         { h: "Ne pas tromper la RAM", t: "\"Sur-engagement\" de RAM : allouer aux VM plus de RAM que n'en a réellement l'hôte fonctionne tant que tout le monde ne consomme pas en même temps. Prévoyez la marge, mesurez avec la supervision (voir AIS CP7), et restez prudents sur les machines critiques." }
                     ]}
                 ],
+                guiSteps: [
+                    { title: "Ouvrir Hyper-V Manager et creer un commutateur virtuel", action: "Ouvrez Hyper-V Manager (Demarrer - Outils d'administration). Dans le panneau Actions a droite, cliquez Virtual Switch Manager. Choisissez External, cliquez Create Virtual Switch. Nommez-le LAN-EXT, selectionnez la carte physique, validez.", observation: "Le commutateur virtuel LAN-EXT apparait dans la liste. Il connecte les VM au reseau physique via la carte Ethernet de l'hote.", mockup: 'mockup-hyperv' },
+                    { title: "Creer une VM avec l'assistant", action: "Dans le panneau Actions, cliquez New - Virtual Machine. Suivez l'assistant : Name = VM-CLI01, Generation = 2, Memory = 4096 MB (decochez Dynamic Memory pour l'instant), Virtual Switch = LAN-EXT, Virtual Hard Disk = 60 GB (dynamique), Installation options = ISO image (pointez vers votre fichier .iso). Cliquez Finish.", observation: "La VM apparait dans la liste avec l'etat Off. Son disque virtuel (VHDX) est cree dans le dossier par defaut.", mockup: 'mockup-hyperv' },
+                    { title: "Demarrer la VM et installer l'OS", action: "Selectionnez la VM dans la liste, cliquez Start dans le panneau Actions, puis Connect pour ouvrir la console graphique. Suivez l'installation de Windows (ou Linux) comme sur une machine physique.", observation: "La console s'ouvre dans une fenetre. Vous voyez le boot de la VM puis l'installeur de l'OS. Une fois installe, la VM se comporte comme un serveur physique." },
+                    { title: "Creer un checkpoint (snapshot)", action: "Selectionnez la VM, dans le panneau Actions cliquez Checkpoint. Nommez-le avant-modification. Apres avoir applique un changement, vous pouvez revenir en arriere avec Revert.", observation: "Le checkpoint apparait dans l'onglet Checkpoints de la VM. Un retour en arriere restaure l'etat exact de la VM au moment du checkpoint.", cli: [
+                        "Checkpoint-VM -VMName VM-CLI01 -SnapshotName avant-modification",
+                        "Get-VMSnapshot -VMName VM-CLI01",
+                        "Restore-VMSnapshot -VMName VM-CLI01 -Name avant-modification -Confirm:$false"
+                    ] },
+                    { title: "Verifier avec PowerShell (methode 2)", action: "Ouvrez PowerShell et tapez les commandes ci-dessous pour verifier l'etat des VM et du commutateur sans ouvrir la console graphique.", observation: "Get-VM liste toutes les VM avec leur etat, Get-VMSwitch montre les commutateurs, Get-VMSnapshot liste les checkpoints.", cli: [
+                        "Get-VM",
+                        "Get-VMSwitch",
+                        "Get-VMSnapshot -VMName VM-CLI01"
+                    ] }
+                ],
+                deepDive: [
+                    { t: "Type 1 vs Type 2 - ce que ca change vraiment", p: [
+                        "Type 1 (Hyper-V, ESXi, Proxmox) : l'hyperviseur est le seul OS sur la machine. Il alloue directement les ressources materielles. Plus performant, plus stable, mais necessite une machine dediee.",
+                        "Type 2 (VirtualBox, VMware Workstation) : s'installe comme une application sur votre poste. Parfait pour apprendre et tester, mais partage les ressources avec votre OS hote.",
+                        "En entreprise, on ne trouve que du type 1 en production. Le type 2 sert au developpement et a la formation."
+                    ],
+                    box: 'remember', boxText: "A retenir : snapshot = retour arriere a un instant T (pour tester un changement), sauvegarde = copie complete et persistante (pour restaurer apres une panne). Un snapshot n'est PAS une sauvegarde - si le datastore est perdu, les snapshots sont perdus aussi." },
+                    { t: "Erreurs frequentes en virtualisation", p: [
+                        "Surdimensionner les VM : allouer 16 Go de RAM a chaque VM quand 4 Go suffisent sature l'hote. Regle : allouez ce dont la VM a besoin, pas ce que l'hote a de disponible.",
+                        "Accumuler les snapshots sans les supprimer : chaque snapshot creuse un differentiel qui grandit. Supprimez les checkpoints apres validation du changement.",
+                        "Oublier d'activer le commutateur externe : la VM creee avec un commutateur Internal ne peut pas joindre le reseau physique. Verifiez le type de commutateur (External, Internal, Private)."
+                    ],
+                    box: 'warn', boxText: "Erreur frequente : creer une VM avec Dynamic Memory (Hyper-V) sans definir de limites. La VM peut absorber toute la RAM de l'hote et affamer les autres VM. Definissez toujours un minimum et un maximum." },
+                    { t: "Cas d'entreprise - migration d'un serveur physique vers une VM (P2V)", p: [
+                        "Situation : un serveur physique de 8 ans (Windows Server 2012) heberge une application critique. Le materiel arrive en fin de vie.",
+                        "Approche : creer une VM neuve avec un OS supporte, installer l'application, migrer les donnees, tester, puis basculer le DNS pour rediriger les utilisateurs. Le serveur physique est garde en secours pendant 2 semaines.",
+                        "Lecon : la migration P2V n'est pas une copie - c'est une reconstruction propre sur une infrastructure moderne. Le P2V direct (avec un outil automatique) est possible mais rarement recommande."
+                    ],
+                    box: 'case', boxText: "Ce cas illustre la transition du physique vers le virtuel : reconstruire proprement est preferable a cloner l'ancien. La VM recoit un OS a jour, les pilotes sont virtualises, et le serveur devient un fichier que l'on sauvegarde et duplique." }
+                ],
                 exercices: [
                     { enonce: "Dimensionnez une VM pour un serveur web interne (visiteurs modérés, haute disponibilité attendue). Proposez vCPU, RAM, disque, type de provisionnement, et justifiez.", correction: "Point de départ raisonnable : 2 vCPU, 4 Go de RAM, disque de 40 Go provisionné à la demande pour un site web interne peu chargé. Justification : un serveur web interne modéré sollicite peu le CPU mais il vaut mieux de la RAM pour les traitements ; le thin provisioning est acceptable si l'espace de l'hôte est supervisé. Ce sont des hypothèses de départ, pas une norme : on vérifie ensuite par la supervision (AIS CP7) et on ajuste." },
                     { enonce: "Un collègue veut « sauvegarder » une VM avec un snapshot avant de rester en prod toute l'année. Qu'en dit-on ?", correction: "Le snapshot convient pour un instant T à court terme (avant une opération risquée), pas comme sauvegarde permanente : il grandit avec le temps, dégrade les performances et meurt avec le disque de la VM. La bonne réponse : sauvegarde dédiée et externalisée du support (CP8), snapshot temporaire avant chaque intervention, supprimé après validation." }
@@ -772,6 +858,54 @@
                         { h: "Paramètres et codes de retour", t: "$1 désigne le premier paramètre passé au script, echo affiche du texte, et le code de sortie ($? dans le shell appelant) dit si la dernière commande a réussi (0) ou échoué. C'est ce code que les planificateurs et la supervision surveillent." },
                         { h: "Exécuter proprement", t: "chmod +x script.sh rend le script exécutable, puis ./script.sh le lance. Ne donnez jamais +x à un script que vous n'avez pas tapé vous-même — retour à la règle d'or." }
                     ]}
+                ],
+                guiSteps: [
+                    { title: "Ecrire et executer son premier script PowerShell", action: "Ouvrez PowerShell ISE (ou Visual Studio Code avec l'extension PowerShell). Tapez les commandes ci-dessous et sauvegardez le fichier en .ps1. Pour executer : clic droit - Run with PowerShell, ou dans un terminal : .\\monscript.ps1.", observation: "Le script s'execute ligne par ligne. Si une erreur survient, PowerShell affiche le numero de ligne et le message.", cli: [
+                        "# monscript.ps1",
+                        "Write-Host 'Bienvenue dans mon premier script' -ForegroundColor Green",
+                        "$hostname = hostname",
+                        "Write-Host 'Nom du poste : $hostname'",
+                        "Get-Service | Where-Object Status -eq Running | Select-Object -First 5"
+                    ] },
+                    { title: "Utiliser le pipeline et le filtre", action: "Le pipeline envoie le resultat d'une cmdlet vers la suivante. Where-Object filtre, Sort-Object trie, Select-Object choisit les colonnes. C'est la base de tout script PowerShell.", observation: "Le pipeline transforme une liste brute en rapport lisible. Chaque etape ajoute une transformation.", cli: [
+                        "# Services arretes, tries par nom, affiches en liste",
+                        "Get-Service | Where-Object Status -eq Stopped | Sort-Object Name | Format-Table Name, DisplayName",
+                        "# Espace disque des lecteurs de plus de 10 Go",
+                        "Get-Volume | Where-Object SizeRemaining -gt 10GB | Sort-Object SizeRemaining"
+                    ] },
+                    { title: "Ecrire un script bash avec parametre", action: "Ouvrez un terminal Linux. Creez un fichier script.sh avec un shebang en premiere ligne, rendez-le executable, puis executez-le avec des parametres. Le parametre $1 est le premier argument passe au script.", observation: "Le script prend le parametre (un nom de fichier) et affiche son contenu. $1 = premier argument, $@ = tous les arguments.", cli: [
+                        "cat > lire.sh << 'EOF'",
+                        "#!/bin/bash",
+                        "echo 'Lecture du fichier : $1'",
+                        "wc -l $1",
+                        "echo 'Dernieres lignes :'",
+                        "tail -n 3 $1",
+                        "EOF",
+                        "chmod +x lire.sh",
+                        "./lire.sh /etc/hostname"
+                    ] },
+                    { title: "Securite : comprendre avant d'executer", action: "Ne JAMAIS executer un script trouve sur Internet sans le lire. Cherchez : les commandes destructives (Remove-Item, rm, format), les connexions reseau (Invoke-WebRequest, curl), et les modifications de securite (Set-ExecutionPolicy, usermod).", observation: "Le niveau d'execution par defaut de PowerShell (Restricted) bloque les scripts non signes. Set-ExecutionPolicy RemoteSigned autorise les scripts locaux tout en exigeant une signature pour les scripts distants." }
+                ],
+                deepDive: [
+                    { t: "Quand automatiser et quand ne pas le faire", p: [
+                        "Automatisez quand la tache est repetee, previsible et sensible aux erreurs humaines (creation de comptes, deploiement de configuration, sauvegarde).",
+                        "N'automatisez pas une tache que vous ne savez pas faire a la main : l'automatisation d'un processus mal maitrise amplifie les erreurs."
+                    ],
+                    cmd: [
+                        "# Exemple : creer 10 utilisateurs depuis un CSV",
+                        "Import-Csv C:\\Scripts\\users.csv | ForEach-Object {",
+                        "    New-ADUser -Name $_.Nom -SamAccountName $_.Login -Path $_.OU -AccountPassword (ConvertTo-SecureString $_.Pass -AsPlainText -Force) -Enabled $true",
+                        "}",
+                        "# Bash : verifier les services sur plusieurs serveurs",
+                        "for srv in srv1 srv2 srv3; do echo '== $srv ==' && ssh $srv systemctl is-active sshd; done"
+                    ],
+                    box: 'remember', boxText: "A retenir : un script = une tache repetable + des parametres + une verification du resultat. Le shebang (#!) indique l'interpreteur en bash. Le pipeline en PowerShell transmet des objets (pas du texte), d'ou la puissance de Where-Object et Select-Object." },
+                    { t: "Erreurs frequentes en scripting", p: [
+                        "Oublier le -WhatIf sur une commande destructive : PowerShell permet de simuler avec -WhatIf avant d'executer reellement.",
+                        "Hardcoder un mot de passe dans un script : utilisez ConvertTo-SecureString et stockez dans un fichier securise, ou utilisez un gestionnaire de secrets.",
+                        "Ne pas gerer les erreurs : un script sans try/catch s'arrete brutalement au premier probleme."
+                    ],
+                    box: 'warn', boxText: "Erreur frequente : Set-ExecutionPolicy Unrestricted sur un poste de production. Cela autorise l'execution de n'importe quel script. Utilisez RemoteSigned (scripts locaux autorises, scripts distants dovent etre signes)." }
                 ],
                 exercices: [
                     { enonce: "Écrivez une commande PowerShell qui compte les fichiers .log d'un dossier.", correction: "Deux écritures possibles : Get-ChildItem -Filter *.log | Measure-Object (affiche un résumé dont le champ Count), ou (Get-ChildItem -Filter *.log).Count pour n'avoir que le nombre. Get-ChildItem énumère, Measure-Object compte — le pipeline fait le pont." },
@@ -813,6 +947,40 @@
                         { h: "Diagnostic de sortie Internet", t: "Ordre simple : ping passerelle (local OK ?) → ping sur une IP publique (8.8.8.8) : routage et sortie NAT OK ? → nom de domaine (DNS OK ?). Remontez pas à pas et vous trouverez la couche fautive sans raturer la configuration entière." }
                     ]}
                 ],
+                guiSteps: [
+                    { title: "Configurer NAT sur un routeur Cisco pour sortir sur Internet", action: "Dans le CLI Cisco, configurez les interfaces inside (LAN) et outside (WAN), puis creez une regle NAT dynamique avec overload (PAT). Le mot-cle overload active le PAT : plusieurs adresses privees partagent une seule IP publique.", observation: "Apres configuration, un ping depuis le LAN vers 8.8.8.8 reussit. La commande show ip nat translations affiche les traductions actives.", cli: [
+                        "interface Gi0/0",
+                        " ip nat inside",
+                        "interface Gi0/1",
+                        " ip nat outside",
+                        "access-list 1 permit 192.168.1.0 0.0.0.255",
+                        "ip nat inside source list 1 interface Gi0/1 overload"
+                    ] },
+                    { title: "Configurer la passerelle par defaut sur un poste client", action: "Sur le poste client, ouvrez Parametres - Reseau - Modifier les options - TCP/IPv4 - Proprietes. Verifiez que la passerelle pointe vers le routeur (ex : 192.168.1.254). Le DNS doit pointer vers le serveur interne (ex : 172.16.10.10).", observation: "ipconfig /all montre la passerelle et le DNS. Un ping vers 8.8.8.8 confirme la sortie Internet, nslookup confirme la resolution de nom." },
+                    { title: "Verifier les traductions NAT en cours", action: "Sur le routeur, tapez show ip nat translations pour voir les traductions actives, et show ip nat statistics pour les compteurs. Chaque flux sortant crée une entree dans la table NAT.", observation: "Les traductions montrent l'IP locale, le port source, l'IP publique et le port traduit. C'est le PAT qui permet a plusieurs postes de partager une seule IP publique.", cli: [
+                        "show ip nat translations",
+                        "show ip nat statistics"
+                    ] }
+                ],
+                deepDive: [
+                    { t: "NAT, PAT et le principe de la passerelle", p: [
+                        "NAT (Network Address Translation) remplace l'adresse IP source privee par l'adresse IP publique du routeur. PAT (Port Address Translation) ajoute aussi la traduction du port pour distinguer les flux.",
+                        "La passerelle par defaut est l'adresse du routeur vers laquelle le poste envoie tout trafic destine a un autre reseau. Sans passerelle configuree, le poste ne sort jamais de son sous-reseau."
+                    ],
+                    cmd: [
+                        "# Verifier la table NAT en temps reel",
+                        "show ip nat translations",
+                        "# Purger les traductions (apres modification de config)",
+                        "clear ip nat translation *"
+                    ],
+                    box: 'remember', boxText: "A retenir : NAT/PAT = le routeur remplace IP et port pour sortir sur Internet. La passerelle par defaut = l'adresse du routeur. Sans passerelle configuree, pas de sortie possible, meme si le reseau local fonctionne." },
+                    { t: "Erreurs frequentes", p: [
+                        "Oublier le mot-cle overload : sans lui, le NAT echoue car chaque adresse privee exigerait une IP publique dediee.",
+                        "Configurer NAT sans marquer les interfaces inside/outside : le routeur ne sait pas dans quel sens traduire.",
+                        "Confondre DNS interne (le DC du domaine) et DNS externe (le FAI ou 8.8.8.8) : le poste doit utiliser le DNS interne pour resoudre les noms AD, et le DNS interne redirige vers l'exterieur."
+                    ],
+                    box: 'warn', boxText: "Erreur frequente : oublier l'interface outside. Sans 'ip nat outside' sur l'interface WAN, le routeur ne traduit jamais les paquets sortants, et le ping 8.8.8.8 depuis le LAN echoue." }
+                ],
                 exercices: [
                     { enonce: "Le chef vient de vous dire que tout le monde a perdu Internet. Écrivez votre méthode de diagnostic en cinq étapes numérotées.", correction: "1) Un seul poste ou tous ? (un seul = problème client, voir CP4). 2) Passerelle atteignable en ping ? (échec = réseau local, câble/VLAN/du routeur). 3) IP publique pingable (8.8.8.8) ? (échec = chaîne routeur/FAI ou NAT). 4) Un nom de domaine résout-il ? (adresse IP ok mais nom échoué = DNS). 5) Vérifier les journaux du routeur et l'état des liens (ligne, fibre). Toujours de la couche la plus proche vers l'extérieur, jamais l'ordre inverse." },
                     { enonce: "On vous demande de publier un serveur web interne sur Internet. Quelles conditions réunir avant de l'accorder ?", correction: "Liste non exhaustive : une IP publique fixe (ou un service de mise à jour DNS dynamique), une règle NAT de translation de port vers le serveur uniquement, HTTPS avec un certificat valide (certificat émis par une autorité — Let's Encrypt délivre gratuitement des certificats reconnus, par exemple), serveur et CMS à jour, journalisation et supervision de l'exposition, et évalutation si un accès VPN ou un portail sécurisé ne serait pas preferable à une exposition directe. Chaque ouverture est un choix documenté, pas un geste machinal." }
@@ -853,6 +1021,30 @@
                         { h: "Le piège n°1", t: "La sauvegarde « verte » qui réussit chaque nuit depuis trois ans mais n'a jamais été testée, stockée sur le même disque que les données, sans rétention définie : quand la panne arrive, rien ne restaure. Chaque indice de fragilité (sauvegarde sur le même support, rétention floue, pas de test) doit déclencher un signal." }
                     ]}
                 ],
+                guiSteps: [
+                    { title: "Configurer une sauvegarde Windows Server (Windows Server Backup)", action: "Ouvrez Server Manager - Tools - Windows Server Backup. Cliquez Local Backup dans le menu de gauche, puis Backup Schedule. Choisissez les fichiers a sauvegarder, l'horaire (ex : 23h), et la destination (disque dedie ou partage reseau).", observation: "L'assistant configure une sauvegarde planifiee. Vous pouvez verifier le statut dans le panneau Backup Schedule." },
+                    { title: "Lancer une sauvegarde manuelle avec Veeam (VM)", action: "Ouvrez la console Veeam Backup and Replication. Cliquez Home - Backup Job - Virtual Machine. Nommez le job, selectionnez les VM, choisissez le repository (destination), configurez la retentions (ex : 14 points), planifiez la sauvegarde.", observation: "Le job apparait dans la liste avec son statut. Apres execution, vous pouvez voir les points de restauration dans Backups - Disk." },
+                    { title: "Tester une restauration", action: "Dans Veeam, cliquez sur un point de restauration, puis Restore - Entire VM. Choisissez la destination (meme hote, autre hote, ou nouveau nom). Suivez l'assistant et verifiez que la VM restauree demarre.", observation: "La restauration cree une VM identique a l'etat du backup. C'est le SEUL test qui prouve que votre sauvegarde fonctionne.", cli: [
+                        "# Windows Server Backup en ligne de commande",
+                        "wbadmin start backup -backupTarget:E: -include:C: -allCritical -quiet",
+                        "# Verifier les versions disponibles",
+                        "wbadmin get versions"
+                    ] }
+                ],
+                deepDive: [
+                    { t: "La regle 3-2-1 expliquee simplement", p: [
+                        "3 copies des donnees (l'originale + 2 sauvegardes). 2 supports differents (ex : disque local + NAS). 1 copie hors site (ex : cloud ou bande transportee).",
+                        "Pourquoi : si le serveur brule (incident local), les 2 autres copies survivent. Si le NAS est chiffre par un ransomware (incident reseau), la copie hors site survient.",
+                        "La variante 3-2-1-1-0 ajoute 1 copie immuable (non modifiable) et 0 erreur de restauration verifiee."
+                    ],
+                    box: 'remember', boxText: "A retenir : complete = tout, differentielle = depuis la derniere complete, incrementale = depuis la derniere sauvegarde. Restauration differentielle = complete + derniere differentielle. Restauration incrementale = complete + TOUTES les incrementales." },
+                    { t: "Snapshot vs sauvegarde - ne confondez plus jamais", p: [
+                        "Un snapshot (checkpoint) fige l'etat d'une VM a un instant T pour permettre un retour arriere. Il depend du datastore de l'hyperviseur. Si le datastore est perdu, le snapshot est perdu.",
+                        "Une sauvegarde est une copie complete et independante, stockee sur un support different (disque, NAS, bande, cloud). Elle survit a la perte du datastore.",
+                        "En resume : le snapshot sert a TESTER un changement, la sauvegarde sert a SURVIVRE a une panne."
+                    ],
+                    box: 'warn', boxText: "Erreur frequente : confondre snapshot et sauvegarde. Un snapshot n'est PAS une sauvegarde. Si l'hyperviseur ou le datastore est compromis (ransomware), les snapshots sont chiffres aussi." }
+                ],
                 exercices: [
                     { enonce: "Votre sauvegarde complète tourne le dimanche, les incrémentielles chaque soir en semaine. Le serveur tombe mercredi soir. Quelles sauvegardes restaurez-vous ? Et si c'était des différentielles ?", correction: "Version incrémentielle : la complète de dimanche + les incrémentielles de lundi et mardi (les données du mercredi n'ont pas eu le temps d'être sauvegardées : c'est votre RPO subi). Version différentielle : la complète de dimanche + la différentielle de mardi (qui contient tout depuis dimanche). La différentielle exige un seul jeu en plus de la complète ; l'incrémentielle exige la chaîne depuis le début." },
                     { enonce: "Citez au moins quatre indices d'un système de sauvegarde fragile.", correction: "1) Une seule copie, stockée sur le même disque (ou même baie) que les données. 2) Aucune copie hors site. 3) Aucun test de restauration jamais réalisé. 4) Rétention floue ou absente (on ne sait pas ce qu'on garde ni combien de temps). 5) Le compte administrateur de sauvegarde sert aussi à l'usage quotidien. Chaque point correspond à un volet de la règle 3-2-1 et du CP." }
@@ -892,6 +1084,24 @@
                         { h: "Réinstaller et remplacer", t: "Poste défectueux ? On réinstalle l'image, l'utilisateur retrouve son environnement (GPO + réassociation de ses données). Remplacer un poste = décharger son profil/données (sauvegarde ou transfert), réimager le matériel sortant, et suivre tout cela dans l'inventaire." },
                         { h: "Retirer proprement", t: "Un poste sorti du parc ne part pas avec ses données : effacement des disques avec des outils dédiés AVANT toute cession ou revente ; désactivation et réaffectation du compte AD ; mise à jour de l'inventaire. Le retrait se conduit comme le déploiement, avec autant de rigueur." }
                     ]}
+                ],
+                guiSteps: [
+                    { title: "Creer une image de reference (sysprep)", action: "Installez Windows sur une VM propre (sans domaine), installez les mises a jour et les logiciels de base, puis executez sysprep : C:\\Windows\\System32\\sysprep\\sysprep.exe /oobe /generalize /shutdown.", observation: "La VM s'eteint. Son disque virtuel (VHDX) est maintenant une image generique prete a etre capturee et deployee." },
+                    { title: "Capturer l'image avec WDS", action: "Ouvrez la console WDS (Windows Deployment Services). Dans Install Images, clic droit - Add Install Image. Selectionnez le fichier boot.wim de l'image sysprep, donnez-lui un nom (ex : Win11-Golden-2026).", observation: "L'image apparait dans la console WDS et est disponible pour le deploiement PXE." },
+                    { title: "Deployer via PXE", action: "Sur un poste client, configurez le boot reseau dans le BIOS (PXE Boot). Demarrez le poste : il recoit une adresse DHCP, charge boot.wim via TFTP, et l'installateur Windows propose les images disponibles.", observation: "Le poste boot reseau affiche l'assistant d'installation avec l'image Win11-Golden-2026. Apres installation, le poste est integre au domaine automatiquement (fichier de reponse unattend.xml)." }
+                ],
+                deepDive: [
+                    { t: "Golden image : pourquoi et comment", p: [
+                        "Une golden image est une installation standardisee : OS a jour, logiciels de base pre-installes, configuration de securite appliquee. Elle evite d'installer chaque poste a la main.",
+                        "Le cycle : installer une fois proprement, sysprep pour generaliser, capturer, deployer en masse, integrer au domaine via GPO."
+                    ],
+                    box: 'remember', boxText: "A retenir : sysprep /generalize efface les identifiants uniques (SID, nom d'ordinateur) pour rendre l'image deployable plusieurs fois. Sans sysprep, chaque poste aurait le meme SID - conflits garanties." },
+                    { t: "Erreurs frequentes en deploiement", p: [
+                        "Oublier sysprep : tous les postes deployes partagent le meme SID, les GPO ne s'appliquent pas correctement.",
+                        "Ne pas preparer le fichier unattend.xml : l'installateur demande l'interaction humaine a chaque deploiement.",
+                        "Oublier de mettre a jour l'image : les correctifs de securite manquants creent des vulnerabilites des le premier demarrage."
+                    ],
+                    box: 'warn', boxText: "Erreur frequente : capturer une image sans avoir desinstalle les logiciels specifiques (imprimantes, VPN personnel). L'image doit contenir UNIQUEMENT ce qui est commun a tous les postes." }
                 ],
                 exercices: [
                     { enonce: "Vous devez déployer 30 postes identiques dans 2 salles en une semaine. Décrivez la méthode en étapes, de l'image à la livraison.", correction: "1) Préparer et tester l'image de référence (OS, correctifs, logiciels standard, configuration réseau). 2) Préparer WDS/MDT opérationnel avec séquence de tâche incluant le fichier de réponse. 3) Déploiement PXE salle par salle (10 à 15 postes par session, pas tous en même temps pour ne pas saturer le réseau). 4) Vérifications : intégration au domaine, GPO appliquées (gpresult), logiciels présents, inventaire complété. 5) Livraison : remise utilisateur, signature de prise en charge, clôture du projet. La chronologie évite le bouchon réseau et les oublis d'inventaire." },
@@ -937,6 +1147,25 @@
                         { h: "La revue périodique", t: "À intervalles fixes : qui a encore accès à quoi ? quels comptes sont obsolètes ? quels comptes de service existent et sont-ils toujours nécessaires ? Cette revue régulière empêche les droits de s'accumuler silencieusement." }
                     ]}
                 ],
+                guiSteps: [
+                    { title: "Appliquer le moindre privilege - separer les comptes", action: "Dans ADUC, creez un compte admin separe (ex : adm.jdupont) pour l'administration quotidienne. Le compte ordinaire (jdupont) sert pour la bureautique. Dans lusrmgr.msc, verifiez que le compte ordinaire n'est PAS dans le groupe Administrateurs.", observation: "Deux comptes distincts : un pour le quotidien, un pour l'administration. En cas de compromission du compte ordinaire, l'attaquant n'a pas les droits admin." },
+                    { title: "Activer la MFA (authentification multifacteur)", action: "Dans Entra ID (ex-Azure AD), naviguez vers Users - Per-user MFA. Selectionnez les comptes admin, cliquez Enable. L'utilisateur devra configurer Microsoft Authenticator a sa prochaine connexion.", observation: "La MFA ajoute un second facteur (code dans l'app mobile). Meme si le mot de passe est vole, l'attaquant ne peut pas se connecter sans le telephone." },
+                    { title: "Documenter un changement (gestion du changement)", action: "Avant toute modification d'infrastructure, remplissez une fiche de changement : quoi, quand, qui, impact, plan de retour arriere. Testez dans un environnement de test avant la production.", observation: "La documentation du changement cree une tracabilite : qui a fait quoi, quand, et pourquoi. En cas de panne, le retour arriere est possible." }
+                ],
+                deepDive: [
+                    { t: "Le moindre privilege explique simplement", p: [
+                        "Chaque compte, chaque service, chaque processus ne doit avoir que les droits STRICTEMENT necessaires. Pas plus.",
+                        "En pratique : un technicien helpdesk n'a pas besoin d'etre admin du domaine. Il a besoin du droit de reinitialiser les mots de passe, rien de plus.",
+                        "En AD, cela se traduit par des delegations ciblees (clic droit sur une OU - Delegate Control) plutot que l'ajout au groupe Domain Admins."
+                    ],
+                    box: 'remember', boxText: "A retenir : moindre privilege = chaque compte a SEULEMENT les droits necessaires. Separation des comptes (bureautique vs admin), delegations ciblees par OU, et MFA sur les comptes sensibles." },
+                    { t: "Erreurs frequentes en securite", p: [
+                        "Utiliser le compte Domain Admin pour la bureautique : si le poste est compromis (phishing), le domaine entier est compromis.",
+                        "Donner les droits admin du domaine au service informatique entier : utiliser les delegations d'OU et les groupes cible a la place.",
+                        "Oublier de desactiver les comptes des ex-employes : un compte actif sans proprietaire actif est une porte d'entree."
+                    ],
+                    box: 'warn', boxText: "Erreur frequente : ajouter des utilisateurs au groupe Domain Admins pour resoudre un probleme d'acces. Ce groupe donne le controle TOTAL du domaine. Utilisez les delegations d'OU a la place." }
+                ],
                 exercices: [
                     { enonce: "Vous reprenez la main sur l'infrastructure d'un nouveau client. Citez cinq actions de première prise en main qui sécurisent le plus la situation.", correction: "1) Faire l'inventaire des comptes à privilèges et s'assurer qu'ils sont nominatifs (supprimer les comptes génériques ou partagés). 2) Vérifier que la MFA protège les accès distants et les comptes admin. 3) Vérifier les sauvegardes : existence, emplacement, et au moins un test de restauration. 4) Constituer une documentation minimale (schéma, accès, contacts, procédures d'urgence). 5) Instaurer la règle : tout changement passe par une annonce et un plan de retour arrière. L'ordre va du contrôle des accès vers la capacité de réagir." },
                     { enonce: "Un manager exige « le mot de passe administrateur pour dépanner son équipe ». Comment répondez-vous ?", correction: "On ne partage pas de comptes : la traçabilité (qui a fait quoi) devient impossible et le moindre privilège est annulé. La bonne réponse : écouter le besoin réel, y répondre avec un accès proportionné (compte standard, délégation sur le service concerné, ou intervention de l'équipe IT), et expliquer pourquoi le partage de compte est refusé. La demande, la réponse et l'accord obtenu sont documentés." }
@@ -977,6 +1206,43 @@
                         { h: "Faire vivre le schéma", t: "Le réseau change : nouveau site, nouveau switch, remplacement. Le schéma et le tableau des flux sont révisés à chaque changement, pas à la fin du projet. Un schéma à jour est le premier outil du diagnostic ; un schéma périmé est un piège." }
                     ]}
                 ],
+                guiSteps: [
+                    { title: "Verifier la topologie reseau avec des outils de base", action: "Sur un poste Windows, ouvrez une invite de commandes et tapez les commandes de diagnostic reseau dans l'ordre. Chaque commande repond a une question precise.", observation: "ipconfig /all montre l'adressage, ping teste la joignabilite, tracert montre le chemin, arp -a montre le cache MAC.", cli: [
+                        "ipconfig /all",
+                        "ping 192.168.1.254",
+                        "tracert 8.8.8.8",
+                        "arp -a"
+                    ] },
+                    { title: "Configurer un switch Cisco : VLAN et trunk", action: "Connectez-vous au switch (console ou SSH), entrez en mode configuration, creez les VLANs et affectez les ports. Un port en mode access appartient a UN VLAN, un port en mode trunk transporte PLUSIEURS VLANs.", observation: "show vlan brief liste les VLANs et leurs ports. show interfaces trunk montre les liens d'agregation.", cli: [
+                        "enable",
+                        "configure terminal",
+                        "vlan 10",
+                        " name PROD",
+                        "vlan 20",
+                        " name VOIP",
+                        "interface fa0/1",
+                        " switchport mode access",
+                        " switchport access vlan 10"
+                    ] },
+                    { title: "Analyser une trame avec Wireshark", action: "Ouvrez Wireshark, selectionnez l'interface reseau, demarrez la capture. Generez du trafic (ping, navigation web). Arretez la capture et analysez une trame : Ethernet (MAC) + IP + TCP/UDP + donnees.", observation: "Chaque couche du modele OSI est visible dans une trame : MAC (couche 2), IP (couche 3), TCP/UDP (couche 4), HTTP/DNS (couche 7). Wireshark colorie les protocoles pour faciliter la lecture." }
+                ],
+                deepDive: [
+                    { t: "La couche 2 en pratique : switch, MAC, VLAN", p: [
+                        "Le switch apprend les adresses MAC en lisant la MAC source de chaque trame. Il construit sa table CAM (Content Addressable Memory). Quand il recoit une trame, il regarde la MAC destination et envoie sur le port correspondant.",
+                        "Un VLAN isole les domaines de diffusion. Deux postes dans des VLANs differents ne peuvent pas communiquer sans un routeur (ou un switch de couche 3)."
+                    ],
+                    cmd: [
+                        "show mac address-table",
+                        "show vlan brief",
+                        "show interfaces trunk"
+                    ],
+                    box: 'remember', boxText: "A retenir : la table CAM associe MAC a port. Un VLAN = un domaine de diffusion. Le trunk transporte plusieurs VLANs avec des tags 802.1Q. Le VLAN natif circule non bague." },
+                    { t: "La couche 3 en pratique : routage", p: [
+                        "Le routeur lit l'IP destination de chaque paquet et consulte sa table de routage. La route la plus precise gagne (le plus long prefixe). Si aucune route ne correspond, le paquet est supprime.",
+                        "Les distances administratives departagent les sources : statique = 1, OSPF = 110, RIP = 120. La plus fiable gagne."
+                    ],
+                    box: 'remember', boxText: "A retenir : le routeur relie les reseaux. La table de routage dit OU envoyer. Les distances admin disent QUELLE source croire. IP destination + masque = recherche dans la table." }
+                ],
                 exercices: [
                     { enonce: "Une PME de 150 employés : proposez un découpage en zones (avec VLAN) et deux règles de flux exemplaires.", correction: "Exemple valable : VLAN 10 Postes, VLAN 20 Serveurs, VLAN 30 Wi-Fi invités, VLAN 40 Administration. Règles attendues : Postes → Serveurs sur les services utiles uniquement (fichiers, imprimante, ERP), autorisé ; Invités → tout le reste, refusé sauf Internet ; Administration → joignable seulement depuis les postes admins, jamais depuis Invités. Toute autre variation cohérente est acceptable : l'essentiel est le refus par défaut et la justification par flux." },
                     { enonce: "On vient d'installer un lien de secours entre deux switches. Pourquoi le STP devient-il votre allié, et que faut-il tester ?", correction: "Deux chemins entre les mêmes switches = boucle possible ; STP coupe automatiquement l'un des chemins et le réactive si l'autre tombe. À tester : débrancher le lien principal et mesurer la durée pendant laquelle le réseau est affecté, vérifier que le secours prend effectivement le relais, et refaire l'inverse. Le test est documenté (date, résultat, pertes), et le schéma est mis à jour." }
@@ -1016,6 +1282,36 @@
                         { h: "Le compte de service, une entité limitée", t: "Un compte de service (utilisé par une application) a un mot de passe robuste, des droits minimaux sur ce service précisément, et un mot de passe distinct de tous vos comptes personnels. Il n'est jamais un compte admin « polyvalent »." }
                     ]}
                 ],
+                guiSteps: [
+                    { title: "Durcir un serveur Windows Server", action: "Ouvrez Parametres - Systeme - A propos - Parametres systeme avances - Performances - Parametres - Avance - Memoire virtuelle. Verifiez que le fichier de page n'est pas sur C:. Ouvrez secpol.msc (Strategie de securite locale) et configurez : verrouillage apres 5 echecs, duree de verrouillage 15 min, mot de passe minimum 12 caracteres.", observation: "La strategie de securite locale applique des regles que tous les comptes doivent respecter. Les changements sont visibles dans gpresult." },
+                    { title: "Durcir un serveur Linux (SSH, permissions)", action: "Editez /etc/ssh/sshd_config : PermitRootLogin no, PasswordAuthentication no (apres avoir installe une cle), MaxAuthTries 3. Redemarrez ssh. Verifiez les permissions critiques : /etc/shadow en 600, /etc/passwd en 644.", observation: "Le serveur SSH refuse la connexion root et n'accepte que les cles. Un audit avec ssh-audit (outil open source) note la securite de la configuration.", cli: [
+                        "sudo nano /etc/ssh/sshd_config",
+                        "sudo sshd -t",
+                        "sudo systemctl restart sshd",
+                        "sudo chmod 600 /etc/shadow",
+                        "sudo ls -la /etc/shadow /etc/passwd"
+                    ] },
+                    { title: "Verifier les comptes et les privileges", action: "Sur Windows : net user liste les comptes locaux, net localgroup Administrateurs liste les admins. Sur Linux : cat /etc/passwd liste les comptes, sudo -l montre les privileges sudo de l'utilisateur courant.", observation: "Toute compte admin inattendu (ex : un compte de test oublie) est une vulnerabilite. Documentez chaque compte et son role.", cli: [
+                        "net user",
+                        "net localgroup Administrateurs"
+                    ] }
+                ],
+                deepDive: [
+                    { t: "Le hardening en 5 domaines", p: [
+                        "1. Comptes : moindre privilege, suppression des comptes inactifs, MFA sur les comptes sensibles.",
+                        "2. Reseau : pare-feu actif (regles restrictives), ports inutiles fermes, chiffrement des flux (TLS, SSH).",
+                        "3. Journaux : logs actifs, centralises (syslog/SIEM), retention definie.",
+                        "4. Mises a jour : patch management automatique, test avant production.",
+                        "5. Sauvegarde : regle 3-2-1, test de restauration regulier."
+                    ],
+                    box: 'remember', boxText: "A retenir : le hardening reduit la surface d'attaque. Chaque service desactive est une porte fermee. Chaque regle de pare-feu est une contrainte pour l'attaquant. Chaque journal actif est une trace pour l'investigation." },
+                    { t: "Erreurs frequentes en securite systeme", p: [
+                        "Laisser le compte root/admin actif en SSH/RDP : c'est la premiere cible des attaques par force brute.",
+                        "Installer des services inutiles (FTP, Telnet) qui creent des portes d'entree supplementaires.",
+                        "Oublier de mettre a jour le systeme pendant des mois : les vulnerabilites connues (CVE) sont publiquement documentees et exploitees."
+                    ],
+                    box: 'warn', boxText: "Erreur frequente : penser que le pare-feu perimeter suffit. Un attaquant qui a compromis un poste interne peut se deplacer lateralement (lateral movement) si les serveurs internes ne sont pas durcis." }
+                ],
                 exercices: [
                     { enonce: "Rédigez une check-list de prise en charge d'un nouveau serveur Linux de production (au moins six points).", correction: "Exemple de base attendu : 1) mises à jour installées avec un rythme planifié ; 2) SSH en authentification par clés, comptes nominatifs ; 3) services inutiles identifiés et désactivés ; 4) sauvegarde définie pour les données de ce serveur et test de restauration planifié ; 5) journaux centralisés vers le système de collecte ; 6) documentation créée (rôle, IP, procédure de restauration) ; 7) accès d'administration uniquement via le VPN. Toute check-list couvrant accès, mise à jour, sauvegarde et traçabilité est valable." },
                     { enonce: "On vous propose de regrouper annuaire (AD DS), DHCP et serveur de fichiers sur une seule VM. Quels arguments posez-vous ?", correction: "Arguments pour la séparation d'AD DS en priorité : l'annuaire est le service dont dépendent tous les autres (authentification), une panne combinée = tout fonctionne en même temps sur le même point de fragilité. La complexité de reconstituer le service un jour dépasse l'économie de gestion réalisée. Compromis réaliste : séparer AD DS, éventuellement regrouper DHCP + fichiers, et tout se joue aussi sur les contraintes du client (budget, matériel). Documentez la décision et ses compromis." }
@@ -1054,6 +1350,24 @@
                         { h: "Un compte admin de plateforme dédié", t: "Les comptes d'administration de l'hyperviseur ne servent qu'à cela — comme pour les sauvegardes (TSSR CP8), la séparation limite ce qu'un compromis peut atteindre. On révoque périodiquement les accès des personnes parties ou des prestataires terminés." },
                         { h: "Gouverner les ressources", t: "Mises à jour de l'hyperviseur suivies (fenêtre planifiée, test d'abord), limites de ressources pour qu'une VM gourmande ne fasse pas tout tomber, et surveillance de la plateforme avec la supervision (AIS CP7). Un cluster est un système, pas un ensemble de boîtes indépendantes." }
                     ]}
+                ],
+                guiSteps: [
+                    { title: "Creer un cluster Hyper-V", action: "Sur les deux serveurs Hyper-V, installez la fonctionnalite Failover Clustering (Server Manager - Add Roles and Features - Failover Clustering). Ouvrez le Failover Cluster Manager, cliquez Validate Configuration, selectionnez les deux serveurs, lancez les tests. Puis Create Cluster.", observation: "Le cluster apparait avec les deux noeuds. Le stockage partagé (SMB, SAN ou Storage Spaces Direct) est requis pour les disques des VM." },
+                    { title: "Migrer une VM a chaud (Live Migration)", action: "Dans Hyper-V Manager, clic droit sur une VM - Move - Move the virtual machine. Choisissez l'autre noeud du cluster. La VM continue de fonctionner pendant le transfert.", observation: "Aucune interruption de service visible pour l'utilisateur. La VM change d'hote en quelques secondes." },
+                    { title: "Verifier la haute disponibilite", action: "Eteignez brutalement le noeud actif (shutdown). Le cluster detecte la panne et redemarre la VM sur l'autre noeud automatiquement. Le temps d'interruption est de 30 secondes environ.", observation: "La VM apparait maintenant sur l'autre noeud, en etat Running. L'utilisateur n'a perdu que quelques secondes de connexion." }
+                ],
+                deepDive: [
+                    { t: "La haute disponibilite expliquee simplement", p: [
+                        "La haute disponibilite (HA) signifie qu'un service continue de fonctionner meme si un composant tombe en panne. Pour une VM, cela se fait par un cluster d'hyperviseurs avec stockage partage.",
+                        "Le PRA (Plan de Reprise d'Activite) va plus loin : il permet de redemarrer l'informatique dans un AUTRE SITE en cas de sinistre du site principal."
+                    ],
+                    box: 'remember', boxText: "A retenir : HA = survivre a la panne d'un composant (cluster). PRA = survivre a la perte du site (replication inter-site). PCA = continuer a travailler PENDANT l'incident. RTO = delai de reprise. RPO = perte de donnees maximale." },
+                    { t: "Erreurs frequentes en virtualisation avancee", p: [
+                        "Oublier le stockage partage : sans stockage accessible par les deux noeuds, la VM ne peut pas migrer.",
+                        "Ne pas tester le basculement : un cluster non teste n'est pas un cluster. Il faut SIMULER la panne regulierement.",
+                        "Oublier les reseaux VMkernel/vMotion dedies : la migration a chaud a besoin d'un reseau dedie avec suffisamment de bande passante."
+                    ],
+                    box: 'warn', boxText: "Erreur frequente : creer un cluster sans tester le basculement. Le jour de la vraie panne, le cluster peut ne pas basculer correctement (quotum perdu, stockage inaccessible)." }
                 ],
                 exercices: [
                     { enonce: "Un serveur de facturation critique tourne sur le cluster. Rédigez son plan de protection complet.", correction: "Attendu : sauvegarde quotidienne externalisée et hors site (règle 3-2-1, TSSR CP8), test de restauration périodique de la VM entière ; VM hébergée sur le cluster avec bascule automatique en cas de panne d'hôte ; snapshot temporaire avant chaque changement, supprimé après validation ; interface d'administration de la VM et du cluster restreinte au VLAN admin avec MFA ; supervision des ressources (CPU, RAM, disque) avec alertes. La sauvegarde reste le filet ultime, la haute disponibilité protège de la panne matérielle instantanée seulement." },
@@ -1095,6 +1409,29 @@
                         { h: "La proposition documentée", t: "Schéma logique + physique, plan d'adressage et de zones, justificatifs, prix en ordre de grandeur, hypothèses et limites, plan de sauvegarde intégré. C'est ce document que le client signe, et que vous relirez quand viendra la mise en production (AIS CP6)." }
                     ]}
                 ],
+                guiSteps: [
+                    { title: "Concevoir une solution de A a Z", action: "Avant d'installer quoi que ce soit, remplissez un document de conception qui repond a ces questions : Quel besoin metier ? Quelle architecture (physique, virtuel, cloud) ? Quel dimensionnement (CPU, RAM, disque, reseau) ? Quelle haute disponibilite ? Quelle securite ? Quelle supervision ? Quelle sauvegarde ?", observation: "Le document de conception est le contrat entre le besoin metier et la solution technique. Il evite les surcouts et les oublis." },
+                    { title: "Dessiner l'architecture", action: "Utilisez un outil de schema (draw.io, Visio) pour representer : les serveurs, les reseaux (VLANs, pare-feux), les flux (qui parle a qui sur quel port), les points de stockage et les chemins de sauvegarde.", observation: "Le schema permet de valider l'architecture avec le metier et de detecter les points de defaillance unique (SPOF)." },
+                    { title: "Dimensionner correctement", action: "Pour chaque serveur : CPU (nombre de coeurs necessaires selon la charge), RAM (application + OS + marge), disque (taille des donnees + croissance + sauvegardes), reseau (bande passante + redondance). Documentez les hypotheses.", observation: "Un serveur sous-dimensionne plante en production. Un serveur sur-dimensionne gaspille. Le dimensionnement est un equilibre base sur des donnees." }
+                ],
+                deepDive: [
+                    { t: "Concevoir une architecture en pratique", p: [
+                        "Partez du besoin metier (ex : heberger un ERP pour 50 utilisateurs), identifiez les composants (serveur applicatif, base de donnees, sauvegarde, reseau), choisissez les technologies (Hyper-V, Windows Server, SQL Server), et dessinez l'architecture.",
+                        "Verifiez chaque point de defaillance unique (SPOF) : un seul DC ? ajoutez un second. Un seul switch ? ajoutez un second en stack. Un seul lien Internet ? ajoutez un lien de secours 4G."
+                    ],
+                    box: 'remember', boxText: "A retenir : le schema reseau, la matrice de flux et le plan de sauvegarde sont les trois documents indispensables de toute conception d'infrastructure." }
+                ],
+                deepDive: [
+                    { t: "La methode de conception en 6 etapes", p: [
+                        "1. Cadrer le besoin metier (que veut-on faire ?). 2. Choisir l'architecture (technos, taille, disponibilite). 3. Dimensionner (CPU, RAM, disque, reseau). 4. Securiser (pare-feu, comptes, chiffrement). 5. Documenter (schema, procedures, contacts). 6. Tester (Poc, recette, mise en production)."
+                    ],
+                    box: 'remember', boxText: "A retenir : une solution bien concue est documentee AVANT l'installation. Le schema reseau, la matrice de flux et le plan de sauvegarde sont les trois documents indispensables." },
+                    { t: "Les points de defaillance unique (SPOF)", p: [
+                        "Un SPOF est un composant dont la panne interrompt TOUT le service. Exemples : un seul switch, un seul serveur, un seul chemin de stockage, un seul DC, un seul lien Internet.",
+                        "Pour chaque SPOF identifie, proposez une solution : redondance (deux switchs), cluster (deux DC), lien de secours (4G), replication (deux sites)."
+                    ],
+                    box: 'warn', boxText: "Erreur frequente : concevoir une solution sans identifier les SPOF. Un seul DC, un seul lien Internet ou un seul switch d'acces sont des SPOF critiques." }
+                ],
                 exercices: [
                     { enonce: "Un client veut « un espace de stockage partagé fiable pour 150 utilisateurs, avec sauvegardes ». Proposez une architecture en cinq blocs maximum, avec justifications courtes.", correction: "Exemple valable : 1) un serveur de fichiers avec disques en configuration redondante (miroir RAID 1 si petit espace, ou RAID 5 pour un plus grand espace — le choix dépend du volume et du budget) ; 2) une sauvegarde vers un second support local (règle 3-2-1) ; 3) une copie hors site (par exemple dans un coffre numérique distant ou le cloud) pour un sinistre total ; 4) un VLAN réseau dédié pour le trafic de stockage/sauvegarde (AIS CP2) ; 5) une supervision de l'espace disque et du service (AIS CP7). Hypothèses écrites indispensables : volumes par utilisateur estimés, croissance, fenêtre de sauvegarde nocturne." },
                     { enonce: "Votre client vous demande « la même solution en moins cher ». Comment répondez-vous sans rompre ?", correction: "On repose la discussion sur le cahier des charges : quels sont les éléments dits indispensables (disponibilité, sauvegarde, sécurité) et lesquels sont négociables (taille, redondance, matériel plus standard). On propose une variante moins cher avec ses limites écrites (« cette variante accepte une interruption de X heures en cas de panne de disque ») et on laisse le client décider de la réelle tension budget/risque. Jamais de coupe silencieuse sur la sauvegarde ou la sécurité." }
@@ -1135,6 +1472,13 @@
                         { h: "Le retour d'expérience (REX)", t: "Une heure de débriefing : ce qui s'est bien passé, ce qui a surpris, ce qu'on changera au prochain changement projet planifié. Le REX honnête est ce qui rend l'équipe meilleure plus vite que n'importe quel cours." }
                     ]}
                 ],
+                deepDive: [
+                    { t: "Mettre en production sans casse", p: [
+                        "La mise en production suit un plan : preparation (test en environnement de recette), announcement (informer les utilisateurs), execution (jour et heure choisis hors production), verification (tests fonctionnels), retour arriere (si echec).",
+                        "Le rollback est la garantie : si la mise en production echoue, on restaure l'etat precedent en moins de 15 minutes."
+                    ],
+                    box: 'remember', boxText: "A retenir : une mise en production reussie = preparation + communication + execution + verification + plan de retour arriere. Le rollback doit etre teste AVANT la mise en production." }
+                ],
                 exercices: [
                     { enonce: "Rédigez un plan de bascule simplifié pour remplacer le pare-feu d'un site le vendredi soir.", correction: "Attendu : fenêtre 22 h – 00 h ; prérequis : configuration du nouveau pare-feu testée en labo, sauvegarde de la configuration actuelle exportée, équipe de deux présents. Étapes : 1) export et archivage de la config actuelle (22 h) ; 2) bascule physique et reconfiguration (22h15) ; 3) tests (23 h) : Internet sortant, VPN site-à-site, flux inter-VLAN, accès admin ; 4) rollback si un test critique échoue avant 23h40 (réinstallation de l'ancien pare-feu) ; 5) observation rapprochée le samedi. Communication : annonce aux utilisateurs la veille, contact d'urgence affiché. Toute réponse avec rollback horodaté et critères de test est valable." },
                     { enonce: "À mi-bascule, un test d'accès distant échoue. L'équipe propose « on finit et on verra demain ». Que répondez-vous ?", correction: "Le plan contient un critère de succès et un temps de marge. Si l'accès distant est un point critique et que l'échéance du rollback approche, on déclenche le retour arrière comme prévu ; on repart sur un plan de diagnostic en fenêtre non critique. Continuer en production non confirmée transforme un échec anodin en utilisateurs bloqués lundi matin. La décision est documentée dans le journal de bascule." }
@@ -1173,6 +1517,24 @@
                         { h: "Tableaux de bord et répartition", t: "Un tableau de bord partagé donne la vue d'ensemble (état des services critiques). La répartition est claire : qui reçoit les alertes critiques hors heures (astreinte), qui suit les avertissements, et où est consigné ce qui a été fait." },
                         { h: "Tester la chaîne d'alerte", t: "Un dispositif d'alerte se teste comme un extincteur : arrêter un service de test, vérifier que l'alerte arrive, au bon destinataire, avec la bonne info. Cette vérification périodique évite le scénario trop fréquent : découvrir trois mois plus tard que « la supervision ne marchait pas »." }
                     ]}
+                ],
+                guiSteps: [
+                    { title: "Installer et configurer Zabbix (vue d'ensemble)", action: "Zabbix se compose d'un serveur (collecte les metriques), d'une base de donnees (stocke), et d'un frontend web (affiche). Les agents s'installent sur les machines surveillees. L'interface web est accessible sur http://serveur-zabbix/zabbix.", observation: "L'interface web affiche : Dashboards (vue d'ensemble), Monitoring (donnees en temps reel), Data collection (hosts, templates, items), Alerts (triggers, actions)." },
+                    { title: "Ajouter un hote et associer un template", action: "Dans Data collection - Hosts - Create host. Nom = SRV-LNX01, Groups = Linux servers, Interface = Agent (IP de la cible, port 10050). Dans l'onglet Templates, recherchez et liez 'Linux by Zabbix agent'. Cliquez Add.", observation: "L'host apparait dans la liste avec l'icne de disponibilite de l'agent (vert = OK). Le template apporte automatiquement des items (CPU, RAM, disque) et des triggers." },
+                    { title: "Creer un trigger et tester l'alerte", action: "Dans Data collection - Hosts, cliquez sur votre hote - Triggers - Create trigger. Name = 'CPU > 90% sur {HOST.NAME}', Expression = last(/SRV-LNX01/system.cpu.util)>90. Ajoutez une action (email, webhook) dans Alerts - Actions.", observation: "Quand le CPU depasse 90%, le trigger passe en PROBLEM et l'action declenche une notification. Quand le CPU redescend, le trigger passe en RESOLVED." }
+                ],
+                deepDive: [
+                    { t: "Les 4 niveaux de la supervision", p: [
+                        "Niveau 1 : disponibilite (le service repond-il ? ping, port, HTTP). Niveau 2 : performance (CPU, RAM, disque, reseau). Niveau 3 : applicatif (le service fonctionne-t-il correctement ? test de connexion a la base). Niveau 4 : metier (les utilisateurs peuvent-ils travailler ?).",
+                        "Un bon systeme de supervision couvre les 4 niveaux et hiérarchise les alertes par severite (info, warning, average, high, disaster)."
+                    ],
+                    box: 'remember', boxText: "A retenir : supervision = collecte (agents, SNMP) + stockage (base) + affichage (dashboards) + alertes (triggers + actions). L'agent actif envoie, l'agent passif repond. Un template apporte des items pre-configures." },
+                    { t: "Erreurs frequentes en supervision", p: [
+                        "Trop d'alertes : si vous recevez 50 emails par jour, vous les ignorez. Calibrez les seuils sur l'historique reel.",
+                        "Superviser uniquement les serveurs : le reseau (switchs, routeurs, liens WAN) et les applications sont tout aussi critiques.",
+                        "Oublier les actions : un trigger sans action (email, webhook) ne previent personne."
+                    ],
+                    box: 'warn', boxText: "Erreur frequente : installer Zabbix, ajouter les hosts, et ne JAMAIS revenir. La supervision n'est utile que si quelqu'un lit les alertes et agit. Configurez les notifications et les escalades." }
                 ],
                 exercices: [
                     { enonce: "Définissez trois alertes utiles pour un serveur de fichiers, avec niveaux et actions, puis une alerte à supprimer.", correction: "Exemple attendu : 1) espace disque > 85 % = avertissement (planifier l'arbitrage), > 95 % = critique (agir ce jour) ; 2) service de partage arrêté = critique (relancer selon la procédure) ; 3) échec de sauvegarde nocturne = critique le matin (vérifier puis relancer). À supprimer : une alerte CPU > 10 % — inutile car un CPU peu chargé n'est pas un problème, et un seuil faible crée du bruit permanent. Chaque alerte citée porte condition, niveau et action attendue." },
@@ -1214,6 +1576,24 @@
                         { h: "La clôture du cycle", t: "Trouver ne sert à rien sans corriger ni vérifier : après la correction, on re-scanne pour confirmer, et l'on documente (décision, justification, preuve). La mesure de sécurité est un cycle permanent, pas un événement annuel ponctuel." }
                     ]}
                 ],
+                guiSteps: [
+                    { title: "Mesurer le niveau de securite avec un audit simple", action: "Utilisez des outils open source pour evaluer la securite : Lynis (Linux) et Microsoft Security Baseline (Windows). Sur Linux, executez 'sudo lynis audit system' et lisez le rapport (hardening index, warnings, suggestions).", observation: "Lynis affiche un hardening index (0-100) et des recommandations classees par gravite. Chaque suggestion est un point a ameliorer." },
+                    { title: "Scanner les vulnerabilites reseau avec nmap", action: "Depuis une machine de test, scannez le reseau : 'nmap -sn 172.16.10.0/24' (decouverte des hotes), puis 'nmap -sV 172.16.10.10' (versions des services sur le DC). Comparez avec la liste des services attendus.", observation: "Nmap liste les ports ouverts et les versions des services. Tout service inattendu est une surface d'attaque supplementaire." },
+                    { title: "Evaluer avec EBIOS RM (methode ANSSI)", action: "EBIOS RM structure l'analyse de risque en 5 ateliers : 1) cadrage et societe cible, 2) evenements redoutes, 3) scenarios de menace, 4) risques, 5) traitement. Pour chaque risque : probabilite x impact = niveau de risque.", observation: "Le registre des risques liste chaque risque avec sa cotation et son traitement (accepte, reduit, transfere, elie)." }
+                ],
+                deepDive: [
+                    { t: "Les outils de mesure de securite", p: [
+                        "Scan de vulnerabilites : Nessus, OpenVAS, Qualys. Audit de configuration : Lynis, CIS-CAT, Microsoft Security Compliance Toolkit. Pentest : Nmap, Metasploit, Burp Suite. Detection : SIEM (Wazuh, Splunk), EDR (Defender, CrowdStrike).",
+                        "Chaque outil repond a une question differente : 'quelles sont mes failles ?' (scan), 'ma config est-elle securisee ?' (audit), 'puis-je etre attaque ?' (pentest), 'suis-je attaque ?' (detection)."
+                    ],
+                    box: 'remember', boxText: "A retenir : la securite se mesure avec des outils (scan, audit, pentest) et des processus (EBIOS RM, ISO 27001). Les CVE sont les vulnerabilites publiees, le CVSS est leur score de gravite (0-10)." },
+                    { t: "Erreurs frequentes en mesure de securite", p: [
+                        "Scanner en production sans prevenir : un scan de vulnerabilites peut faire planter des services sensibles (imprimantes, applicatifs anciens).",
+                        "Confondre scan de vulnerabilites et pentest : le scan identifie des failles connues (CVE), le pentest simule une attaque reelle avec de la creativite.",
+                        "Ne pas corriger apres le scan : un rapport de vulnerabilites qui reste dans un tiroir ne protege personne."
+                    ],
+                    box: 'warn', boxText: "Erreur frequente : croire qu'un scan vierge = systeme securise. Le scan ne detecte que les failles CONNUES. Un zero-day, une mauvaise pratique organisationnelle ou une ingenierie sociale ne sont pas detectes par un scan." }
+                ],
                 exercices: [
                     { enonce: "Un scan révèle une faille critique sur le serveur web exposé à Internet et vingt failles mineures internes. Ordre de traitement et justification ?", correction: "1) Le serveur exposé d'abord : c'est la surface publiquement attaquable, son risque d'exploitation est le plus immédiat ; correction en urgence (fenêtre courte annoncée si service impacté). 2) Les failles internes : classement par criticité réelle (systèmes à privilèges, annuaire, serveurs exposés internes), puis plans de correction en fenêtres planifiées (AIS CP1). 3) Re-scan de confirmation et documentation. Le nombre (20 vs 1) ne décide pas : la criticité de l'exposition oui." },
                     { enonce: "Un prestataire vous propose un « pentest surprise de votre réseau, sans prévenir, pour être plus réaliste ». Réagissez.", correction: "Un test d'intrusion sans mandat écrit et sans fenêtre connue de l'équipe interne est une prise de risque : les équipes de garde peuvent déclencher des mesures d'urgence contre un « attaquant » réel, un service peut tomber sans personne en capacité de reconnaître le test. On exige : mandat écrit (périmètre, méthodes, dates, contacts), fenêtre annoncée aux personnes qui doivent le savoir (pas à tous les utilisateurs), et procédure d'arrêt d'urgence partagée. La surprise est un argument de marketing, pas de méthode." }
@@ -1254,6 +1634,24 @@
                         { h: "Revoir périodiquement", t: "La PSSI se relit au moins annuellement et à chaque changement majeur (nouveau service, incident, réorganisation). Une politique qui n'a pas bougé depuis la fin de la dernière décennie protège un SI qui n'existe plus." }
                     ]}
                 ],
+                guiSteps: [
+                    { title: "Definir une politique de securite documentee", action: "Redigez un document qui formalise : les regles d'utilisation du systeme informatique (mot de passe, Internet, USB), les responsabilites (qui administre quoi), les procedures (acces, depart, incident), et les mesures techniques (pare-feu, MFA, chiffrement).", observation: "La politique de securite est le document de reference. Elle doit etre valiee par la direction et communiquee a tous les employes." },
+                    { title: "Implementer une politique de mot de passe par GPO", action: "Dans GPMC, editez la Default Domain Policy. Computer Configuration - Policies - Windows Settings - Security Settings - Account Policies - Password Policy. Configurez : longueur minimale 12, complexite active, historique 24, duree maximale 90 jours.", observation: "La politique s'applique a tous les comptes du domaine. Les utilisateurs sont forces a utiliser des mots de passe conformes." },
+                    { title: "Restreindre l'acces USB par GPO", action: "Dans une GPO dediee, naviguez vers Computer Configuration - Administrative Templates - System - Removable Storage Access. Activez 'Removable Disks: Deny read access' et 'Deny write access'. Liez la GPO a l'OU cible.", observation: "Les cles USB sont bloquees sur les postes cibles. L'utilisateur recoit un message d'acces refuse." }
+                ],
+                deepDive: [
+                    { t: "La politique de securite en 3 couches", p: [
+                        "1. Politique generale (direction) : principes, responsabilites, sanctions. 2. Politiques specifiques (DSI) : mot de passe, acces distant, BYOD, sauvegarde. 3. Procedures operationnelles (techniciens) : comment faire concretement.",
+                        "Chaque couche doit etre coherente avec les autres. La politique generale dit QUOI, les procedures disent COMMENT."
+                    ],
+                    box: 'remember', boxText: "A retenir : la securite n'est pas qu'une affaire de technique. Une politique de securite documentee et communiquee est aussi importante que le pare-feu. La conformite RGPD exige une politique documentee." },
+                    { t: "Erreurs frequentes en politique de securite", p: [
+                        "Ecrire une politique de 200 pages que personne ne lit : faites court, clair et actionnable.",
+                        "Appliquer la meme politique a tout le monde : un developpeur, un commercial et un comptable n'ont pas les memes besoins.",
+                        "Ne jamais mettre a jour : la politique doit evoluer avec les menaces et les changements d'organisation."
+                    ],
+                    box: 'warn', boxText: "Erreur frequente : une politique de securite qui n'est pas appliquee (ou pas verifiable) est pire que pas de politique du tout, car elle cree un faux sentiment de securite." }
+                ],
                 exercices: [
                     { enonce: "Rédigez cinq règles de charte informatique, formulées pour être comprises par un nouvel embauché non technique.", correction: "Exemple valable : 1) « Votre mot de passe est personnel : ne le partagez jamais, même avec un collègue ou l'équipe informatique. » 2) « Utilisez une phrase de passe longue (au moins 4 mots), unique par service utilisé. » 3) « Ne cliquez pas sur les liens des mails que vous n'attendez pas ; en cas de doute, questionnez l'équipe IT. » 4) « Ni clé USB personnelle, ni installation de logiciels sans accord. » 5) « Ne stockez jamais les données du client sur un support personnel ou un cloud personnel. » Forme attendue : phrases simples, aucune menace, un réflexe par règle." },
                     { enonce: "Un collègue vous demande de sauvegarder sur son poste les CV de 200 candidats « au cas où ». Y a-t-il un sujet RGPD et quoi faire ?", correction: "Oui : les CV sont des données personnelles (parcours professionnel identifiant une personne). Le RGPD demande une finalité et une durée de conservation définie : « au cas où » n'en est pas une. Réponse attendue : vérifier où ces CV sont censés être conservés (processus de recrutement), définir la durée (souvent au-delà d'un concours), et ne pas dupliquer sans finalité. C'est un bon exemple du rôle du technicien : ne pas jouer aux archives, mais alerter dès qu'une copie non encadrée circule." }
@@ -1292,6 +1690,23 @@
                         { h: "Restaurer intelligent", t: "Avec un rançongiciel, on restaure depuis les sauvegardes (TSSR CP8) après s'être assuré que la faille d'entrée est fermée, sinon le rançongiciel revient sur des données fraîchement restaurées. La restauration suit l'ordre des services critiques défini à l'avance (plan de continuité)." },
                         { h: "Le REX sans blâme", t: "Analyse après-coup : comment est-on entré, combien de temps l'incident a-t-il vécu sans être détecté, quels contrôles ont marché ou pas ? Trois questions valent mieux qu'un rapport décoratif. Les actions en sortent : durcir, former, surveiller (bouclage avec AIS CP8 et CP9)." }
                     ]}
+                ],
+                guiSteps: [
+                    { title: "Detecter et repondre a un incident de securite", action: "Un incident de securite suit un cycle defini : detection (SIEM, alerte, signalement utilisateur), qualification (est-ce une vraie attaque ?), confinement (isoler le poste, bloquer le compte), eradication (supprimer le malware, corriger la faille), recuperation (restaurer les donnees), retour d'experience.", observation: "Chaque etape est documentee dans le ticket ou le rapport d'incident. La chaine de traitement est tracable de bout en bout." },
+                    { title: "Reagir a une suspicion de ransomware", action: "1. ISOLER immediatement le poste affecte (debrancher le reseau ou desactiver la carte via ncpa.cpl). 2. NE PAS redemarrer (le ransomware peut se reactiver). 3. Identifier la souche (fichier note.txt, extension des fichiers chiffres). 4. Verifier l'etendue (d'autres postes touches ?). 5. Restaurer depuis les sauvegardes (hors ligne). 6. Identifier la porte d'entree (email, RDP, faille non patchee).", observation: "La reaction aux ransomwares suit un protocole precis. L'isolation du poste est la PREMIERE action : elle empeche la propagation." }
+                ],
+                deepDive: [
+                    { t: "Le cycle de reponse a incident (NIST)", p: [
+                        "1. Preparation (playbooks, outils, formation). 2. Detection et analyse (SIEM, alertes, signalements). 3. Confinement (isoler, bloquer). 4. Eradication (supprimer la menace). 5. Recuperation (restaurer, verifier). 6. Retour d'experience (ameliorer le processus).",
+                        "Chaque phase a des actions concretes et des responsables definis dans le playbook d'incident."
+                    ],
+                    box: 'remember', boxText: "A retenir : incident = evenement non planifie qui affecte la securite. Le cycle NIST est : Preparation, Detection, Confinement, Eradication, Recuperation, Retour d'experience. L'isolation du poste affecte est TOUJOURS la premiere action." },
+                    { t: "Erreurs frequentes en reponse a incident", p: [
+                        "Redemarrer le poste compromis : le malware peut se reactiver au demarrage ou effacer ses traces.",
+                        "Payer la rancon d'un ransomware : cela encourage les attaquants et ne garantit pas la restauration.",
+                        "Ne pas informer la CNIL : en cas de violation de donnees personnelles, la RGPD impose une notification sous 72 heures."
+                    ],
+                    box: 'warn', boxText: "Erreur frequente : traiter l'incident sans chercher la porte d'entree. Si vous supprimez le malware sans corriger la faille, l'attaquant revient par la meme porte." }
                 ],
                 exercices: [
                     { enonce: "Un poste affiche un écran de rançon ; les fichiers réseau deviennent inaccessibles. Écrivez vos cinq premières actions dans l'ordre.", correction: "1) Isoler le poste du réseau (câble/Wi-Fi) sans l'éteindre. 2) Mesurer l'ampleur : autres postes touchés ? serveurs ? vérifier les partages réseau. 3) Alerter le décideur et déclencher la procédure d'incident (personne qui décide identifiée). 4) Préserver les traces : horodatage des actions, copies de journaux, capture(s) d'écran — sans « nettoyer » de votre initiative. 5) Étendre l'isolation si d'autres machines sont suspectes, et préparer la restauration depuis les sauvegardes testées une fois la faille d'entrée identifiée et fermée. Le paiement de rançon est une décision de direction, jamais d'un technicien de garde." },
