@@ -9,3 +9,12 @@ sauvegarde_*.html
 # Fichiers système
 Thumbs.db
 Desktop.ini
+
+# Dépôts SpyKeeR (références tierces, non publiés)
+Anki-Cards-main/
+Cheatsheets-main/
+Knowledge-base-main/
+Labs-playground-main/
+PrepaCertifs-main/
+PrepaExamTSSR-main/
+Scripts-main/

@@ -2785,6 +2785,27 @@
 
         // Schéma étendu : title, cat, env, certif + commands[{cmd, desc (objectif+résultat), ex (exemple concret), risk ("consultation" / "modification" / "destructif"), mode (prérequis/droits)}].
         const CHEAT_SHEETS = [
+            { title: "Cisco IOS - Switching avancé", env: "Cisco IOS", cat: "Réseau", certif: "CCNA / AIS", commands: [
+                { cmd: "vlan 10\n name ADMIN", desc: "Crée un VLAN et lui donne un nom descriptif.", ex: "vlan 10 → name ADMIN", risk: "modification", case: "Segmenter le réseau par service ou fonction.", freq: 4 },
+                { cmd: "switchport mode access\n switchport access vlan 10", desc: "Place le port en mode access sur le VLAN 10.", ex: "interface fa0/5 → switchport mode access → switchport access vlan 10", risk: "modification", case: "Connecter un PC à un VLAN spécifique.", freq: 5 },
+                { cmd: "switchport mode trunk\n switchport trunk allowed vlan 10,20,30", desc: "Place le port en mode trunk et restreint les VLANs transportés.", ex: "interface gi0/1 → switchport mode trunk → switchport trunk allowed vlan 10,20,30", risk: "modification", case: "Liaison inter-switch transportant plusieurs VLANs.", freq: 4 },
+                { cmd: "switchport trunk native vlan 99", desc: "Définit le VLAN natif (non balisé) du trunk.", ex: "switchport trunk native vlan 99", risk: "modification", case: "Éviter le mismatch de VLAN natif entre deux switchs.", freq: 3 },
+                { cmd: "switchport voice vlan 110", desc: "Configure un VLAN voix séparé pour un combiné VoIP.", ex: "interface fa0/10 → switchport voice vlan 110", risk: "modification", case: "Brancher un téléphone IP + un PC sur le même port.", freq: 3 },
+                { cmd: "spanning-tree portfast", desc: "Transition immédiate vers forwarding (sans écoute STP).", ex: "interface fa0/1 → spanning-tree portfast", risk: "modification", case: "Accélérer la connexion des postes utilisateurs.", freq: 3 },
+                { cmd: "show mac address-table", desc: "Affiche la table CAM : adresses MAC apprises par port.", ex: "show mac address-table", risk: "consultation", case: "Diagnostiquer où un équipement est connecté.", freq: 5 },
+                { cmd: "show spanning-tree", desc: "Affiche l'état STP (racine, ports root/alternate, priorités).", ex: "show spanning-tree", risk: "consultation", case: "Identifier le pont racine et vérifier qu'aucun port n'est bloqué inutilement.", freq: 4 }
+            ]},
+            { title: "Cisco IOS - Routage avancé", env: "Cisco IOS", cat: "Réseau", certif: "CCNA / AIS", commands: [
+                { cmd: "ip route 0.0.0.0 0.0.0.0 <gw>", desc: "Route par défaut : tout trafic non connu part vers cette passerelle.", ex: "ip route 0.0.0.0 0.0.0.0 192.168.1.1", risk: "modification", case: "Sortir vers Internet ou vers un réseau non annoncé.", freq: 4 },
+                { cmd: "ip route <net> <mask> <gw> 150", desc: "Route flottante : prend la main si la route principale (AD plus basse) tombe.", ex: "ip route 192.168.3.0 255.255.255.0 192.168.1.2 150", risk: "modification", case: "Lien de secours avec une distance administrative supérieure.", freq: 3 },
+                { cmd: "router eigrp 100\n network 10.0.0.0\n no auto-summary", desc: "Configure EIGRP (protocole propriétaire Cisco, convergence rapide).", ex: "router eigrp 100 → network 10.0.0.0 → no auto-summary", risk: "modification", case: "Réseau 100% Cisco où la convergence rapide est prioritaire.", freq: 3 },
+                { cmd: "show ip protocols", desc: "Affiche les protocoles de routage actifs (OSPF, EIGRP, RIP), router-id, zones.", ex: "show ip protocols", risk: "consultation", case: "Contrôler la configuration de routage à froid.", freq: 4 }
+            ]},
+            { title: "Cisco IOS - Sécurité avancée", env: "Cisco IOS", cat: "Sécurité", certif: "CCNA / AIS", commands: [
+                { cmd: "ip ssh version 2\n ip ssh time-out 60\n ip ssh authentication-retries 3", desc: "Configure SSH v2 avec timeout et limite de tentatives.", ex: "ip ssh version 2 → ip ssh time-out 60 → ip ssh authentication-retries 3", risk: "modification", case: "Sécuriser l'accès SSH : version 2, timeout de session, limite de tentatives.", freq: 4 },
+                { cmd: "username admin privilege 15 secret <pass>", desc: "Crée un compte admin local avec privilège 15 (tous les droits).", ex: "username admin privilege 15 secret AdminPass123", risk: "modification", case: "Authentification locale pour SSH sans serveur RADIUS/TACACS+.", freq: 4 },
+                { cmd: "errdisable recovery cause psecure-violation\n errdisable recovery interval 300", desc: "Récupération automatique des ports err-disable après 5 minutes.", ex: "errdisable recovery cause psecure-violation → errdisable recovery interval 300", risk: "modification", case: "Éviter d'intervenir manuellement après chaque violation de port-security.", freq: 3 }
+            ]},
             { title: "Consultation", env: "Cisco IOS", cat: "Réseau", certif: "CCNA / AIS (voire TSSR)", commands: [
                 { cmd: "?", desc: "Liste les commandes disponibles dans le mode courant.", ex: "conf t\n?", risk: "consultation", freq: 3, mode: "entièrement interactif sur l'équipement" },
                 { cmd: "show running-config", desc: "Affiche la configuration courante stockée en RAM.", ex: "sh run \| include interface", risk: "consultation", freq: 5, mode: "mode privilégié (« enable »)" },
