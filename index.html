@@ -57,8 +57,8 @@
             // --- CCNA v2.0 (Dès Fév 2027) ---
             {
                 id: 'ccna-v2-1-1',
-                certif: 'CCNA v2.0',
-                parcours: 'CCNA v2.0',
+                certif: 'CCNA',
+                parcours: 'CCNA',
                 code: '1.1',
                 title: 'Diagnostiquer les problèmes d\'interface et de câble',
                 statut: 'brouillon à relire',
@@ -99,8 +99,8 @@
             },
             {
                 id: 'ccna-v2-1-2',
-                certif: 'CCNA v2.0',
-                parcours: 'CCNA v2.0',
+                certif: 'CCNA',
+                parcours: 'CCNA',
                 code: '1.2',
                 title: 'Hyperviseurs, machines virtuelles et conteneurs',
                 statut: 'brouillon à relire',
@@ -141,8 +141,8 @@
             },
             {
                 id: 'ccna-v2-1-3',
-                certif: 'CCNA v2.0',
-                parcours: 'CCNA v2.0',
+                certif: 'CCNA',
+                parcours: 'CCNA',
                 code: '1.3',
                 title: 'Depanner l\'adressage et le sous-reseau IPv4',
                 statut: 'brouillon à relire',
@@ -183,8 +183,8 @@
             },
             {
                 id: 'ccna-v2-1-4',
-                certif: 'CCNA v2.0',
-                parcours: 'CCNA v2.0',
+                certif: 'CCNA',
+                parcours: 'CCNA',
                 code: '1.4',
                 title: 'Depanner l\'adressage IPv6, le prefixe et l\'EUI-64',
                 statut: 'brouillon à relire',
@@ -225,8 +225,8 @@
             },
             {
                 id: 'ccna-v2-1-5',
-                certif: 'CCNA v2.0',
-                parcours: 'CCNA v2.0',
+                certif: 'CCNA',
+                parcours: 'CCNA',
                 code: '1.5',
                 title: 'Principes du sans fil',
                 statut: 'brouillon à relire',
@@ -266,8 +266,8 @@
             },
             {
                 id: 'ccna-v2-1-6',
-                certif: 'CCNA v2.0',
-                parcours: 'CCNA v2.0',
+                certif: 'CCNA',
+                parcours: 'CCNA',
                 code: '1.6',
                 title: 'Depanner la connectivite des clients filaires et sans fil',
                 statut: 'brouillon à relire',
@@ -309,8 +309,8 @@
             },
             {
                 id: 'ccna-v2-1-7',
-                certif: 'CCNA v2.0',
-                parcours: 'CCNA v2.0',
+                certif: 'CCNA',
+                parcours: 'CCNA',
                 code: '1.7',
                 title: 'Depanner DHCPv4 : client, serveur et relais',
                 statut: 'brouillon à relire',
@@ -353,8 +353,8 @@
             },
             {
                 id: 'ccna-v2-dom4',
-                certif: 'CCNA v2.0',
-                parcours: 'CCNA v2.0',
+                certif: 'CCNA',
+                parcours: 'CCNA',
                 code: '4.0',
                 title: 'Network Services and Security',
                 why: "Le CCNA v2.0 met l'accent sur le durcissement du niveau 2 (DHCP Snooping, DAI) et les frameworks AAA pour contrer les attaques de spoofing et d'usurpation.",
@@ -1746,52 +1746,52 @@
         // --- BANQUE DE QCM (FONC-09 / FONC-10) ---
         const QCM_DATA = [
             // --- CCNA v2.0 DOMAINE 1 (SUJETS 1.1 à 1.7) ---
-            { id: 101, certif: 'CCNA v2.0', cp: '1.1', version: 'v2.0', level: 1, question: "Quel symptôme est le plus typique d'un mismatch de duplex ?", options: [ { text: "Aucune erreur, mais vitesse nominale atteinte", correct: false, exp: "Incorrect : un lien sain n'affiche pas d'erreurs." }, { text: "Erreurs CRC et late collisions sur un côté du lien", correct: true, exp: "Correct : le côté half-duplex subit des collisions, le côté full-duplex des erreurs CRC." }, { text: "Adresse IP en 169.254.x.x sur tous les postes", correct: false, exp: "Incorrect : cela correspond à un échec DHCP, pas à un duplex." }, { text: "Passage automatique du port en mode shutdown", correct: false, exp: "Incorrect : un mismatch n'éteint pas le port." } ] },
-            { id: 102, certif: 'CCNA v2.0', cp: '1.1', version: 'v2.0', level: 1, question: "Quelle est la longueur maximale d'un lien Ethernet en cuivre ?", options: [ { text: "50 m", correct: false, exp: "Incorrect pour l'Ethernet cuivre standard." }, { text: "100 m", correct: true, exp: "Correct : 100 m pour l'Ethernet cuivre standard." }, { text: "500 m", correct: false, exp: "Incorrect : il s'agit de valeurs de fibre multimode ou de seuils trop élevés." }, { text: "2 km", correct: false, exp: "Incorrect : 2 km correspond à la fibre multimode." } ] },
-            { id: 103, certif: 'CCNA v2.0', cp: '1.1', version: 'v2.0', level: 1, question: "Quelle commande affiche les compteurs d'erreurs d'une interface Cisco ?", options: [ { text: "show ip route", correct: false, exp: "Incorrect : table de routage." }, { text: "show interfaces GigabitEthernet0/1", correct: true, exp: "Correct : état, duplex, vitesse et compteurs." }, { text: "show vlan brief", correct: false, exp: "Incorrect : VLAN." }, { text: "show running-config", correct: false, exp: "Incorrect : configuration, sans compteurs." } ] },
-            { id: 104, certif: 'CCNA v2.0', cp: '1.1', version: 'v2.0', level: 2, question: "Un duplex en half-duplex sur un lien en full-duplex produit surtout :", options: [ { text: "Un DHCP en échec", correct: false, exp: "Incorrect." }, { text: "Des collisions et des erreurs sur le port", correct: true, exp: "Correct : des collisions et des erreurs sur le lien." }, { text: "Un changement de VLAN natif", correct: false, exp: "Incorrect : le VLAN natif n'est pas concerné." }, { text: "Un blocage STP", correct: false, exp: "Incorrect : STP n'est pas la cause directe." } ] },
-            { id: 105, certif: 'CCNA v2.0', cp: '1.1', version: 'v2.0', level: 2, question: "Pourquoi remettre les compteurs à zéro avant un test ?", options: [ { text: "Pour réinitialiser la configuration", correct: false, exp: "Incorrect : la configuration n'est pas modifiée." }, { text: "Pour observer l'évolution des erreurs dans le temps", correct: true, exp: "Correct : on mesure ce qui se produit pendant le test." }, { text: "Pour changer le duplex", correct: false, exp: "Incorrect : le duplex n'est pas modifié." }, { text: "Pour éteindre le port", correct: false, exp: "Incorrect : le port reste actif." } ] },
+            { id: 101, certif: 'CCNA', cp: '1.1', version: 'v2.0', level: 1, question: "Quel symptôme est le plus typique d'un mismatch de duplex ?", options: [ { text: "Aucune erreur, mais vitesse nominale atteinte", correct: false, exp: "Incorrect : un lien sain n'affiche pas d'erreurs." }, { text: "Erreurs CRC et late collisions sur un côté du lien", correct: true, exp: "Correct : le côté half-duplex subit des collisions, le côté full-duplex des erreurs CRC." }, { text: "Adresse IP en 169.254.x.x sur tous les postes", correct: false, exp: "Incorrect : cela correspond à un échec DHCP, pas à un duplex." }, { text: "Passage automatique du port en mode shutdown", correct: false, exp: "Incorrect : un mismatch n'éteint pas le port." } ] },
+            { id: 102, certif: 'CCNA', cp: '1.1', version: 'v2.0', level: 1, question: "Quelle est la longueur maximale d'un lien Ethernet en cuivre ?", options: [ { text: "50 m", correct: false, exp: "Incorrect pour l'Ethernet cuivre standard." }, { text: "100 m", correct: true, exp: "Correct : 100 m pour l'Ethernet cuivre standard." }, { text: "500 m", correct: false, exp: "Incorrect : il s'agit de valeurs de fibre multimode ou de seuils trop élevés." }, { text: "2 km", correct: false, exp: "Incorrect : 2 km correspond à la fibre multimode." } ] },
+            { id: 103, certif: 'CCNA', cp: '1.1', version: 'v2.0', level: 1, question: "Quelle commande affiche les compteurs d'erreurs d'une interface Cisco ?", options: [ { text: "show ip route", correct: false, exp: "Incorrect : table de routage." }, { text: "show interfaces GigabitEthernet0/1", correct: true, exp: "Correct : état, duplex, vitesse et compteurs." }, { text: "show vlan brief", correct: false, exp: "Incorrect : VLAN." }, { text: "show running-config", correct: false, exp: "Incorrect : configuration, sans compteurs." } ] },
+            { id: 104, certif: 'CCNA', cp: '1.1', version: 'v2.0', level: 2, question: "Un duplex en half-duplex sur un lien en full-duplex produit surtout :", options: [ { text: "Un DHCP en échec", correct: false, exp: "Incorrect." }, { text: "Des collisions et des erreurs sur le port", correct: true, exp: "Correct : des collisions et des erreurs sur le lien." }, { text: "Un changement de VLAN natif", correct: false, exp: "Incorrect : le VLAN natif n'est pas concerné." }, { text: "Un blocage STP", correct: false, exp: "Incorrect : STP n'est pas la cause directe." } ] },
+            { id: 105, certif: 'CCNA', cp: '1.1', version: 'v2.0', level: 2, question: "Pourquoi remettre les compteurs à zéro avant un test ?", options: [ { text: "Pour réinitialiser la configuration", correct: false, exp: "Incorrect : la configuration n'est pas modifiée." }, { text: "Pour observer l'évolution des erreurs dans le temps", correct: true, exp: "Correct : on mesure ce qui se produit pendant le test." }, { text: "Pour changer le duplex", correct: false, exp: "Incorrect : le duplex n'est pas modifié." }, { text: "Pour éteindre le port", correct: false, exp: "Incorrect : le port reste actif." } ] },
 
-            { id: 106, certif: 'CCNA v2.0', cp: '1.2', version: 'v2.0', level: 1, question: "Quel hyperviseur s'exécute directement sur le matériel ?", options: [ { text: "Type 1 (bare metal)", correct: true, exp: "Correct : type 1, sans OS hôte intermédiaire." }, { text: "Type 2 (hébergé)", correct: false, exp: "Incorrect : type 2 s'appuie sur un OS hôte." }, { text: "Conteneur", correct: false, exp: "Incorrect : un conteneur n'est pas un hyperviseur." }, { text: "Commutateur virtuel", correct: false, exp: "Incorrect : un commutateur virtuel est un élément réseau." } ] },
-            { id: 107, certif: 'CCNA v2.0', cp: '1.2', version: 'v2.0', level: 1, question: "Qu'est-ce qui différencie un conteneur d'une VM ?", options: [ { text: "Le conteneur embarque un OS complet", correct: false, exp: "Incorrect : c'est le cas de la VM." }, { text: "Le conteneur partage le noyau de l'hôte", correct: true, exp: "Correct : le noyau est partagé, d'où la légèreté." }, { text: "La VM n'a pas de mémoire", correct: false, exp: "Incorrect : une VM a une mémoire allouée." }, { text: "Le conteneur n'a pas d'IP", correct: false, exp: "Incorrect : un conteneur peut avoir une adresse IP." } ] },
-            { id: 108, certif: 'CCNA v2.0', cp: '1.2', version: 'v2.0', level: 1, question: "Quelle commande liste les conteneurs Docker actifs ?", options: [ { text: "docker ps", correct: true, exp: "Correct : docker ps." }, { text: "docker start", correct: false, exp: "Incorrect : démarre un conteneur." }, { text: "docker build", correct: false, exp: "Incorrect : construit une image." }, { text: "docker network create", correct: false, exp: "Incorrect : crée un réseau." } ] },
-            { id: 109, certif: 'CCNA v2.0', cp: '1.2', version: 'v2.0', level: 2, question: "Une VM est arrêtée. Quel état attendu avec virsh list --all ?", options: [ { text: "running", correct: false, exp: "Incorrect." }, { text: "shut off", correct: true, exp: "Correct : état arrêté." }, { text: "paused", correct: false, exp: "Incorrect : état suspendu." }, { text: "blocked", correct: false, exp: "Incorrect : pas un état libvirt de ce type." } ] },
-            { id: 110, certif: 'CCNA v2.0', cp: '1.2', version: 'v2.0', level: 2, question: "Quel avantage principal des conteneurs ?", options: [ { text: "Isolation matérielle complète", correct: false, exp: "Incorrect : l'isolation est plus faible que celle d'une VM." }, { text: "Démarrage rapide et faible empreinte", correct: true, exp: "Correct : légèreté et démarrage rapide." }, { text: "Compatibilité avec n'importe quel noyau", correct: false, exp: "Incorrect : ils dépendent du noyau de l'hôte." }, { text: "Pas besoin d'hôte", correct: false, exp: "Incorrect : ils ont toujours un hôte." } ] },
+            { id: 106, certif: 'CCNA', cp: '1.2', version: 'v2.0', level: 1, question: "Quel hyperviseur s'exécute directement sur le matériel ?", options: [ { text: "Type 1 (bare metal)", correct: true, exp: "Correct : type 1, sans OS hôte intermédiaire." }, { text: "Type 2 (hébergé)", correct: false, exp: "Incorrect : type 2 s'appuie sur un OS hôte." }, { text: "Conteneur", correct: false, exp: "Incorrect : un conteneur n'est pas un hyperviseur." }, { text: "Commutateur virtuel", correct: false, exp: "Incorrect : un commutateur virtuel est un élément réseau." } ] },
+            { id: 107, certif: 'CCNA', cp: '1.2', version: 'v2.0', level: 1, question: "Qu'est-ce qui différencie un conteneur d'une VM ?", options: [ { text: "Le conteneur embarque un OS complet", correct: false, exp: "Incorrect : c'est le cas de la VM." }, { text: "Le conteneur partage le noyau de l'hôte", correct: true, exp: "Correct : le noyau est partagé, d'où la légèreté." }, { text: "La VM n'a pas de mémoire", correct: false, exp: "Incorrect : une VM a une mémoire allouée." }, { text: "Le conteneur n'a pas d'IP", correct: false, exp: "Incorrect : un conteneur peut avoir une adresse IP." } ] },
+            { id: 108, certif: 'CCNA', cp: '1.2', version: 'v2.0', level: 1, question: "Quelle commande liste les conteneurs Docker actifs ?", options: [ { text: "docker ps", correct: true, exp: "Correct : docker ps." }, { text: "docker start", correct: false, exp: "Incorrect : démarre un conteneur." }, { text: "docker build", correct: false, exp: "Incorrect : construit une image." }, { text: "docker network create", correct: false, exp: "Incorrect : crée un réseau." } ] },
+            { id: 109, certif: 'CCNA', cp: '1.2', version: 'v2.0', level: 2, question: "Une VM est arrêtée. Quel état attendu avec virsh list --all ?", options: [ { text: "running", correct: false, exp: "Incorrect." }, { text: "shut off", correct: true, exp: "Correct : état arrêté." }, { text: "paused", correct: false, exp: "Incorrect : état suspendu." }, { text: "blocked", correct: false, exp: "Incorrect : pas un état libvirt de ce type." } ] },
+            { id: 110, certif: 'CCNA', cp: '1.2', version: 'v2.0', level: 2, question: "Quel avantage principal des conteneurs ?", options: [ { text: "Isolation matérielle complète", correct: false, exp: "Incorrect : l'isolation est plus faible que celle d'une VM." }, { text: "Démarrage rapide et faible empreinte", correct: true, exp: "Correct : légèreté et démarrage rapide." }, { text: "Compatibilité avec n'importe quel noyau", correct: false, exp: "Incorrect : ils dépendent du noyau de l'hôte." }, { text: "Pas besoin d'hôte", correct: false, exp: "Incorrect : ils ont toujours un hôte." } ] },
 
-            { id: 111, certif: 'CCNA v2.0', cp: '1.3', version: 'v2.0', level: 2, question: "Combien d'hôtes utilisables dans un /26 ?", options: [ { text: "30", correct: false, exp: "Incorrect." }, { text: "62", correct: true, exp: "Correct : 64 adresses moins réseau et diffusion." }, { text: "64", correct: false, exp: "Incorrect : c'est le nombre total d'adresses." }, { text: "126", correct: false, exp: "Incorrect : c'est un /25." } ] },
-            { id: 112, certif: 'CCNA v2.0', cp: '1.3', version: 'v2.0', level: 2, question: "Quelle est l'adresse de diffusion de 192.168.10.128/26 ?", options: [ { text: "192.168.10.127", correct: false, exp: "Incorrect." }, { text: "192.168.10.191", correct: true, exp: "Correct : dernière adresse du bloc 128 à 191." }, { text: "192.168.10.255", correct: false, exp: "Incorrect : c'est la diffusion d'un /24." }, { text: "192.168.10.129", correct: false, exp: "Incorrect : première adresse hôte." } ] },
-            { id: 113, certif: 'CCNA v2.0', cp: '1.3', version: 'v2.0', level: 2, question: "Un hôte 192.168.10.70/26 a une passerelle 192.168.10.1. Que se passe-t-il ?", options: [ { text: "Tout fonctionne", correct: false, exp: "Incorrect." }, { text: "La passerelle est hors de son sous-réseau, pas de routage", correct: true, exp: "Correct : 192.168.10.1 n'appartient pas au bloc 64 à 127." }, { text: "Le DHCP est désactivé", correct: false, exp: "Incorrect : le DHCP n'est pas en cause ici." }, { text: "La carte est en half-duplex", correct: false, exp: "Incorrect : le duplex n'a pas de rapport avec l'adressage." } ] },
-            { id: 114, certif: 'CCNA v2.0', cp: '1.3', version: 'v2.0', level: 1, question: "Quelle commande Linux affiche les adresses IP des interfaces ?", options: [ { text: "ip a", correct: true, exp: "Correct." }, { text: "ipconfig /all", correct: false, exp: "Incorrect : commande Windows." }, { text: "show ip route", correct: false, exp: "Incorrect : commande Cisco." }, { text: "ping -a", correct: false, exp: "Incorrect : test de connectivité." } ] },
-            { id: 115, certif: 'CCNA v2.0', cp: '1.3', version: 'v2.0', level: 1, question: "Quel masque correspond à /26 ?", options: [ { text: "255.255.255.0", correct: false, exp: "Incorrect : c'est /24." }, { text: "255.255.255.128", correct: false, exp: "Incorrect : c'est /25." }, { text: "255.255.255.192", correct: true, exp: "Correct : 192 = 11000000, soit deux bits pour le réseau supplémentaires." }, { text: "255.255.255.224", correct: false, exp: "Incorrect : c'est /27." } ] },
+            { id: 111, certif: 'CCNA', cp: '1.3', version: 'v2.0', level: 2, question: "Combien d'hôtes utilisables dans un /26 ?", options: [ { text: "30", correct: false, exp: "Incorrect." }, { text: "62", correct: true, exp: "Correct : 64 adresses moins réseau et diffusion." }, { text: "64", correct: false, exp: "Incorrect : c'est le nombre total d'adresses." }, { text: "126", correct: false, exp: "Incorrect : c'est un /25." } ] },
+            { id: 112, certif: 'CCNA', cp: '1.3', version: 'v2.0', level: 2, question: "Quelle est l'adresse de diffusion de 192.168.10.128/26 ?", options: [ { text: "192.168.10.127", correct: false, exp: "Incorrect." }, { text: "192.168.10.191", correct: true, exp: "Correct : dernière adresse du bloc 128 à 191." }, { text: "192.168.10.255", correct: false, exp: "Incorrect : c'est la diffusion d'un /24." }, { text: "192.168.10.129", correct: false, exp: "Incorrect : première adresse hôte." } ] },
+            { id: 113, certif: 'CCNA', cp: '1.3', version: 'v2.0', level: 2, question: "Un hôte 192.168.10.70/26 a une passerelle 192.168.10.1. Que se passe-t-il ?", options: [ { text: "Tout fonctionne", correct: false, exp: "Incorrect." }, { text: "La passerelle est hors de son sous-réseau, pas de routage", correct: true, exp: "Correct : 192.168.10.1 n'appartient pas au bloc 64 à 127." }, { text: "Le DHCP est désactivé", correct: false, exp: "Incorrect : le DHCP n'est pas en cause ici." }, { text: "La carte est en half-duplex", correct: false, exp: "Incorrect : le duplex n'a pas de rapport avec l'adressage." } ] },
+            { id: 114, certif: 'CCNA', cp: '1.3', version: 'v2.0', level: 1, question: "Quelle commande Linux affiche les adresses IP des interfaces ?", options: [ { text: "ip a", correct: true, exp: "Correct." }, { text: "ipconfig /all", correct: false, exp: "Incorrect : commande Windows." }, { text: "show ip route", correct: false, exp: "Incorrect : commande Cisco." }, { text: "ping -a", correct: false, exp: "Incorrect : test de connectivité." } ] },
+            { id: 115, certif: 'CCNA', cp: '1.3', version: 'v2.0', level: 1, question: "Quel masque correspond à /26 ?", options: [ { text: "255.255.255.0", correct: false, exp: "Incorrect : c'est /24." }, { text: "255.255.255.128", correct: false, exp: "Incorrect : c'est /25." }, { text: "255.255.255.192", correct: true, exp: "Correct : 192 = 11000000, soit deux bits pour le réseau supplémentaires." }, { text: "255.255.255.224", correct: false, exp: "Incorrect : c'est /27." } ] },
 
-            { id: 116, certif: 'CCNA v2.0', cp: '1.4', version: 'v2.0', level: 1, question: "Quelle longueur de préfixe est standard pour un LAN IPv6 ?", options: [ { text: "/48", correct: false, exp: "Incorrect : /48 est souvent un site entier." }, { text: "/56", correct: false, exp: "Incorrect : /56 est un bloc client." }, { text: "/64", correct: true, exp: "Correct : la partie hôte fait 64 bits." }, { text: "/128", correct: false, exp: "Incorrect : /128 est une adresse unique." } ] },
-            { id: 117, certif: 'CCNA v2.0', cp: '1.4', version: 'v2.0', level: 2, question: "Quelle est la plage des adresses link-local IPv6 ?", options: [ { text: "fc00::/7", correct: false, exp: "Incorrect : unique local." }, { text: "fe80::/10", correct: true, exp: "Correct." }, { text: "2001:db8::/32", correct: false, exp: "Incorrect : documentation." }, { text: "ff00::/8", correct: false, exp: "Incorrect : multicast." } ] },
-            { id: 118, certif: 'CCNA v2.0', cp: '1.4', version: 'v2.0', level: 2, question: "En EUI-64, quelle valeur est insérée au milieu de la MAC ?", options: [ { text: "FF:FF", correct: false, exp: "Incorrect." }, { text: "FF:FE", correct: true, exp: "Correct : FFFE." }, { text: "00:00", correct: false, exp: "Incorrect." }, { text: "AA:BB", correct: false, exp: "Incorrect." } ] },
-            { id: 119, certif: 'CCNA v2.0', cp: '1.4', version: 'v2.0', level: 1, question: "Quel message permet aux hôtes de se configurer en SLAAC ?", options: [ { text: "DHCPv4 Offer", correct: false, exp: "Incorrect : DHCPv4." }, { text: "Router Advertisement", correct: true, exp: "Correct : le RA annonce le préfixe." }, { text: "ARP Reply", correct: false, exp: "Incorrect : IPv4." }, { text: "STP BPDU", correct: false, exp: "Incorrect : couche 2." } ] },
-            { id: 120, certif: 'CCNA v2.0', cp: '1.4', version: 'v2.0', level: 1, question: "Quelle commande affiche les adresses IPv6 d'un routeur Cisco ?", options: [ { text: "show ip interface brief", correct: false, exp: "Incorrect : IPv4." }, { text: "show ipv6 interface brief", correct: true, exp: "Correct." }, { text: "show vlan", correct: false, exp: "Incorrect." }, { text: "show cdp", correct: false, exp: "Incorrect." } ] },
+            { id: 116, certif: 'CCNA', cp: '1.4', version: 'v2.0', level: 1, question: "Quelle longueur de préfixe est standard pour un LAN IPv6 ?", options: [ { text: "/48", correct: false, exp: "Incorrect : /48 est souvent un site entier." }, { text: "/56", correct: false, exp: "Incorrect : /56 est un bloc client." }, { text: "/64", correct: true, exp: "Correct : la partie hôte fait 64 bits." }, { text: "/128", correct: false, exp: "Incorrect : /128 est une adresse unique." } ] },
+            { id: 117, certif: 'CCNA', cp: '1.4', version: 'v2.0', level: 2, question: "Quelle est la plage des adresses link-local IPv6 ?", options: [ { text: "fc00::/7", correct: false, exp: "Incorrect : unique local." }, { text: "fe80::/10", correct: true, exp: "Correct." }, { text: "2001:db8::/32", correct: false, exp: "Incorrect : documentation." }, { text: "ff00::/8", correct: false, exp: "Incorrect : multicast." } ] },
+            { id: 118, certif: 'CCNA', cp: '1.4', version: 'v2.0', level: 2, question: "En EUI-64, quelle valeur est insérée au milieu de la MAC ?", options: [ { text: "FF:FF", correct: false, exp: "Incorrect." }, { text: "FF:FE", correct: true, exp: "Correct : FFFE." }, { text: "00:00", correct: false, exp: "Incorrect." }, { text: "AA:BB", correct: false, exp: "Incorrect." } ] },
+            { id: 119, certif: 'CCNA', cp: '1.4', version: 'v2.0', level: 1, question: "Quel message permet aux hôtes de se configurer en SLAAC ?", options: [ { text: "DHCPv4 Offer", correct: false, exp: "Incorrect : DHCPv4." }, { text: "Router Advertisement", correct: true, exp: "Correct : le RA annonce le préfixe." }, { text: "ARP Reply", correct: false, exp: "Incorrect : IPv4." }, { text: "STP BPDU", correct: false, exp: "Incorrect : couche 2." } ] },
+            { id: 120, certif: 'CCNA', cp: '1.4', version: 'v2.0', level: 1, question: "Quelle commande affiche les adresses IPv6 d'un routeur Cisco ?", options: [ { text: "show ip interface brief", correct: false, exp: "Incorrect : IPv4." }, { text: "show ipv6 interface brief", correct: true, exp: "Correct." }, { text: "show vlan", correct: false, exp: "Incorrect." }, { text: "show cdp", correct: false, exp: "Incorrect." } ] },
 
-            { id: 121, certif: 'CCNA v2.0', cp: '1.5', version: 'v2.0', level: 1, question: "Quels canaux 2,4 GHz sont non superposés en Europe ?", options: [ { text: "1, 2, 3", correct: false, exp: "Incorrect : se chevauchent." }, { text: "1, 6, 11", correct: true, exp: "Correct." }, { text: "5, 10, 15", correct: false, exp: "Incorrect." }, { text: "36, 40, 44", correct: false, exp: "Incorrect : ce sont des canaux 5 GHz." } ] },
-            { id: 122, certif: 'CCNA v2.0', cp: '1.5', version: 'v2.0', level: 2, question: "Quel avantage principal du 5 GHz ?", options: [ { text: "Porte plus loin", correct: false, exp: "Incorrect : il porte moins loin." }, { text: "Moins d'interférences et plus de canaux", correct: true, exp: "Correct." }, { text: "Compatible avec tous les anciens appareils", correct: false, exp: "Incorrect." }, { text: "Pas besoin de canal", correct: false, exp: "Incorrect." } ] },
-            { id: 123, certif: 'CCNA v2.0', cp: '1.5', version: 'v2.0', level: 1, question: "Quel protocole de sécurité Wi-Fi ne doit plus être utilisé ?", options: [ { text: "WPA3", correct: false, exp: "Incorrect." }, { text: "WPA2", correct: false, exp: "Incorrect." }, { text: "WEP", correct: true, exp: "Correct : WEP est cassé." }, { text: "802.1X", correct: false, exp: "Incorrect : c'est une méthode d'authentification." } ] },
-            { id: 124, certif: 'CCNA v2.0', cp: '1.5', version: 'v2.0', level: 2, question: "Deux bornes voisines sur le canal 6 provoquent :", options: [ { text: "Un meilleur débit", correct: false, exp: "Incorrect." }, { text: "Des interférences", correct: true, exp: "Correct." }, { text: "Une association DHCP", correct: false, exp: "Incorrect." }, { text: "Une baisse du PoE", correct: false, exp: "Incorrect." } ] },
-            { id: 125, certif: 'CCNA v2.0', cp: '1.5', version: 'v2.0', level: 1, question: "Qu'est-ce que la bande en Wi-Fi ?", options: [ { text: "Le câble de liaison", correct: false, exp: "Incorrect." }, { text: "La fréquence radio utilisée (2,4 ou 5 GHz)", correct: true, exp: "Correct." }, { text: "Le nom du réseau", correct: false, exp: "Incorrect : c'est le SSID." }, { text: "La table MAC", correct: false, exp: "Incorrect." } ] },
+            { id: 121, certif: 'CCNA', cp: '1.5', version: 'v2.0', level: 1, question: "Quels canaux 2,4 GHz sont non superposés en Europe ?", options: [ { text: "1, 2, 3", correct: false, exp: "Incorrect : se chevauchent." }, { text: "1, 6, 11", correct: true, exp: "Correct." }, { text: "5, 10, 15", correct: false, exp: "Incorrect." }, { text: "36, 40, 44", correct: false, exp: "Incorrect : ce sont des canaux 5 GHz." } ] },
+            { id: 122, certif: 'CCNA', cp: '1.5', version: 'v2.0', level: 2, question: "Quel avantage principal du 5 GHz ?", options: [ { text: "Porte plus loin", correct: false, exp: "Incorrect : il porte moins loin." }, { text: "Moins d'interférences et plus de canaux", correct: true, exp: "Correct." }, { text: "Compatible avec tous les anciens appareils", correct: false, exp: "Incorrect." }, { text: "Pas besoin de canal", correct: false, exp: "Incorrect." } ] },
+            { id: 123, certif: 'CCNA', cp: '1.5', version: 'v2.0', level: 1, question: "Quel protocole de sécurité Wi-Fi ne doit plus être utilisé ?", options: [ { text: "WPA3", correct: false, exp: "Incorrect." }, { text: "WPA2", correct: false, exp: "Incorrect." }, { text: "WEP", correct: true, exp: "Correct : WEP est cassé." }, { text: "802.1X", correct: false, exp: "Incorrect : c'est une méthode d'authentification." } ] },
+            { id: 124, certif: 'CCNA', cp: '1.5', version: 'v2.0', level: 2, question: "Deux bornes voisines sur le canal 6 provoquent :", options: [ { text: "Un meilleur débit", correct: false, exp: "Incorrect." }, { text: "Des interférences", correct: true, exp: "Correct." }, { text: "Une association DHCP", correct: false, exp: "Incorrect." }, { text: "Une baisse du PoE", correct: false, exp: "Incorrect." } ] },
+            { id: 125, certif: 'CCNA', cp: '1.5', version: 'v2.0', level: 1, question: "Qu'est-ce que la bande en Wi-Fi ?", options: [ { text: "Le câble de liaison", correct: false, exp: "Incorrect." }, { text: "La fréquence radio utilisée (2,4 ou 5 GHz)", correct: true, exp: "Correct." }, { text: "Le nom du réseau", correct: false, exp: "Incorrect : c'est le SSID." }, { text: "La table MAC", correct: false, exp: "Incorrect." } ] },
 
-            { id: 126, certif: 'CCNA v2.0', cp: '1.6', version: 'v2.0', level: 1, question: "Une adresse 169.254.12.7 sur un poste indique :", options: [ { text: "Un DNS en panne", correct: false, exp: "Incorrect." }, { text: "Un échec d'obtention d'adresse par DHCP", correct: true, exp: "Correct : adresse APIPA." }, { text: "Un débit trop faible", correct: false, exp: "Incorrect." }, { text: "Un VLAN natif erroné", correct: false, exp: "Incorrect." } ] },
-            { id: 127, certif: 'CCNA v2.0', cp: '1.6', version: 'v2.0', level: 1, question: "Quelle est la première vérification logique ?", options: [ { text: "Changer le DNS", correct: false, exp: "Incorrect : trop tôt." }, { text: "Vérifier le lien physique", correct: true, exp: "Correct : couche 1 d'abord." }, { text: "Réinstaller le système", correct: false, exp: "Incorrect." }, { text: "Modifier le mot de passe", correct: false, exp: "Incorrect." } ] },
-            { id: 128, certif: 'CCNA v2.0', cp: '1.6', version: 'v2.0', level: 1, question: "Quelle commande renouvelle le bail DHCP sous Windows ?", options: [ { text: "ipconfig /renew", correct: true, exp: "Correct." }, { text: "ipconfig /all", correct: false, exp: "Incorrect : affiche seulement." }, { text: "ping -t", correct: false, exp: "Incorrect." }, { text: "tracert", correct: false, exp: "Incorrect." } ] },
-            { id: 129, certif: 'CCNA v2.0', cp: '1.6', version: 'v2.0', level: 2, question: "Un ping vers la passerelle réussit mais un nom ne se résout pas. Où chercher ?", options: [ { text: "Le câble", correct: false, exp: "Incorrect : le câble fonctionne." }, { text: "Le serveur DNS", correct: true, exp: "Correct." }, { text: "La MAC", correct: false, exp: "Incorrect." }, { text: "Le VLAN natif", correct: false, exp: "Incorrect." } ] },
-            { id: 130, certif: 'CCNA v2.0', cp: '1.6', version: 'v2.0', level: 2, question: "Un Wi-Fi refuse l'association. Cause la plus probable ?", options: [ { text: "Un débit trop haut", correct: false, exp: "Incorrect." }, { text: "Un mot de passe ou un type de sécurité incorrect", correct: true, exp: "Correct." }, { text: "Un canal 6", correct: false, exp: "Incorrect." }, { text: "Une adresse IPv6", correct: false, exp: "Incorrect." } ] },
+            { id: 126, certif: 'CCNA', cp: '1.6', version: 'v2.0', level: 1, question: "Une adresse 169.254.12.7 sur un poste indique :", options: [ { text: "Un DNS en panne", correct: false, exp: "Incorrect." }, { text: "Un échec d'obtention d'adresse par DHCP", correct: true, exp: "Correct : adresse APIPA." }, { text: "Un débit trop faible", correct: false, exp: "Incorrect." }, { text: "Un VLAN natif erroné", correct: false, exp: "Incorrect." } ] },
+            { id: 127, certif: 'CCNA', cp: '1.6', version: 'v2.0', level: 1, question: "Quelle est la première vérification logique ?", options: [ { text: "Changer le DNS", correct: false, exp: "Incorrect : trop tôt." }, { text: "Vérifier le lien physique", correct: true, exp: "Correct : couche 1 d'abord." }, { text: "Réinstaller le système", correct: false, exp: "Incorrect." }, { text: "Modifier le mot de passe", correct: false, exp: "Incorrect." } ] },
+            { id: 128, certif: 'CCNA', cp: '1.6', version: 'v2.0', level: 1, question: "Quelle commande renouvelle le bail DHCP sous Windows ?", options: [ { text: "ipconfig /renew", correct: true, exp: "Correct." }, { text: "ipconfig /all", correct: false, exp: "Incorrect : affiche seulement." }, { text: "ping -t", correct: false, exp: "Incorrect." }, { text: "tracert", correct: false, exp: "Incorrect." } ] },
+            { id: 129, certif: 'CCNA', cp: '1.6', version: 'v2.0', level: 2, question: "Un ping vers la passerelle réussit mais un nom ne se résout pas. Où chercher ?", options: [ { text: "Le câble", correct: false, exp: "Incorrect : le câble fonctionne." }, { text: "Le serveur DNS", correct: true, exp: "Correct." }, { text: "La MAC", correct: false, exp: "Incorrect." }, { text: "Le VLAN natif", correct: false, exp: "Incorrect." } ] },
+            { id: 130, certif: 'CCNA', cp: '1.6', version: 'v2.0', level: 2, question: "Un Wi-Fi refuse l'association. Cause la plus probable ?", options: [ { text: "Un débit trop haut", correct: false, exp: "Incorrect." }, { text: "Un mot de passe ou un type de sécurité incorrect", correct: true, exp: "Correct." }, { text: "Un canal 6", correct: false, exp: "Incorrect." }, { text: "Une adresse IPv6", correct: false, exp: "Incorrect." } ] },
 
-            { id: 131, certif: 'CCNA v2.0', cp: '1.7', version: 'v2.0', level: 1, question: "Quelle est la séquence correcte du DHCP ?", options: [ { text: "Request, Discover, Offer, Acknowledge", correct: false, exp: "Incorrect." }, { text: "Discover, Offer, Request, Acknowledge", correct: true, exp: "Correct : DORA." }, { text: "Offer, Discover, Acknowledge, Request", correct: false, exp: "Incorrect." }, { text: "Discover, Request, Offer, Acknowledge", correct: false, exp: "Incorrect." } ] },
-            { id: 132, certif: 'CCNA v2.0', cp: '1.7', version: 'v2.0', level: 2, question: "Quelle commande transmet les requêtes DHCP à un serveur situé sur un autre réseau ?", options: [ { text: "ip dhcp excluded-address", correct: false, exp: "Incorrect." }, { text: "ip helper-address", correct: true, exp: "Correct." }, { text: "ip route", correct: false, exp: "Incorrect." }, { text: "ip nat inside", correct: false, exp: "Incorrect." } ] },
-            { id: 133, certif: 'CCNA v2.0', cp: '1.7', version: 'v2.0', level: 1, question: "Quelle commande affiche les baux DHCP attribués sur IOS ?", options: [ { text: "show ip dhcp binding", correct: true, exp: "Correct." }, { text: "show ip route", correct: false, exp: "Incorrect." }, { text: "show vlan", correct: false, exp: "Incorrect." }, { text: "show cdp neighbors", correct: false, exp: "Incorrect." } ] },
-            { id: 134, certif: 'CCNA v2.0', cp: '1.7', version: 'v2.0', level: 2, question: "Un client reste en 169.254.x.x alors que le serveur est actif. Cause probable ?", options: [ { text: "Pool épuisé sans relais", correct: true, exp: "Correct si le relais manque ou le pool est vide." }, { text: "Duplex half", correct: false, exp: "Incorrect." }, { text: "Mauvais canal Wi-Fi", correct: false, exp: "Incorrect." }, { text: "Absence de NTP", correct: false, exp: "Incorrect." } ] },
-            { id: 135, certif: 'CCNA v2.0', cp: '1.7', version: 'v2.0', level: 1, question: "Pourquoi exclure des adresses dans un pool ?", options: [ { text: "Pour éviter les conflits avec des adresses statiques", correct: true, exp: "Correct." }, { text: "Pour accélérer le DHCP", correct: false, exp: "Incorrect." }, { text: "Pour activer IPv6", correct: false, exp: "Incorrect." }, { text: "Pour réduire le DNS", correct: false, exp: "Incorrect." } ] },
+            { id: 131, certif: 'CCNA', cp: '1.7', version: 'v2.0', level: 1, question: "Quelle est la séquence correcte du DHCP ?", options: [ { text: "Request, Discover, Offer, Acknowledge", correct: false, exp: "Incorrect." }, { text: "Discover, Offer, Request, Acknowledge", correct: true, exp: "Correct : DORA." }, { text: "Offer, Discover, Acknowledge, Request", correct: false, exp: "Incorrect." }, { text: "Discover, Request, Offer, Acknowledge", correct: false, exp: "Incorrect." } ] },
+            { id: 132, certif: 'CCNA', cp: '1.7', version: 'v2.0', level: 2, question: "Quelle commande transmet les requêtes DHCP à un serveur situé sur un autre réseau ?", options: [ { text: "ip dhcp excluded-address", correct: false, exp: "Incorrect." }, { text: "ip helper-address", correct: true, exp: "Correct." }, { text: "ip route", correct: false, exp: "Incorrect." }, { text: "ip nat inside", correct: false, exp: "Incorrect." } ] },
+            { id: 133, certif: 'CCNA', cp: '1.7', version: 'v2.0', level: 1, question: "Quelle commande affiche les baux DHCP attribués sur IOS ?", options: [ { text: "show ip dhcp binding", correct: true, exp: "Correct." }, { text: "show ip route", correct: false, exp: "Incorrect." }, { text: "show vlan", correct: false, exp: "Incorrect." }, { text: "show cdp neighbors", correct: false, exp: "Incorrect." } ] },
+            { id: 134, certif: 'CCNA', cp: '1.7', version: 'v2.0', level: 2, question: "Un client reste en 169.254.x.x alors que le serveur est actif. Cause probable ?", options: [ { text: "Pool épuisé sans relais", correct: true, exp: "Correct si le relais manque ou le pool est vide." }, { text: "Duplex half", correct: false, exp: "Incorrect." }, { text: "Mauvais canal Wi-Fi", correct: false, exp: "Incorrect." }, { text: "Absence de NTP", correct: false, exp: "Incorrect." } ] },
+            { id: 135, certif: 'CCNA', cp: '1.7', version: 'v2.0', level: 1, question: "Pourquoi exclure des adresses dans un pool ?", options: [ { text: "Pour éviter les conflits avec des adresses statiques", correct: true, exp: "Correct." }, { text: "Pour accélérer le DHCP", correct: false, exp: "Incorrect." }, { text: "Pour activer IPv6", correct: false, exp: "Incorrect." }, { text: "Pour réduire le DNS", correct: false, exp: "Incorrect." } ] },
 
             // --- QUESTIONS EXEMPLES CCNA ---
             {
                 id: 3,
-                certif: 'CCNA v2.0',
+                certif: 'CCNA',
                 cp: 'Domaine 2.0',
                 version: 'v2.0',
                 level: 2,
@@ -4743,8 +4743,7 @@
             const savedDarkMode = localStorage.getItem('tssr_dark_mode');
 
             const [currentTab, setCurrentTab] = useState('dashboard');
-            const savedCcnaVersion = localStorage.getItem('ccna_version');
-            const [ccnaVersion, setCcnaVersion] = useState(savedCcnaVersion === 'v1.1' ? 'v1.1' : 'v2.0'); // FONC-03 : mémorisé d'une visite à l'autre
+            const ccnaVersion = 'v2.0'; // Version unique : distinction v1.1/v2.0 supprimée
             const [examDate, setExamDate] = useState(savedExamDate || '2027-02-15');
             const [darkMode, setDarkMode] = useState(savedDarkMode !== 'false');
             const [fontScale, setFontScale] = useState(localStorage.getItem('tssr_font_scale') || '100'); // FONC-22
@@ -4841,7 +4840,7 @@
 
             useEffect(() => {
                 localStorage.setItem('ccna_version', ccnaVersion);
-            }, [ccnaVersion]);
+            }, []);
 
             useEffect(() => {
                 document.documentElement.style.fontSize = fontScale + '%';
@@ -4851,7 +4850,7 @@
             // Filtre de la banque QCM : par sujet lié au cours, par certification (version CCNA choisie), ou tout
             const filteredQcm = useMemo(() => {
                 if (qcmFilter === 'ALL') return QCM_DATA;
-                if (qcmFilter === 'CCNA') return QCM_DATA.filter(q => q.certif && q.certif === ('CCNA v' + ccnaVersion));
+                if (qcmFilter === 'CCNA') return QCM_DATA.filter(q => q.certif && q.certif === 'CCNA');
                 return QCM_DATA.filter(q => q.cp === qcmFilter);
             }, [qcmFilter, ccnaVersion]);
 
@@ -4865,7 +4864,7 @@
                     }
                 });
                 return options;
-            }, [ccnaVersion]);
+            }, []);
 
 
             const filteredCourses = useMemo(() => {
@@ -4875,7 +4874,7 @@
                     if (courseFilter === 'TSSR' && c.parcours !== 'TSSR') return false;
                     if (courseFilter === 'AIS' && c.parcours !== 'AIS') return false;
                     // FONC-03 : dans « Tous les parcours », n'afficher que la version CCNA sélectionnée
-                    if (c.parcours && c.parcours.startsWith('CCNA') && c.parcours !== ('CCNA ' + ccnaVersion)) return false;
+                    if (c.parcours && c.parcours.startsWith('CCNA') && c.parcours !== 'CCNA') return false;
 
                     if (searchQuery) {
                         const q = normText(searchQuery);
@@ -5259,24 +5258,6 @@
                                 <option value="AIS">AIS</option>
                             </select>
                         </div>
-                        {/* Sélecteur de version CCNA (FONC-03) mémorisé d'une visite à l'autre */}
-                        <div className="flex items-center justify-between gap-2 mb-2 pb-2 border-b border-slate-200 dark:border-slate-700">
-                            <label htmlFor="ccna-version-select" className="text-[10px] font-bold uppercase text-slate-400 tracking-wider">Version CCNA</label>
-                            <select
-                                id="ccna-version-select"
-                                value={ccnaVersion}
-                                onChange={(e) => setCcnaVersion(e.target.value)}
-                                className="bg-slate-100 dark:bg-slate-900 text-xs text-slate-700 dark:text-slate-300 rounded border border-slate-200 dark:border-slate-700 px-1.5 py-0.5"
-                            >
-                                <option value="v2.0">v2.0 (dès fév. 2027)</option>
-                                <option value="v1.1">v1.1 (avant 2027)</option>
-                            </select>
-                        </div>
-                        {ccnaVersion === 'v1.1' && (
-                            <p className="text-[10px] text-amber-500 dark:text-amber-400 mb-2 border border-amber-500/30 bg-amber-500/10 rounded p-2">
-                                ℹ️ Fiches de cours CCNA v1.1 : en préparation. Les fiches rédigées aujourd'hui suivent la v2.0 ; la v1.1 sera conservée en archive avant le 3 février 2027.
-                            </p>
-                        )}
                         <p className="text-[10px] text-slate-400 dark:text-slate-500 leading-relaxed mb-2 border-b border-slate-200 dark:border-slate-700 pb-2">
                             💡 Suivez l'ordre des fiches : 1.1 → 1.7 pour le CCNA, CP1 → CP9 pour le TSSR, CP1 → CP10 pour l'AIS. Chaque fiche s'appuie sur la précédente.
                         </p>
