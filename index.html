@@ -515,33 +515,45 @@
                     ] }
                 ],
                 deepDive: [
-                    { t: "Méthodologie terrain — intégrer un nouveau collaborateur en moins de 10 minutes", p: [
-                        "En entreprise, l'arrivée d'un collaborateur suit une procédure documentée (un runbook). L'objectif : que la personne ouvre sa session, trouve ses lecteurs réseau et son imprimante sans appeler le support.",
-                        "L'ordre des opérations compte : on prépare l'OU et les groupes AVANT de créer le compte, pour que les GPO s'appliquent dès la première ouverture de session."
+                    { t: "Architecture AD complète — ce que le formateur explique au tableau", p: [
+                        "Active Directory s'organise en hiérarchie : une FORÊT (le cadre global) contient un ou plusieurs DOMAINES (la frontière d'administration). Chaque domaine contient des UO (l'outil de rangement) qui hébergent les objets : utilisateurs, ordinateurs, groupes, imprimantes.",
+                        "Les 4 conteneurs par défaut (Built-in, Computers, System, Users) sont créés automatiquement à la promotion du DC. Ils ne doivent JAMAIS être utilisés pour l'organisation : pas de liaison GPO directe sur les conteneurs, pas de délégation granulaire.",
+                        "Les UO sont des « dossiers virtuels » : elles permettent de classer logiquement (par service, par site, par type), de déléguer l'administration (un technicien helpdesk ne peut gérer que l'OU Helpdesk) et de lier des GPO ciblées. Un objet ne peut être que dans UNE seule UO à la fois."
+                    ],
+                    box: 'admin', boxText: "Conseil d'administrateur : créez votre structure d'UO DÈS LE DÉBUT, même simple. Exemple : OU_Services (avec des sous-UO par service), OU_Ordinateurs (Postes, Serveurs), OU_Groupes. Une structure bien pensée dans les 5 premières minutes évite des mois de réorganisation plus tard." },
+                    { t: "AGDLP — la méthode Microsoft, expliquée pas à pas", p: [
+                        "AGDLP est une méthode d'organisation des groupes qui garantit un contrôle d'accès clair et évolutif.",
+                        "A (Accounts) : les utilisateurs sont placés dans des groupes GLOBAUX (GG). Un GG regroupe des comptes du MÊME domaine (ex : GG_Comptabilite).",
+                        "G (Groupes Globaux) : les GG sont ajoutés aux groupes de DOMAINE LOCAL (DL). Un DL sert à ACCORDER des droits sur une RESSOURCE du domaine (ex : DL_Compta_Share_L).",
+                        "D (Domaine Local) : les DL sont utilisés pour les permissions NTFS et les autorisations de partage. Un DL peut contenir des GG et des comptes.",
+                        "P (Permissions) : les permissions sont appliquées aux DL sur les ressources (NTFS, partage, imprimante). JAMAIS directement sur les comptes."
                     ],
                     cmd: [
-                        "# Vérifier que l'OU existe",
-                        "Get-ADOrganizationalUnit -Filter \"Name -eq 'Compta'\"",
-                        "# Créer le compte dans la bonne OU, mot de passe à changer à la première connexion",
-                        "New-ADUser -Name 'Claire Martin' -SamAccountName claire.martin -UserPrincipalName claire.martin@lab.lan -Path 'OU=Compta,DC=lab,DC=lan' -AccountPassword (ConvertTo-SecureString 'Init2026!' -AsPlainText -Force) -ChangePasswordAtLogon $true -Enabled $true",
-                        "# Ajouter aux groupes du service",
-                        "Add-ADGroupMember -Identity 'GG-Compta' -Members claire.martin",
-                        "# Contrôle final",
-                        "Get-ADUser claire.martin -Properties Department, MemberOf | Select Name, Enabled, Department"
+                        "# Créer la chaîne AGDLP complète en PowerShell",
+                        "# 1. Créer le groupe global",
+                        "New-ADGroup -Name 'GG_Comptabilite' -GroupScope Global -GroupCategory Security",
+                        "# 2. Créer le groupe de domaine local",
+                        "New-ADGroup -Name 'DL_Compta_Share_L' -GroupScope DomainLocal -GroupCategory Security",
+                        "# 3. Ajouter le GG dans le DL",
+                        "Add-ADGroupMember -Identity 'DL_Compta_Share_L' -Members 'GG_Comptabilite'",
+                        "# 4. Ajouter l'utilisateur dans le GG",
+                        "Add-ADGroupMember -Identity 'GG_Comptabilite' -Members claire.martin",
+                        "# 5. Appliquer les permissions NTFS sur la ressource",
+                        "icacls 'D:\\Ressources\\Compta' /grant 'LAB\\DL_Compta_Share_L:(OI)(CI)M'"
                     ],
-                    box: 'admin', boxText: "Conseil d'administrateur : ne créez jamais un compte en dehors d'une OU. Un compte posé à la racine du domaine échappe aux GPO liées aux OU et devient invisible pour vos délégations d'administration. Si vous héritez d'un annuaire mal rangé, documentez la convention de nommage des OU avant toute migration." },
-                    { t: "Erreurs fréquentes vues en support", p: [
-                        "Le compte est créé mais l'utilisateur « n'a pas de lecteur réseau » : la GPO de mappage est liée à une OU dont l'utilisateur ne dépend pas, ou le poste n'a pas exécuté gpupdate /force.",
-                        "« Le compte est verrouillé » alors que l'utilisateur dit taper le bon mot de passe : Caps Lock, pavé numérique désactivé, ou un mot de passe stocké obsolète dans le gestionnaire d'identifiants Windows. Vider le gestionnaire d'identifiants règle 80 % de ces tickets.",
-                        "Deux comptes portent le même nom (mariage, changement de nom) : ne jamais renommer un compte SANS vérifier ses ACL, sinon les droits NTFS restent liés à l'ancien SamAccountName."
+                    box: 'remember', boxText: "À retenir : AGDLP = Accounts → Global → Domain Local → Permissions. Comptes dans GG, GG dans DL, DL porte les droits sur la ressource. Pourquoi ? Pour changer les droits d'un service en modifiant UN SEUL groupe, sans toucher aux permissions NTFS." },
+                    { t: "Kerberos, LDAP, FSMO — les protocoles et rôles AD", p: [
+                        "KERBEROS est le protocole d'authentification : l'utilisateur s'authentifie une fois auprès du DC, reçoit un TGT (Ticket Granting Ticket), puis présente ce TGT à chaque service. Le mot de passe ne circule JAMAIS sur le réseau.",
+                        "LDAP est le protocole d'accès à l'annuaire : les applications interrogent AD pour lire/écrire les objets (ex : un CRM qui cherche le nom d'un client dans l'annuaire).",
+                        "FSMO sont les 5 rôles qui garantissent la cohérence AD : le PDC Emulator (synchronisation horaire, gestion des mots de passe), le RID Master (attribue les identifiants), le Master d'infrastructure (réplique les références croisées), le Master de nommage (gère les domaines de la forêt), le Master de schéma (définit les objets possibles)."
                     ],
-                    box: 'warn', boxText: "Erreur fréquente : créer un compte avec « l'utilisateur doit changer son mot de passe » MAIS désactiver en même temps « le mot de passe n'expire jamais ». La politique de domaine écrase ce réglage et le ticket revient trois mois plus tard. Décidez une politique par profil (standard, comptes de service) et tenez-vous-y." },
-                    { t: "Pour l'examen — ce que le correcteur cherche", p: [
-                        "Le vocabulaire : OU (rangement) ≠ groupe (droits) ≠ GPO (configuration). Confondre ces trois notions est la première cause d'échec.",
-                        "L'ordre LSDOU doit être récité sans hésiter : Local, Site, Domaine, OU — et savoir qu'en cas de conflit, la plus spécifique (OU) s'applique.",
-                        "Kerberos se résume en une phrase : le contrôleur de domaine délivre des tickets, l'utilisateur ne renvoie jamais son mot de passe aux services."
+                    box: 'admin', boxText: "Conseil d'administrateur : les 5 rôles FSMO sont par défaut sur le premier DC. Bonne pratique : les ventiler entre plusieurs DC et VÉRIFIER avec netdom query fsmo ou Get-ADDomain | Select InfrastructureMaster, RidMaster, PdcEmulator." },
+                    { t: "CAS D'ENTREPRISE — migration d'un AD mal structuré", p: [
+                        "Situation : une PME a installé AD il y a 5 ans sans structurer les UO. Tous les utilisateurs sont dans le conteneur Users par défaut, les postes dans Computers. Aucune GPO ciblée n'est possible.",
+                        "Démarche : 1) Créer la structure d'UO cible (par service). 2) Créer les groupes GG/DL selon AGDLP. 3) Migrer les objets avec MOVER ou Get-ADUser | Move-ADObject. 4) Lier les GPO aux nouvelles UO. 5) Tester gpresult /R sur des postes pilotes.",
+                        "Leçon : la réorganisation d'AD est un APRÈS-VENTE. Il faut documenter, planifier, tester et communiquer. Un objet déplacé hérite PAREILLEMENT des GPO de sa nouvelle UO."
                     ],
-                    box: 'remember', boxText: "À retenir : AD = annuaire (NTDS.dit) + authentification (Kerberos) + politiques (GPO). Les OU rangent, les groupes donnent les droits (modèle AGDLP), les GPO configurent. PowerShell (module RSAT ActiveDirectory) devient indispensable dès 10 comptes." }
+                    box: 'case', boxText: "Ce cas illustre la dette technique créée par un AD mal structuré : les conteneurs par défaut, l'absence de GPO ciblée, l'impossibilité de déléguer. La sortie de crise exige un projet structuré avec planification et tests." }
                 ],
                 exercices: [
                     { enonce: "Une nouvelle collaboratrice, Claire Martin, rejoint le service Compta. Décrivez les étapes de son intégration côté Active Directory.", correction: "1) Identifier (ou créer) l'OU Compta. 2) Créer le compte claire.martin dans cette OU avec mot de passe à changer à la première connexion. 3) L'ajouter aux groupes de son service et au groupe de base des utilisateurs. 4) Vérifier le compte (affichage de la console ou Get-ADUser claire.martin). 5) Remettre les identifiants et la charte informatique à la collaboratrice. La logique : ranger, nommer, grouper, puis vérifier." },
@@ -3414,7 +3426,7 @@
         // --- FICHES DEPANNAGE PROFESSIONNELLES (symptome -> diagnostic -> cause -> resolution -> prevention) ---
         const DEPANNAGE_DATA = [
             {
-                id: 'dep-win-boot', parcours: 'TSSR', titre: 'Windows — le poste ne démarre plus (boucle de réparation)',
+                id: 'dep-win-boot', freq: 2, parcours: 'TSSR', titre: 'Windows — le poste ne démarre plus (boucle de réparation)',
                 symptome: "Le poste affiche « Préparation de la réparation automatique » en boucle, ou un écran bleu (INACCESSIBLE_BOOT_DEVICE) après une mise à jour ou un arrêt brutal.",
                 contexte: "Poste Windows 10/11 joint au domaine, utilisateur bloqué sans aucune donnée accessible. Le support doit choisir entre réparation in-place et réimagerie.",
                 diagnostic: [
@@ -3432,7 +3444,7 @@
                 prevention: "Sauvegarde régulière du profil (redirection Documents vers le serveur), points de restauration avant les mises à jour, et surveillance du disque (SMART) dans la supervision."
             },
             {
-                id: 'dep-win-domaine', parcours: 'TSSR', titre: 'Windows — « Aucun accès réseau » sur un poste joint au domaine',
+                id: 'dep-win-domaine', freq: 5, parcours: 'TSSR', titre: 'Windows — « Aucun accès réseau » sur un poste joint au domaine',
                 symptome: "Le poste affiche « Pas d'accès réseau » ou « Non connecté », l'utilisateur ne peut pas ouvrir une session du domaine (session locale seulement).",
                 contexte: "Un seul poste est touché (les autres fonctionnent) : le problème est local au poste, pas au réseau d'infrastructure.",
                 diagnostic: [
@@ -3450,7 +3462,7 @@
                 prevention: "Surveiller les ports err-disable dans la supervision, verrouiller la configuration DHCP du segment, et provisionner un compte admin local de secours (LAPS) pour l'intervention hors domaine."
             },
             {
-                id: 'dep-win-gpo', parcours: 'TSSR', titre: 'Windows — une GPO ne s\'applique pas',
+                id: 'dep-win-gpo', freq: 4, parcours: 'TSSR', titre: 'Windows — une GPO ne s\'applique pas',
                 symptome: "Une stratégie nouvellement créée (fond d'écran, lecteur mappé, interdiction USB) n'apparaît pas sur les postes cibles après gpupdate /force.",
                 contexte: "Contexte de domaine classique : la GPO est créée dans GPMC mais reste invisible dans gpresult /R côté client.",
                 diagnostic: [
@@ -3468,7 +3480,7 @@
                 prevention: "Convention de nommage des GPO (COMPUTER-xxx / USER-xxx), commentaires GPMC systématiques, et un environnement de test (OU Pilote) avant la production."
             },
             {
-                id: 'dep-ad-kerberos', parcours: 'TSSR', titre: 'AD — ouverture de session très lente ou échecs Kerberos',
+                id: 'dep-ad-kerberos', freq: 3, parcours: 'TSSR', titre: 'AD — ouverture de session très lente ou échecs Kerberos',
                 symptome: "Les utilisateurs mettent plusieurs minutes à ouvrir leur session, ou reçoivent « L'horloge du client et du serveur diffèrent » / erreurs Kerberos ( événement 4 ou 7).",
                 contexte: "Plusieurs postes touchés simultanément = problème d'infrastructure (heure, DNS ou réplication) ; un seul poste = problème local.",
                 diagnostic: [
@@ -3486,7 +3498,7 @@
                 prevention: "Surveiller l'écart d'horloge et l'état de réplication dans Zabbix (compteurs repadmin), et verrouiller la configuration DNS des postes par GPO (impossible de pointer ailleurs)."
             },
             {
-                id: 'dep-linux-service', parcours: 'AIS', titre: 'Linux — un service ne démarre plus',
+                id: 'dep-linux-service', freq: 4, parcours: 'AIS', titre: 'Linux — un service ne démarre plus',
                 symptome: "« systemctl status nginx » (ou tout autre service) retourne « failed » après une mise à jour ou une modification de configuration.",
                 contexte: "Serveur Linux Debian/RHEL en production ; la fenêtre d'intervention est courte, il faut restaurer le service vite mais proprement.",
                 diagnostic: [
@@ -3504,7 +3516,7 @@
                 prevention: "Toujours « cp conf conf.bak » avant modification, tester la config avant le restart, et mettre en place une alerte Zabbix sur les services critiques (systemd unit failed)."
             },
             {
-                id: 'dep-linux-disk', parcours: 'AIS', titre: 'Linux — disque plein, services en échec',
+                id: 'dep-linux-disk', freq: 4, parcours: 'AIS', titre: 'Linux — disque plein, services en échec',
                 symptome: "Plusieurs services échouent simultanément (base de données, SSH ne peut plus écrire), les journaux montrent « No space left on device ».",
                 contexte: "Incident classique de fin de semaine : un fichier ou un journal a saturé une partition. Diagnostic rapide exigé.",
                 diagnostic: [
@@ -3521,7 +3533,7 @@
                 prevention: "Alerte Zabbix à 85 % d'occupation par partition, logrotate vérifié à l'installation, et quota sur les répertoires d'upload."
             },
             {
-                id: 'dep-net-dhcp', parcours: 'AIS', titre: 'Réseau — postes en 169.254.x.x (pas d\'adresse DHCP)',
+                id: 'dep-net-dhcp', freq: 4, parcours: 'AIS', titre: 'Réseau — postes en 169.254.x.x (pas d\'adresse DHCP)',
                 symptome: "Un ou plusieurs postes affichent une adresse 169.254.x.x (APIPA) et ne joignent ni le LAN ni Internet.",
                 contexte: "Si un seul poste : problème local. Si tout un étage : le serveur DHCP ou le relais du segment est en cause.",
                 diagnostic: [
@@ -3539,7 +3551,7 @@
                 prevention: "Alerte Zabbix quand l'étendue dépasse 90 % de baux alloués, supervision des services DHCP/DNS sur le serveur, et test de validation après toute modification de VLAN."
             },
             {
-                id: 'dep-net-lenteur', parcours: 'AIS', titre: 'Réseau — lenteur sur un lien (duplex, câble, saturation)',
+                id: 'dep-net-lenteur', freq: 4, parcours: 'AIS', titre: 'Réseau — lenteur sur un lien (duplex, câble, saturation)',
                 symptome: "Les transferts de fichiers sont lents sur un segment, des erreurs CRC montent sur les compteurs d'interface, les utilisateurs parlent de « réseau qui coupe ».",
                 contexte: "La lenteur chronique est plus fréquente que la panne franche : elle ne déclenche pas d'alerte et dure parfois des mois.",
                 diagnostic: [
@@ -3557,7 +3569,7 @@
                 prevention: "Superviser les erreurs CRC et la bande passante par interface dans Zabbix, et photographier/documenter les licences de câblage à chaque intervention."
             },
             {
-                id: 'dep-cisco-port', parcours: 'CCNA', titre: 'Cisco — port en err-disable après branchement',
+                id: 'dep-cisco-port', freq: 3, parcours: 'CCNA', titre: 'Cisco — port en err-disable après branchement',
                 symptome: "Le port d'un switch passe en « err-disabled » dès qu'un équipement est branché : le voyant est orange et le trafic ne passe plus.",
                 contexte: "Incident fréquent après l'activation de port-security, de BPDU guard ou de DHCP snooping sur les ports d'accès.",
                 diagnostic: [
@@ -3574,7 +3586,7 @@
                 prevention: "BPDU guard + port-security sur tous les ports d'accès comme standard, errdisable recovery configuré, et supervision des logs %PORT_SECURITY."
             },
             {
-                id: 'dep-sauvegarde-veeam', parcours: 'TSSR', titre: 'Sauvegarde — job Veeam en échec toutes les nuits',
+                id: 'dep-sauvegarde-veeam', freq: 3, parcours: 'TSSR', titre: 'Sauvegarde — job Veeam en échec toutes les nuits',
                 symptome: "Le job de sauvegarde Veeam échoue avec « Processing VM Error: Failed to create snapshot » ou des erreurs de connexion à l'hyperviseur.",
                 contexte: "La sauvegarde est la dernière ligne de défense : un job qui échoue trois nuits de suite doit être traité comme un incident majeur, pas comme un « avertissement ».",
                 diagnostic: [
@@ -5265,7 +5277,7 @@
             const renderCourses = () => (
                 <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
                     {/* Barre latérale des cours */}
-                    <div className="lg:col-span-1 space-y-2 bg-white dark:bg-slate-800 p-4 rounded-xl border border-slate-200 dark:border-slate-700 max-h-[75vh] overflow-y-auto">
+                    <div className="lg:col-span-1 space-y-2 bg-white dark:bg-slate-800 p-4 rounded-xl border border-slate-200 dark:border-slate-700 lg:sticky lg:top-20 lg:max-h-[calc(100vh-6rem)] overflow-y-auto self-start">
                         <div className="flex justify-between items-center mb-2">
                             <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider">Modules</h3>
                             <select
@@ -5984,7 +5996,14 @@
                     if (!labSearch) return true;
                     const q = normText(labSearch);
                     return normText([d.titre, d.symptome, d.contexte, d.cause, ...(d.diagnostic || []), ...(d.resolution || [])].join(' ')).includes(q);
-                });
+                }).sort((a, b) => (b.freq || 3) - (a.freq || 3));
+                const depFreqGroups = [
+                    { f: 5, label: 'Très fréquent — à connaître par cœur' },
+                    { f: 4, label: 'Fréquent — incidents courants en production' },
+                    { f: 3, label: 'Régulier — incidents ponctuels' },
+                    { f: 2, label: 'Occasionnel' },
+                    { f: 1, label: 'Rare — cas avancés' }
+                ];
                 const byParcours = (p) => DEPANNAGE_DATA.filter(d => d.parcours === p).length;
                 const parcoursBadge = (p) => ({
                     "TSSR": "bg-sky-500/10 text-sky-500",
@@ -6017,8 +6036,16 @@
                             {filtered.length === 0 && (
                                 <div className="text-center text-xs text-slate-500 py-8">Aucune fiche ne correspond à votre recherche.</div>
                             )}
-                            <div className="grid grid-cols-1 xl:grid-cols-2 gap-5">
-                                {filtered.map((d, idx) => (
+                            {depFreqGroups.map(g => {
+                                const items = filtered.filter(d => (d.freq || 3) === g.f);
+                                if (items.length === 0) return null;
+                                return (
+                                    <div key={g.f} className="space-y-3">
+                                        <h3 className="text-sm font-bold text-brand-600 dark:text-brand-400 border-b border-slate-200 dark:border-slate-700 pb-1">
+                                            {g.label} <span className="text-slate-400 font-normal">({items.length})</span>
+                                        </h3>
+                                        <div className="grid grid-cols-1 xl:grid-cols-2 gap-5">
+                                            {items.map((d, idx) => (
                                     <div key={idx} className="p-4 bg-slate-50 dark:bg-slate-900/50 rounded-xl border border-slate-200 dark:border-slate-700 space-y-3">
                                         <div className="flex flex-wrap items-center gap-2">
                                             <span className={`px-2 py-0.5 text-[10px] font-bold rounded-full ${parcoursBadge(d.parcours)}`}>{d.parcours}</span>
@@ -6047,61 +6074,17 @@
                                             <span className="font-bold uppercase text-[10px] text-emerald-600 dark:text-emerald-400 block mb-0.5">🛡️ Prévention</span>{d.prevention}
                                         </div>
                                     </div>
-                                ))}
-                            </div>
+                                                ))}
+                                    </div>
+                                </div>
+                            );
+                            })}
                         </div>
                     </div>
                 );
             };
 
             // Rendu Onglet Examen Blanc
-            const renderExam = () => (
-                <div className="max-w-3xl mx-auto bg-white dark:bg-slate-800 rounded-xl p-6 border border-slate-200 dark:border-slate-700 space-y-6">
-                    <div className="border-b border-slate-200 dark:border-slate-700 pb-4">
-                        <h2 className="text-xl font-bold text-slate-900 dark:text-white">Simulateur d'Examen Blanc Chronometre</h2>
-                        <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">Entrainez-vous aux formats officiels. Les mini-tests chronométrés sont disponibles dès à présent dans la Banque QCM (mode « Chronométré »).</p>
-                    </div>
-
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <div className="p-4 bg-slate-50 dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-700 text-center space-y-2">
-                            <span className="text-xs font-bold text-sky-500">TSSR (TP-01351)</span>
-                            <h3 className="font-bold text-sm text-slate-900 dark:text-white">Mise en Situation</h3>
-                            <p className="text-xs text-slate-500">Durée officielle : 2 h 30 min</p>
-                            <button disabled className="w-full py-2 bg-slate-200 dark:bg-slate-700 text-slate-500 dark:text-slate-400 rounded text-xs font-bold cursor-not-allowed">En préparation</button>
-                            <p className="text-[10px] text-slate-400">Le simulateur TSSR sera proposé plus loin dans le parcours.</p>
-                        </div>
-
-                        <div className="p-4 bg-slate-50 dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-700 text-center space-y-2">
-                            <span className="text-xs font-bold text-emerald-500">AIS (TP-01352)</span>
-                            <h3 className="font-bold text-sm text-slate-900 dark:text-white">Questionnaire Pro</h3>
-                            <p className="text-xs text-slate-500">Durée officielle : 2 h 30 min</p>
-                            <button disabled className="w-full py-2 bg-slate-200 dark:bg-slate-700 text-slate-500 dark:text-slate-400 rounded text-xs font-bold cursor-not-allowed">En préparation</button>
-                            <p className="text-[10px] text-slate-400">Le simulateur AIS sera proposé plus loin dans le parcours.</p>
-                        </div>
-
-                        <div className="p-4 bg-slate-50 dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-700 text-center space-y-2">
-                            <span className="text-xs font-bold text-purple-500">Cisco CCNA</span>
-                            <h3 className="font-bold text-sm text-slate-900 dark:text-white">Certification 200-301</h3>
-                            <p className="text-xs text-slate-500">Durée réelle : 120 min (100 QCM)</p>
-                            <button
-                                onClick={() => {
-                                    setQcmFilter('CCNA');
-                                    setCurrentTab('qcm');
-                                }}
-                                className="w-full py-2 bg-purple-600 hover:bg-purple-700 text-white rounded text-xs font-bold transition-colors"
-                            >
-                                Entraînement QCM CCNA
-                            </button>
-                            <p className="text-[10px] text-slate-400">Cliquez « Entraînement QCM CCNA », puis dans la Banque QCM choisissez le mode ⏱️ Chronométré (durée au choix, jusqu'à 2 heures) pour un test aux rythmes officiels.</p>
-                        </div>
-                    </div>
-
-                    <div className="p-3 bg-amber-500/10 border border-amber-500/20 text-amber-700 dark:text-amber-400 text-xs rounded-lg">
-                        <strong>Avertissement :</strong> Cet examen blanc n'a pas de valeur de certification officielle. Il constitue un outil d'entrainement autonome.
-                    </div>
-                </div>
-            );
-
             return (
                 <div className="min-h-screen flex flex-col">
                     <header className="bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 sticky top-0 z-50">
@@ -6201,7 +6184,6 @@
                                     { id: 'courses', label: '📚 Cours & Fiches' },
                                     { id: 'qcm', label: '✍️ Banque QCM' },
                                     { id: 'labs', label: '🧪 Labos Guidés' },
-                                    { id: 'exam', label: '⏱️ Examen Blanc' },
                                     { id: 'commands', label: '⚙️ Commandes' },
                                     { id: 'depannage', label: '\u{1F9F0} Dépannage' },
                                     { id: 'glossary', label: '📖 Glossaire' },
@@ -6229,7 +6211,6 @@
                         {currentTab === 'courses' && renderCourses()}
                         {currentTab === 'qcm' && renderQCM()}
                         {currentTab === 'labs' && renderLabs()}
-                        {currentTab === 'exam' && renderExam()}
                         {currentTab === 'commands' && renderCommandsTab()}
                         {currentTab === 'depannage' && renderDepannageTab()}
                         {currentTab === 'glossary' && renderGlossaryTab()}
