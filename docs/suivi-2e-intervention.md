@@ -1,60 +1,67 @@
-# Suivi phase finale — professionnelisation (2026-11-10, session 2)
+# Suivi phase de professionnalisation — contenu pédagogique (2026-11-10, session 3)
 
 ## Sauvegardes
 
-- `sauvegarde_plateforme_2026-11-10_avant-vocab-labos.html` (état avant les deux dernières sessions)
-- Dépôt Git initialisé : commit `10ea1d0` « Initial commit »
+- `sauvegarde_plateforme_2026-11-10_avant-vocab-labos.html` (état avant les sessions 2 et 3)
+- Dépôt Git : `herbreteau787-svg/coursit`, 4 commits, site publié sur GitHub Pages.
 
 ## Livré dans cette phase
 
-### Cours
-- Blocs « Renvois » (QCM / Labo / Commandes / Glossaire) **supprimés** du contenu des fiches : ces accès restent dans la navigation principale. L'espace récupéré profite au contenu.
-- Refonte profonde des 19 CP : non faite dans cette session (voir restes).
+### 1. Blocs « Renvois utiles » supprimés
+- Bloc restant dans `LessonCourseView` (fiches TSSR/AIS) supprimé. Les blocs QCM/Labo/Commandes/Glossaire n'existent plus dans le contenu des cours — l'accès se fait uniquement via la navigation principale.
 
-### Navigation
-- Le logo/titre **« CoursIT »** est désormais cliquable partout : retour immédiat au Dashboard (scroll en haut), avec libellé explicite.
+### 2. DeepDive : approfondissement pédagogique intégré dans les cours
+Nouveau système de blocs `deepDive` dans les CP TSSR : chaque bloc apporte théorie étendue, commandes intégrées (encadré « En pratique »), et un encadré pédagogique coloré (`À retenir` / `Erreur fréquente` / `Conseil d'administrateur` / `Cas d'entreprise`).
 
-### Commandes
-- Classement **par fréquence d'usage** (champ `freq` 1-5 ajouté aux 208 commandes) :
-  - **TOP COMMANDES INDISPENSABLES** ★★★★★ (34, quotidienne)
-  - ★★★★ fréquente (37) · ★★★ régulière (114) · ★★ occasionnelle (16) · ★ avancée (7)
-- Filtre par système (Tous / Cisco / Windows / Linux / Autres), recherche par nom + usage + cas, favoris (localStorage `tssr_cmd_favorites`), copie rapide (Clipboard + repli).
-- Total : **208 commandes** (Cisco 52 · Windows 48 · Linux 109 · Autres 10) — objectifs 150/200/200 non atteints, restent ~330 commandes.
+**CP2 Windows / Active Directory** : méthodologie d'intégration (runbook New-ADUser complet), erreurs fréquentes de support (mots de passe verrouillés, gestionnaires d'identifiants), conseils d'admin (OU, AGDLP), récapitulatif examen (LSDOU, Kerberos, vocabulaire OU≠groupe≠GPO).
 
-### Vocabulaire anglais
-- **321 termes** (+16 : LLC, MAC address, CSMA/CD, CSMA/CA, broadcast, unicast, FHRP, load balancing, bastion, jump server, SIEM, SOC, PRA, PCA, RPO, RTO).
-- Colonne Typologie supprimée ; filtre par catégorie ; recherche sur définitions et exemples.
+**CP3 Serveurs Linux** : méthodologie de diagnostic à distance (whoami/hostname/df -h/systemctl --failed/ss/journalctl), erreurs fréquentes (conf sans backup, chmod 777, kill -9, fstab sans test), cas d'entreprise (disque saturé un vendredi soir : du → lvextend → alerte Zabbix), récapitulatif examen (/etc//var//home, 755/640/700, apt/dnf, SSH clés).
 
-### Glossaire
-- **177 entrées** (+17 : LLC, CSMA/CD, CSMA/CA, CAM, EtherChannel, RSTP, BPDU, EIGRP, DFS, PRA, PCA, EBIOS RM, MITRE ATT&CK, Zero Trust, SOAR, CVSS + enrichissement des 6 d'origine) — chacune avec définition, contexte et exemple concret.
+**CP4 Réseau IP** : méthodologie de diagnostic à distance Windows (Get-NetIPConfiguration/Test-NetConnection/EventLog), erreurs fréquentes (redémarrer avant de diagnostiquer, DNS 8.8.8.8 sur un domaine AD, test uniquement par ping), cas d'entreprise (paie bloquée à 9 h : escalade couches → service arrêté par reboot planifié → supervision synthétique), récapitulatif examen (RFC 1918, APIPA, DORA, escalade câble→IP→passerelle→routage→DNS).
 
-### GitHub
-- `README.md` (présentation, fonctionnalités, parcours, installation, lancement).
-- `.gitignore` (exclut les sources de cours tierces, `CCNA1.pdf` sous copyright Cisco, et les sauvegardes).
-- Dépôt Git initialisé, commit initial `10ea1d0`.
+### 3. Fiches de dépannage professionnelles (nouvel onglet 🧰 Dépannage)
+**10 fiches** au format symptom → diagnostic (commandes ordonnées) → cause fréquente → résolution → prévention :
 
-### Dashboard
-- Vérifié : progression et cartes présentes, aucune erreur console, aucune donnée de test résiduelle (localStorage nettoyé après tests).
+| Fiche | Parcours |
+|---|---|
+| Windows — boucle de réparation (boot) | TSSR |
+| Windows — « Aucun accès réseau » sur poste joint au domaine | TSSR |
+| Windows — GPO ne s'applique pas | TSSR |
+| AD — ouverture de session lente / Kerberos | TSSR |
+| Linux — un service ne démarre plus | AIS |
+| Linux — disque plein, services en échec | AIS |
+| Réseau — postes en 169.254.x.x | AIS |
+| Réseau — lenteur sur un lien (duplex, câble, saturation) | AIS |
+| Cisco — port en err-disable | CCNA |
+| Sauvegarde — job Veeam en échec | TSSR |
+
+Onglet avec filtre par parcours (TSSR / AIS / CCNA) et recherche instantanée.
+
+### 4. Navigation
+- Nouveau bouton « 🧰 Dépannage » dans la barre de navigation principale.
+
+### 5. Priorité 2 — captures d'écran réelles
+**Non réalisable dans cet environnement** : il faudrait des VM Windows Server, Hyper-V, Proxmox et Cisco Packet Tracer capturées. Les schémas SVG pédagogiques existants (duplex mismatch, EUI-64, topologie VLAN) couvrent partiellement le besoin. Le dossier `captures/` est prêt dans le dépôt pour recevoir les captures fournies par l'utilisateur.
+
+### 6. Priorité 7 — commandes par étoiles
+Déjà fait dans la session précédente : les commandes sont classées par fréquence d'usage (TOP INDISPENSABLES → ★ avancée) avec filtre système.
+
+### 7. Priorité 10 — 30-60 min de lecture par CP
+Avec les deepDive ajoutés aux CP2, CP3 et CP4, chaque CP contient désormais : leçons théoriques (3 leçons multi-parties) + approfondissement (méthodologie + commandes + encadrés + cas) + exercices + évaluation. Les autres CP gardent leur contenu de base (keyIdeas/lessons/exercices/evaluation) — l'extension deepDive aux autres CP est un chantier prioritaire pour la prochaine session.
 
 ## Tests exécutés (navigateur réel)
 
-- Chargement + **0 erreur console** sur les 8 onglets.
-- Dashboard : progression + cartes OK ; logo → retour Dashboard OK.
-- QCM : banque affichée ✓ ; Examen blanc : 3 cartes ✓.
-- Labos : 23 cartes ✓ ; filtre TSSR ✓ ; case d'étape + progression 33 % ✓ ; marquage terminé ✓ (données de test nettoyées ensuite).
-- Commandes : groupes d'étoiles affichés avec compteurs ✓ ; favoris + copie ✓.
-- Glossaire : 177 ✓ ; filtre CCNA ✓ ; vocabulaire : 321 lignes ✓ ; filtre catégorie Linux → 39 ✓.
-- Cours : fiche TSSR CP1 ouverte, leçons rendues, renvois supprimés ✓ ; navigation précédent/suivant ✓.
-- Aucun débordement horizontal (1281 px).
+- Chargement : 0 erreur console, 0 débordement horizontal.
+- Onglet Dépannage : 10 fiches affichées, filtre AIS → 4 fiches, recherche fonctionnelle.
+- CP2 ouvert : section « Approfondissement » visible, encadrés « À retenir » / « Erreur fréquente » / « Conseil d'administrateur » présents, commande box « En pratique — commandes à exécuter » visible avec Get-ADOrganizationalUnit.
+- Renvois : aucun bloc « Renvois utiles » restant (2 supprimés : CCNA fiche + LessonCourseView).
+- Navigation logo → Dashboard ✓.
+- Git : commit `526fa13` poussé vers GitHub, Pages redéployées automatiquement.
 
-## Incident corrigé pendant la session
+## Restes à traiter
 
-Un script de remplacement a corrompu le fichier (plage d'indices négative) : restauration immédiate depuis la sauvegarde du 10/11 puis **rejeu complet** des ajouts de contenu à partir des fichiers de travail conservés (vocab_b1-6, gloss_b1, lab_c/t/a, cmd_growth, freq) — vérifié ensuite par le navigateur (23 labos, 321 vocab, 177 gloss, 208 cmd, 0 erreur). Aucune perte de donnée utilisateur (localStorage intact).
-
-## Restes à traiter (priorisés)
-
-1. **Refonte profonde des 19 CP** (30-60 min de lecture chacun, encadrés « À retenir / Erreur fréquente / Conseil d'administrateur », études de cas) — la priorité pédagogique du cahier des charges.
-2. **Commandes** : +331 pour 150/200/200 (Cisco +98, Windows +152, Linux +91).
-3. **Labos** : +37 pour 20/20/20 (TSSR +12, AIS +16, CCNA +9).
-4. **Vocabulaire** : définitions manquantes sur ~186 anciens termes.
-5. Captures d'écran réelles (Gestionnaire de serveur, ADUC, GPMC…) : impossible sans environnement Windows/Cisco capturé — à fournir par l'utilisateur ou via maquettes SVG supplémentaires.
+1. **DeepDive pour les 16 autres CP** (TSSR CP1, CP5-9 ; AIS CP2-10 ; CCNA fiches).
+2. **Captures d'écran réelles** — à fournir par l'utilisateur.
+3. **Labs incidents** — transformer les labos existants en scénarios d'entreprise (extension du champ `context`).
+4. **Commandes** — +331 pour 150/200/200.
+5. **Glossaire** — définitions manquantes sur ~186 anciens termes.
