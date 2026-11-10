@@ -3605,6 +3605,19 @@
             }
         ];
 
+        // --- SCRIPTS PÉDAGOGIQUES (source : Scripts-main SpyKeeR) ---
+        const SCRIPTS_DATA = [
+            { id: 'script-ps-ad-users', cat: 'PowerShell · Active Directory', titre: "Création d'utilisateurs en masse depuis un CSV", objectif: "Automatiser la création de dizaines d'utilisateurs AD depuis un fichier CSV. Gain de temps : 10 comptes en 30 secondes vs 10×5 min manuellement.", code: "Import-Csv \"C:\\Scripts\\users.csv\" | ForEach-Object {\n    $password = ConvertTo-SecureString \"P@ssw0rd123!\" -AsPlainText -Force\n    New-ADUser -Name \"$($_.Prenom) $($_.Nom)\" `\n        -GivenName $_.Prenom `\n        -Surname $_.Nom `\n        -SamAccountName $_.Login `\n        -UserPrincipalName \"$($_.Login)@entreprise.local\" `\n        -Path $_.OU `\n        -AccountPassword $password `\n        -Enabled $true\n    Write-Host \"Utilisateur $($_.Login) cree\" -ForegroundColor Green\n}", explications: ["Import-Csv lit le fichier users.csv dont les colonnes sont Prenom, Nom, Login, OU.", "ForEach-Object boucle sur chaque ligne du CSV.", "ConvertTo-SecureString chiffre le mot de passe pour AD.", "New-ADUser crée le compte avec SamAccountName, UPN, OU cible et mot de passe.", "Write-Host confirme la création en vert pour le suivi visuel."], resultat: "Chaque ligne du CSV produit un compte AD actif dans la bonne OU avec le mot de passe défini.", risques: "Le CSV doit être structuré exactement ainsi. Un OU erroné créera le compte dans une mauvaise UO. Vérifiez avec Get-ADUser après." },
+            { id: 'script-ps-ad-inactive', cat: 'PowerShell · Sécurité', titre: "Désactiver les comptes inactifs (>90 jours)", objectif: "Sécurité : trouver et désactiver automatiquement les comptes AD qui n'ont pas servi depuis 90 jours. Réduit la surface d'attaque.", code: "$date = (Get-Date).AddDays(-90)\nGet-ADUser -Filter {Enabled -eq $true} -Properties LastLogonDate |\n    Where-Object {$_.LastLogonDate -lt $date} |\n    ForEach-Object {\n        Disable-ADAccount -Identity $_.SamAccountName\n        Write-Host \"Compte $($_.SamAccountName) desactive\" -ForegroundColor Yellow\n    }", explications: ["Get-ADUser -Filter {Enabled -eq $true} : liste seulement les comptes ACTIFS.", "-Properties LastLogonDate : charge le champ date de dernière connexion.", "Where-Object LastLogonDate < $date : ne garde que ceux inactifs depuis 90 jours.", "Disable-ADAccount : désactive le compte (il n'est pas supprimé, on peut le réactiver)."], resultat: "Les comptes dormants sont désactivés. Ils ne peuvent plus être utilisés pour s'authentifier, mais restent dans l'annuaire.", risques: "Vérifier que les comptes des utilisateurs en congé long ne sont pas désactivés par erreur. Exécuter d'abord en mode lecture (sans Disable) pour lister avant de désactiver." },
+            { id: 'script-ps-disk-report', cat: 'PowerShell · Inventaire', titre: "Rapport espace disque multi-serveurs", objectif: "Générer un rapport CSV de l'espace disque de tous les serveurs. Identifie les serveurs qui risquent de saturer.", code: "$serveurs = @('SRV-DC01', 'SRV-FILE01', 'SRV-WEB01')\n$rapport = @()\nforeach ($srv in $serveurs) {\n    $disques = Get-WmiObject Win32_LogicalDisk -ComputerName $srv -Filter 'DriveType=3'\n    foreach ($d in $disques) {\n        $rapport += [PSCustomObject]@{\n            Serveur = $srv\n            Lecteur = $d.DeviceID\n            TailleGo = [math]::Round($d.Size/1GB,2)\n            LibreGo = [math]::Round($d.FreeSpace/1GB,2)\n        }\n    }\n}\n$rapport | Export-Csv 'rapport_disques.csv' -NoTypeInformation\n$rapport | Format-Table -AutoSize", explications: ["$serveurs : liste des serveurs à scanner (peut être remplacée par Get-ADComputer).", "Get-WmiObject Win32_LogicalDisk -ComputerName : interroge le WMI du serveur distant pour les disques.", "DriveType=3 : uniquement les disques locaux (pas les CD, USB...).", "Export-Csv : sauvegarde le rapport au format CSV pour Excel ou PowerBI."], resultat: "Un fichier CSV avec colonnes Serveur, Lecteur, TailleGo, LibreGo. Idéal pour un rapport hebdomadaire ou un dashboard.", risques: "Nécessite WinRM activé et les droits d'admin sur chaque serveur cible. Le WMI peut être lent sur de gros parcs." },
+            { id: 'script-ps-spooler', cat: 'PowerShell · Diagnostic', titre: "Vérifier et redémarrer le spooler d'impression", objectif: "Diagnostiquer et résoudre les problèmes d'impression en vérifiant le spooler Windows et en vidant la file d'attente.", code: "$spooler = Get-Service -Name 'Spooler'\nWrite-Host \"Statut : $($spooler.Status)\"\nif ($spooler.Status -ne 'Running') {\n    Start-Service -Name 'Spooler'\n    Write-Host 'Spooler demarre' -ForegroundColor Green\n}\n\n# Vider la file d'attente\nStop-Service Spooler\nRemove-Item C:\\Windows\\System32\\spool\\PRINTERS\\* -Force\nStart-Service Spooler\nWrite-Host 'File d attente videe, service redemarre' -ForegroundColor Green", explications: ["Get-Service Spooler : vérifie si le service d'impression tourne.", "Start-Service : le redémarre s'il est arrêté.", "Remove-Item ...PRINTERS\\* : supprime les fichiers .SPL en attente d'impression (la file).", "Restart-Service Spooler : redémarre le service après avoir vidé la file."], resultat: "Le service Spooler est redémarré avec une file vide. Les impressions bloquées sont supprimées.", risques: "Supprime TOUTES les impressions en attente, y compris celles des autres utilisateurs. Informer avant de vider." },
+            { id: 'script-ps-gpo-shutdown', cat: 'PowerShell · Administration', titre: "Arrêt programmé de multiple provenance GPO", objectif: "Configure un arrêt planifié de plusieurs PC via une GPO avec script.", code: "$pcs = Get-Content 'C:\\Scripts\\computers.txt'\nforeach ($pc in $pcs) {\n    Stop-Computer -ComputerName $pc -Force\n    Write-Host \"$pc arrete\" -ForegroundColor Yellow\n}", explications: ["Get-Content : lit le fichier computers.txt avec un nom de PC par ligne.", "Stop-Computer -ComputerName : arrête le PC distant via WMI.", "-Force : force l'arrêt même si des applications sont ouvertes."], resultat: "Tous les PC listés dans computers.txt sont arrêtés au lancement du script.", risques: "-Force ferme sans sauvegarder. Peut causer une perte de données non enregistrées. Utiliser sans -Force si possible." },
+            { id: 'script-bash-backup', cat: 'Bash · Sauvegardes', titre: "Script de sauvegarde Linux (rsync + log)", objectif: "Sauvegarder un dossier utilisateur avec journalisation. Utilise rsync pour l'efficacité (copie seulement les différences).", code: "#!/bin/bash\nDEST=\"/sauvegarde/$(date +%Y%m%d)\"\nmkdir -p \"$DEST\"\nrsync -av --delete /home/user/Documents \"$DEST/\"\necho \"$(date) : Sauvegarde de /home/user/Documents vers $DEST\" >> /var/log/backup.log\nif [ $? -eq 0 ]; then\n    echo \"Sauvegarde reussie\"\nelse\n    echo \"ERREUR sauvegarde\" >&2\n    exit 1\nfi", explications: ["#!/bin/bash : shebang bash.", "$DEST : dossier de sauvegarde daté du jour (ex : /sauvegarde/20261110).", "rsync -av --delete : synchronise récursivement, supprime les fichiers absents en destination.", "$? : code retour de rsync (0=reussi, autre=erreur).", ">> /var/log/backup.log : journalise dans le fichier de log."], resultat: "Une sauvegarde incrementale et datée est créée. Le log trace chaque exécution.", risques: "--delete supprime les fichiers absents en source : si le synario est inversé, les données sont perdues. Toujours tester avec -n (dry-run) d'abord." },
+            { id: 'script-bash-monitor', cat: 'Bash · Monitoring', titre: "Vérifier l'état d'un service et alerter", objectif: "Vérifier périodiquement qu'un service tourne sous Linux. Si le service est arrêté, il envoie une alerte.", code: "#!/bin/bash\nSERVICE='sshd'\nif systemctl is-active --quiet $SERVICE; then\n    echo \"$(date) : $SERVICE actif\"\nelse\n    echo \"$(date) : ALERTE - $SERVICE INACTIF\" >&2\n    systemctl restart $SERVICE\n    echo \"$(date) : $SERVICE redemarre\" >> /var/log/monitor.log\nfi", explications: ["systemctl is-active --quiet : retourne 0 (succès) si le service tourne, 1 sinon.", "-q (quiet) : supprime l'output pour un script silencieux.", "&2 : redirige vers stderr (fichier d'erreurs).", "systemctl restart : redémarre automatiquement le service s'il est arrêté."], resultat: "Le script vérifie que le service tourne. S'il est arrêté, il alerte et le redémarre automatiquement.", risques: "Un redémarrage automatique peut masquer la cause. Si le service s'arrête REGULIÈREMENT, diagnostiquer la cause racine." },
+            { id: 'script-batch-shutdown', cat: 'Batch · Administration', titre: "Arrêt programmé de PC via GPO (batch)", objectif: "Exécuter un arrêt ou shutdown planifié sur plusieurs postes via un script batch lancé par GPO.", code: "@echo off\nfor /f %%i in (computers.txt) do (\n    psshutdown \\\\%%i -t 300\n)\necho \"Arret programme de tous les PC dans 5 minutes\"", explications: ["@echo off : masque l'affichage des commandes.", "for /f %%i in (computers.txt) : boucle sur chaque ligne du fichier (chaque PC).", "psshutdown \\\\pc -t 300 : outil Sysinternals qui arrête le PC distant après 300 secondes (5 min).", "L'utilisateur reçoit un message d'avertissement sur son écran avant l'arrêt."], resultat: "Tous les PC de la liste sont arrêtés dans 5 minutes avec un message d'avertissement à l'utilisateur.", risques: "L'outil psshutdown (PsTools) doit être installé sur le poste qui lance le script. Les PC doivent être allumés et joignables sur le réseau." },
+            { id: 'script-ps-inventory', cat: 'PowerShell · Inventaire', titre: "Inventaire système rapide (CPU, RAM, OS, IP)", objectif: "Générer un inventaire complet d'un poste ou serveur : OS, CPU, RAM, IP, disque. Base de tout audit.", code: "$info = [PSCustomObject]@{\n    ComputerName = $env:COMPUTERNAME\n    OS = (Get-CimInstance Win32_OperatingSystem).Caption\n    Version = (Get-CimInstance Win32_OperatingSystem).Version\n    CPU = (Get-CimInstance Win32_Processor).Name\n    RAM_GB = [math]::Round((Get-CimInstance Win32_ComputerSystem).TotalPhysicalMemory/1GB, 2)\n    DiskFree_GB = [math]::Round((Get-CimInstance Win32_LogicalDisk -Filter 'DeviceID=\"C:\"').FreeSpace/1GB, 2)\n    IPAddress = (Get-NetIPAddress -AddressFamily IPv4 | Where-Object { $_.InterfaceAlias -notmatch 'Loopback' }).IPAddress\n}\n$info | Format-List\n$info | Export-Csv 'inventaire.csv' -NoTypeInformation", explications: ["$env:COMPUTERNAME : variable d'environnement Windows (sans commande WMI).", "Get-CimInstance Win32_OperatingSystem : info OS (version, nom).", "Get-CimInstance Win32_Processor : info CPU (nom, architecture).", "Get-NetIPAddress -AddressFamily IPv4 : uniquement les adresses IPv4 (pas les IPv6).", "Where-Object InterfaceAlias -notmatch 'Loopback' : exclut l'interface de loopback 127.0.0.1.", "Export-Csv : exporte l'inventaire pour un rapport."], resultat: "Une fiche inventaire complète (OS, CPU, RAM, disque, IP) affichée et exportée en CSV. Réutilisable pour l'audit de parc.", risques: "Win32_Processor peut retourner plusieurs CPU en multi-socket. Utiliser foreach pour gérer ce cas." }
+        ];
+
         // --- MOTEUR DE SCHÉMAS DYNAMIQUES SVG (FONC-07 / SECTION 6) ---
         const DynamicSVGDiagram = ({ type }) => {
             if (type === 'topologie-duplex-mismatch') {
@@ -5989,6 +6002,66 @@
                 );
             };
 
+            // Rendu Onglet Scripts (pédagogique — source : Scripts-main)
+            const renderScriptsTab = () => {
+                const cats = Array.from(new Set(SCRIPTS_DATA.map(s => s.cat))).sort();
+                const filtered = SCRIPTS_DATA.filter(s => {
+                    if (!labSearch) return true;
+                    const q = normText(labSearch);
+                    return normText([s.titre, s.objectif, s.cat, s.resultat, s.risques].join(' ')).includes(q);
+                });
+                return (
+                    <div className="space-y-6">
+                        <div className="bg-white dark:bg-slate-800 rounded-xl p-4 md:p-6 border border-slate-200 dark:border-slate-700 space-y-4">
+                            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-3 border-b border-slate-200 dark:border-slate-700 pb-3">
+                                <div>
+                                    <h2 className="text-xl font-bold text-slate-900 dark:text-white">💻 Scripts pédagogiques</h2>
+                                    <p className="text-xs text-slate-500 dark:text-slate-400">{SCRIPTS_DATA.length} scripts, {cats.length} catégories — objectifs, explications ligne par ligne, résultats et risques.</p>
+                                </div>
+                                <div className="w-full md:w-72">
+                                    <input type="text" placeholder="🔍 Rechercher un script..." value={labSearch} onChange={(e) => setLabSearch(e.target.value)}
+                                        className="w-full bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-1.5 text-xs text-slate-900 dark:text-slate-100 focus:outline-none focus:border-brand-500" />
+                                </div>
+                            </div>
+                            {filtered.length === 0 && <div className="text-center text-xs text-slate-500 py-8">Aucun script ne correspond.</div>}
+                            {cats.map(cat => {
+                                const items = filtered.filter(s => s.cat === cat);
+                                if (items.length === 0) return null;
+                                return (
+                                    <div key={cat} className="space-y-3">
+                                        <h3 className="text-sm font-bold text-brand-600 dark:text-brand-400 border-b border-slate-200 dark:border-slate-700 pb-1">{cat} <span className="text-slate-400 font-normal">({items.length})</span></h3>
+                                        {items.map((s, idx) => (
+                                            <div key={idx} className="p-4 bg-slate-50 dark:bg-slate-900/50 rounded-xl border border-slate-200 dark:border-slate-700 space-y-3">
+                                                <h4 className="text-sm font-bold text-slate-900 dark:text-white">{s.titre}</h4>
+                                                <div className="p-2.5 bg-sky-500/10 border-l-4 border-sky-500/50 rounded text-xs text-slate-700 dark:text-slate-300">
+                                                    <span className="font-bold uppercase text-[10px] text-sky-600 dark:text-sky-400 block mb-0.5">🎯 Objectif</span>{s.objectif}
+                                                </div>
+                                                <div className="rounded-lg overflow-hidden border border-slate-700">
+                                                    <div className="bg-slate-800 px-3 py-1 text-[10px] font-bold uppercase text-slate-300">Code</div>
+                                                    <pre className="bg-slate-950 p-3 text-[11px] text-emerald-400 font-mono whitespace-pre-wrap break-words leading-relaxed">{s.code}</pre>
+                                                </div>
+                                                <div>
+                                                    <span className="text-[10px] font-bold uppercase text-brand-500 block mb-1">📖 Explication ligne par ligne</span>
+                                                    <ul className="list-disc pl-5 text-xs text-slate-700 dark:text-slate-300 space-y-1">
+                                                        {(s.explications || []).map((ex, ei) => <li key={ei}>{ex}</li>)}
+                                                    </ul>
+                                                </div>
+                                                <div className="p-2.5 bg-emerald-500/10 border-l-4 border-emerald-500/50 rounded text-xs text-slate-700 dark:text-slate-300">
+                                                    <span className="font-bold uppercase text-[10px] text-emerald-600 dark:text-emerald-400 block mb-0.5">✅ Résultat attendu</span>{s.resultat}
+                                                </div>
+                                                <div className="p-2.5 bg-red-500/10 border-l-4 border-red-500/50 rounded text-xs text-slate-700 dark:text-slate-300">
+                                                    <span className="font-bold uppercase text-[10px] text-red-600 dark:text-red-400 block mb-0.5">⚠️ Risques</span>{s.risques}
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                );
+                            })}
+                        </div>
+                    </div>
+                );
+            };
+
             // Rendu Onglet Dépannage (fiches professionnelles)
             const renderDepannageTab = () => {
                 const filtered = DEPANNAGE_DATA.filter(d => {
@@ -6185,6 +6258,7 @@
                                     { id: 'qcm', label: '✍️ Banque QCM' },
                                     { id: 'labs', label: '🧪 Labos Guidés' },
                                     { id: 'commands', label: '⚙️ Commandes' },
+                                    { id: 'scripts', label: '💻 Scripts' },
                                     { id: 'depannage', label: '\u{1F9F0} Dépannage' },
                                     { id: 'glossary', label: '📖 Glossaire' },
                                     { id: 'vocab', label: '🌐 Vocabulaire Anglais' }
@@ -6212,6 +6286,7 @@
                         {currentTab === 'qcm' && renderQCM()}
                         {currentTab === 'labs' && renderLabs()}
                         {currentTab === 'commands' && renderCommandsTab()}
+                        {currentTab === 'scripts' && renderScriptsTab()}
                         {currentTab === 'depannage' && renderDepannageTab()}
                         {currentTab === 'glossary' && renderGlossaryTab()}
                         {currentTab === 'vocab' && renderVocabTab()}
