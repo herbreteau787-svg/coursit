@@ -1,0 +1,11 @@
+# Sources de cours tierces et documents volumineux (non publiés)
+cours_IT-main/
+Cours_TSSR-main/
+CCNA1.pdf
+
+# Sauvegardes locales du site
+sauvegarde_*.html
+
+# Fichiers système
+Thumbs.db
+Desktop.ini
