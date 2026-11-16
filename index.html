@@ -60,42 +60,88 @@
                 certif: 'CCNA',
                 parcours: 'CCNA',
                 code: '1.1',
-                title: 'Diagnostiquer les problèmes d\'interface et de câble',
-                statut: 'brouillon à relire',
-                why: "Une panne réseau commence souvent par la couche physique. Un câble défectueux ou un mauvais duplex ralentit tout le réseau sans message d'erreur évident.",
-                keyIdeas: [
-                    "Une collision se produit uniquement en half-duplex : deux machines émettent en même temps sur le même support.",
-                    "Un mismatch de duplex (un côté full-duplex, l'autre half-duplex) produit surtout des erreurs CRC et des late collisions.",
-                    "Une distance trop grande sur du cuivre (au-delà de 100 m pour l'Ethernet) provoque des erreurs et des pertes.",
-                    "Les compteurs d'erreurs d'une interface sont le premier outil de diagnostic physique."
-                ],
-                schemaType: 'topologie-duplex-mismatch',
-                guiProcedure: "1. Sur un switch Cisco, ouvrir la vue de l'interface et comparer la vitesse et le duplex des deux extrémités. 2. Sur l'ordinateur, ouvrir les propriétés de la carte réseau et vérifier la vitesse et le duplex en mode automatique.",
-                cliProcedure: [
-                    { cmd: "show interfaces GigabitEthernet0/1", desc: "affiche l'état, le duplex, la vitesse et les compteurs d'erreurs de l'interface" },
-                    { cmd: "show interfaces status", desc: "affiche en un tableau l'état, le duplex et la vitesse de chaque port" },
-                    { cmd: "clear counters GigabitEthernet0/1", desc: "remet les compteurs à zéro pour mesurer l'évolution des erreurs" }
-                ],
-                verification: { cmd: "show interfaces GigabitEthernet0/1 | include duplex|errors", expected: "Duplex Full des deux côtés, aucun compteur CRC ou late collision qui augmente" },
-                pitfalls: [
-                    "Ne pas confondre un duplex fixé à Full d'un côté et Auto de l'autre : le mismatch est silencieux.",
-                    "Un compteur d'erreurs ne prouve pas la cause : il faut le remettre à zéro puis observer sa progression."
-                ],
-                vocab: [
-                    { en: "collision", fr: "collision" },
-                    { en: "duplex mismatch", fr: "incoherence de duplex" },
-                    { en: "CRC error", fr: "erreur de controle de redondance cyclique" },
-                    { en: "late collision", fr: "collision tardive" }
-                ],
+                title: "Ethernet, la couche physique et le dépannage d'interface",
                 niveau: 'Débutant',
-                prerequis: "Aucun : c'est le tout premier sujet du parcours CCNA.",
+                prerequis: "Aucun : c'est le tout premier sujet du parcours CCNA — les couches OSI y sont introduites au fil du dépannage.",
                 objectifs: [
-                    "Expliquer avec vos mots la différence entre half-duplex et full-duplex",
-                    "Reconnaître les symptômes d'un câble trop long ou d'un duplex mal réglé (erreurs CRC, late collisions)",
-                    "Lire l'état d'un port avec 'show interfaces status' et 'show interfaces'",
-                    "Remettre les compteurs d'erreurs à zéro pour confirmer un diagnostic proprement"
+                    "Utiliser le modèle OSI comme grille de diagnostic (couche par couche, du câble à l'application)",
+                    "Expliquer ce qu'est une collision en half-duplex et pourquoi le full-duplex l'élimine",
+                    "Reconnaître un duplex mismatch et un câble hors spécifications aux compteurs (CRC, late collisions)",
+                    "Lire l'état d'un port (show interfaces, show interfaces status) et remettre les compteurs à zéro proprement",
+                    "Connaître les limites physiques Ethernet : 100 m cuivre, catégories de câbles, fibre pour la distance"
                 ],
-                links: { qcmId: 101, labId: 'lab-1', cheatSheetCat: 'Diagnostic réseau' }
+                lessons: [
+                    { title: "Leçon 1 — Le modèle OSI comme outil de diagnostic", parts: [
+                        { h: "Sept couches, un ordre de lecture", t: "7 Application (HTTP, DNS vu par l'utilisateur) ; 6 Présentation ; 5 Session ; 4 Transport (TCP/UDP, ports) ; 3 Réseau (IP, routage) ; 2 Liaison (Ethernet, MAC, VLAN) ; 1 Physique (câbles, signaux). En pratique, on diagnostique en remontant : couche 1 (lien physique ?), couche 2 (VLAN, duplex, erreurs de trames ?), couche 3 (adresse, passerelle, route ?), couche 7 (service, DNS ?). Chaque couche validée élimine la moitié des hypothèses restantes." },
+                        { h: "Encapsulation : l'emboîtement russe", t: "Une donnée applicative s'emballe : segment (couche 4, en-tête TCP avec ports), paquet (couche 3, en-tête IP avec adresses), trame (couche 2, en-tête Ethernet avec MAC + FCS de contrôle). Chaque couche ne lit que son en-tête : un switch lit les MAC (couche 2), un routeur les IP (couche 3). Le FCS (Frame Check Sequence) en fin de trame détecte la corruption : c'est lui qui alimente les compteurs CRC — une trame abîmée par un câble défectueux est jetée et comptée." },
+                        { h: "Ethernet et MAC", t: "Ethernet (IEEE 802.3) identifie chaque interface par son adresse MAC : 48 bits (6 octets, ex : 00:1A:2B:3C:4D:5E), les 24 premiers identifiant le constructeur (OUI). Le switch apprend les MAC source des trames entrantes pour bâtir sa table (show mac address-table) — une table qui « oscille » (la même MAC vue sur plusieurs ports) signale une boucle de couche 2." }
+                    ]},
+                    { title: "Leçon 2 — Collision, duplex et CSMA/CD", parts: [
+                        { h: "Half-duplex et le domaine de collision", t: "En half-duplex, une interface émet OU reçoit, jamais les deux : deux émissions simultanées sur le même segment produisent une collision. Le CSMA/CD (détection de collision) gère ce partage : écouter avant d'émettre, détecter la collision, attendre un temps aléatoire (backoff) et réessayer. Le hub — aujourd'hui disparu — forçait tout le monde en half-duplex : un seul domaine de collision pour tous ses ports." },
+                        { h: "Full-duplex : la fin des collisions", t: "Avec un switch (une liaison dédiée par port) et le full-duplex, chaque sens a son propre fil : émettre et recevoir simultanément devient possible, et une collision est physiquement IMPOSSIBLE — CSMA/CD se désactive. En 2026, tout lien moderne est full-duplex : si vous voyez encore des collisions dans les compteurs, c'est qu'un lien quelque part est retombé en half (mismatch) ou qu'un hub ancien survit." },
+                        { h: "Le duplex mismatch, l'ennemi invisible", t: "Un côté auto-négociation, l'autre forcé en full : l'interface auto se rabat en half. Le côté full ne fait pas de CSMA/CD (il n'écoute pas avant d'émettre) : les trames du côté half se heurtent à des émissions du côté full, et les compteurs affichent des late collisions et des erreurs CRC côté half — le tout SANS lien down : lenteur chronique, pas de panne franche. Correction : full (ou auto) des DEUX côtés, jamais un mélange." }
+                    ]},
+                    { title: "Leçon 3 — Le câblage : cuivre, fibre et limites", parts: [
+                        { h: "Le paires torsadées et les catégories", t: "Cat5e (1 Gbps, 100 m), Cat6/6a (1-10 Gbps selon longueur), Cat7/8 (data centers). Le droit et le croisé : le câble croisé (crossover) reliait deux équipements identiques à l'Auto-MDIX absent ; l'Auto-MDIX moderne rend tous les câbles droits utilisables — mais un câble croisé de réserve dépanne encore les vieux équipements. La règle absolue : 100 m maximum par segment cuivre (90 m fixe + 10 m cordons)." },
+                        { h: "La fibre pour la distance et l'immunité", t: "Monomode (single-mode, laser, jaune) : dizaines de kilomètres — interconnexions de sites, Fibre Channel longue distance. Multimode (LED/VCSEL, orange/aqua) : quelques centaines de mètres — liens intra-bâtiment entre étages. La fibre ne craint ni les interférences électromagnétiques ni la foudre, et traverse les environnements industriels. Les paires cuivre SFP permettent aussi cette transition sur les équipements existants." },
+                        { h: "Les symptômes du câblage défaillant", t: "Câble trop long ou écrasé/gammé : erreurs CRC croissantes, liaisons qui tombent sous la charge (une liaison qui tient au ping mais échoue en transfert massif est la signature classique). Connecteur oxydé ou mal embouti : erreurs unilatérales. Le réflectomètre (OTDR) localise la casse exacte sur les fibres longues ; un simple testeur de câble suffit en cuivre LAN." }
+                    ]},
+                    { title: "Leçon 4 — Lire un port comme un professionnel", parts: [
+                        { h: "show interfaces status : le tableau de bord", t: "Une ligne par port : nom, état (connected/notconnect/err-disabled), VLAN, duplex (a-full = auto-négocié), speed, type. C'est la PREMIÈRE commande devant tout incident réseau : en trois secondes, elle dit si le lien est là, à quelle vitesse, dans quel VLAN — et un err-disabled y claque tout de suite." },
+                        { h: "show interfaces : les compteurs qui racontent", t: "Le détail d'une interface : les compteurs d'entrée/sortie (octets, paquets) et surtout les ERREURS : CRC (trames corrompues — câble, connecteur, carte), input errors (somme des erreurs entrantes), late collisions (duplex mismatch ou segment trop long), output errors (drops de sortie — lien saturé ou QoS). Un compteur est une SOMME DEPUIS LE DERNIER CLEAR : lire son évolution, pas son total." },
+                        { h: "La méthode des compteurs", t: "(1) Noter les compteurs ; (2) clear counters Gi0/1 (les remet à zéro — sans impact sur le trafic) ; (3) générer du trafic (ping continu, iperf) ; (4) relire : quelques CRC en 30 secondes = câblage à corriger maintenant ; zéro = passer à la couche 3. Cette méthode remplace l'à-peu-près par une mesure." }
+                    ]}
+                ],
+                guiSteps: [
+                    { title: "Lire l'état des ports d'un switch", action: "Sur SW1 (Packet Tracer ou réel), en mode privilégié : show interfaces status. Parcourez le tableau : repérez les ports connected, leurs VLAN et leurs duplex.", observation: "Un port en a-full/a-1000 a tout négocié ; un port full sans le 'a-' est FORCÉ — croisez sa config avec l'équipement opposé (un full forcé face à un auto = mismatch probable). Un port notconnect attend un câble ; err-disabled claque la cause (fiche dédiée au centre de dépannage)." },
+                    { title: "Créer un duplex mismatch et l'observer", action: "Dans Packet Tracer : sur SW1, forcez un port : duplex full, speed 100. Sur le PC opposé (carte configurée en auto), lancez un ping -t vers la passerelle. Puis show interfaces sur le port du switch.", observation: "Le lien reste up (aucune panne franche) mais les pings deviennent irréguliers. Les compteurs du côté half (la carte du PC négociée en half) accumulent late collisions et CRC : la lenteur silencieuse du mismatch, rendue visible." },
+                    { title: "Remettre à zéro et mesurer proprement", action: "Corrigez : remettez le port du switch en auto (duplex auto, speed auto). clear counters sur le port, relancez un ping -t une minute, puis show interfaces Gi0/1 | include error|collision|CRC.", observation: "Tous les compteurs restent à zéro : la mesure propre confirme la correction. La démarche (clear → trafic → relire) est celle de tout diagnostic de couche 1-2 sérieux." },
+                    { title: "Tester les limites de distance en simulation", action: "Dans Packet Tracer, connectez deux switchs avec un câble cuivre, puis observez les caractéristiques du lien. Comparez avec une fibre (connectez les ports SFP si disponibles).", observation: "Le cuivre est plafonné à 100 m par spécification ; la fibre multimode porte à 550 m et la monomode à des kilomètres. Dans un bâtiment : cuivre du poste à la prise du local, fibre entre les locaux techniques — la topologie standard de tout réseau structuré." }
+                ],
+                deepDive: [
+                    { t: "Les états d'interface et leur signification immédiate", p: [
+                        "up/up : lien et protocole actifs — le port fonctionne.",
+                        "administratively down : shutdown posé — no shutdown à faire (ou à vérifier qui l'a posé et pourquoi).",
+                        "down/down : aucun signal — câble, équipement opposé éteint, port mort. Vérifier les DEUX extrémités.",
+                        "up/down (protocole down) : le signal est là mais la couche 2 ne monte pas — VLAN d'accès absent de la table (le cas classique du switch), encapsulation incohérente sur un lien routé.",
+                        "err-disabled : le port s'est protégé (port-security, BPDU guard...) — voir la fiche dédiée."
+                    ],
+                    cmd: [
+                        "show ip interface brief        # vue de tous les ports, état ligne/protocole",
+                        "show interfaces Gi0/1 status   # VLAN, duplex, vitesse",
+                        "show interfaces Gi0/1 | include CRC|collision|error   # compteurs",
+                        "clear counters Gi0/1           # remise a zero avant mesure"
+                    ],
+                    box: 'remember', boxText: "À retenir : down/down = physique (câble/extinction), up/down = couche 2 (VLAN manquant, encapsulation), err-disabled = protection déclenchée. La commande pour départager en 3 secondes : show ip interface brief." },
+                    { t: "CRC, late collisions, giants : traduire les compteurs", p: [
+                        "CRC croissants : trames reçues corrompues — câble endommagé/long, connecteur, interface en fin de vie. Unilatéraux = un seul côté du lien à blâmer.",
+                        "Late collisions : collisions détectées APRÈS les 512 premiers bits — segment trop long ou duplex mismatch (le full ne détecte pas, le half subit).",
+                        "Giants/runts : trames hors gabarit (> 1518 / < 64 octets) — souvent une carte défaillante ou du trafic exotique (VLAN tag double : vérifier la config QoS).",
+                        "Output drops : le port n'a pas suivi (buffers vides) — saturation légitime (débit à ajouter) plutôt que panne."
+                    ],
+                    box: 'admin', boxText: "Conseil d'administrateur : surveillez les compteurs d'erreurs dans votre supervision avec un seuil sur la PROGRESSION (erreurs/minute), pas sur le total. Un total de 3000 CRC qui ne bouge plus depuis un an est un souvenir ; 20 CRC par minute sur un lien = intervention aujourd'hui." },
+                    { t: "Cas d'entreprise — le serveur lent du service RH", p: [
+                        "Situation : le serveur RH est 'lent' depuis son déménagement de la semaine passée. Les utilisateurs parlent de 'réseau qui rame' ; l'inventaire signale un simple déplacement de bureau.",
+                        "Diagnostic : show interfaces status sur le port du serveur : speed 100, duplex full (forcés par l'ancienne config du port de l'ancien bureau... restée sur la carte du serveur en auto de son côté → half négocié). Le ping répond, mais un transfert massif échoue par paliers.",
+                        "Correction : passer la carte du serveur ET le port du switch en auto (ou full des deux) : la liaison négocie 1000 full, les late collisions tombent à zéro, le débit est multiplié par vingt.",
+                        "Leçon : à chaque déménagement, la checklist couche 1-2 (port, VLAN, duplex) — le 'réseau lent' est très souvent un lien dégradé, pas un réseau saturé."
+                    ],
+                    box: 'case', boxText: "Devant une lenteur chronique d'un équipement précis : lire ses compteurs AVANT toute hypothèse. Câble/duplex défaillants = lenteur unilatérale ; saturation = drops symétriques. Le discriminant tient dans deux commandes." }
+                ],
+                exercices: [
+                    { enonce: "Un lien entre un switch et un serveur affiche : côté switch, full-duplex 1 Gbps configurés manuellement ; côté serveur, carte en auto-négociation. Quels symptômes attendez-vous et sur quels compteurs, et quelle est la correction ?", correction: "La carte auto, ne recevant pas de négociation cohérente, se rabat en half-duplex : le lien monte (pas de panne franche) mais le serveur (half) voit ses émissions heurtées par celles du switch (full, qui n'écoute pas) — late collisions et CRC croissants côté serveur, lenteur asymétrique (le serveur émet mal, reçoit mieux). Correction : aligner — soit auto des deux côtés (recommandé : la négociation gère vitesse ET duplex), soit full/1000 fixés des deux côtés. Puis clear counters + mesure de contrôle : les compteurs doivent rester à zéro sous charge." },
+                    { enonce: "Classer chaque incident à sa couche OSI et nommer la première commande de vérification : (a) 'Je ne peux pas ouvrir google.com mais l'intranet marche' ; (b) 'Le nouveau serveur ne ping rien, le voyant du port est éteint' ; (c) 'Les postes du 2e étage échangent entre eux mais pas avec le sous-sol' ; (d) 'La liaison fibre entre bâtiments montre 4000 CRC depuis ce matin'.", correction: "(a) Couche 7/3 : résolution DNS — nslookup google.com (et vérifier le DNS du poste). (b) Couche 1 : câble/port — show interfaces status (notconnect ou administratively down : brancher, no shutdown). (c) Couche 3 (voire 2) : routage inter-VLAN ou trunk — ping de la passerelle, puis show interfaces trunk côté étage. (d) Couche 1 : la fibre est endommagée (travaux, courbure trop serrée) — lecture des compteurs, test optique (puissance en dBm avec les DOM), remplacement de la section fautive. Chaque incident a sa couche : la trouver d'abord économise l'essentiel du diagnostic." }
+                ],
+                resume: "OSI est une grille de diagnostic : on remonte du câble (couche 1 : CRC, collisions, 100 m) à la trame (couche 2 : duplex, VLAN) puis au paquet (couche 3 : passerelle). Full-duplex élimine les collisions ; un duplex mismatch crée late collisions et CRC sans lien down. Les compteurs d'interface racontent tout — à condition de les remettre à zéro avant de mesurer. show interfaces status + show interfaces : les deux réflexes fondateurs du dépannage réseau.",
+                suite: "Le sujet 1.2 élargit au socle moderne (virtualisation et conteneurs) avant que 1.3 n'installe le calcul d'adressage IPv4.",
+                evaluation: [
+                    { q: "Une collision ne peut se produire que si :", options: [ "Le câble dépasse 100 m", "Un lien au moins est en half-duplex", "Le VLAN est absent", "Le DNS est faux" ], answer: 1, exp: "Correct : en full-duplex, chaque sens a son fil — collision physiquement impossible. Des collisions dans les compteurs = du half quelque part (mismatch ou hub ancien)." },
+                    { q: "L'état up/down (protocole down) sur un port de switch oriente vers :", options: [ "Un câble débranché", "Un VLAN d'accès absent de la table VLAN", "Un serveur éteint", "Une erreur DNS" ], answer: 1, exp: "Correct : le signal est là mais la couche 2 ne monte pas — le VLAN configuré n'existe pas dans la table. Créer le vlan X fait remonter le lien instantanément." },
+                    { q: "Late collisions croissantes sur un lien signent le plus souvent :", options: [ "Un duplex mismatch ou un segment trop long", "Un DNS erroné", "Un pool DHCP épuisé", "Un VLAN natif incorrect" ], answer: 0, exp: "Correct : les collisions après 512 bits viennent d'un côté half face à un full, ou d'un segment hors spécifications." },
+                    { q: "Avant de mesurer l'évolution d'erreurs CRC, la bonne pratique est :", options: [ "Rebooter le switch", "clear counters sur l'interface puis générer du trafic", "Attendre 24 h", "Remplacer le câble immédiatement" ], answer: 1, exp: "Correct : les compteurs sont des sommes depuis le dernier clear — seule leur PROGRESSION sous charge signe une panne active." },
+                    { q: "La distance maximale d'un segment cuivre Ethernet est :", options: [ "50 m", "100 m", "550 m", "10 km" ], answer: 1, exp: "Correct : 100 m (90 m de câble fixe + 10 m de cordons). Au-delà : fibre — multimode ~550 m, monomode des kilomètres." },
+                    { q: "Le FCS en fin de trame Ethernet sert à :", options: [ "Étiqueter le VLAN", "Détecter la corruption de la trame (alimente les compteurs CRC)", "Choisir le meilleur chemin", "Attribuer le bail DHCP" ], answer: 1, exp: "Correct : le Frame Check Sequence est le contrôle d'intégrité — une trame dont le FCS ne correspond pas est jetée et comptée comme erreur CRC." }
+                ]
             },
             {
                 id: 'ccna-v2-1-2',
@@ -144,84 +190,174 @@
                 certif: 'CCNA',
                 parcours: 'CCNA',
                 code: '1.3',
-                title: 'Depanner l\'adressage et le sous-reseau IPv4',
-                statut: 'brouillon à relire',
-                why: "Une machine sur le mauvais sous-reseau ne communique plus avec sa passerelle. Le calcul du sous-reseau est la base de presque tout diagnostic IP.",
-                keyIdeas: [
-                    "L'adresse IP est divisee en partie reseau et partie hote, delimitees par le masque.",
-                    "Un /26 (255.255.255.192) donne 64 adresses, dont 62 utilisables pour les hotes.",
-                    "L'adresse reseau et l'adresse de diffusion ne peuvent pas etre attribuees a un hote.",
-                    "Une passerelle hors du sous-reseau de l'hote rend le routage impossible."
-                ],
-                schemaType: 'decoupage-subnet-v4',
-                guiProcedure: "Sous Windows : ouvrir les proprietes IPv4 de la carte et comparer l'adresse, le masque et la passerelle avec le plan d'adressage.",
-                cliProcedure: [
-                    { cmd: "ipconfig /all", desc: "affiche l'adresse, le masque, la passerelle et les serveurs DNS sous Windows" },
-                    { cmd: "ip a", desc: "affiche les adresses IP des interfaces sous Linux" },
-                    { cmd: "show ip interface brief", desc: "affiche l'etat et l'adresse IP de chaque interface Cisco" }
-                ],
-                verification: { cmd: "ping <passerelle>", expected: "Reponse de la passerelle si l'hote est dans le bon sous-reseau" },
-                pitfalls: [
-                    "Oublier que 192.168.10.128/26 a pour diffusion 192.168.10.191, pas .255.",
-                    "Confondre masque decimal et notation CIDR."
-                ],
-                vocab: [
-                    { en: "subnet mask", fr: "masque de sous-reseau" },
-                    { en: "default gateway", fr: "passerelle par defaut" },
-                    { en: "network address", fr: "adresse reseau" },
-                    { en: "broadcast address", fr: "adresse de diffusion" }
-                ],
+                title: "Adressage IPv4 et sous-réseaux : la base de tout diagnostic IP",
                 niveau: 'Débutant à intermédiaire',
-                prerequis: "Suivre le sujet 1.3 est plus simple après le 1.1, mais si vous savez lire une adresse comme 192.168.10.70, vous pouvez commencer ici : le calcul est expliqué pas à pas.",
+                prerequis: "Aucun pour la lecture : le calcul est expliqué pas à pas. Le sujet 1.1 aide à comprendre le contexte (une panne IP commence souvent par un mauvais plan d'adressage).",
                 objectifs: [
-                    "Découper un réseau /24 en plusieurs sous-réseaux /26 sans table toute prête",
-                    "Calculer l'adresse réseau, les adresses utilisables et l'adresse de diffusion d'un bloc",
-                    "Reconnaître en quelques secondes une passerelle « hors sous-réseau »",
-                    "Vérifier une configuration IPv4 avec 'ipconfig /all' et 'ip a'"
+                    "Lire une adresse IPv4 et son masque (décimal et CIDR) sans hésiter",
+                    "Découper un réseau /24 en plusieurs sous-réseaux égaux (/26, /28...) sans table toute prête",
+                    "Calculer pour chaque bloc : adresse réseau, plage utilisable, adresse de diffusion",
+                    "Appliquer le VLSM pour dimensionner des sous-réseaux de tailles différentes",
+                    "Reconnaître en quelques secondes une passerelle « hors sous-réseau » et vérifier une configuration IPv4"
                 ],
-                links: { qcmId: 111, labId: 'lab-1', cheatSheetCat: 'Diagnostic réseau' }
+                lessons: [
+                    { title: "Leçon 1 — L'adresse IPv4 et son masque", parts: [
+                        { h: "32 bits, 4 octets", t: "Une adresse IPv4 est un nombre de 32 bits écrit en 4 octets décimaux (192.168.10.70). Chaque octet va de 0 à 255. Le masque de sous-réseau délimite deux parties : les bits de réseau (identiques pour tous les hôtes d'un même sous-réseau) et les bits d'hôte (identifient chaque machine). 255.255.255.0 (/24 en CIDR) signifie : les 24 premiers bits sont la partie réseau." },
+                        { h: "Le calcul clé : la puissance de deux", t: "Si N bits restent pour la partie hôte, le sous-réseau contient 2^N adresses. /26 → 6 bits d'hôte → 64 adresses, dont 62 utilisables (on retire l'adresse réseau, tous les bits hôte à 0, et l'adresse de diffusion, tous les bits hôte à 1). /30 → 4 adresses → 2 utilisables : le bloc des liens point-à-point. /31 → 2 adresses : réservé aux liens RFC 3021. /32 → 1 adresse : une machine précise (règle d'ACL)." },
+                        { h: "Les masques en clair", t: "/24 = 255.255.255.0 (256 adresses) ; /25 = 255.255.255.128 (128) ; /26 = 255.255.255.192 (64) ; /27 = 255.255.255.224 (32) ; /28 = 255.255.255.240 (16) ; /29 = 255.255.255.248 (8) ; /30 = 255.255.255.252 (4). Le pas entre deux sous-réseaux consécutifs vaut toujours la taille du bloc : 64 pour un /26." },
+                        { h: "Adresses publiques, privées et spéciales", t: "Privées (RFC 1918, non routables sur Internet) : 10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16. Loopback : 127.0.0.0/8. APIPA : 169.254.0.0/16 — l'auto-adressage qui signale un échec DHCP. 0.0.0.0 = « n'importe où » (route par défaut). 255.255.255.255 = diffusion limitée locale." }
+                    ]},
+                    { title: "Leçon 2 — Subnetter pas à pas (méthode des blocs)", parts: [
+                        { h: "La méthode en quatre gestes", t: "Pour découper 192.168.10.0/24 en /26 : (1) taille du bloc = 2^(32-26) = 64 ; (2) le pas est 64 — les blocs démarrent à .0, .64, .128, .192 ; (3) chaque bloc : adresse réseau = départ, diffusion = départ + 63 ; (4) utilisables = les 62 entre les deux. Exemple du bloc .128 : réseau 192.168.10.128, utilisables .129 à .190, diffusion .191 — PAS .255, qui appartient au dernier bloc." },
+                        { h: "Savoir situer une adresse instantanément", t: "À quelle plage appartient 192.168.10.70/26 ? Les multiples de 64 : 0, 64, 128, 192. 70 est entre 64 et 127 → réseau 192.168.10.64, diffusion .127, passerelle possible de .65 à .126. Ce réflexe de « multiple le plus proche en dessous » est le cœur du subnetting." },
+                        { h: "Le nombre de sous-réseaux", t: "Emprunter B bits au masque d'origine crée 2^B sous-réseaux. /24 → /26 emprunte 2 bits → 4 sous-réseaux. /24 → /28 emprunte 4 bits → 16 sous-réseaux de 16 adresses. Le plan d'adressage est toujours un arbitrage : beaucoup de petits blocs ou peu de grands." },
+                        { h: "Le masque invalide", t: "Un masque doit être CONTIGU : des 1 puis des 0 (255.255.255.192 est valide ; 255.255.63.0 ne l'est pas). C'est pour cela que seuls les masques « pleins » /1 à /32 existent — pas de masque à trous." }
+                    ]},
+                    { title: "Leçon 3 — VLSM : des blocs à la demande", parts: [
+                        { h: "Pourquoi le VLSM", t: "Le découpage égal gaspille : un lien point-à-point n'a besoin que de 2 adresses (/30), un réseau d'utilisateurs en veut 100 (/25). Le VLSM (Variable Length Subnet Mask) taille chaque sous-réseau selon son besoin réel — indispensable dès que l'espace d'adressage se raréfie." },
+                        { h: "La règle d'or : du plus grand au plus petit", t: "On alloue d'abord les blocs les plus grands, puis on descend. Sur 192.168.1.0/24 : un service de 100 hôtes prend /25 (.0-.127) ; un service de 50 prend /26 (.128-.191) ; un lien WAN prend /30 (.192-.195) ; un autre lien /30 (.196-.199) ; le reste (.200+) reste disponible pour la croissance. Allouer dans le désordre fragmente l'espace et rend les blocs suivants impossibles." },
+                        { h: "Vérifier son plan", t: "Un plan VLSM correct ne chevauche jamais : chaque adresse appartient à un seul bloc. Le test : écrire tous les blocs (réseau → diffusion) et vérifier qu'ils se suivent sans trou ni recouvrement. Ce tableau devient le document de référence du réseau — l'inventaire des VLAN, pools DHCP et ACL en découle." }
+                    ]},
+                    { title: "Leçon 4 — Diagnostiquer une adresse IP", parts: [
+                        { h: "Les symptômes d'un adressage cassé", t: "Passerelle hors sous-réseau : le poste peut pinguer son voisin mais rien au-delà (sa passerelle est dans un autre bloc, le routage démarre mal). Deux hôtes se croyant dans le même bloc alors qu'un routeur les sépare : les pings partent et se perdent. Mauvais masque (un /25 au lieu d'un /24) : le poste croit des voisins locaux être locaux (ou l'inverse) et échoue sur les adresses de bord." },
+                        { h: "La séquence de diagnostic", t: "ipconfig /all (Windows) ou ip a (Linux) : lire adresse, masque, passerelle. (1) La passerelle est-elle dans le bloc de l'hôte ? (2) Le poste peut-il pinguer la passerelle ? (3) Un ping vers l'extérieur révèle-t-il un problème de route ou de DNS ? Une « mauvaise passerelle » se voit en 5 secondes avec le réflexe des multiples." },
+                        { h: "Interpréter les réponses de ping", t: "« Destination host unreachable » depuis la passerelle : pas de route vers la destination. « Request timed out » : le paquet part et se perd (route asymétrique, ACL silencieuse ou hôte muet). Réponse de 169.254.x.x : le poste n'a pas de bail DHCP — voir la fiche APIPA du centre de dépannage." }
+                    ]}
+                ],
+                guiSteps: [
+                    { title: "Lire sa configuration sous Windows", action: "Ouvrez l'invite de commandes (Windows+R, cmd) et tapez ipconfig /all. Repérez pour la carte active : adresse IPv4, masque, passerelle, serveurs DNS, bail DHCP obtenu.", observation: "Comparez le masque affiché (255.255.255.192 = /26) avec le plan d'adressage. Notez la date d'obtention du bail : un bail ancien avec une IP qui a changé de plan signale un pool DHCP périmé." },
+                    { title: "Situater une adresse dans son bloc", action: "Avec l'adresse 192.168.10.70/26 obtenue : calculez les multiples de 64 (0, 64, 128, 192). Le plus proche inférieur à 70 est 64 : le réseau est 192.168.10.64, la diffusion 192.168.10.127.", observation: "La plage utilisable est .65 à .126 : la passerelle doit s'y trouver. Si ipconfig affiche 192.168.10.1 en passerelle, elle est HORS de votre bloc — voilà la panne." },
+                    { title: "Vérifier sous Linux", action: "Sur un poste Linux : ip a affiche les interfaces et adresses ; ip route affiche la passerelle (via x.x.x.x) ; ping -c 3 <passerelle> teste la joignabilité locale.", observation: "ip route montre la route par défaut : si la passerelle via n'est pas dans le préfixe de votre interface (ex : dev eth0 192.168.10.70/26), le noyau refuse d'envoyer — l'équivalent Linux de la mauvaise passerelle Windows." },
+                    { title: "Découper un /24 complet sur papier", action: "Prenez 172.16.5.0/24 et découpez-le : un bloc /25 (100 hôtes RH), un bloc /26 (50 hôtes IT), deux blocs /30 (liens WAN), le reste en réserve. Écrivez chaque bloc : réseau, première et dernière utilisable, diffusion.", observation: "Votre tableau doit se lire d'une traite : .0-.127 (/25 RH), .128-.191 (/26 IT), .192-.195 (/30 WAN1), .196-.199 (/30 WAN2), .200+ réserve. C'est exactement le document qu'on retrouve dans le dossier réseau d'une entreprise." }
+                ],
+                deepDive: [
+                    { t: "Le tableau des puissances de deux — à connaître par cœur", p: [
+                        "2^2 = 4 (lien /30) ; 2^3 = 8 (/29) ; 2^4 = 16 (/28) ; 2^5 = 32 (/27) ; 2^6 = 64 (/26) ; 2^7 = 128 (/25) ; 2^8 = 256 (/24).",
+                        "Taille du bloc = 2^(32 - préfixe). Nombre de blocs d'un /24 = 256 ÷ taille.",
+                        "Utilisables = taille - 2 (sauf /31 : 2 utilisables en RFC 3021, et /32 : une seule).",
+                        "Le pas entre blocs = la taille du bloc : c'est le nombre à additionner pour passer d'un réseau au suivant."
+                    ],
+                    box: 'remember', boxText: "À retenir pour l'examen : adresse réseau = tous les bits hôte à 0 ; diffusion = tous à 1 ; utilisables = entre les deux. Un /26 = 64 adresses : 192.168.10.128/26 diffuse en .191, jamais en .255." },
+                    { t: "Agrégation (supernetting) : résumer plusieurs réseaux", p: [
+                        "Quatre /24 consécutifs (192.168.8.0/24 à 192.168.11.0/24) se résument en 192.168.8.0/22 : un seul préfixe, une seule route.",
+                        "Condition : les blocs doivent être alignés sur leur taille (les quatre /24 commencent à un multiple de 4 dans le troisième octet) — sinon l'agrégat capte des réseaux étrangers.",
+                        "Usage : la table de routage d'un FAI annonce 1000 clients derrière une poignée d'agrégats ; côté entreprise, l'agrégation réduit les tables et stabilise le routage."
+                    ],
+                    cmd: [
+                        "! Sur un routeur : annoncer un agrégat plutôt que 4 routes",
+                        "ip route 192.168.8.0 255.255.252.0 Null0   # ancre de l'agrégat",
+                        "router ospf 1",
+                        " network 192.168.8.0 0.0.3.255 area 0   # masque générique correspondant au /22"
+                    ],
+                    box: 'admin', boxText: "Conseil d'administrateur : dessinez vos plans d'adressage par blocs alignés dès le départ (tous les /24 d'un site dans le même /22). Les agrégats futurs en découleront naturellement, sinon ils seront impossibles." },
+                    { t: "Cas d'entreprise — la passerelle fantôme", p: [
+                        "Situation : un poste relocalisé vers un nouveau VLAN reçoit 192.168.10.70/26 mais garde la passerelle 192.168.10.1 des anciennes configs statiques.",
+                        "Diagnostic : le ping vers 192.168.10.1 timeout alors que le voisin .71 répond. La passerelle .1 n'est pas dans le bloc .64-.127 : le poste n'a aucun routeur joignable — tout le hors-local échoue.",
+                        "Action : corriger la passerelle (192.168.10.65, première utilisable du bloc), ipconfig /renew pour le pool. Prévention : la passerelle est TOUJOURS la première (ou la dernière) adresse du bloc — une convention d'entreprise évite l'improvisation."
+                    ],
+                    box: 'case', boxText: "La convention de passerelle (toujours .1 du bloc, ou .254) fait partie du plan d'adressage. Sans convention, chaque tech place la passerelle où il veut : les configs statiques deviennent un champ de mines." }
+                ],
+                exercices: [
+                    { enonce: "Découpez 10.1.1.0/24 en sous-réseaux /26 et donnez, pour chaque bloc : adresse réseau, plage utilisable, adresse de diffusion. Un hôte en 10.1.1.130 est-il joignable depuis un hôte en 10.1.1.75 sans routeur ?", correction: "Blocs de 64, pas de 64 : (1) 10.1.1.0 réseau, .1-.62 utilisables, .63 diffusion ; (2) 10.1.1.64, .65-.126, .127 ; (3) 10.1.1.128, .129-.190, .191 ; (4) 10.1.1.192, .193-.254, .255. L'hôte .130 est dans le bloc .128-.191 et .75 dans le bloc .64-.127 : ils sont dans deux sous-réseaux différents — sans routeur, aucun échange direct (les broadcasts non plus). Un ping entre eux échoue silencieusement tant qu'aucune couche 3 ne relie les deux blocs." },
+                    { enonce: "Plan VLSM sur 192.168.20.0/24 : 60 hôtes (production), 25 hôtes (développement), 10 hôtes (direction), 2 liens WAN. Proposez le découpage en allouant du plus grand au plus petit.", correction: "60 hôtes → /26 (64 adresses) : 192.168.20.0-.63 (production, .1-.62). 25 → /27 (32) : .64-.95 (développement, .65-.94). 10 → /28 (16) : .96-.111 (direction, .97-.110). 2 → /30 : .112-.115 (WAN1) et .116-.119 (WAN2). Reste .120-.255 en réserve. En allouant du plus grand au plus petit, chaque bloc est aligné sur sa taille et l'espace restant est contigu — un découpage dans le désordre aurait fragmenté la réserve." }
+                ],
+                resume: "Une adresse IPv4 = 32 bits partagés entre réseau et hôte par le masque. Taille d'un bloc = 2^(32-préfixe), utilisables = taille - 2, pas entre blocs = taille. Le VLSM alloue du plus grand au plus petit pour ne rien gaspiller ; l'agrégation résume des blocs alignés. Diagnostic : la passerelle doit être dans le bloc de l'hôte — c'est le premier réflexe devant un « réseau local OK, extérieur KO ».",
+                suite: "Le sujet 1.4 transpose cette logique à IPv6 : préfixes /64, EUI-64, adresses link-local.",
+                evaluation: [
+                    { q: "Un /26 contient combien d'adresses utilisables pour des hôtes ?", options: [ "64", "62", "32", "16" ], answer: 1, exp: "Correct : 2^6 = 64 adresses moins l'adresse réseau et la diffusion = 62 utilisables." },
+                    { q: "192.168.10.130/26 appartient au sous-réseau :", options: [ "192.168.10.0", "192.168.10.64", "192.168.10.128", "192.168.10.192" ], answer: 2, exp: "Correct : les blocs vont de 64 en 64 ; 130 est entre 128 et 191 — réseau .128, diffusion .191." },
+                    { q: "L'adresse 169.254.x.x sur un poste signifie :", options: [ "Une adresse publique", "Un échec DHCP (auto-adressage APIPA)", "L'adresse du DNS", "Une adresse de loopback" ], answer: 1, exp: "Correct : APIPA = le poste n'a reçu aucune réponse DHCP et s'auto-attribue une adresse locale non routable." },
+                    { q: "Pour un VLSM, on alloue les blocs :", options: [ "Du plus petit au plus grand", "Du plus grand au plus petit", "Dans l'ordre alphabétique des services", "Toujours en /24" ], answer: 1, exp: "Correct : allouer les grands blocs d'abord évite la fragmentation — les petits s'insèrent ensuite dans les trous." },
+                    { q: "Un poste 172.16.1.70/26 avec passerelle 172.16.1.1 : que se passe-t-il ?", options: [ "Tout fonctionne", "Le local fonctionne, le hors-local échoue : la passerelle est hors du bloc", "Le poste ne pingue personne", "Le DNS casse" ], answer: 1, exp: "Correct : le bloc de .70/26 est .64-.127 ; la passerelle .1 est dans le bloc .0-.63 — le poste n'a pas de routeur joignable dans son sous-réseau." },
+                    { q: "Quatre /24 consécutifs alignés (192.168.8.0 à 192.168.11.0) s'agrègent en :", options: [ "192.168.8.0/23", "192.168.8.0/22", "192.168.0.0/16", "Impossible" ], answer: 1, exp: "Correct : 4 × 256 = 1024 adresses = 2^10 → préfixe 32-10 = /22, à condition que le départ soit aligné (multiple de 4 du troisième octet)." }
+                ]
             },
             {
                 id: 'ccna-v2-1-4',
                 certif: 'CCNA',
                 parcours: 'CCNA',
                 code: '1.4',
-                title: 'Depanner l\'adressage IPv6, le prefixe et l\'EUI-64',
-                statut: 'brouillon à relire',
-                why: "IPv6 est deploye dans de nombreux reseaux. Une adresse mal derivee ou un prefixe trop court empeche la communication sans erreur evidente.",
-                keyIdeas: [
-                    "Un prefixe IPv6 standard pour un LAN est un /64 ; la partie hote fait 64 bits.",
-                    "En EUI-64, l'adresse MAC est coupee en deux, FFFE est insere au milieu, et le 7e bit est inverse.",
-                    "L'adresse link-local (fe80::/10) existe sur chaque interface IPv6 active.",
-                    "Un routeur doit annoncer le prefixe par RA pour que les hotes se configurent en SLAAC."
-                ],
-                schemaType: 'transformation-eui64',
-                guiProcedure: "Sur un routeur Cisco, configurer une interface avec un prefixe /64 en EUI-64, puis verifier l'adresse auto-generee a partir de la MAC.",
-                cliProcedure: [
-                    { cmd: "ipv6 address 2001:db8:10::/64 eui-64", desc: "genere l'identifiant d'interface a partir de la MAC" },
-                    { cmd: "show ipv6 interface brief", desc: "affiche les adresses IPv6 et leur etat" },
-                    { cmd: "ipconfig", desc: "affiche les adresses IPv6 sous Windows" }
-                ],
-                verification: { cmd: "show ipv6 interface brief", expected: "Une adresse globale 2001:db8:10:... et une adresse fe80:: pour l'interface" },
-                pitfalls: [
-                    "Oublier d'inverser le 7e bit lors d'un calcul manuel EUI-64.",
-                    "Confondre une adresse link-local (fe80::) avec une adresse globale routable."
-                ],
-                vocab: [
-                    { en: "prefix", fr: "prefixe" },
-                    { en: "link-local address", fr: "adresse de lien local" },
-                    { en: "EUI-64", fr: "identifiant etendu 64 bits" },
-                    { en: "Router Advertisement (RA)", fr: "annonce de routeur" }
-                ],
+                title: "Adressage IPv6 : préfixes, SLAAC, EUI-64 et dépannage",
                 niveau: 'Intermédiaire',
-                prerequis: "Le sujet 1.3 : la logique du découpage est la même, ici en 128 bits. Si vous savez manipuler un /26, c'est déjà suffisant.",
+                prerequis: "Le sujet 1.3 (logique réseau/hôte des masques) : la même intuition s'applique, en 128 bits et sans masque décimal. Aucune expérience IPv6 requise.",
                 objectifs: [
-                    "Décrire la structure d'une adresse IPv6 : préfixe + identifiant d'interface",
-                    "Justifier le choix d'un /64 pour un LAN IPv6",
-                    "Transformer une MAC en identifiant EUI-64 (insertion de FFFE, inversion du 7e bit)",
-                    "Distinguer une adresse link-local (fe80::) d'une adresse globale routable"
+                    "Lire et abréger une adresse IPv6 (hextets, règle du :: unique)",
+                    "Distinguer global unicast (2001::/3), link-local (fe80::/10), ULA (fd00::/8) et multicast (ff02::)",
+                    "Justifier le /64 standard des LAN et dériver un identifiant EUI-64 depuis une MAC",
+                    "Expliquer SLAAC, le rôle des Router Advertisement et le recours au DHCPv6",
+                    "Activer le routage IPv6 sur un routeur Cisco et vérifier avec show ipv6 interface brief"
                 ],
-                links: { qcmId: 116, labId: 'lab-1', cheatSheetCat: 'Diagnostic réseau' }
+                lessons: [
+                    { title: "Leçon 1 — Pourquoi IPv6 et comment le lire", parts: [
+                        { h: "128 bits contre 32", t: "IPv4 offre ~4,3 milliards d'adresses : épuisées. IPv6 en offre 2^128 (~3,4 × 10^38) — assez pour adresser chaque appareil de la planète de nombreuses fois, ce qui supprime au passage le besoin de NAT. L'adresse s'écrit en 8 groupes de 4 chiffres hexadécimaux séparés par deux points : 2001:0db8:0000:0000:0000:0000:0000:0001." },
+                        { h: "Les deux règles d'abréviation", t: "(1) Les zéros non significatifs de chaque groupe se suppriment : 0db8 → db8. (2) Une seule séquence de groupes nuls (la plus longue) se remplace par :: : l'adresse devient 2001:db8::1. La règle d'or : :: ne peut apparaître QU'UNE fois par adresse — sinon on ne sait plus combien de groupes ont été omis." },
+                        { h: "La notation des préfixes", t: "IPv6 n'utilise plus de masque décimal : la longueur de préfixe en CIDR suit l'adresse (2001:db8:1::/64). Un /48 est typiquement alloué à un site (entreprise, foyer), découpé en /64 pour chaque réseau : un /48 fournit 65 536 réseaux de /64. Règle absolue des LAN : toujours /64 — les mécanismes auto (SLAAC, EUI-64) l'exigent." }
+                    ]},
+                    { title: "Leçon 2 — Les types d'adresses", parts: [
+                        { h: "Globales unicast (GUUA)", t: "Préfixe 2000::/3 (adresses commençant par 2 ou 3). L'équivalent des adresses publiques IPv4 : routables sur Internet. 2001:db8::/32 est réservé à la documentation — utilisez-le dans vos labos et vos cours sans polluer l'Internet réel." },
+                        { h: "Link-local (fe80::/10)", t: "Chaque interface IPv6 active s'auto-attribue une fe80:: — valable UNIQUEMENT sur le lien local (pas de routage). Elles servent aux protocoles de voisinage : OSPFv3 monte ses adjacences sur les link-local, NDP (le remplaçant d'ARP) fonctionne avec. En dépannage : l'interface peut avoir une fe80:: valide mais aucune adresse globale — le routeur n'annonce pas de préfixe (RA absent)." },
+                        { h: "ULA et multicast", t: "ULA (Unique Local Address, fd00::/8) : l'équivalent privé des plages RFC 1918, pour des réseaux internes non connectés. Multicast : ff02::1 (tous les nœuds du lien), ff02::2 (tous les routeurs), ff02::5 (tous les routeurs OSPF). IPv6 remplace le broadcast par ces multicast bien ciblés — il n'y a PLUS d'adresse de diffusion en IPv6." },
+                        { h: "Anycast", t: "Une même adresse affectée à plusieurs serveurs : le paquet atteint le plus proche en métrique de routage. Usage : résolveurs DNS racine (K-root, etc.) et CDN. Un anycast se configure comme une unicast — c'est le routage qui crée l'effet." }
+                    ]},
+                    { title: "Leçon 3 — Attribution : SLAAC, RA et EUI-64", parts: [
+                        { h: "SLAAC : l'autoconfiguration sans serveur", t: "En SLAAC (StateLess Address AutoConfiguration), l'hôte construit son adresse globale seul : il écoute les Router Advertisement (RA) que le routeur émet périodiquement (ou en réponse à un Router Solicitation). Le RA annonce le préfixe (/64) ; l'hôte y colle son identifiant d'interface — soit dérivé de sa MAC (EUI-64), soit aléatoire (privacy extensions, par défaut sur les OS modernes). Aucun serveur à gérer : c'est le mode par défaut d'Internet IPv6." },
+                        { h: "EUI-64 : de la MAC à l'identifiant", t: "La MAC (48 bits) se coupe en deux moitiés, FFFE s'insère au milieu (48+16 = 64 bits), et le 7e bit du premier octet (bit U/L) s'inverse. MAC 00:1A:2B:3C:4D:5E → coupe en 001A:2B et 3C:4D:5E → insère FFFE → 001A:2BFF:FE3C:4D:5E → inverse le bit → 021A:2BFF:FE3C:4D:5E. L'identifiant complète le préfixe : 2001:db8:1::021A:2BFF:FE3C:4D:5E/64." },
+                        { h: "DHCPv6 : stateless ou stateful", t: "Le routeur peut signaler dans ses RA deux autres modes : M-flag → DHCPv6 stateful (le serveur attribue tout, comme DHCPv4) ; O-flag → DHCPv6 stateless (l'hôte construit son adresse en SLAAC mais récupère les options — DNS — auprès du serveur). Sur Cisco : ipv6 nd other-config-flag (stateless) ou ipv6 nd managed-config-flag (stateful)." },
+                        { h: "NDP, le remplaçant d'ARP", t: "Neighbor Discovery Protocol (ICMPv6) fait tout ce qu'ARP faisait et plus : résolution MAC (Neighbor Solicitation/Advertisement), détection de routeur (RS/RA), détection d'adresses dupliquées (DAD — l'hôte vérifie son unicité avant d'utiliser l'adresse) et découverte de préfixes obsolètes." }
+                    ]},
+                    { title: "Leçon 4 — Configurer et dépanner IPv6", parts: [
+                        { h: "Sur le routeur Cisco", t: "ipv6 unicast-routing active le routage (sinon le routeur n'émet AUCUN RA — panne classique des labos). Interface : ipv6 address 2001:db8:10::1/64 (statique) ou ipv6 address 2001:db8:10::/64 eui-64 (identifiant auto depuis la MAC). Une interface avec seulement ipv6 enable obtient une link-local sans adresse globale." },
+                        { h: "Vérifier", t: "show ipv6 interface brief : adresses par interface avec leur état (up/up ou down). show ipv6 interface g0/1 détaille : link-local, globale, groupes multicast, et surtout l'état du RA. show ipv6 route affiche la table (C pour connectés). Le ping IPv6 : ping 2001:db8:10::2 sous IOS, ping -6 sous Windows, ping6 sous Linux." },
+                        { h: "Les pannes typiques", t: "Hôte avec fe80:: mais pas de globale : RA absent (ipv6 unicast-routing oublié sur le routeur, ou mauvaise interface). Ping link-local OK mais globale KO : routage non activé ou préfixe différent des deux côtés. Adresse valide mais pas de DNS : en SLAAC pur, les DNS viennent des options RDNSS du RA — selon les hôtes, il faut un DHCPv6 stateless pour les distribuer." }
+                    ]}
+                ],
+                guiSteps: [
+                    { title: "Observer les adresses IPv6 de son poste", action: "Sur votre poste (Windows : ipconfig ; Linux : ip a), repérez les adresses IPv6 de votre carte : une fe80:: (link-local) et probablement une 2xxx:: globale (si votre box distribue de l'IPv6).", observation: "Notez la globale : si elle change à chaque reconnexion, votre OS utilise les privacy extensions (identifiant aléatoire rotatif) — c'est voulu, pas une panne. La fe80:: est stable, dérivée de la MAC ou d'un identifiant aléatoire d'interface." },
+                    { title: "Configurer un routeur IPv6 dans Packet Tracer", action: "Sur R1 : ipv6 unicast-routing (global), puis interface G0/0 : ipv6 address 2001:db8:10::1/64, no shutdown. Sur un PC connecté : Configuration d'adresse IPv6 en automatique (SLAAC).", observation: "Le PC obtient en quelques secondes une adresse 2001:db8:10::xxxx/64 — construite à partir du RA du routeur. Sans ipv6 unicast-routing, le PC ne recevrait RIEN : testez en le retirant pour voir la panne." },
+                    { title: "Vérifier l'attribution et pinguer en IPv6", action: "Sur R1 : show ipv6 interface brief — l'interface affiche sa globale et sa link-local. Depuis le PC : ping 2001:db8:10::1.", observation: "Le ping IPv6 répond : le SLAAC a fonctionné de bout en bout. Notez que le PC a aussi des adresses ff02:: (multicast) : tous les nœuds écoutent ff02::1, les routeurs ff02::2." },
+                    { title: "Tester l'EUI-64 manuellement", action: "Sur R1, configurez ipv6 address 2001:db8:20::/64 eui-64 sur G0/1, puis show ipv6 interface g0/1. Relevez la MAC de l'interface (show interfaces g0/1).", observation: "L'adresse affichée se termine par l'identifiant EUI-64 dérivé de la MAC (FFFE au milieu, 7e bit inversé). Vérifiez le calcul à la main : c'est l'exercice-type de l'examen." }
+                ],
+                deepDive: [
+                    { t: "EUI-64 calculé pas à pas", p: [
+                        "MAC de départ : 00:1A:2B:3C:4D:5E (48 bits).",
+                        "Coupe en deux après 24 bits : 00:1A:2B | 3C:4D:5E.",
+                        "Insère FFFE au milieu : 00:1A:2B:FF:FE:3C:4D:5E (64 bits).",
+                        "Inverse le 7e bit du premier octet (0x00 → 0x02) : 02:1A:2B:FF:FE:3C:4D:5E.",
+                        "Collé au préfixe 2001:db8:1::/64 : 2001:db8:1::021A:2BFF:FE3C:4D:5E."
+                    ],
+                    box: 'remember', boxText: "À retenir : insérer FFFE entre les deux moitiés de la MAC, inverser le bit U/L (7e bit du premier octet). Un identifiant qui contient ff:fe au milieu révèle un EUI-64 ; le bit U/L inversé fait passer le premier octet de pair à impair (00→02, 0A→08)." },
+                    { t: "Choisir le mode d'attribution", p: [
+                        "SLAAC pur : aucun serveur, l'hôte se débrouille avec les RA — le mode standard d'Internet IPv6, mais les DNS dépendent des options RDNSS (support inégal selon les OS anciens).",
+                        "SLAAC + DHCPv6 stateless (O-flag) : adresses en SLAAC, options (DNS) par DHCPv6 — le compromèse courant en entreprise.",
+                        "DHCPv6 stateful (M-flag) : le serveur attribue adresses ET options — contrôle total (journaux, réservations), au prix de la dépendance au serveur.",
+                        "Le choix se déclare CÔTÉ ROUTEUR dans les RA : ipv6 nd managed-config-flag ou ipv6 nd other-config-flag."
+                    ],
+                    cmd: [
+                        "interface GigabitEthernet0/0",
+                        " ipv6 nd other-config-flag    ! SLAAC + options DHCPv6",
+                        "show ipv6 interface GigabitEthernet0/0 | include RA|flags"
+                    ],
+                    box: 'admin', boxText: "Conseil d'administrateur : en entreprise, SLAAC + DHCPv6 stateless donne le meilleur des deux mondes — autoconfiguration robuste, DNS et traçabilité centralisés. Ne forcez le stateful que si vous devez réserver des adresses à des hôtes." },
+                    { t: "Cas d'entreprise — le réseau « sans adresse globale »", p: [
+                        "Situation : un labo IPv6 : les PC ont des fe80:: mais aucune 2001:db8:xx:: — impossible de pinguer au-delà du lien.",
+                        "Diagnostic : show ipv6 interface brief sur R1 montre la globale correcte du routeur. Le détail : ipv6 unicast-routing n'a jamais été activé — le routeur ne route pas et n'émet AUCUN Router Advertisement.",
+                        "Action : ipv6 unicast-routing, quelques secondes plus tard les RA partent, les PC construisent leurs globales, les pings passent. La panne la plus fréquente des labos IPv6 tient en une ligne de config oubliée."
+                    ],
+                    box: 'case', boxText: "Un hôte avec link-local mais sans globale = il n'a reçu aucun préfixe par RA. Les causes dans l'ordre : ipv6 unicast-routing absent, mauvaise interface, préfixe en /non-64 qui brise le SLAAC." }
+                ],
+                exercices: [
+                    { enonce: "Abrégez 2001:0db8:0000:0000:00a1:0000:0000:0001 et vérifiez que le résultat est unique. Puis dérivez l'identifiant EUI-64 de la MAC 00:1B:44:11:3A:B7.", correction: "Abridé : les zéros de tête tombent (0db8→db8, 00a1→a1), puis la plus longue série de groupes nuls (les positions 3-4 et 6-8 — on prend la première, la plus longue : positions 3,4 et 6,7,8 forment deux séries ; les groupes 3 et 4 (0000:0000) et les groupes 6,7,8 (0000:0000:0001 — non, le groupe 8 vaut 0001)... : les groupes nuls sont 3,4,6,7 (le 8 vaut 1) — deux séries égales de longueur 2 et 2 ; on remplace la première par :: → 2001:db8::a1:0:0:1. ATTENTION : on ne peut remplacer qu'UNE série. EUI-64 : 00:1B:44 | 11:3A:B7 → insérer FFFE → 00:1B:44:FF:FE:11:3A:B7 → inverser bit U/L (00→02) → 02:1B:44:FF:FE:11:3A:B7." }
+                ],
+                resume: "IPv6 adresse en 128 bits (8 hextets, :: une seule fois), avec des types tranchés : globale 2000::/3, link-local fe80::, ULA fd00::, multicast ff02:: — plus de broadcast. Le /64 est la règle des LAN ; SLAAC construit les adresses depuis les RA du routeur (ipv6 unicast-routing obligatoire), EUI-64 dérive l'identifiant de la MAC (FFFE + bit inversé), DHCPv6 stateless/stateless complète les options. Dépannage : link-local sans globale = RA absent.",
+                suite: "Le sujet 1.5 plonge dans le sans fil ; le 1.6 systématise le dépannage de connectivité côté client.",
+                evaluation: [
+                    { q: "Combien de fois le symbole :: peut-il apparaître dans une adresse IPv6 ?", options: [ "Une fois par moitié", "Une seule fois", "Autant qu'on veut", "Deux fois" ], answer: 1, exp: "Correct : une seule occurrence — deux rendraient le nombre de groupes omis ambigu, l'adresse serait invalide." },
+                    { q: "Une adresse fe80:: est :", options: [ "Routable sur Internet", "Locale au lien uniquement", "Une ULA", "Du multicast" ], answer: 1, exp: "Correct : link-local, valable sur le lien direct — OSPFv3 et NDP s'en servent, aucun routeur ne la transmet." },
+                    { q: "La longueur de préfixe standard d'un LAN IPv6 est :", options: [ "/48", "/64", "/96", "/128" ], answer: 1, exp: "Correct : /64 partout — SLAAC et EUI-64 supposent 64 bits de préfixe + 64 bits d'interface. Un /63 ou /65 brise l'autoconfiguration." },
+                    { q: "Dans EUI-64, qu'insère-t-on au milieu de la MAC ?", options: [ "FFFF", "FFFE", "0:0:0", "FE80" ], answer: 1, exp: "Correct : FFFE passe la MAC de 48 à 64 bits, puis le 7e bit du premier octet s'inverse (bit U/L)." },
+                    { q: "Des hôtes ont des fe80:: mais aucune adresse globale. Première cause à vérifier :", options: [ "Le pare-feu IPv6", "ipv6 unicast-routing sur le routeur (RA jamais émis)", "Le DNS", "Le VLAN" ], answer: 1, exp: "Correct : sans routage activé, le routeur Cisco n'émet aucun Router Advertisement — aucun hôte ne peut construire d'adresse globale." },
+                    { q: "ff02::2 désigne :", options: [ "Tous les hôtes du lien", "Tous les routeurs du lien", "Tous les serveurs OSPF", "L'adresse de diffusion" ], answer: 1, exp: "Correct : ff02::1 = tous les nœuds, ff02::2 = tous les routeurs, ff02::5 = OSPFv3. IPv6 n'a pas de broadcast : du multicast ciblé." }
+                ]
             },
             {
                 id: 'ccna-v2-1-5',
@@ -406,44 +542,88 @@
                 certif: 'CCNA',
                 parcours: 'CCNA',
                 code: '1.7',
-                title: 'Depanner DHCPv4 : client, serveur et relais',
-                statut: 'brouillon à relire',
-                why: "DHCP attribue les adresses automatiquement. Un relais mal configure prive tout un sous-reseau d'adresse, alors que le serveur fonctionne.",
-                keyIdeas: [
-                    "Le processus DORA : Discover, Offer, Request, Acknowledge.",
-                    "Les requetes DHCP sont des broadcasts ; un relais (ip helper-address) les transmet au serveur sur un autre sous-reseau.",
-                    "Un pool epuise empeche l'attribution de nouvelles adresses.",
-                    "Les exclusions evitent d'attribuer des adresses deja statiques."
-                ],
-                schemaType: 'sequence-dora-dhcp',
-                guiProcedure: "Sur le routeur, configurer le pool, les exclusions, puis ip helper-address sur l'interface du sous-reseau client.",
-                cliProcedure: [
-                    { cmd: "ip dhcp excluded-address 192.168.10.1 192.168.10.10", desc: "reserve les premieres adresses a l'usage statique" },
-                    { cmd: "ip dhcp pool LAN10", desc: "cree un pool d'adresses nomme" },
-                    { cmd: "ip helper-address 192.168.20.5", desc: "relaie les requetes DHCP vers le serveur" },
-                    { cmd: "show ip dhcp binding", desc: "affiche les baux attribues" },
-                    { cmd: "show ip dhcp pool", desc: "affiche l'utilisation du pool" }
-                ],
-                verification: { cmd: "show ip dhcp binding", expected: "Une entree par client avec adresse, MAC et echeance du bail" },
-                pitfalls: [
-                    "Oublier le relais : le client reste en 169.254.x.x.",
-                    "Ne pas exclure la passerelle : conflit d'adresse."
-                ],
-                vocab: [
-                    { en: "lease", fr: "bail" },
-                    { en: "relay agent", fr: "agent relais" },
-                    { en: "address pool", fr: "pool d'adresses" },
-                    { en: "excluded address", fr: "adresse exclue" }
-                ],
+                title: "DHCPv4 : le bail, le relais et le pool — fonctionnement complet",
                 niveau: 'Intermédiaire',
-                prerequis: "Le sujet 1.3 (notion de sous-réseau) et idéalement 1.6 (l'adresse 169.254.x.x) ; aucune expérience DHCP nécessaire.",
+                prerequis: "Le sujet 1.3 (sous-réseaux, passerelle) est indispensable : un pool DHCP correspond toujours à un sous-réseau précis. Le 1.6 aide à reconnaître l'échec DHCP (adresse APIPA).",
                 objectifs: [
-                    "Réciter et expliquer la séquence DORA (Discover, Offer, Request, Acknowledge)",
-                    "Identifier l'utilité d'un relais DHCP ('ip helper-address') et quand le mettre en place",
-                    "Reconnaître un pool épuisé ou l'absence d'exclusions face à un client sans bail",
-                    "Vérifier les baux attribués avec 'show ip dhcp binding'"
+                    "Dérouler la séquence DORA (Discover, Offer, Request, Acknowledge) trame par trame",
+                    "Configurer un pool IOS complet : exclusions, passerelle, DNS, domaine, bail",
+                    "Expliquer le relais DHCP (ip helper-address) et pourquoi les broadcasts ne franchissent pas un routeur",
+                    "Choisir une durée de bail selon la population du réseau (visiteurs vs postes fixes)",
+                    "Diagnostiquer : APIPA, pool épuisé, relais absent, conflit d'adresses, serveur non autorisé"
                 ],
-                links: { qcmId: 131, labId: 'lab-1', cheatSheetCat: 'Services IP' }
+                lessons: [
+                    { title: "Leçon 1 — DORA : le bail pas à pas", parts: [
+                        { h: "Pourquoi DHCP", t: "Configurer chaque poste à la main (IP, masque, passerelle, DNS) est ingérable à l'échelle d'un parc. DHCP automatise l'attribution avec un bail (lease) : une adresse prêtée pour une durée définie, renouvelée à mi-vie (T1, 50 %) et rebindée à 87,5 % (T2). À l'expiration sans renouvellement, l'adresse retourne au pool." },
+                        { h: "Les quatre messages", t: "Discover : le client émet en broadcast (src 0.0.0.0, dst 255.255.255.255) — « y a-t-il un serveur DHCP ? ». Offer : le(s) serveur(s) proposent une adresse (réservée brièvement). Request : le client BROADCAST son choix — il remercie publiquement le serveur retenu (et informe les autres serveurs qui avaient offert). Acknowledge : le serveur confirme avec les options (masque, passerelle, DNS, bail). Le broadcast du Request est une subtilité d'examen : le client n'a pas encore d'IP confirmée, il ne peut pas unicast." },
+                        { h: "DHCPDISCOVER et le flag broadcast", t: "Certains clients ne peuvent pas recevoir d'unicast avant d'être configurés (pare-feu local) : le flag broadcast de DHCP force le serveur à répondre en 255.255.255.255. En capture Wireshark (bootp/dhcp), la séquence DORA se lit directement — un diagnostic DHCP se fait en 30 secondes de capture : Discover sans Offer = serveur/relais absent ; Offer sans Ack = conflit d'adresse détecté." }
+                    ]},
+                    { title: "Leçon 2 — Le pool sur un routeur Cisco", parts: [
+                        { h: "La configuration type", t: "ip dhcp excluded-address 192.168.10.1 192.168.10.10 réserve les premières adresses aux équipements d'infrastructure. ip dhcp pool LAN10 crée le pool : network 192.168.10.0 255.255.255.0, default-router 192.168.10.1, dns-server 10.1.1.10 10.1.1.11, domain-name lab.lan, lease 8. Un pool = un sous-réseau : les options (passerelle, DNS) ne doivent jamais mélanger des adresses d'un autre bloc." },
+                        { h: "Les exclusions, une discipline", t: "Toute adresse statique du sous-réseau (serveurs, imprimantes, passerelles, équipements réseau) doit être exclue du pool — sinon le serveur peut la prêter et créer un conflit d'adresse (deux MAC, une IP : connexions qui tombent aléatoirement). Le réflexe : à chaque réservation statique, on l'ajoute aux exclusions dans la foulée." },
+                        { h: "Le bail, une décision de dimensionnement", t: "Bail court (1-6 h) : parfaits pour les visiteurs et les réseaux denses à forte rotation — le pool se recycle vite. Bail long (2-8 jours) : postes fixes d'entreprise — moins de trafic de renouvellement. L'erreur classique : bail de 8 jours sur un réseau d'invités : le pool se sature avec les adresses des visiteurs partis (voir la fiche « pool épuisé » du centre de dépannage)." }
+                    ]},
+                    { title: "Leçon 3 — Le relais : franchir le routeur", parts: [
+                        { h: "Le problème du broadcast", t: "Le Discover est un broadcast : par définition, un routeur ne le transmet PAS. Un serveur DHCP centralisé derrière un routeur ne voit donc jamais les clients des autres sous-réseaux — sauf si l'interface du routeur relaie : ip helper-address 10.1.1.10 sur l'interface du réseau client. Le routeur transforme le broadcast en unicast vers le serveur (source : lui-même), et relaie la réponse." },
+                        { h: "La magie du giaddr", t: "Dans le Discover relayé, le routeur inscrit son adresse d'interface (giaddr, gateway IP address) : le serveur DHCP lit ce champ pour choisir le BON pool. Sans giaddr, le serveur ne saurait pas quel sous-réseau servir. C'est aussi pour cela qu'un serveur unique sert des dizaines de sous-réseaux : un pool par giaddr possible." },
+                        { h: "Helper et autres protocoles", t: "ip helper-address relaie DHCP mais aussi par défaut quelques autres UDP : TFTP, DNS, NetBIOS, NTP... La liste se restreint avec no ip forward-protocol udp <port>. En pratique, un helper par interface cliente vers le serveur DHCP (et éventuellement le serveur TFTP pour le provisioning téléphonique)." }
+                    ]},
+                    { title: "Leçon 4 — Vérifier et dépanner", parts: [
+                        { h: "Les commandes de vérité", t: "show ip dhcp binding : les baux attribués (adresse, MAC, expiration). show ip dhcp pool : l'état du pool (utilisé, libre, le prochain à attribuer). show ip dhcp conflict : les conflits détectés (ping de vérification par le serveur). debug ip dhcp server events trace les allocations en temps réel." },
+                        { h: "L'APIPA raconte l'échec", t: "Un client en 169.254.x.x a émis Discover et n'a rien reçu : soit le serveur est down/saturé, soit le relais manque, soit le port est dans le mauvais VLAN. La démarche complète est fiche « DHCP — postes en 169.254.x.x » du centre de dépannage : segment seul ou étage entier ? port/VLAN ? serveur ? relais ?" },
+                        { h: "Serveur Windows : l'autorisation", t: "Un serveur DHCP Windows refuse de distribuer s'il n'est pas autorisé dans l'AD (protection contre les serveurs pirates qui casseraient un réseau). Symptôme : le service tourne, aucun bail n'est émis. Vérification : console DHCP, flèche rouge sur le serveur = non autorisé → Autoriser avec les droits d'admin du domaine." }
+                    ]}
+                ],
+                guiSteps: [
+                    { title: "Configurer le pool sur un routeur IOS", action: "Sur R1 : ip dhcp excluded-address 192.168.10.1 192.168.10.10, puis ip dhcp pool LAN10 ; network 192.168.10.0 255.255.255.0 ; default-router 192.168.10.1 ; dns-server 10.1.1.10 ; lease 8.", observation: "show ip dhcp pool affiche le pool LAN10, sa plage, 0 baux utilisés. La ligne 'Next address to allocate' montre la première adresse distribuée — après l'exclusion, elle doit démarrer à .11." },
+                    { title: "Observer DORA en direct", action: "Dans Packet Tracer, passez en mode Simulation (filtre DHCP/BOOTP). Sur PC1 en IP automatique, cliquez renouveler/obtenir.", observation: "La chronologie affiche Discover (broadcast) → Offer (serveur → client) → Request (broadcast du client) → ACK. Le broadcast des messages 1 et 3 se voit dans la colonne destination : 255.255.255.255. C'est DORA rendu visible." },
+                    { title: "Relayer vers un serveur distant", action: "Déplacez le serveur DHCP sur un autre sous-réseau (10.1.1.0/24). Sur R1, interface G0/0 du réseau client : ip helper-address 10.1.1.50. Le PC reprend une IP.", observation: "Sans helper, le PC reste en APIPA (Discover mort au niveau du routeur). Avec le helper, le Discover devient unicast vers 10.1.1.50, le giaddr (10.1.1.1 ou l'IP de l'interface) indique au serveur quel pool servir. Enlevez le helper pour voir revenir l'APIPA : la panne et sa cause en un geste." },
+                    { title: "Vérifier les baux et tester un conflit", action: "Sur R1 : show ip dhcp binding (les baux avec MAC et expiration), show ip dhcp conflict. Configurez ensuite une IP statique .11 sur un poste alors que le pool la distribue.", observation: "Le conflit apparaît dans show ip dhcp conflict après la détection (ping du serveur) : le serveur marque l'adresse et en distribue une autre. C'est la démonstration de pourquoi les adresses statiques doivent être exclues du pool." }
+                ],
+                deepDive: [
+                    { t: "DORA trame par trame (vue Wireshark)", p: [
+                        "Discover : src 0.0.0.0:68 → dst 255.255.255.255:67 (UDP). Le client n'a encore AUCUNE adresse.",
+                        "Offer : serveur → client (unicast ou broadcast selon le flag) : adresse proposée, options, temps de bail.",
+                        "Request : le client renvoie en BROADCAST son choix — il remercie le serveur élu et désiste les autres offres simultanées.",
+                        "Ack : confirmation finale avec toutes les options. Le client configure son IP ; l'entrée passe en bail actif (show ip dhcp binding).",
+                        "En capture : deux Offers (deux serveurs) puis un seul Ack signent un environnement multi-serveurs — fréquent en entreprise pour la redondance."
+                    ],
+                    cmd: [
+                        "show ip dhcp binding",
+                        "show ip dhcp pool",
+                        "show ip dhcp conflict",
+                        "debug ip dhcp server events   # desactiver ensuite : undebug all"
+                    ],
+                    box: 'remember', boxText: "À retenir : Discover et Request sont en broadcast ; l'Offer réserve l'adresse ; le renouvellement se fait à 50 % du bail (T1) en unicast direct au serveur ; à 87,5 % (T2), le client rebind en broadcast vers n'importe quel serveur." },
+                    { t: "Dimensionner pools et exclusions : la checklist", p: [
+                        "Inventaire des statiques du sous-réseau (passerelles, serveurs, imprimantes, équipements réseau) → plage d'exclusion dédiée, ex : .1 à .20.",
+                        "Population réelle + croissance : un /24 (253 utiles) pour 180 postes n'a plus de marge — prévoir dès 70 % d'occupation.",
+                        "Durée de bail par population : visiteurs 2-6 h, collaborateurs 2-8 jours, téléphones 1-3 jours (rotation en cas de remplacement).",
+                        "Redondance : deux serveurs avec des plages disjointes (ex : serveur A = .21-.140, serveur B = .141-.250) — aucun des deux ne peut prêter l'adresse de l'autre."
+                    ],
+                    box: 'admin', boxText: "Conseil d'administrateur : documentez chaque étendue comme un tableau à quatre colonnes (sous-réseau, plage du pool, exclusions, bail). Le jour où 'plus personne n'a d'adresse', ce tableau tranche en 2 minutes entre saturation, exclusion accidentelle et relais cassé." },
+                    { t: "Cas d'entreprise — la lenteur de 9h un lundi", p: [
+                        "Situation : lundi 9h, 40 tickets 'lent' à la connexion. Les postes finissent par obtenir une adresse mais après 30-60 s d'attente, et le Wi-Fi en est le plus affecté.",
+                        "Diagnostic : l'attente se produit sur les postes qui changent de segment (Wi-Fi ↔ filaire) : leur bail du réseau précédent est encore vivant côté serveur, le Discover parcourt, le serveur répond, mais le client refuse les offres hors de son sous-réseau d'origine (phase de rebind) avant d'accepter. La capture montre plusieurs Discover/Offer avant le Request.",
+                        "Action : raccourcir le bail des populations mobiles (8 jours → 4 h) et activer le 'release on logout' du client si pertinent. Lundi suivant : plus rien.",
+                        "Leçon : le bail n'est pas un paramètre par défaut à laisser : c'est un choix de conception qui conditionne l'expérience des populations nomades."
+                    ],
+                    box: 'case', boxText: "Une connexion lente du lundi matin sur les postes mobiles est souvent un problème de BAIL, pas de bande passante : le client s'accroche à son ancien bail avant d'accepter le nouveau. Raccourcir les baux des nomades règle en général la moitié des tickets 'Wi-Fi lent'." }
+                ],
+                exercices: [
+                    { enonce: "Un client émet des Discover qu'un sniffer placé sur son segment voit, mais aucune réponse n'arrive. Le serveur DHCP (Windows, 10.1.1.50) est sur un autre sous-réseau, up et jouable au ping depuis le routeur client. Diagnostic et correction.", correction: "Le Discover est un broadcast : le routeur ne l'a pas transmis (pas de relais configuré), donc le serveur ne l'a jamais vu — le ping du serveur depuis le routeur ne prouve rien pour DHCP. Correction : sur l'interface du routeur côté client, ip helper-address 10.1.1.50. Le routeur relaie alors le Discover en unicast avec son giaddr (l'IP de l'interface cliente) : le serveur choisit le pool du sous-réseau client et la réponse revient relayée. Vérification : le client obtient son bail, show ip dhcp binding côté serveur liste l'entrée." },
+                    { enonce: "Un réseau invités /24 a 253 adresses, bail 8 jours. Chaque salon hebdomadaire amène 60 visiteurs avec 2 appareils connectés (téléphone + PC). Après quelques semaines, les nouveaux arrivants restent en APIPA. Expliquez et proposez deux corrections, l'une immédiate, l'autre structurelle.", correction: "Chaque semaine, 120 bails de 8 jours s'empilent : au bout de 2-3 semaines, les 253 adresses sont toutes 'prises' par des visiteurs partis depuis longtemps — le serveur n'a plus rien à offrir, nouveaux arrivants en APIPA. Immédiate : purger les baux actifs à l'issue du salon (Remove-DhcpServerv4Lease / clear des baux sur l'étendue invités). Structurelle : réduire le bail de l'étendue invités à 2-4 h — les adresses se recyclent naturellement dans la journée ; 253 adresses avec rotation rapide suffisent largement à 120 visiteurs simultanés." }
+                ],
+                resume: "DHCP attribue des baux par DORA : Discover et Request en broadcast, Offer et Ack par le serveur. Un pool = un sous-réseau, avec exclusions de toutes les adresses statiques et un bail dimensionné à la population. Le relais (ip helper-address + giaddr) transporte les broadcasts vers un serveur centralisé. Vérités : show ip dhcp binding/pool/conflict ; l'APIPA signale un Discover resté sans réponse.",
+                suite: "Les fiches suivantes (2.1 et suivantes) appliquent ces bases aux VLAN et à la commutation.",
+                evaluation: [
+                    { q: "Dans DORA, quels messages partent du client en BROADCAST ?", options: [ "Discover et Ack", "Discover et Request", "Offer et Request", "Aucun : tout est unicast" ], answer: 1, exp: "Correct : le client n'a pas d'adresse confirmée avant l'Ack — ses Discover et Request partent en 255.255.255.255." },
+                    { q: "Le rôle du giaddr dans un Discover relayé est :", options: [ "Chiffrer l'échange", "Indiquer au serveur quel pool (sous-réseau) servir", "Fixer le bail", "Attribuer le DNS" ], answer: 1, exp: "Correct : le relais y inscrit l'IP de son interface cliente ; le serveur choisit l'étendue correspondante. Sans giaddr, serveur aveugle." },
+                    { q: "ip helper-address se configure :", options: [ "En global sur le serveur", "Sur l'interface du routeur côté réseau client", "Sur le poste client", "Sur le switch d'accès" ], answer: 1, exp: "Correct : c'est l'interface qui reçoit les broadcasts clients qui doit les relayer en unicast vers le serveur." },
+                    { q: "Un bail de 8 jours sur un réseau d'invités provoque à terme :", options: [ "Rien de particulier", "La saturation du pool par des baux de visiteurs partis", "Des conflits MAC", "La coupure du DNS" ], answer: 1, exp: "Correct : les adresses restent réservées des jours après le départ — bail court (2-4 h) pour les populations tournantes." },
+                    { q: "Un serveur DHCP Windows affiche une flèche rouge et ne distribue rien. Cause :", options: [ "Pool épuisé", "Serveur non autorisé dans l'Active Directory", "Relais absent", "Bail expiré" ], answer: 1, exp: "Correct : l'autorisation AD est la protection anti-serveur pirate — sans elle, le service tourne mais n'émet aucun bail." },
+                    { q: "Le renouvellement de bail à mi-durée (T1) se fait :", options: [ "En broadcast vers tous les serveurs", "En unicast direct au serveur d'origine", "Par le routeur", "Uniquement après expiration" ], answer: 1, exp: "Correct : à 50 % du bail, le client unicast directement son serveur ; seulement à 87,5 % (T2), faute de réponse, il rebind en broadcast." }
+                ]
             },
             {
                 id: 'ccna-v2-2-1',
