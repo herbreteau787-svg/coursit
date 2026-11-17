@@ -28,6 +28,7 @@ Plateforme de révision + apprentissage TSSR (CP1-CP9), AIS (CP1-CP10) et CCNA 2
 - `TSSR_COURSES` CP1-CP9 et `AIS_COURSES` CP1-CP10 : format leçon, guiSteps/deepDive variables.
 - `DEPANNAGE_DATA` : 30 fiches, 6 cats. `SCRIPTS_LIB` : 29 scripts (os win/lin, type PowerShell/Batch/Bash, freq ordre, description/usage/code/sortie/niveau). Ancien `SCRIPTS_DATA` supprimé.
 - **Les Indispensables** : `PORTS_DATA` 36, `ESSENTIALS_COMMANDS` (os/cat/items{c,d}), `PRIVATE_RANGES`, `HTTP_CODES` 12, `TOOLS_DATA` 15, `PS_TIPS`/`LIN_TIPS` 10 chacun. États : essTab/essPortSearch/essPortProto/essPortFavs/essOs/essCat/portQuiz/scriptsOs/scriptsSearch.
+- **Onglet Images** (`images`) : `IMG_POOL` = 5 noms de fichiers du dossier Images/ (hardcodés — rescan manuel si ajout). Test instantané via CSS var `--site-bg-image` ; bannière via état `imgBanner` (localStorage `site_banner_img`, `site_bg_img`) ; notation localStorage `img_ratings` (critères IMG_CRITERIA, helper `critsAvg`) ; recommandation calculée par `recommendation(meta)` (luminance canvas + ratio). Méta chargées en useEffect au démarrage (imgMeta).
 - Labs : `LABS_DATA` (~23), CCNA labs lab-ccna-01..N. QCM : `QCM_DATA` (180 : 61 historiques + 25 CCNA 2.1-4.2 ids 141-165 + 119 réinjectées ids 300+, cp = nom de domaine D1-D14). Glossaire 177, vocab 321, commandes 223.
 
 ## Dépendances critiques
