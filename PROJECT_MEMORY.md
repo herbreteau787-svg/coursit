@@ -14,7 +14,8 @@ Plateforme de révision + apprentissage TSSR (CP1-CP9), AIS (CP1-CP10) et CCNA 2
 - Chaque cours peut avoir 2 formats ; le routeur (`selectedCourse.lessons ?`) bascule :
   - Format **leçon** (rendu par `LessonCourseView`) : `lessons[{title, parts[{h,t}]}]`, `guiSteps[{title,action,observation,mockup?,cli?}]`, `deepDive[{t,p[],cmd?,box,boxText}]` (box: remember/warn/admin/case), `exercices[{enonce,correction}]`, `resume`, `suite`, `evaluation[{q,options,answer,exp}]`.
   - Format **fiche** : `why, keyIdeas, schemaType, guiProcedure, cliProcedure, verification, pitfalls, vocab, links` (links inutilisé).
-- Fiches dépannage : `DEPANNAGE_DATA` — `{id, freq(1-5), cat, parcours, titre, symptome, contexte, verifications[], outils, commandes[], diagnostic[], causes[], resolution[], prevention, casEntreprise}`.
+- Dépannage : `DEPANNAGE_DATA` — 30 fiches, 6 cats. `SCRIPTS_DATA` : 9 scripts.
+- **Préparation Examen (onglet `prep`)** : `PREP_DOMAINS` (14), `PREP_FICHES` (14), `PREP_QCM` (119, types vf/qcm/multi/config, lvl 1-4). 4 modes : fiches / entraînement (filtre domaine+niveau) / simulateur (20 Q tirées, 30 min, score+correction) / subnetting (génération aléatoire + vérification auto). États : prepMode, prepDom, prepLvl, simQueue/simAnswers/simIdx/simDone/simTime/simRunning, subStreak. Helpers : `prepHelpers.shuffle/newSubExercise`.
 - Scripts : `SCRIPTS_DATA` — `{id, cat, titre, objectif, code, explications[], resultat, risques}`.
 - Navigation locale de dépannage : état `selectedDepId` (App), liste déroulante + fiche complète ou cartes groupées par freq.
 - Français uniquement, apostrophes dans chaînes double-quoted. Attention aux apostrophes non échappées dans titres (source d'erreurs Babel).
@@ -38,8 +39,9 @@ Plateforme de révision + apprentissage TSSR (CP1-CP9), AIS (CP1-CP10) et CCNA 2
 - `.gitignore` à jour (sources + build).
 
 ## Prochaines tâches
-1. QCM : importer QCM PrepaExamTSSR (30-40Q/CP) et PrepaCertifs (ENCOR QCM modules) dans `QCM_DATA` avec corrections détaillées. (fait partiellement : CCNA 2.1-4.2 couverts)
-2. Labos : enrichir contexte entreprise + dépannage + validation depuis Labs-playground-main.
+1. Étendre `PREP_QCM` vers 200-300 questions (types dépannage/subnet explicites, drag-drop non supporté nativement en HTML — simuler par options). Ajouter un cours CCNA complet « OSI/TCP-IP + ARP » (code 1.8) et « Services réseau (DNS/HTTP/FTP/TFTP/SSH) » (code 1.9).
+2. QCM PrepaExamTSSR (30-40Q/CP) à importer dans `QCM_DATA` (fait partiellement : CCNA 2.1-4.2 couverts).
+3. Labos : enrichir contexte entreprise + dépannage + validation depuis Labs-playground-main.
 3. Convertir fiches CCNA restantes 1.2, 1.6 en format leçon.
 4. Exploiter ENCOR Notes Modules 1-5 (170 Ko) pour approfondir 1.1/2.1/2.2/3.1.
 5. Glossaire/commands : extension depuis Cheatsheets-main.

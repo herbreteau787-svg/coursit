@@ -2578,7 +2578,337 @@
             }
         ];
 
-        // --- LABOS GUIDÉS (FONC-06 / FONC-08) ---
+        // --- PRÉPARATION EXAMEN CCNA (contenu original, thèmes alignés sur ITN/SRWE/ENSA v7) ---
+        const PREP_DOMAINS = [
+            { id: 'D1', nom: 'Réseaux et Internet' },
+            { id: 'D2', nom: 'Modèles OSI et TCP/IP' },
+            { id: 'D3', nom: 'Adressage IPv4' },
+            { id: 'D4', nom: 'Adressage IPv6' },
+            { id: 'D5', nom: 'Subnetting' },
+            { id: 'D6', nom: 'Ethernet' },
+            { id: 'D7', nom: 'Commutation (Switching)' },
+            { id: 'D8', nom: 'VLAN' },
+            { id: 'D9', nom: 'Routage' },
+            { id: 'D10', nom: 'Services réseau' },
+            { id: 'D11', nom: 'Sécurité réseau' },
+            { id: 'D12', nom: 'Virtualisation' },
+            { id: 'D13', nom: 'Cloud Computing' },
+            { id: 'D14', nom: 'IoT' }
+        ];
+
+        const PREP_FICHES = [
+            { dom: 'D1', titre: "Réseaux et Internet", points: [
+                "LAN (local, un site), WAN (inter-sites), PAN, MAN. L'Internet est un réseau de réseaux : les FAI fournissent l'accès, les hébergeurs fournissent les services.",
+                "Un réseau fiable repose sur quatre piliers : tolérance aux pannes (chemins redondants + bascule automatique), évolutivité (grandir sans tout reconcevoir), qualité de service (prioriser le trafic sensible au délai : voix, vidéo), sécurité (intégrité, confidentialité, disponibilité).",
+                "Bande passante = capacité théorique du lien (Mbps) ; débit = ce que vous mesurez réellement (toujours inférieur, moins les surcharges).",
+                "Réseau P2P : partage direct entre machines, sans serveur dédié ; réseau client/serveur : services centralisés.",
+                "La passerelle par défaut = l'IP de l'interface du routeur du réseau local. Passerelle erronée : le local fonctionne, le distant échoue."
+            ], cmd: ["ipconfig /all", "ping <destination>", "tracert <destination>", "nslookup <nom>", "netstat -r   (ou route print)", "arp -a"], tableau: null, pieges: [
+                "« L'hôte ne peut pas communiquer avec les hôtes du réseau local » ≠ « avec les hôtes d'autres réseaux » : lisez LA portée exacte du symptôme.",
+                "QoS ne crée PAS de bande passante : elle priorise ce qui existe.",
+                "ping 127.0.0.1 (loopback) échoue = pile TCP/IP du poste à revoir, pas le câble."
+            ] },
+            { dom: 'D2', titre: "Modèles OSI et TCP/IP", points: [
+                "OSI : 7. Application, 6. Présentation, 5. Session, 4. Transport, 3. Réseau, 2. Liaison de données, 1. Physique.",
+                "TCP/IP : Application = OSI 7+6+5 ; Internet = OSI 3 ; Accès réseau = OSI 2+1.",
+                "Encapsulation : Données → Segment (TCP/UDP + ports) → Paquet (IP) → Trame (Ethernet + MAC + FCS) → Bits.",
+                "PDU par couche : 4 = segment ; 3 = paquet ; 2 = trame ; 1 = bits.",
+                "Couche 2 : adressage physique (MAC), accès au support (CSMA/CD), détection d'erreurs (FCS).",
+                "Couche 3 : adressage logique (IP), routage (meilleur chemin), TTL anti-boucle.",
+                "Couche 4 : segmentation, numéros de séquence, ports, contrôle de flux (fenêtre glissante), retransmission."
+            ], cmd: ["show ip interface brief", "show interfaces", "ipconfig", "netstat -an   # ports TCP/UDP ouverts"], tableau: [
+                "TCP : fiable, orienté connexion, 3-way handshake (SYN, SYN-ACK, ACK), accusés de réception, retransmission, fenêtre glissante (contrôle de flux). Usage : HTTP, FTP, SMTP.",
+                "UDP : sans connexion, pas de fiabilité, faible surcharge. Usage : DNS, DHCP, TFTP, VoIP, SNMP."
+            ], pieges: [
+                "La fenêtre glissante sert au CONTRÔLE DE FLUX (ralentir la source) ; l'accusé de réception déclenche la RETRANSMISSION ; les numéros de séquence garantissent l'ORDRE.",
+                "IP ne garantit RIEN : sans connexion, au mieux (best effort), indépendant du support.",
+                "OSI 5, 6, 7 = l'application TCP/IP — pas seulement la couche 7."
+            ] },
+            { dom: 'D3', titre: "Adressage IPv4", points: [
+                "32 bits, 4 octets. Partie réseau / partie hôte délimitées par le masque.",
+                "Privées RFC 1918 : 10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16 (non routables sur Internet).",
+                "Spéciales : 127.0.0.0/8 (loopback), 169.254.0.0/16 (APIPA = échec DHCP), 224.0.0.0/4 (multicast), 240.0.0.0/4 (expérimental), 0.0.0.0/0 (route par défaut).",
+                "Types de diffusion : unicast (1 à 1), broadcast (tous, ff:ff:ff:ff:ff:ff en MAC), multicast (1 à groupe).",
+                "Le masque doit être CONTIGU : des 1 puis des 0. 255.255.255.192 valide ; 255.255.63.0 invalide."
+            ], cmd: ["ipconfig /all", "arp -a", "netstat -r", "route print", "ping 127.0.0.1"], tableau: [
+                "Passerelle par défaut erronée → le local marche, le distant échoue.",
+                "APIPA (169.254.x.x) → le poste a émis Discover sans réponse (voir fiche Dépannage DHCP).",
+                "TTL : décrémenté de 1 par chaque routeur ; à 0 le paquet est jeté + ICMP Time Exceeded."
+            ], pieges: [
+                "ARP : la requête est une diffusion qui atteint tout le segment local (jamais au-delà du routeur).",
+                "L'adresse MAC change à CHAQUE saut entre réseaux ; l'adresse IP reste constante (sans NAT).",
+                "Une adresse expérimentale (240.x.x.x) n'est pas routable sur Internet."
+            ] },
+            { dom: 'D4', titre: "Adressage IPv6", points: [
+                "128 bits, 8 hextets de 4 chiffres hexa. Abréviations : zéros de tête supprimés ; :: remplace UNE seule série de groupes nuls (la plus longue, sinon la première).",
+                "LAN = /64 toujours. Site = /48 typiquement.",
+                "Types : globale (2000::/3, commence par 2 ou 3), link-local fe80::/10 (chaque interface, non routée), ULA fd00::/8 (privé), multicast ff02::1 (tous nœuds), ff02::2 (tous routeurs), anycast.",
+                "Plus de broadcast en IPv6 : du multicast ciblé.",
+                "SLAAC : l'hôte construit son adresse globale depuis le RA du routeur + EUI-64 ou identifiant aléatoire. Avant usage : DAD (détecter les doublons) via Neighbor Solicitation.",
+                "EUI-64 : MAC 48 bits → insérer FFFE au milieu → inverser le 7e bit du premier octet (bit U/L).",
+                "DHCPv6 : M-flag = stateful (serveur donne tout) ; O-flag = stateless (SLAAC pour l'adresse, DHCP pour les options)."
+            ], cmd: ["ipv6 unicast-routing", "ipv6 address 2001:db8:1::1/64", "ipv6 address 2001:db8:1::/64 eui-64", "show ipv6 interface brief", "ping 2001:db8:1::2"], tableau: null, pieges: [
+                "ipv6 unicast-routing oublié → le routeur n'émet AUCUN RA → les hôtes n'obtiennent AUCUN préfixe.",
+                "fe80:: sans globale = RA absent (cause la plus fréquente des labos).",
+                "EUI-64 : l'octet passe de pair à impair (0x00 → 0x02, 0x1C → 0x1E, 0xC1 → 0xC3)."
+            ] },
+            { dom: 'D5', titre: "Subnetting", points: [
+                "Taille du bloc = 2^(32 - préfixe). Utilisables = bloc - 2. Pas entre blocs = taille.",
+                "Puissances : /25=128, /26=64, /27=32, /28=16, /29=8, /30=4, /31=2, /32=1.",
+                "Hôtes nécessaires H → bits d'hôte N tels que 2^N - 2 ≥ H. 4 hôtes → /29 ; 10 → /28 ; 50 → /26 ; 100 → /25.",
+                "Même masque partout : prendre le masque du PLUS GRAND besoin.",
+                "VLSM : allouer du plus grand au plus petit, blocs alignés. Agrégation : regrouper des blocs alignés en préfixe plus court."
+            ], cmd: ["ipconfig", "show ip interface brief", "ipconfig /all | findstr Subnet"], tableau: [
+                "/24 : 256 adr. — /25 : 128 — /26 : 64 — /27 : 32 — /28 : 16 — /29 : 8 — /30 : 4 (2 utiles, liens point-à-point)."
+            ], pieges: [
+                "192.168.10.128/26 diffuse en .191 (PAS .255).",
+                "Adresse réseau et diffusion ne sont PAS attribuables.",
+                "Passerelle toujours dans le bloc de l'hôte.",
+                "4 hôtes → /29 (8 adresses, 6 utiles) : le /30 (2 utiles) ne suffit plus quand il faut 4 hôtes."
+            ] },
+            { dom: 'D6', titre: "Ethernet", points: [
+                "Trame : Préambule | MAC destination | MAC source | Type | Données | FCS.",
+                "MAC 48 bits : 24 bits OUI (constructeur) + 24 bits d'interface.",
+                "FCS (CRC) : détecte la corruption (interférence, distorsion) → trame jetée.",
+                "Half-duplex : CSMA/CD (écouter, émettre, détecter collision, backoff aléatoire). Full-duplex : plus de collisions, CSMA/CD désactivé.",
+                "Cuivre UTP : 100 m max, paires torsadées contre la diaphonie, dégradé par EMI/RFI et mauvaise terminaison. Fibre : distance + immunité aux interférences.",
+                "Atténuation : perte de puissance du signal avec la distance."
+            ], cmd: ["show interfaces", "show interfaces status", "arp -a", "arp -d *"], tableau: null, pieges: [
+                "La requête ARP est une diffusion : TOUS les hôtes du segment la traitent (CPU) et le switch l'inonde sur tous les ports.",
+                "Auto-MDIX : plus besoin de câble croisé sur du matériel moderne.",
+                "Le champ Type indique le protocole couche 3 encapsulé (0x0800 IPv4, 0x86DD IPv6)."
+            ] },
+            { dom: 'D7', titre: "Commutation (Switching)", points: [
+                "Apprentissage : le switch lit la MAC SOURCE des trames entrantes pour remplir sa table (show mac address-table).",
+                "Inconnue/broadcast/multicast : inondation sur tous les ports du VLAN (sauf l'entrant).",
+                "Store-and-forward : trame entière reçue + CRC vérifié avant retransmission ; cut-through : retransmission dès la destination lue (latence faible, trames corrompues possibles).",
+                "Un switch casse le domaine de collision par port ; un VLAN casse le domaine de diffusion.",
+                "Switch géré : IP d'interface VLAN 1 + ip default-gateway pour la gestion à distance.",
+                "Port en err-disabled : protection (port-security, BPDU guard...) → voir fiche Dépannage."
+            ], cmd: ["show mac address-table", "show interfaces status", "show ip interface brief", "ip default-gateway 192.168.1.1", "show version"], tableau: null, pieges: [
+                "Un switch n'agit QUE en couche 2 : sans IP d'interface ni passerelle, il n'est pas gérable à distance.",
+                "La table MAC s'oscille (même MAC sur plusieurs ports) = boucle de couche 2.",
+                "Vérifier la bannière : exit depuis le mode privilégié (pas de reboot !)."
+            ] },
+            { dom: 'D8', titre: "VLAN", points: [
+                "Un VLAN = un domaine de diffusion = (convention) un sous-réseau IP.",
+                "Port d'accès : un seul VLAN. Trunk 802.1Q : tous les VLAN, tag 4 octets.",
+                "VLAN natif : circule NON tagué sur le trunk — identique des deux côtés, ≠ VLAN 1.",
+                "Routage inter-VLAN : router-on-a-stick (sous-interfaces dot1Q) ou SVI sur switch L3 (interface vlan X + ip routing).",
+                "VLAN voix (voice vlan) : téléphone + PC sur un même port, deux VLAN.",
+                "VLAN 1 : défaut, à ne pas utiliser en production."
+            ], cmd: ["vlan 10", "name RH", "switchport mode access", "switchport access vlan 10", "switchport mode trunk", "switchport trunk allowed vlan 10,20", "show vlan brief", "show interfaces trunk"], tableau: null, pieges: [
+                "VLAN absent d'un switch du chemin : trames taguées perdues SILENCIEUSEMENT.",
+                "Trunk d'un seul côté (DTP) : modes explicites + nonegotiate.",
+                "Deux PC de VLAN différents sur le même switch ne communiquent pas sans couche 3."
+            ] },
+            { dom: 'D9', titre: "Routage", points: [
+                "Table de routage : C (connecté), L (local), S (statique), O (OSPF), D (EIGRP), R (RIP).",
+                "Distance administrative (qui croire) : connecté 0, statique 1, eBGP 20, EIGRP 90, OSPF 110, RIP 120.",
+                "Route par défaut : 0.0.0.0 0.0.0.0 <next-hop>.",
+                "Chaque saut : l'IP reste constante, l'adresse MAC est réécrite (nouvelle trame par saut).",
+                "TTL : décrémenté à chaque saut ; 0 → ICMP Time Exceeded (bloque les paquets sans fin).",
+                "OSPF : link-state, LSDB identique par zone, SPF/Dijkstra, métrique = coût, multicast 224.0.0.5."
+            ], cmd: ["show ip route", "ip route 192.168.30.0 255.255.255.0 10.0.12.2", "ip route 0.0.0.0 0.0.0.0 203.0.113.1", "router ospf 1", "show ip ospf neighbor"], tableau: null, pieges: [
+                "Une route statique (AD 1) écrase la même destination en OSPF (AD 110).",
+                "Routage aller sans retour : vérifier des DEUX côtés.",
+                "route print / netstat -r = table de routage d'un hôte Windows."
+            ] },
+            { dom: 'D10', titre: "Services réseau", points: [
+                "DNS : traduit noms → IP. Enregistrements : A (IPv4), AAAA (IPv6), MX (mail), NS (serveur de noms), CNAME (alias).",
+                "DHCP : DORA (Discover, Offer, Request, Ack). Relayé par ip helper-address.",
+                "HTTP (80) vs HTTPS (443, chiffré TLS). DNS (53 UDP/TCP). DHCP (67/68).",
+                "FTP : 21 (contrôle) + 20 (données), TCP, avec authentification. TFTP : 69, UDP, simple, sans auth (copies de config/IOS).",
+                "SSH (22, chiffré) remplace Telnet (23, en clair). SMTP 25 (envoi), POP3 110, IMAP 143 (réception).",
+                "SSH sur un Cisco : hostname, ip domain-name, crypto key generate rsa, vty transport input ssh + utilisateur local."
+            ], cmd: ["nslookup www.example.com", "ipconfig /all", "crypto key generate rsa", "transport input ssh", "copy running-config tftp:   # sur l'IP du serveur TFTP"], tableau: [
+                "Port source du client = port éphémère (>1023) ; port destination = port du service (ex : 443). Le port source du client devient destination du retour."
+            ], pieges: [
+                "Ping IP OK + nom KO = DNS (nslookup pour confirmer).",
+                "Port 69 = TFTP (pas FTP !).",
+                "HTTPS chiffre le WEB ; l'accès distant chiffré = SSH."
+            ] },
+            { dom: 'D11', titre: "Sécurité réseau", points: [
+                "Triade CIA : Confidentialité, Intégrité, Disponibilité.",
+                "Attaques : reconnaissance (découverte/vulnérabilités), accès (identifiants volés/exploits), DoS (saturer), phishing, cheval de Troie (backdoor déguisée), ver (se répète SEUL sur le réseau), ransomware.",
+                "AAA : Authentification (qui êtes-vous), Autorisation (que pouvez-vous faire), Accounting/traçabilité (qu'avez-vous fait).",
+                "Mots de passe IOS : enable secret (haché) > enable password ; service password-encryption chiffre les mots de passe de la CONFIG (pas le réseau !).",
+                "SSH : chiffre le trafic de gestion ; Telnet ne chiffre rien.",
+                "Ports : port-security limite les MAC ; BPDU guard interdit les switchs pirates ; DHCP snooping et DAI bloquent les faux serveurs/ARP."
+            ], cmd: ["enable secret <mdp>", "service password-encryption", "username admin secret <mdp>", "line vty 0 4 / transport input ssh / login local", "copy running-config startup-config"], tableau: null, pieges: [
+                "Autorisation = droits lecture seule sur un dossier (après authentification).",
+                "service password-encryption ne chiffre PAS le trafic.",
+                "Ver (worm) = se propage seul par le réseau ; cheval de Troie = caché dans un logiciel légitime."
+            ] },
+            { dom: 'D12', titre: "Virtualisation", points: [
+                "Hyperviseur type 1 (bare metal : ESXi, Hyper-V, KVM) : directement sur le matériel. Type 2 (hébergé : VirtualBox, VMware Workstation) : sur un OS.",
+                "VM : OS complet par machine, isolation forte, snapshots.",
+                "Conteneur : partage le noyau de l'hôte, léger, démarrage rapide (Docker).",
+                "Avantages : consolidation, déploiement rapide, isolement, migration, snapshots.",
+                "Sur un hôte : virsh list --all (KVM), docker ps (conteneurs), Get-VM (Hyper-V)."
+            ], cmd: ["virsh list --all", "docker ps", "Get-VM"], tableau: null, pieges: [
+                "Un conteneur ne peut pas avoir un noyau différent de son hôte.",
+                "Sur-allocation mémoire du hyperviseur → TOUTES les VM ralentissent."
+            ] },
+            { dom: 'D13', titre: "Cloud Computing", points: [
+                "IaaS : infrastructure (VM, réseau, stockage) gérée par le fournisseur ; vous gérez l'OS et au-dessus (AWS EC2, Azure VM).",
+                "PaaS : plateforme (runtime, BD gérée) ; vous n'écrivez que l'application.",
+                "SaaS : logiciel prêt à l'emploi (M365, Salesforce).",
+                "Déploiements : public, privé, hybride.",
+                "Avantage clé : capacités accrues SANS investissement dans l'infrastructure, le personnel ou les logiciels."
+            ], cmd: [], tableau: null, pieges: [
+                "« Améliorer les capacités sans investissement supplémentaire » = avantage cloud (question classique).",
+                "IoT ≠ cloud ; edge computing = traiter PRÈS de la source pour réduire la latence."
+            ] },
+            { dom: 'D14', titre: "IoT", points: [
+                "IoT : capteurs et actionneurs connectés (domotique, industrie, santé), souvent via une passerelle.",
+                "ZigBee : faible débit, TRÈS faible consommation → domotique (éclairages, capteurs).",
+                "LoRaWAN : longue portée, très faible débit, batteries pluriannuelles.",
+                "Wi-Fi : débit élevé, consommation élevée. 5G : mobile, haut débit.",
+                "Risque : chaque objet connecté élargit la surface d'attaque → mots de passe défaut à changer, segmentation (VLAN IoT)."
+            ], cmd: [], tableau: null, pieges: [
+                "Domotique + faible énergie = ZigBee (pas le Wi-Fi).",
+                "Longue portée + très faible débit = LoRaWAN."
+            ] }
+        ];
+
+        // Banque d'entraînement originale (thèmes Cisco v7, questions originales)
+        // type: 'qcm' (une réponse), 'multi' (plusieurs), 'vf' (vrai/faux), 'depannage' (scénario), 'config' (commandes IOS), 'subnet' (calcul)
+        // lvl: 1 débutant, 2 intermédiaire, 3 examen final, 4 pièges
+        const PREP_QCM = [
+            { id: 'P101', dom: 'D1', type: 'vf', lvl: 1, q: "Dans un réseau peer-to-peer, deux postes peuvent partager des fichiers sans serveur dédié.", options: ["Vrai", "Faux"], correct: [0], exp: "Correct : le P2P partage directement entre machines ; le client/serveur centralise les services." },
+            { id: 'P102', dom: 'D1', type: 'qcm', lvl: 2, q: "Un lien WAN primaire tombe ; une liaison de secours prend le relais en quelques secondes sans que personne ne s'en aperçoive. Quelle caractéristique de réseau est illustrée ?", options: ["Évolutivité", "Tolérance aux pannes", "QoS", "Sécurité"], correct: [1], exp: "Correct : la tolérance aux pannes repose sur des chemins redondants et une bascule automatique." },
+            { id: 'P103', dom: 'D1', type: 'qcm', lvl: 2, q: "Quel mécanisme priorise la voix sur le téléchargement de fichiers sur un même lien ?", options: ["NAT", "QoS", "DHCP", "STP"], correct: [1], exp: "Correct : la QoS (qualité de service) priorise le trafic sensible aux délais." },
+            { id: 'P104', dom: 'D1', type: 'qcm', lvl: 1, q: "Qui fournit l'accès à Internet aux particuliers ?", options: ["L'hébergeur web", "Le FAI", "L'ICANN", "Le constructeur de la box"], correct: [1], exp: "Correct : le FAI (fournisseur d'accès Internet) connecte le client à l'Internet ; l'hébergeur fournit des services web." },
+            { id: 'P105', dom: 'D1', type: 'qcm', lvl: 3, q: "Un poste partage ses fichiers avec un voisin de bureau mais ne joint plus aucun serveur. Quelle est la zone exacte du problème ?", options: ["La pile TCP/IP locale", "La passerelle par défaut ou le routage", "Le câble réseau", "Le DNS du FAI"], correct: [1], exp: "Correct : local OK + distant KO pointe la passerelle par défaut ou le routage, pas la couche locale." },
+            { id: 'P106', dom: 'D1', type: 'multi', lvl: 3, q: "Trois caractéristiques définissent un réseau fiable :", options: ["Tolérance aux pannes", "Chiffrement de toutes les trames", "Qualité de service", "Évolutivité", "Génération de la bannière MOTD"], correct: [0, 2, 3], exp: "Correct : tolérance aux pannes, QoS et évolutivité ; le chiffrement n'est pas une caractéristique de fiabilité générique et la bannière est un détail de configuration." },
+            { id: 'P107', dom: 'D1', type: 'qcm', lvl: 2, q: "Que mesure le débit réel d'un lien ?", options: ["La capacité théorique", "Ce qui est effectivement transféré après surcharges", "La latence du lien", "Le nombre de sauts"], correct: [1], exp: "Correct : le débit réel est toujours inférieur à la bande passante théorique (en-têtes, retransmissions, contention)." },
+            { id: 'P108', dom: 'D1', type: 'qcm', lvl: 1, q: "Un WAN relie :", options: ["Deux postes d'une même pièce", "Des sites géographiquement séparés", "Des conteneurs d'un même hôte", "Deux ports d'un même switch"], correct: [1], exp: "Correct : le WAN (Wide Area Network) relie des sites distants, généralement via un opérateur." },
+            { id: 'P109', dom: 'D1', type: 'config', lvl: 3, q: "Sur un switch d'accès, quelle commande permet sa gestion depuis un réseau distant ?", options: ["ip route 0.0.0.0 0.0.0.0 vlan 1", "ip default-gateway 192.168.1.1", "default-gateway ip 192.168.1.1", "ip helper-address 192.168.1.1"], correct: [1], exp: "Correct : ip default-gateway <IP> donne au switch (un hôte couche 2) sa passerelle pour la gestion à distance." },
+            { id: 'P110', dom: 'D1', type: 'vf', lvl: 4, q: "Un ping réussi vers 8.8.8.8 prouve que la résolution DNS fonctionne.", options: ["Vrai", "Faux"], correct: [1], exp: "Faux : 8.8.8.8 est testé par adresse IP — la DNS n'est pas impliquée. Tester la résolution : ping un NOM ou nslookup." },
+
+            { id: 'P201', dom: 'D2', type: 'qcm', lvl: 1, q: "Quelles couches OSI correspondent à la couche Application du modèle TCP/IP ?", options: ["7, 6 et 5", "7 et 6", "7 uniquement", "7, 6, 5 et 4"], correct: [0], exp: "Correct : Application TCP/IP = OSI 7 (application) + 6 (présentation) + 5 (session)." },
+            { id: 'P202', dom: 'D2', type: 'qcm', lvl: 1, q: "Ordre correct d'encapsulation :", options: ["Données → Paquet → Segment → Trame", "Données → Segment → Paquet → Trame", "Données → Trame → Paquet → Segment", "Segment → Données → Trame → Paquet"], correct: [1], exp: "Correct : la couche 4 (segment) s'encapsule dans la couche 3 (paquet) puis la couche 2 (trame)." },
+            { id: 'P203', dom: 'D2', type: 'qcm', lvl: 1, q: "Quel est le PDU de la couche 3 ?", options: ["Segment", "Paquet", "Trame", "Bits"], correct: [1], exp: "Correct : 4 = segment, 3 = paquet, 2 = trame, 1 = bits." },
+            { id: 'P204', dom: 'D2', type: 'multi', lvl: 2, q: "Deux caractéristiques du protocole IP :", options: ["Sans connexion (pas de setup de bout en bout)", "Au mieux (best effort) : aucune garantie de livraison", "Retransmet les paquets perdus", "Réordonne les segments à l'arrivée"], correct: [0, 1], exp: "Correct : IP est best effort et sans connexion ; la retransmission et l'ordre relèvent de TCP (couche 4)." },
+            { id: 'P205', dom: 'D2', type: 'qcm', lvl: 2, q: "Quel mécanisme TCP demande à l'émetteur de RALENTIR son envoi ?", options: ["Les accusés de réception", "La fenêtre glissante (contrôle de flux)", "Le TTL", "Le checksum"], correct: [1], exp: "Correct : la taille de fenêtre annoncée par le récepteur régule le débit ; l'ACK déclenche la retransmission ; les numéros de séquence garantissent l'ordre." },
+            { id: 'P206', dom: 'D2', type: 'qcm', lvl: 2, q: "Quel protocole choisir pour la VoIP en temps réel ?", options: ["TCP (fiabilité maximale)", "UDP (faible surcharge)", "FTP", "ICMP"], correct: [1], exp: "Correct : en temps réel, retransmettre un paquet perdu arrive trop tard — UDP minimise la surcharge." },
+            { id: 'P207', dom: 'D2', type: 'qcm', lvl: 1, q: "Ordre correct du handshake TCP :", options: ["SYN, SYN-ACK, ACK", "ACK, SYN, FIN", "SYN, ACK, SYN", "FIN, FIN-ACK, ACK"], correct: [0], exp: "Correct : le three-way handshake établit la connexion : SYN → SYN-ACK → ACK." },
+            { id: 'P208', dom: 'D2', type: 'qcm', lvl: 2, q: "Quel champ de trame détecte une trame corrompue en cours de transmission ?", options: ["Le champ Type", "Le FCS (séquence de vérification)", "Le préambule", "L'adresse MAC source"], correct: [1], exp: "Correct : le FCS est calculé sur la trame ; toute modification en cours de route rend le contrôle invalide — la trame est jetée." },
+            { id: 'P209', dom: 'D2', type: 'qcm', lvl: 3, q: "Un paquet traverse 4 routeurs sans NAT. Que peut-on affirmer ?", options: ["L'IP de destination a changé 4 fois", "Les adresses MAC source/destination changent à chaque saut", "Le TTL n'a pas changé", "Le port destination a changé"], correct: [1], exp: "Correct : chaque saut construit une NOUVELLE trame (nouvelles MAC) ; l'en-tête IP (source/destination, moins TTL) reste constant." },
+            { id: 'P210', dom: 'D2', type: 'vf', lvl: 2, q: "Les protocoles propriétaires sont définis et contrôlés par une seule entreprise.", options: ["Vrai", "Faux"], correct: [0], exp: "Vrai : un protocole propriétaire est contrôlé par son éditeur (ex : EIGRP à l'origine) ; TCP/IP est une norme ouverte." },
+            { id: 'P211', dom: 'D2', type: 'qcm', lvl: 3, q: "Un câble UTP installé près de lampes fluorescentes déforme les signaux. Quels facteurs ?", options: ["EMI et RFI", "Atténuation seulement", "Diaphonie du connecteur", "La fenêtre glissante"], correct: [0], exp: "Correct : les interférences électromagnétiques (EMI) et radiofréquences (RFI) perturbent le cuivre non blindé — les paires torsadées ne suffisent pas à 100 %." },
+            { id: 'P212', dom: 'D2', type: 'qcm', lvl: 3, q: "Qu'indique une mécanique de réseau qui analyse les flux pendant les heures de pointe sur plusieurs segments ?", options: ["Le coût des équipements", "Une représentation réaliste des modèles de trafic", "La liste des VLAN", "Le TTL moyen"], correct: [1], exp: "Correct : capturer aux heures de pointe et sur plusieurs segments donne une image fidèle des flux réels." },
+
+            { id: 'P301', dom: 'D3', type: 'multi', lvl: 1, q: "Deux plages privées RFC 1918 :", options: ["10.0.0.0/8", "172.16.0.0/12", "127.0.0.0/8", "224.0.0.0/4", "169.254.0.0/16"], correct: [0, 1], exp: "Correct : 10/8 et 172.16/12 sont privées ; 127 = loopback, 224 = multicast, 169.254 = APIPA." },
+            { id: 'P302', dom: 'D3', type: 'qcm', lvl: 1, q: "Un poste affiche 169.254.12.7. Que se passe-t-il ?", options: ["Adresse loopback", "Échec DHCP (APIPA)", "Adresse publique", "Rien d'anormal"], correct: [1], exp: "Correct : l'auto-adressage APIPA signale un Discover resté sans réponse." },
+            { id: 'P303', dom: 'D3', type: 'qcm', lvl: 2, q: "Quel champ IPv4 empêche un paquet de circuler indéfiniment ?", options: ["Le champ Type de service", "Le TTL", "La longueur d'en-tête", "Le décalage de fragment"], correct: [1], exp: "Correct : chaque routeur décrémente le TTL de 1 ; à 0, le paquet est jeté et un ICMP Time Exceeded part vers la source." },
+            { id: 'P304', dom: 'D3', type: 'multi', lvl: 2, q: "Deux commandes Windows affichent la table de routage de l'hôte :", options: ["netstat -r", "route print", "show ip route", "tracert"], correct: [0, 1], exp: "Correct : sur un hôte Windows, netstat -r et route print donnent la table ; show ip route est propre à IOS." },
+            { id: 'P305', dom: 'D3', type: 'qcm', lvl: 3, q: "Quel type d'adresse relie un ensemble prédéfini d'hôtes (une seule copie envoyée à un groupe) ?", options: ["Unicast", "Broadcast", "Multicast", "Anycast"], correct: [2], exp: "Correct : le multicast (224.0.0.0/4, MAC 01:00:5E:...) envoie à un groupe abonné ; le broadcast va à TOUS." },
+            { id: 'P306', dom: 'D3', type: 'qcm', lvl: 3, q: "Quel masque est INVALIDE ?", options: ["255.255.255.192", "255.255.255.224", "255.255.63.0", "255.240.0.0"], correct: [2], exp: "Correct : un masque doit être contigu (des 1 puis des 0). 255.255.63.0 a un trou — invalide." },
+            { id: 'P307', dom: 'D3', type: 'qcm', lvl: 4, q: "Une requête ARP est envoyée. Qui la reçoit ?", options: ["Tous les hôtes du segment local", "Uniquement le destinataire", "Tous les hôtes du WAN", "Uniquement le routeur"], correct: [0], exp: "Correct : la requête ARP est une diffusion couche 2 : tout le segment local la traite ; le routeur ne la transmet pas." },
+            { id: 'P308', dom: 'D3', type: 'vf', lvl: 4, q: "Une adresse IP de destination peut changer au fil des sauts d'un paquet.", options: ["Vrai", "Faux"], correct: [1], exp: "Faux (sans NAT) : l'IP reste constante de bout en bout ; ce sont les MAC qui changent à chaque saut." },
+            { id: 'P309', dom: 'D3', type: 'qcm', lvl: 2, q: "Quelle commande montre les correspondances IP→MAC apprises par un hôte ?", options: ["arp -a", "netstat -r", "nslookup", "ipconfig /flushdns"], correct: [0], exp: "Correct : arp -a affiche le cache ARP du poste." },
+            { id: 'P310', dom: 'D3', type: 'qcm', lvl: 3, q: "Deux problèmes engendrés par un grand nombre de requêtes ARP :", options: ["Les CPU des hôtes traitent toutes les diffusions ; le switch inonde tous ses ports", "La table MAC oscille ; le TTL expire", "Le DNS surcharge ; le DHCP expire", "Le NAT sature ; les VLAN se ferment"], correct: [0], exp: "Correct : les requêtes ARP (diffusions) sont traitées par tous les nœuds du segment et inondées par le switch — jamais par la table MAC ni le TTL." },
+
+            { id: 'P401', dom: 'D4', type: 'qcm', lvl: 1, q: "Combien de fois :: peut-il apparaître dans une adresse IPv6 ?", options: ["Deux fois", "Une seule fois", "Une fois par groupe de zéros", "Autant que nécessaire"], correct: [1], exp: "Correct : une seule occurrence, sinon le nombre de groupes omis serait ambigu." },
+            { id: 'P402', dom: 'D4', type: 'qcm', lvl: 2, q: "Que désigne ff02::2 ?", options: ["Tous les nœuds du lien", "Tous les routeurs du lien", "Tous les serveurs DHCPv6", "Une adresse anycast"], correct: [1], exp: "Correct : ff02::1 = tous les nœuds, ff02::2 = tous les routeurs." },
+            { id: 'P403', dom: 'D4', type: 'qcm', lvl: 3, q: "MAC 1C-6F-65-C2-BD-F8 → identifiant EUI-64 :", options: ["1E6F:65FF:FEC2:BDF8", "0C6F:65FF:FEC2:BDF8", "C16F:65FF:FEC2:BDF8", "106F:65FF:FEC2:BDF8"], correct: [0], exp: "Correct : insérer FFFE au milieu et inverser le bit U/L (0x1C → 0x1E) : 1E6F:65FF:FEC2:BDF8." },
+            { id: 'P404', dom: 'D4', type: 'qcm', lvl: 2, q: "Après SLAAC, que doit vérifier l'hôte avant d'utiliser son adresse ?", options: ["Envoyer un DHCPv6 REQUEST", "Envoyer une Neighbor Solicitation (DAD) pour l'unicité", "Interroger le DNS", "Attendre le TTL"], correct: [1], exp: "Correct : la détection d'adresses dupliquées (DAD) par NS confirme l'unicité avant usage." },
+            { id: 'P405', dom: 'D4', type: 'qcm', lvl: 3, q: "Quel est l'effet de ipv6 unicast-routing sur un routeur ?", options: ["Crée une adresse globale statique", "Les interfaces IPv6 commencent à émettre des Router Advertisement", "Active DHCPv6 sur les interfaces", "Génère des link-local sur toutes les interfaces"], correct: [1], exp: "Correct : le routage activé fait émettre les RA ; les link-local existent dès ipv6 enable, sans lui." },
+            { id: 'P406', dom: 'D4', type: 'multi', lvl: 2, q: "Deux types d'adresses valides pour une interface IPv6 :", options: ["2001:db8:1::1 (globale)", "fe80::1 (link-local)", "127.0.0.1", "255.255.255.255"], correct: [0, 1], exp: "Correct : globale et link-local coexistent sur chaque interface ; 127.0.0.1 est du loopback IPv4." },
+            { id: 'P407', dom: 'D4', type: 'qcm', lvl: 2, q: "Le préfixe standard d'un LAN IPv6 est :", options: ["/48", "/56", "/64", "/128"], correct: [2], exp: "Correct : /64 partout — SLAAC et EUI-64 supposent 64 bits d'identifiant d'interface." },
+            { id: 'P408', dom: 'D4', type: 'qcm', lvl: 3, q: "Flag O-flag dans les RA signifie :", options: ["DHCPv6 stateful : le serveur attribue les adresses", "DHCPv6 stateless : SLAAC pour l'adresse, DHCP pour les options", "Pas de DHCPv6", "Multicast obligatoire"], correct: [1], exp: "Correct : O-flag = autre configuration (DNS...) via DHCPv6 stateless ; M-flag = tout par DHCPv6." },
+            { id: 'P409', dom: 'D4', type: 'vf', lvl: 4, q: "IPv6 conserve le broadcast pour le mécanisme ARP.", options: ["Vrai", "Faux"], correct: [1], exp: "Faux : IPv6 supprime le broadcast — NDP utilise le multicast (ff02::1, ff02::2, solicitated-node)." },
+            { id: 'P410', dom: 'D4', type: 'qcm', lvl: 4, q: "2001:0db8:0000:0000:0000:ff00:0042:8329 abrégée correctement :", options: ["2001:db8::ff00:42:8329", "2001:db8::ff00:0042:8329", "2001:db8:0:0:0:ff00:42:8329", "2001:db8::0:ff00:42:8329"], correct: [0], exp: "Correct : zéros de tête supprimés (db8, ff00, 42), la série de trois groupes nuls remplacée par :: : 2001:db8::ff00:42:8329." },
+
+            { id: 'P501', dom: 'D5', type: 'qcm', lvl: 1, q: "Combien d'hôtes utilisables dans un /26 ?", options: ["64", "62", "32", "126"], correct: [1], exp: "Correct : 64 adresses - réseau - diffusion = 62." },
+            { id: 'P502', dom: 'D5', type: 'qcm', lvl: 2, q: "Le plus petit masque pour un réseau de 4 périphériques :", options: ["255.255.255.240", "255.255.255.248", "255.255.255.252", "255.255.255.224"], correct: [1], exp: "Correct : 4 hôtes → 2^3 - 2 = 6 ≥ 4 → /29 = 255.255.255.248. Le /30 n'offre que 2 hôtes." },
+            { id: 'P503', dom: 'D5', type: 'qcm', lvl: 2, q: "Adresse de diffusion de 192.168.10.128/26 :", options: ["192.168.10.127", "192.168.10.191", "192.168.10.255", "192.168.10.160"], correct: [1], exp: "Correct : le bloc .128-.191 a son réseau en .128 et sa diffusion en .191." },
+            { id: 'P504', dom: 'D5', type: 'qcm', lvl: 3, q: "192.168.1.96 est adresse hôte valide du sous-réseau :", options: ["192.168.1.64/26", "192.168.1.64/29", "192.168.1.32/27", "192.168.1.32/28"], correct: [0], exp: "Correct : le /26 .64-.127 contient .96 (.65-.126 utilisables) ; les /29 et /27 proposés n'englobent pas .96 comme hôte valide." },
+            { id: 'P505', dom: 'D5', type: 'qcm', lvl: 3, q: "Téléphones 22, PC 20, imprimantes 2, scanners 2 : masque UNIQUE optimal sur 192.168.10.0/24 ?", options: ["255.255.255.192", "255.255.255.224", "255.255.255.240", "255.255.255.248"], correct: [0], exp: "Correct : le plus grand besoin (22 hôtes) exige 5 bits d'hôte (2^5-2=30) → /26 = 255.255.255.192." },
+            { id: 'P506', dom: 'D5', type: 'qcm', lvl: 3, q: "Sous-réseaux /28 découpés depuis un /24 : combien ?", options: ["8", "16", "32", "64"], correct: [1], exp: "Correct : 4 bits empruntés → 2^4 = 16 sous-réseaux de 16 adresses." },
+            { id: 'P507', dom: 'D5', type: 'qcm', lvl: 4, q: "10.18.10.0/24 : deux blocs de 10 hôtes SANS chevauchement (VLSM) :", options: ["10.18.10.0/28 et 10.18.10.16/28", "10.18.10.0/28 et 10.18.10.8/28", "10.18.10.0/28 et 10.18.10.4/28", "10.18.10.240/28 et 10.18.10.244/28"], correct: [0], exp: "Correct : des /28 successifs alignés (.0-.15 puis .16-.31). Les autres propositions se chevauchent." },
+            { id: 'P508', dom: 'D5', type: 'qcm', lvl: 4, q: "Dernière adresse utilisable du bloc 192.168.1.200/28 :", options: ["192.168.1.215", "192.168.1.214", "192.168.1.222", "192.168.1.207"], correct: [1], exp: "Correct : le /28 .200-.215 diffuse en .215 ; dernière utilisable = .214." },
+            { id: 'P509', dom: 'D5', type: 'vf', lvl: 2, q: "Un /31 est utilisable pour un lien point-à-point.", options: ["Vrai", "Faux"], correct: [0], exp: "Vrai : le /31 (RFC 3021) offre 2 adresses sans réseau/diffusion dédiés — réservé aux liens point-à-point." },
+            { id: 'P510', dom: 'D5', type: 'qcm', lvl: 4, q: "Pour VLSM, on alloue les blocs :", options: ["Du plus petit au plus grand", "Du plus grand au plus petit", "Par ordre de création", "En /24 toujours"], correct: [1], exp: "Correct : les grands d'abord évitent la fragmentation ; les petits s'insèrent dans les trous restants." },
+
+            { id: 'P601', dom: 'D6', type: 'qcm', lvl: 1, q: "Le champ FCS d'une trame Ethernet sert à :", options: ["Identifier le protocole de couche 3", "Détecter une trame corrompue en transit", "Prioriser le trafic", "Segmenter les collisions"], correct: [1], exp: "Correct : le FCS (CRC) vérifie l'intégrité ; une trame altérée (interférence, distorsion) est jetée." },
+            { id: 'P602', dom: 'D6', type: 'qcm', lvl: 2, q: "Combien de bits comporte une adresse MAC et comment est-elle structurée ?", options: ["32 bits : réseau + hôte", "48 bits : OUI constructeur + identifiant interface", "64 bits : préfixe + interface", "128 bits"], correct: [1], exp: "Correct : 48 bits, les 24 premiers identifiant le constructeur (OUI)." },
+            { id: 'P603', dom: 'D6', type: 'multi', lvl: 2, q: "Deux caractéristiques du CSMA/CD :", options: ["Écouter le support avant d'émettre", "Attendre un délai aléatoire après une collision", "Attribuer des priorités de transmission", "Utiliser un jeton"], correct: [0, 1], exp: "Correct : contention avec écoute (carrier sense) et backoff aléatoire après détection de collision ; pas de priorité ni de jeton." },
+            { id: 'P604', dom: 'D6', type: 'qcm', lvl: 2, q: "Quel mécanisme gère l'accès au support en Wi-Fi ?", options: ["CSMA/CD", "CSMA/CA", "Passage de jeton", "Classement de priorités"], correct: [1], exp: "Correct : le sans fil utilise CSMA/CA (collision AVOIDANCE) ; l'Ethernet filaire CSMA/CD (détection)." },
+            { id: 'P605', dom: 'D6', type: 'qcm', lvl: 3, q: "Pourquoi les fils d'un câble UTP sont-ils torsadés en paires ?", options: ["Pour faciliter le sertissage", "Pour annuler la diaphonie (champs magnétiques opposés)", "Pour augmenter la longueur max", "Pour l'esthétique"], correct: [1], exp: "Correct : la torsion fait s'annuler les champs des deux fils — protection contre la diaphonie." },
+            { id: 'P606', dom: 'D6', type: 'qcm', lvl: 4, q: "Après sertissage RJ45, un technicien observe des erreurs. Quel défaut type ?", options: ["Fils détorsadés trop longs près du connecteur", "Gaine sertie trop bas", "Treillis trop court", "Catégorie supérieure"], correct: [0], exp: "Correct : des fils détorsadés excessifs près du connecteur dégradent l'immunité — longueur détorsadée minimale obligatoire." },
+            { id: 'P607', dom: 'D6', type: 'qcm', lvl: 3, q: "Deux causes de dégradation d'un câblage UTP :", options: ["Terminaison défectueuse", "Câble/connecteurs de mauvaise qualité", "Installation dans un conduit", "Torsion excessive des paires"], correct: [0, 1], exp: "Correct : mauvaise terminaison et matériel dégradé sont les causes classiques ; un conduit (bonne pratique) n'altère pas le signal." },
+            { id: 'P608', dom: 'D6', type: 'vf', lvl: 4, q: "Avec l'Auto-MDIX, un câble croisé n'est plus nécessaire entre deux switchs modernes.", options: ["Vrai", "Faux"], correct: [0], exp: "Vrai : l'Auto-MDIX corrige automatiquement le type de câblage." },
+
+            { id: 'P701', dom: 'D7', type: 'qcm', lvl: 1, q: "Comment un switch remplit-il sa table MAC ?", options: ["En lisant les MAC sources des trames entrantes", "En interrogeant ARP", "Via le serveur DHCP", "Depuis le FCS"], correct: [0], exp: "Correct : apprentissage par MAC source ; les trames à destination inconnue sont inondées." },
+            { id: 'P702', dom: 'D7', type: 'qcm', lvl: 2, q: "Un switch cut-through diffère d'un store-and-forward en ce qu'il :", options: ["Vérifie tout le FCS avant retransmission", "Retransmet dès la lecture de la destination (latence moindre, risque de trame corrompue)", "Floode systématiquement", "Ne fonctionne qu'en full-duplex"], correct: [1], exp: "Correct : le cut-through ne lit que l'en-tête — rapide mais peut relayer une trame abîmée." },
+            { id: 'P703', dom: 'D7', type: 'qcm', lvl: 2, q: "Une trame à destination d'une MAC inconnue du switch est :", options: ["Jetée", "Inondée sur tous les ports du VLAN (sauf l'entrant)", "Renvoyée à la passerelle", "Mise en attente"], correct: [1], exp: "Correct : inondation (flooding) dans le VLAN ; le destinataire répondra et la table se remplira." },
+            { id: 'P704', dom: 'D7', type: 'qcm', lvl: 3, q: "La même adresse MAC apparaît successivement sur deux ports du switch. Diagnostic ?", options: ["Un port est en err-disable", "Boucle de couche 2 ou station mobile", "Duplex mismatch", "TTL expiré"], correct: [1], exp: "Correct : l'oscillation de la table MAC signale une boucle (tempête à venir) ou un équipement déplacé." },
+            { id: 'P705', dom: 'D7', type: 'config', lvl: 3, q: "Pour vérifier si la bannière MOTD est bien configurée, le plus rapide :", options: ["Rebooter le switch", "Exit depuis le mode privilégié", "show version", "reload in 10"], correct: [1], exp: "Correct : exit (ou Ctrl-Z + exit) depuis # affiche la bannière immédiatement ; aucun redémarrage nécessaire." },
+            { id: 'P706', dom: 'D7', type: 'qcm', lvl: 4, q: "Un administrateur tape 'conf' en mode utilisateur (>) et reçoit une erreur. Pourquoi ?", options: ["La commande complète est obligatoire", "Il faut enable d'abord : config terminal se tape en mode privilégié (#)", "Le port console est bloqué", "Le switch est en VTP client"], correct: [1], exp: "Correct : le mode utilisateur (>) ne permet pas la configuration — enable d'abord, puis configure terminal (ou config t)." },
+            { id: 'P707', dom: 'D7', type: 'qcm', lvl: 3, q: "Quelle commande enregistre la configuration courante ?", options: ["copy running-config startup-config", "show startup-config", "copy startup-config running-config", "save all"], correct: [0], exp: "Correct : RAM → NVRAM par copy running-config startup-config (ou write memory)." },
+            { id: 'P708', dom: 'D7', type: 'vf', lvl: 2, q: "Un switch sépare les domaines de collision, pas les domaines de diffusion (sans VLAN).", options: ["Vrai", "Faux"], correct: [0], exp: "Vrai : chaque port = un domaine de collision ; tous les ports d'un VLAN partagent le domaine de diffusion." },
+
+            { id: 'P801', dom: 'D8', type: 'qcm', lvl: 1, q: "Un VLAN délimite :", options: ["Un domaine de collision", "Un domaine de diffusion", "Un sous-réseau physique", "Une zone DNS"], correct: [1], exp: "Correct : les broadcasts d'un VLAN ne sortent jamais du VLAN." },
+            { id: 'P802', dom: 'D8', type: 'qcm', lvl: 2, q: "Sur un trunk, quel VLAN circule non tagué ?", options: ["Le VLAN 1", "Le VLAN natif", "Le VLAN d'accès", "Le VLAN voix"], correct: [1], exp: "Correct : le VLAN natif est exempté de tag — d'où l'obligation de le rendre identique des deux côtés." },
+            { id: 'P803', dom: 'D8', type: 'config', lvl: 3, q: "Ordre correct pour router inter-VLAN avec un routeur sur bâton :", options: ["interface G0/0.10 ; encapsulation dot1Q 10 ; ip address", "ip address ; encapsulation dot1Q 10 ; interface G0/0.10", "switchport trunk ; encapsulation dot1Q 10", "vlan 10 ; encapsulation dot1Q"], correct: [0], exp: "Correct : créer la sous-interface, déclarer l'encapsulation dot1Q avec l'ID du VLAN, puis l'adresse IP." },
+            { id: 'P804', dom: 'D8', type: 'qcm', lvl: 2, q: "Deux PC de VLAN différents branchés sur le même switch :", options: ["Communiquent directement", "Nécessitent une couche 3 (SVI ou routeur)", "Nécessitent un nouveau câble", "Nécessitent STP"], correct: [1], exp: "Correct : l'isolation inter-VLAN est couche 2 ; il faut un équipement de routage." },
+            { id: 'P805', dom: 'D8', type: 'qcm', lvl: 4, q: "Un port d'accès est configuré VLAN 30 qui n'existe pas dans la table VLAN. État attendu :", options: ["up/up", "up/down", "err-disabled", "administratively down"], correct: [1], exp: "Correct : le signal est up mais le protocole de ligne ne monte pas (VLAN inexistant) : up/down." },
+            { id: 'P806', dom: 'D8', type: 'qcm', lvl: 2, q: "Le VLAN voix sert à :", options: ["Isoler le trafic téléphone du trafic données sur le même port", "Tagger le trunk", "Créer le domaine natif", "Router les VLAN"], correct: [0], exp: "Correct : switchport voice vlan X — le téléphone et le PC partagent le port, deux VLAN distincts." },
+            { id: 'P807', dom: 'D8', type: 'qcm', lvl: 4, q: "Pourquoi éviter le VLAN 1 en production ?", options: ["Il ne supporte pas les trunks", "Tout port non configuré y vit par défaut : surface d'attaque", "Il ne supporte pas les SVI", "Il est réservé au multicast"], correct: [1], exp: "Correct : VLAN 1 = défaut de tous les ports ; un intrus branché est automatiquement dedans — on déplace le natif et la gestion." },
+            { id: 'P808', dom: 'D8', type: 'vf', lvl: 3, q: "switchport trunk allowed vlan 10,20 sur SW1 avec SW2 en 10,20,30 coupe le VLAN 30 dans les deux sens.", options: ["Vrai", "Faux"], correct: [0], exp: "Vrai : la liste autorisée doit être cohérente des deux côtés ; un VLAN non autorisé est ignoré sur ce trunk." },
+
+            { id: 'P901', dom: 'D9', type: 'qcm', lvl: 1, q: "Le code 'S' dans show ip route signifie :", options: ["Route connectée", "Route statique", "Route OSPF", "Sommaire"], correct: [1], exp: "Correct : S = statique ; C = connecté, L = local, O = OSPF, D = EIGRP." },
+            { id: 'P902', dom: 'D9', type: 'qcm', lvl: 2, q: "Quelle distance administrative gagne en cas de conflit de routes ?", options: ["La plus élevée", "La plus basse", "La plus récente", "La métrique la plus basse"], correct: [1], exp: "Correct : l'AD départage les protocoles (statique 1 < OSPF 110) ; la métrique départage au sein d'un même protocole." },
+            { id: 'P903', dom: 'D9', type: 'qcm', lvl: 2, q: "La route par défaut IPv4 s'écrit :", options: ["255.255.255.255 0.0.0.0", "0.0.0.0 0.0.0.0 <next-hop>", "default-route <IP>", "ip default-route"], correct: [1], exp: "Correct : 0.0.0.0/0 = « tout le reste » vers le next-hop." },
+            { id: 'P904', dom: 'D9', type: 'qcm', lvl: 3, q: "Que fait R1 de l'en-tête Ethernet de PC1 quand il route vers une liaison série ?", options: ["Il le conserve", "Il le supprime et en construit un nouveau adapté à la liaison de sortie", "Il remplace l'IP", "Il le renvoie"], correct: [1], exp: "Correct : chaque saut détruit la trame entrante et en construit une nouvelle pour le support suivant — l'IP est conservée." },
+            { id: 'P905', dom: 'D9', type: 'qcm', lvl: 3, q: "Algorithme SPF et LSDB sont associés à :", options: ["RIP", "OSPF", "STP", "DHCP"], correct: [1], exp: "Correct : OSPF (link-state) partage une LSDB identique par zone et calcule par Dijkstra." },
+            { id: 'P906', dom: 'D9', type: 'qcm', lvl: 4, q: "Une destination est annoncée par OSPF ET couverte par une route statique. Le routeur utilise :", options: ["OSPF (plus fiable)", "La statique (AD 1)", "Les deux en équilibrage", "La plus récente"], correct: [1], exp: "Correct : AD 1 < 110 — la statique gagne, même si OSPF est 'meilleur' en qualité de chemin." },
+            { id: 'P907', dom: 'D9', type: 'qcm', lvl: 4, q: "Un site distant n'est joignable que depuis le siège : les paquets arrivent, les réponses se perdent. Cause ?", options: ["ACL sur le site distant", "Route de retour absente côté distant", "Duplex mismatch", "VLAN natif"], correct: [1], exp: "Correct : un routage asymétrique couvert d'un seul côté = aller sans retour — vérifier la table de routage des DEUX routeurs." },
+            { id: 'P908', dom: 'D9', type: 'qcm', lvl: 2, q: "OSPF envoie ses Hello à :", options: ["224.0.0.1", "224.0.0.5", "224.0.0.6", "224.0.0.9"], correct: [1], exp: "Correct : 224.0.0.5 (all OSPF routers) pour les Hello et updates ; 224.0.0.6 aux DR/BDR." },
+
+            { id: 'P1001', dom: 'D10', type: 'qcm', lvl: 1, q: "Port destination 69 reçu par un serveur : le client demande :", options: ["FTP", "TFTP", "DNS", "SMTP"], correct: [1], exp: "Correct : 69 = TFTP (UDP, sans authentification)." },
+            { id: 'P1002', dom: 'D10', type: 'qcm', lvl: 1, q: "Le service DNS fournit :", options: ["Le transfert de fichiers", "La traduction de noms de domaine en adresses IP", "L'accès distant chiffré", "Le courrier"], correct: [1], exp: "Correct : DNS résout les noms ; le transfert de fichiers = FTP/TFTP, l'accès distant = SSH." },
+            { id: 'P1003', dom: 'D10', type: 'multi', lvl: 2, q: "Trois types d'enregistrements DNS :", options: ["A", "AAAA", "MX", "CRC", "FCS"], correct: [0, 1, 2], exp: "Correct : A (IPv4), AAAA (IPv6), MX (échange de courrier) ; NS (serveur de noms) et CNAME (alias) existent aussi." },
+            { id: 'P1004', dom: 'D10', type: 'qcm', lvl: 2, q: "Un ping vers l'IP d'un serveur web réussit, vers son URL échoue. Quelle commande diagnostique ?", options: ["tracert", "nslookup", "netstat", "ipconfig /release"], correct: [1], exp: "Correct : nslookup interroge les serveurs de noms pour ce nom précis." },
+            { id: 'P1005', dom: 'D10', type: 'qcm', lvl: 2, q: "Différence clé FTP / TFTP :", options: ["FTP sur TCP avec authentification ; TFTP sur UDP simple, sans authentification", "FTP sur UDP ; TFTP sur TCP", "Les deux sur TCP", "TFTP est plus sûr"], correct: [0], exp: "Correct : FTP = 20/21 TCP avec identifiants ; TFTP = 69 UDP, pour les copies rapides (config, IOS)." },
+            { id: 'P1006', dom: 'D10', type: 'qcm', lvl: 2, q: "HTTPS fournit :", options: ["L'accès distant sécurisé", "Le web chiffré (échange de pages, texte, images, son, vidéo)", "La résolution de noms", "Le transfert de fichiers entre routeurs"], correct: [1], exp: "Correct : HTTPS = HTTP + TLS sur le port 443 ; l'accès distant chiffré est SSH." },
+            { id: 'P1007', dom: 'D10', type: 'config', lvl: 3, q: "Configuration SSH minimale sur un Cisco : trois prérequis :", options: ["hostname + ip domain-name + crypto key generate rsa", "enable secret + vty + telnet", "ip ssh time-out + banner", "username + console + auxiliary"], correct: [0], exp: "Correct : le nom d'hôte (≠ nom par défaut), le domaine, et la paire de clés RSA alimentent SSH ; puis transport input ssh sur les VTY." },
+            { id: 'P1008', dom: 'D10', type: 'qcm', lvl: 3, q: "Le port source d'un client qui ouvre une session HTTPS est :", options: ["443", "80", "Un port éphémère > 1023", "22"], correct: [2], exp: "Correct : le client choisit un port source éphémère ; le port destination est 443. Le port source devient destination du retour." },
+            { id: 'P1009', dom: 'D10', type: 'qcm', lvl: 3, q: "SMTP sert à :", options: ["Recevoir le courrier sur le poste", "Envoyer le courrier entre serveurs/du client vers le serveur", "Résoudre les noms", "Synchroniser l'heure"], correct: [1], exp: "Correct : SMTP (25) envoie ; POP3 (110) et IMAP (143) relèvent." },
+            { id: 'P1010', dom: 'D10', type: 'vf', lvl: 4, q: "Le DHCP utilise UDP aux ports 67 (serveur) et 68 (client).", options: ["Vrai", "Faux"], correct: [0], exp: "Vrai : 67 côté serveur, 68 côté client — à connaître par cœur." },
+
+            { id: 'P1101', dom: 'D11', type: 'qcm', lvl: 1, q: "La triade de sécurité :", options: ["Confidentialité, Intégrité, Disponibilité", "Authentification, Autorisation, Accounting", "Détection, Prévention, Réponse", "Physique, Logique, Humaine"], correct: [0], exp: "Correct : CIA ; AAA est le modèle d'accès, un autre concept." },
+            { id: 'P1102', dom: 'D11', type: 'qcm', lvl: 2, q: "Un employé balaie le Wi-Fi de l'entreprise avec des outils gratuits pour trouver des vulnérabilités. Type d'attaque ?", options: ["DoS", "Reconnaissance", "Accès", "Cheval de Troie"], correct: [1], exp: "Correct : la reconnaissance est la découverte non autorisée de systèmes, ressources et vulnérabilités." },
+            { id: 'P1103', dom: 'D11', type: 'qcm', lvl: 2, q: "Un logiciel qui se COPIE SEUL de machine en machine via le réseau :", options: ["Virus", "Ver (worm)", "Cheval de Troie", "Phishing"], correct: [1], exp: "Correct : le ver se réplique de façon autonome ; le virus a besoin d'un hôte/exécution ; le cheval de Troie se cache dans un logiciel légitime." },
+            { id: 'P1104', dom: 'D11', type: 'qcm', lvl: 3, q: "Un utilisateur authentifié obtient un accès lecture seule sur un dossier partagé. Quel composant AAA ?", options: ["Authentification", "Autorisation", "Accounting", "Automatisation"], correct: [1], exp: "Correct : l'autorisation détermine CE que l'utilisateur peut faire après l'authentification." },
+            { id: 'P1105', dom: 'D11', type: 'qcm', lvl: 3, q: "Que fait service password-encryption ?", options: ["Chiffre les mots de passe dans la configuration", "Chiffre le trafic réseau", "Exige des mots de passe à la console", "Hache le mot de passe enable"], correct: [0], exp: "Correct : elle chiffre les mots de passe en clair du fichier de configuration ; le trafic réseau n'est pas concerné ; enable secret est déjà hachée." },
+            { id: 'P1106', dom: 'D11', type: 'qcm', lvl: 2, q: "Quelle commande sauvegarde le mot de passe enable de façon sûre ?", options: ["enable password <mdp>", "enable secret <mdp>", "password enable <mdp>", "secret enable <mdp>"], correct: [1], exp: "Correct : enable secret stocke un haché fort ; enable password (faible) est obsolète." },
+            { id: 'P1107', dom: 'D11', type: 'multi', lvl: 3, q: "Deux protections contre le port d'accès compromis :", options: ["port-security (MAC autorisées)", "BPDU guard (interdire les BPDUs)", "ip helper-address", "spanning-tree mode rapid-pvst"], correct: [0, 1], exp: "Correct : port-security limite les MAC, BPDU guard éteint le port qui voit un switch ; helper-address et le mode STP ne protègent pas le port d'accès." },
+            { id: 'P1108', dom: 'D11', type: 'qcm', lvl: 4, q: "Pour accepter UNIQUEMENT des sessions SSH chiffrées sur les VTY, il faut :", options: ["transport input ssh + login local + utilisateur local créé", "transport input telnet + mot de passe vty", "crypto key generate rsa uniquement", "enable secret uniquement"], correct: [0], exp: "Correct : la ligne VTY avec transport input ssh, un utilisateur local (login local) et les clés RSA générées constituent le socle SSH." },
+            { id: 'P1109', dom: 'D11', type: 'vf', lvl: 2, q: "Telnet chiffre les identifiants mais pas les données.", options: ["Vrai", "Faux"], correct: [1], exp: "Faux : Telnet ne chiffre RIEN (tout en clair, y compris les mots de passe) — SSH remplace." },
+            { id: 'P1110', dom: 'D11', type: 'qcm', lvl: 3, q: "Un réseau dont le FAI tombe bascule en quelques secondes sur un lien secondaire sans impact utilisateur. Deux caractéristiques illustrées :", options: ["Tolérance aux pannes et QoS", "Tolérance aux pannes et sécurité", "Sécurité et évolutivité", "QoS et évolutivité"], correct: [0], exp: "Correct : la redondance+bascule = tolérance aux pannes ; l'absence de dégradation ressentie implique aussi une QoS maîtrisée pendant la bascule." },
+
+            { id: 'P1201', dom: 'D12', type: 'qcm', lvl: 1, q: "Un hyperviseur type 1 :", options: ["S'exécute sur un OS hôte", "S'exécute directement sur le matériel", "Est un conteneur", "Est un réseau virtuel"], correct: [1], exp: "Correct : bare metal (ESXi, Hyper-V, KVM) ; le type 2 (VirtualBox) s'appuie sur un OS." },
+            { id: 'P1202', dom: 'D12', type: 'qcm', lvl: 1, q: "Quelle affirmation sur les conteneurs est vraie ?", options: ["Ils embarquent un OS complet", "Ils partagent le noyau de l'hôte", "Ils ont besoin d'un hyperviseur", "Ils ne peuvent pas avoir d'IP"], correct: [1], exp: "Correct : le conteneur partage le noyau — légèreté et démarrage rapide, isolation moindre qu'une VM." },
+            { id: 'P1203', dom: 'D12', type: 'qcm', lvl: 2, q: "Get-VM est la commande de :", options: ["KVM/libvirt", "Hyper-V (PowerShell)", "Docker", "VMware vSphere CLI"], correct: [1], exp: "Correct : Get-VM liste les VM Hyper-V ; virsh list --all pour KVM ; docker ps pour les conteneurs." },
+            { id: 'P1204', dom: 'D12', type: 'qcm', lvl: 2, q: "Un avantage majeur de la virtualisation :", options: ["Un serveur physique par application", "Consolidation et déploiement rapide avec snapshots", "Plus de pannes matérielles", "L'obligation d'un cloud"], correct: [1], exp: "Correct : plusieurs VM sur un hôte, snapshots, migrations, isolation." },
+            { id: 'P1205', dom: 'D12', type: 'vf', lvl: 4, q: "Un conteneur peut exécuter un noyau différent de celui de son hôte.", options: ["Vrai", "Faux"], correct: [1], exp: "Faux : le conteneur partage le noyau de l'hôte — c'est exactement la différence avec la VM." },
+
+            { id: 'P1301', dom: 'D13', type: 'qcm', lvl: 1, q: "Un service de messagerie hébergé utilisé tel quel est :", options: ["IaaS", "PaaS", "SaaS", "DaaS"], correct: [2], exp: "Correct : SaaS = logiciel prêt à l'emploi ; IaaS = VM/réseau/stockage ; PaaS = plateforme de développement." },
+            { id: 'P1302', dom: 'D13', type: 'qcm', lvl: 2, q: "Quel avantage du cloud ?", options: ["Améliorer les capacités sans investissement supplémentaire en infrastructure", "Supprimer la nécessité de mots de passe", "Éliminer les sauvegardes", "Réduire automatiquement les logs"], correct: [0], exp: "Correct : le cloud déporte l'infrastructure, le personnel et les logiciels vers le fournisseur." },
+            { id: 'P1303', dom: 'D13', type: 'qcm', lvl: 2, q: "Une entreprise garde ses données sensibles en interne et déborde en période de pointe sur le cloud. Modèle ?", options: ["Public", "Privé", "Hybride", "Communautaire"], correct: [2], exp: "Correct : le hybride combine interne + public (cloud bursting)." },
+            { id: 'P1304', dom: 'D13', type: 'qcm', lvl: 3, q: "Dans IaaS, qui gère l'OS invité et les applications ?", options: ["Le fournisseur", "Le client", "Personne", "Le FAI"], correct: [1], exp: "Correct : le fournisseur gère matériel/virtualisation ; le client gère OS, middleware, données et applications." },
+            { id: 'P1305', dom: 'D13', type: 'vf', lvl: 3, q: "L'edge computing traite les données au plus près de leur source pour réduire la latence.", options: ["Vrai", "Faux"], correct: [0], exp: "Vrai : le traitement de bord évite le va-et-vient vers le cloud central pour les usages temps réel." },
+
+            { id: 'P1401', dom: 'D14', type: 'qcm', lvl: 1, q: "Technologie sans fil à très faible consommation, populaire en domotique :", options: ["Wi-Fi", "ZigBee", "5G", "Ethernet"], correct: [1], exp: "Correct : ZigBee (802.15.4) vise les faibles débits et une consommation minimale." },
+            { id: 'P1402', dom: 'D14', type: 'qcm', lvl: 2, q: "LoRaWAN est choisi pour :", options: ["Le haut débit vidéo", "La longue portée à très faible débit (capteurs dispersés)", "Le Gaming en ligne", "La sauvegarde locale"], correct: [1], exp: "Correct : LoRaWAN porte des kilomètres pour des messages minuscules — capteurs de champs, compteurs." },
+            { id: 'P1403', dom: 'D14', type: 'qcm', lvl: 2, q: "Un objet IoT type capteur se connecte généralement via :", options: ["Un port console", "Une passerelle IoT (hub) vers le réseau", "Un câble série vers l'Internet", "Le bus PCIe"], correct: [1], exp: "Correct : la passerelle (hub) agrège les objets et les expose au réseau/IP." },
+            { id: 'P1404', dom: 'D14', type: 'qcm', lvl: 3, q: "Principal risque de sécurité du IoT :", options: ["Consommation électrique", "Surface d'attaque élargie (objets mal durcis)", "Coût du câblage", "Manque de débit"], correct: [1], exp: "Correct : chaque objet connecté est une porte potentielle — mots de passe par défaut, segmentation dédiée." },
+            { id: 'P1405', dom: 'D14', type: 'vf', lvl: 4, q: "Les objets IoT doivent être placés sur le même VLAN que les postes de gestion.", options: ["Vrai", "Faux"], correct: [1], exp: "Faux : au contraire — VLAN IoT dédié et filtré, pour contenir une compromission d'objet." }
+        ];
         const LABS_DATA = [
             {
                 id: 'lab-1',
@@ -6515,6 +6845,17 @@
             const [labLevel, setLabLevel] = useState('Tous');
             const [labSearch, setLabSearch] = useState('');
             const [selectedDepId, setSelectedDepId] = useState(''); // Centre de dépannage : problème choisi dans la liste déroulante
+            // --- Préparation Examen CCNA ---
+            const [prepMode, setPrepMode] = useState('fiches'); // fiches | entrainement | simulateur | subnetting
+            const [prepDom, setPrepDom] = useState('Tous');
+            const [prepLvl, setPrepLvl] = useState(0);
+            const [simQueue, setSimQueue] = useState([]);      // questions tirées
+            const [simAnswers, setSimAnswers] = useState({});  // id -> indices choisis
+            const [simIdx, setSimIdx] = useState(0);
+            const [simDone, setSimDone] = useState(false);
+            const [simTime, setSimTime] = useState(0);         // secondes restantes
+            const [simRunning, setSimRunning] = useState(false);
+            const [subStreak, setSubStreak] = useState({ ok: 0, total: 0, cur: null, inputs: {}, checked: false });
             const [selectedLabId, setSelectedLabId] = useState(null);
             const [labChecklist, setLabChecklist] = useState(() => {
                 try { return JSON.parse(localStorage.getItem('tssr_lab_checklist') || '{}'); } catch (e) { return {}; }
@@ -7910,6 +8251,285 @@
                 );
             };
 
+            // Rendu Onglet Préparation Examen CCNA (fiches + entraînement + simulateur + subnetting)
+            const prepHelpers = useMemo(() => {
+                const shuffle = (arr) => arr.map(v => [Math.random(), v]).sort((a, b) => a[0] - b[0]).map(x => x[1]);
+                const newSubExercise = () => {
+                    const prefix = [25, 26, 27, 28, 29][Math.floor(Math.random() * 5)];
+                    const base = `192.168.${Math.floor(Math.random() * 250)}.0`;
+                    const size = 2 ** (32 - prefix);
+                    const start = size * Math.floor(Math.random() * (256 / size));
+                    const ip = base.split('.').slice(0, 3).join('.') + '.' + (start + 1 + Math.floor(Math.random() * (size - 2)));
+                    const ipParts = ip.split('.').map(Number);
+                    const netOct = ipParts[3] - ((ipParts[3] % size));
+                    const network = ipParts.slice(0, 3).join('.') + '.' + netOct;
+                    const broadcast = ipParts.slice(0, 3).join('.') + '.' + (netOct + size - 1);
+                    const mask = (() => { const m = '1'.repeat(prefix) + '0'.repeat(32 - prefix); return [0, 8, 16, 24].map(s => parseInt(m.slice(s, s + 8) || '0', 2)).join('.'); })();
+                    return { ip, prefix, network, broadcast, mask, first: ipParts.slice(0, 3).join('.') + '.' + (netOct + 1), last: ipParts.slice(0, 3).join('.') + '.' + (netOct + size - 2), hosts: size - 2 };
+                };
+                return { shuffle, newSubExercise };
+            }, []);
+
+            const startSimulator = () => {
+                const pool = prepHelpers.shuffle(PREP_QCM).slice(0, 20);
+                setSimQueue(pool); setSimAnswers({}); setSimIdx(0); setSimDone(false); setSimTime(30 * 60); setSimRunning(true);
+            };
+            const simScore = useMemo(() => {
+                let ok = 0;
+                simQueue.forEach(q => {
+                    const a = simAnswers[q.id] || [];
+                    const c = q.correct;
+                    if (a.length === c.length && c.every(i => a.includes(i))) ok++;
+                });
+                return { ok, total: simQueue.length, pct: simQueue.length ? Math.round(ok / simQueue.length * 100) : 0 };
+            }, [simQueue, simAnswers]);
+
+            useEffect(() => {
+                if (!simRunning || simDone) return undefined;
+                const t = setInterval(() => setSimTime(prev => {
+                    if (prev <= 1) { setSimRunning(false); setSimDone(true); return 0; }
+                    return prev - 1;
+                }), 1000);
+                return () => clearInterval(t);
+            }, [simRunning, simDone]);
+
+            const renderPrepTab = () => {
+                const lvlLabels = { 1: 'Débutant', 2: 'Intermédiaire', 3: 'Examen final', 4: 'Pièges' };
+                const domName = (id) => (PREP_DOMAINS.find(d => d.id === id) || {}).nom || id;
+                const modes = [
+                    { id: 'fiches', label: '📑 Fiches de révision' },
+                    { id: 'entrainement', label: '✍️ Entraînement' },
+                    { id: 'simulateur', label: '⏱️ Simulateur d\'examen' },
+                    { id: 'subnetting', label: '🧮 Module subnetting' }
+                ];
+                return (
+                    <div className="space-y-6">
+                        <div className="bg-white dark:bg-slate-800 rounded-xl p-4 md:p-6 border border-slate-200 dark:border-slate-700 space-y-4">
+                            <div>
+                                <h2 className="text-xl font-bold text-slate-900 dark:text-white">🎯 Préparation Examen CCNA</h2>
+                                <p className="text-xs text-slate-500 dark:text-slate-400">Préparation complète aux examens ITN · SRWE · ENSA (v7) : {PREP_FICHES.length} fiches, {PREP_QCM.length} questions originales, simulateur chronométré et générateur de subnetting. Contenu original — thèmes alignés sur le niveau examen.</p>
+                            </div>
+                            <div className="flex gap-2 flex-wrap">
+                                {modes.map(m => (
+                                    <button key={m.id} onClick={() => setPrepMode(m.id)} className={`px-3 py-1.5 text-xs font-bold rounded-lg border transition-colors ${prepMode === m.id ? 'bg-brand-600 text-white border-brand-600' : 'bg-slate-100 dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-200'}`}>{m.label}</button>
+                                ))}
+                            </div>
+
+                            {/* ===== FICHES ===== */}
+                            {prepMode === 'fiches' && (
+                                <div className="space-y-4">
+                                    <p className="text-xs text-slate-500">Résumé des points essentiels, commandes Cisco et pièges d'examen, par domaine.</p>
+                                    {PREP_FICHES.map(f => (
+                                        <div key={f.dom} className="p-4 bg-slate-50 dark:bg-slate-900/50 rounded-xl border border-slate-200 dark:border-slate-700 space-y-3">
+                                            <h3 className="text-sm font-bold text-brand-600 dark:text-brand-400">{f.titre}</h3>
+                                            <ul className="list-disc pl-5 text-xs text-slate-700 dark:text-slate-300 space-y-1">
+                                                {f.points.map((p, i) => <li key={i}>{p}</li>)}
+                                            </ul>
+                                            {f.tableau && (
+                                                <div className="p-2.5 bg-sky-500/5 border border-sky-500/20 rounded text-xs text-slate-700 dark:text-slate-300 space-y-1">
+                                                    {f.tableau.map((r, i) => <div key={i}>{r}</div>)}
+                                                </div>
+                                            )}
+                                            {f.cmd.length > 0 && (
+                                                <div className="rounded-lg overflow-hidden border border-slate-700">
+                                                    <div className="bg-slate-800 px-3 py-1 text-[10px] font-bold uppercase text-slate-300">Commandes clés</div>
+                                                    <pre className="bg-slate-950 p-3 text-[11px] text-emerald-400 font-mono whitespace-pre-wrap break-words">{f.cmd.join('\n')}</pre>
+                                                </div>
+                                            )}
+                                            <div className="p-2.5 bg-red-500/10 border-l-4 border-red-500/50 rounded text-xs text-slate-700 dark:text-slate-300">
+                                                <span className="font-bold uppercase text-[10px] text-red-600 dark:text-red-400 block mb-0.5">⚠️ Pièges d'examen</span>
+                                                <ul className="list-disc pl-5 space-y-0.5">{f.pieges.map((p, i) => <li key={i}>{p}</li>)}</ul>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
+
+                            {/* ===== ENTRAÎNEMENT ===== */}
+                            {prepMode === 'entrainement' && (
+                                <div className="space-y-4">
+                                    <div className="flex gap-2 flex-wrap">
+                                        <button onClick={() => { setPrepDom('Tous'); setPrepLvl(0); }} className={`px-2.5 py-1 text-[11px] font-bold rounded-lg border ${prepDom === 'Tous' && prepLvl === 0 ? 'bg-brand-600 text-white border-brand-600' : 'bg-slate-100 dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300'}`}>Tous ({PREP_QCM.length})</button>
+                                        {PREP_DOMAINS.map(d => (
+                                            <button key={d.id} onClick={() => setPrepDom(d.id)} className={`px-2.5 py-1 text-[11px] font-bold rounded-lg border ${prepDom === d.id ? 'bg-brand-600 text-white border-brand-600' : 'bg-slate-100 dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300'}`}>{d.nom}</button>
+                                        ))}
+                                    </div>
+                                    <div className="flex gap-2 flex-wrap">
+                                        {[0, 1, 2, 3, 4].map(l => (
+                                            <button key={l} onClick={() => setPrepLvl(l)} className={`px-2.5 py-1 text-[11px] font-bold rounded-lg border ${prepLvl === l ? 'bg-amber-500 text-white border-amber-500' : 'bg-slate-100 dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300'}`}>{l === 0 ? 'Tous niveaux' : `Niveau ${l} — ${lvlLabels[l]}`}</button>
+                                        ))}
+                                    </div>
+                                    {PREP_QCM.filter(q => (prepDom === 'Tous' || q.dom === prepDom) && (prepLvl === 0 || q.lvl === prepLvl)).map(q => {
+                                        const isMulti = q.type === 'multi';
+                                        return (
+                                            <div key={q.id} className="p-4 bg-slate-50 dark:bg-slate-900/50 rounded-xl border border-slate-200 dark:border-slate-700 space-y-2">
+                                                <div className="flex flex-wrap items-center gap-2 text-[10px] font-bold">
+                                                    <span className="px-2 py-0.5 rounded-full bg-brand-500/10 text-brand-500">{domName(q.dom)}</span>
+                                                    <span className="px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-600 border border-amber-500/20">{lvlLabels[q.lvl]}</span>
+                                                    {q.type === 'multi' && <span className="px-2 py-0.5 rounded-full bg-purple-500/10 text-purple-500">Choix multiple</span>}
+                                                    {q.type === 'depannage' && <span className="px-2 py-0.5 rounded-full bg-red-500/10 text-red-500">Dépannage</span>}
+                                                    {q.type === 'config' && <span className="px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600">Commandes IOS</span>}
+                                                    {q.type === 'subnet' && <span className="px-2 py-0.5 rounded-full bg-sky-500/10 text-sky-500">Subnetting</span>}
+                                                    {q.type === 'vf' && <span className="px-2 py-0.5 rounded-full bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300">Vrai / Faux</span>}
+                                                </div>
+                                                <p className="text-xs font-bold text-slate-900 dark:text-white">{q.q}</p>
+                                                <details className="text-xs">
+                                                    <summary className="cursor-pointer text-brand-500 font-bold text-[11px]">Afficher la correction</summary>
+                                                    <ul className="mt-2 space-y-1">
+                                                        {q.options.map((o, i) => (
+                                                            <li key={i} className={`pl-2 border-l-2 ${q.correct.includes(i) ? 'border-emerald-500 text-emerald-700 dark:text-emerald-400' : 'border-slate-300 dark:border-slate-600 text-slate-600 dark:text-slate-400'}`}>
+                                                                {q.correct.includes(i) ? '✔ ' : '✕ '}{o}
+                                                            </li>
+                                                        ))}
+                                                    </ul>
+                                                    <div className="mt-2 p-2.5 bg-emerald-500/10 border-l-4 border-emerald-500/50 rounded text-slate-700 dark:text-slate-300">{q.exp}</div>
+                                                </details>
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+                            )}
+
+                            {/* ===== SIMULATEUR ===== */}
+                            {prepMode === 'simulateur' && (
+                                <div className="space-y-4">
+                                    {!simRunning && !simDone && (
+                                        <div className="text-center space-y-3 py-6">
+                                            <p className="text-xs text-slate-500 max-w-lg mx-auto">20 questions tirées au hasard dans toute la banque ({PREP_QCM.length} questions), 30 minutes, score et correction détaillée à la fin. Multi-réponses : cochez toutes les bonnes.</p>
+                                            <button onClick={startSimulator} className="px-6 py-2.5 bg-brand-600 hover:bg-brand-700 text-white text-sm font-bold rounded-xl shadow">▶️ Démarrer un examen blanc</button>
+                                        </div>
+                                    )}
+                                    {simRunning && !simDone && simQueue[simIdx] && (() => {
+                                        const q = simQueue[simIdx];
+                                        const isMulti = q.type === 'multi';
+                                        const cur = simAnswers[q.id] || [];
+                                        const mm = String(Math.floor(simTime / 60)).padStart(2, '0'); const ss = String(simTime % 60).padStart(2, '0');
+                                        return (
+                                            <div className="space-y-4">
+                                                <div className="flex justify-between items-center text-xs font-bold">
+                                                    <span className="text-slate-500">Question {simIdx + 1} / {simQueue.length}</span>
+                                                    <span className={`px-3 py-1 rounded-lg ${simTime < 300 ? 'bg-red-500/10 text-red-500' : 'bg-slate-100 dark:bg-slate-900 text-slate-600 dark:text-slate-300'}`}>⏱️ {mm}:{ss}</span>
+                                                </div>
+                                                <div className="h-1.5 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden"><div className="h-full bg-brand-500 transition-all" style={{ width: `${((simIdx) / simQueue.length) * 100}%` }} /></div>
+                                                <div className="p-4 bg-slate-50 dark:bg-slate-900/50 rounded-xl border border-slate-200 dark:border-slate-700 space-y-3">
+                                                    <p className="text-xs font-bold text-slate-900 dark:text-white">{q.q}</p>
+                                                    {isMulti && <p className="text-[10px] text-amber-600 font-bold uppercase">Choisissez plusieurs réponses</p>}
+                                                    <div className="space-y-2">
+                                                        {q.options.map((o, i) => (
+                                                            <label key={i} className={`flex items-start gap-2 p-2.5 rounded-lg border cursor-pointer text-xs transition-colors ${cur.includes(i) ? 'border-brand-500 bg-brand-500/5' : 'border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800'}`}>
+                                                                <input
+                                                                    type={isMulti ? 'checkbox' : 'radio'}
+                                                                    name={`sim-${q.id}`}
+                                                                    checked={cur.includes(i)}
+                                                                    onChange={() => setSimAnswers(prev => isMulti ? ({ ...prev, [q.id]: cur.includes(i) ? cur.filter(x => x !== i) : [...cur, i] }) : ({ ...prev, [q.id]: [i] }))}
+                                                                    className="mt-0.5"
+                                                                />
+                                                                <span className="text-slate-700 dark:text-slate-300">{o}</span>
+                                                            </label>
+                                                        ))}
+                                                    </div>
+                                                </div>
+                                                <div className="flex justify-between gap-3">
+                                                    <button disabled={simIdx === 0} onClick={() => setSimIdx(i => i - 1)} className="px-4 py-2 text-xs font-bold rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 disabled:opacity-40">← Précédent</button>
+                                                    {simIdx < simQueue.length - 1
+                                                        ? <button onClick={() => setSimIdx(i => i + 1)} className="px-4 py-2 text-xs font-bold rounded-lg bg-brand-600 text-white">Suivant →</button>
+                                                        : <button onClick={() => { setSimRunning(false); setSimDone(true); }} className="px-4 py-2 text-xs font-bold rounded-lg bg-emerald-600 text-white">✅ Terminer l'examen</button>}
+                                                </div>
+                                            </div>
+                                        );
+                                    })()}
+                                    {simDone && (
+                                        <div className="space-y-4">
+                                            <div className={`p-5 rounded-xl text-center ${simScore.pct >= 80 ? 'bg-emerald-500/10 border border-emerald-500/30' : simScore.pct >= 60 ? 'bg-amber-500/10 border border-amber-500/30' : 'bg-red-500/10 border border-red-500/30'}`}>
+                                                <p className="text-3xl font-black text-slate-900 dark:text-white">{simScore.pct} %</p>
+                                                <p className="text-xs text-slate-500">{simScore.ok} / {simScore.total} — {simScore.pct >= 90 ? 'Excellent — niveau examen dépassé' : simScore.pct >= 80 ? 'Prêt pour l\'examen' : simScore.pct >= 60 ? 'Base solide, revoir les fiches' : 'Reprendre les cours des domaines faibles'}</p>
+                                            </div>
+                                            {simQueue.map(q => {
+                                                const a = simAnswers[q.id] || [];
+                                                const ok = a.length === q.correct.length && q.correct.every(i => a.includes(i));
+                                                return (
+                                                    <div key={q.id} className={`p-3.5 rounded-xl border space-y-2 ${ok ? 'border-emerald-500/40 bg-emerald-500/5' : 'border-red-500/40 bg-red-500/5'}`}>
+                                                        <p className="text-xs font-bold text-slate-900 dark:text-white">{ok ? '✔' : '✕'} {q.q} <span className="text-[10px] text-slate-400 font-normal">({domName(q.dom)})</span></p>
+                                                        <ul className="text-xs space-y-0.5">
+                                                            {q.options.map((o, i) => (
+                                                                <li key={i} className={`${q.correct.includes(i) ? 'text-emerald-600 dark:text-emerald-400 font-bold' : 'text-slate-500 dark:text-slate-400'} ${a.includes(i) && !q.correct.includes(i) ? 'line-through text-red-500' : ''}`}>
+                                                                    {q.correct.includes(i) ? '✔' : '✕'} {o}{a.includes(i) ? ' (votre choix)' : ''}
+                                                                </li>
+                                                            ))}
+                                                        </ul>
+                                                        <p className="text-[11px] text-slate-600 dark:text-slate-400 bg-white/50 dark:bg-slate-900/50 rounded p-2">{q.exp}</p>
+                                                    </div>
+                                                );
+                                            })}
+                                            <div className="text-center">
+                                                <button onClick={startSimulator} className="px-6 py-2.5 bg-brand-600 hover:bg-brand-700 text-white text-sm font-bold rounded-xl shadow">🔄 Nouveau tirage</button>
+                                            </div>
+                                        </div>
+                                    )}
+                                </div>
+                            )}
+
+                            {/* ===== SUBNETTING ===== */}
+                            {prepMode === 'subnetting' && (() => {
+                                const cur = subStreak.cur || prepHelpers.newSubExercise();
+                                const inputs = subStreak.inputs || {};
+                                const setIn = (k, v) => setSubStreak(s => ({ ...s, inputs: { ...(s.inputs || {}), [k]: v } }));
+                                const check = () => {
+                                    const norm = (s) => String(s || '').trim();
+                                    const res = {
+                                        mask: norm(inputs.mask) === cur.mask,
+                                        network: norm(inputs.network) === cur.network,
+                                        broadcast: norm(inputs.broadcast) === cur.broadcast,
+                                        first: norm(inputs.first) === cur.first,
+                                        last: norm(inputs.last) === cur.last,
+                                        hosts: Number(norm(inputs.hosts)) === cur.hosts
+                                    };
+                                    const ok = Object.values(res).filter(Boolean).length;
+                                    setSubStreak(s => ({ ...s, checked: true, total: s.total + 1, ok: s.ok + (ok === 6 ? 1 : 0), result: { ...res, score: ok } }));
+                                };
+                                const next = () => setSubStreak({ ok: subStreak.ok, total: subStreak.total, cur: prepHelpers.newSubExercise(), inputs: {}, checked: false });
+                                const fields = [
+                                    ['mask', 'Masque décimal (ex : 255.255.255.192)'],
+                                    ['network', 'Adresse réseau'],
+                                    ['broadcast', 'Adresse de diffusion'],
+                                    ['first', 'Première adresse utilisable'],
+                                    ['last', 'Dernière adresse utilisable'],
+                                    ['hosts', 'Nombre d\'hôtes utilisables']
+                                ];
+                                return (
+                                    <div className="space-y-4">
+                                        <p className="text-xs text-slate-500">Exercices générés aléatoirement avec correction automatique. Écrivez les valeurs en notation décimale pointée (le nombre d'hôtes en chiffre). Série en cours : {subStreak.ok} réussites / {subStreak.total} essais.</p>
+                                        <div className="p-4 bg-slate-50 dark:bg-slate-900/50 rounded-xl border border-slate-200 dark:border-slate-700 space-y-3">
+                                            <p className="text-sm font-bold text-slate-900 dark:text-white">Calculer pour l'hôte <span className="text-brand-600 dark:text-brand-400 font-mono">{cur.ip}/{cur.prefix}</span></p>
+                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                                {fields.map(([k, label]) => (
+                                                    <div key={k}>
+                                                        <label className="text-[10px] font-bold uppercase text-slate-500 block mb-1">{label}</label>
+                                                        <input type="text" value={inputs[k] || ''} onChange={(e) => setIn(k, e.target.value)} disabled={subStreak.checked}
+                                                            className={`w-full bg-white dark:bg-slate-800 border rounded-lg px-3 py-1.5 text-xs font-mono text-slate-900 dark:text-slate-100 focus:outline-none focus:border-brand-500 ${subStreak.checked ? (subStreak.result && subStreak.result[k] ? 'border-emerald-500' : 'border-red-500') : 'border-slate-300 dark:border-slate-700'}`} />
+                                                    </div>
+                                                ))}
+                                            </div>
+                                            {subStreak.checked && (
+                                                <div className={`p-3 rounded text-xs ${subStreak.result.score === 6 ? 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-400' : 'bg-amber-500/10 text-amber-700 dark:text-amber-400'}`}>
+                                                    {subStreak.result.score === 6 ? '🎉 Parfait — 6/6 !' : `${subStreak.result.score}/6. Réponses attendues : masque ${cur.mask} · réseau ${cur.network} · diffusion ${cur.broadcast} · utilisables ${cur.first} → ${cur.last} (${cur.hosts} hôtes).`}
+                                                </div>
+                                            )}
+                                            <div className="flex gap-3">
+                                                {!subStreak.checked
+                                                    ? <button onClick={check} className="px-4 py-2 text-xs font-bold rounded-lg bg-brand-600 text-white">✔️ Vérifier</button>
+                                                    : <button onClick={next} className="px-4 py-2 text-xs font-bold rounded-lg bg-brand-600 text-white">Exercice suivant →</button>}
+                                                <button onClick={next} className="px-4 py-2 text-xs font-bold rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">Skip</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                );
+                            })()}
+                        </div>
+                    </div>
+                );
+            };
+
             // Rendu Onglet Examen Blanc
             return (
                 <div className="min-h-screen flex flex-col">
@@ -8008,6 +8628,7 @@
                                 {[
                                     { id: 'dashboard', label: '🏠 Dashboard' },
                                     { id: 'courses', label: '📚 Cours & Fiches' },
+                                    { id: 'prep', label: '🎯 Prépa Examen' },
                                     { id: 'qcm', label: '✍️ Banque QCM' },
                                     { id: 'labs', label: '🧪 Labos Guidés' },
                                     { id: 'commands', label: '⚙️ Commandes' },
@@ -8036,6 +8657,7 @@
                     <main className="flex-1 max-w-7xl w-full mx-auto px-4 py-6 pb-24 md:pb-6">
                         {currentTab === 'dashboard' && renderDashboard()}
                         {currentTab === 'courses' && renderCourses()}
+                        {currentTab === 'prep' && renderPrepTab()}
                         {currentTab === 'qcm' && renderQCM()}
                         {currentTab === 'labs' && renderLabs()}
                         {currentTab === 'commands' && renderCommandsTab()}
