@@ -44,7 +44,7 @@
             z-index: -2;
             opacity: 0.06;
             pointer-events: none;
-            background-image: var(--site-bg-image, url('assets/images/background-network.jpg'));
+            background-image: url('assets/images/background-network.jpg');
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
@@ -3008,15 +3008,6 @@
             "rsync -av --delete -n source/ dest/ : le -n (dry-run) montre ce qui serait supprimé — à tester avant tout --delete.",
             "crontab -l : vérifier les tâches planifiées de l'utilisateur courant (root ≠ votre utilisateur).",
             "tail -f /var/log/auth.log : surveiller les connexions SSH en direct pendant un test d'accès."
-        ];
-
-        // --- BANQUE D'IMAGES : dossier Images/ (prévisualisation manuelle — aucune sélection automatique) ---
-        const IMG_POOL = [
-            'alexander-korte-5eIKzXXMMZw-unsplash.jpg',
-            'conny-schneider-xuTJZ7uD7PI-unsplash.jpg',
-            'mahdi-bafande-RvbHJ2RB9LY-unsplash.jpg',
-            'pexels-marek-piwnicki-3907296-12489187.jpg',
-            'robynne-o-HOrhCnQsxnQ-unsplash.jpg'
         ];
 
         const LABS_DATA = [            {
@@ -6335,30 +6326,6 @@
                 resetSession();
             }, [mode, qcmData, filterLabel]);
 
-            // Images : appliquer le fond sauvegardé + mesurer méta (résolution, luminance) de toutes les images du dossier Images/
-            useEffect(() => {
-                const savedBg = localStorage.getItem('site_bg_img');
-                if (savedBg) document.documentElement.style.setProperty('--site-bg-image', `url('Images/${savedBg}')`);
-                IMG_POOL.forEach(name => {
-                    const img = new Image();
-                    img.onload = () => {
-                        let lum = 50;
-                        try {
-                            const cv = document.createElement('canvas');
-                            cv.width = 24; cv.height = 24;
-                            const cx = cv.getContext('2d');
-                            cx.drawImage(img, 0, 0, 24, 24);
-                            const d = cx.getImageData(0, 0, 24, 24).data;
-                            let s = 0;
-                            for (let i = 0; i < d.length; i += 4) s += 0.2126 * d[i] + 0.7152 * d[i + 1] + 0.0722 * d[i + 2];
-                            lum = (s / (d.length / 4)) / 2.55;
-                        } catch (e) { /* canvas indisponible */ }
-                        setImgMeta(prev => ({ ...prev, [name]: { w: img.naturalWidth, h: img.naturalHeight, lum } }));
-                    };
-                    img.src = 'Images/' + name;
-                });
-            }, []);
-
             const persistErrors = (ids) => {
                 setErrorIds(ids);
                 try { localStorage.setItem('tssr_qcm_errors', JSON.stringify(ids)); } catch (e) { /* stockage indisponible */ }
@@ -7017,38 +6984,6 @@
             const [scriptsOs, setScriptsOs] = useState('Windows');
             const [scriptsSearch, setScriptsSearch] = useState('');
             const [dashSeed, setDashSeed] = useState(0); // actualisation des indispensables du jour
-            // --- Prévisualisation des images du dossier Images/ ---
-            const [imgBanner, setImgBanner] = useState(() => localStorage.getItem('site_banner_img') || 'assets/images/dashboard-banner-network.jpg');
-            const [imgMeta, setImgMeta] = useState({});          // nom -> {w, h, lum} (luminance 0-100)
-            const [imgRatings, setImgRatings] = useState(() => {
-                try { return JSON.parse(localStorage.getItem('img_ratings') || '{}'); } catch (e) { return {}; }
-            });
-            const [imgCompare, setImgCompare] = useState({ a: IMG_POOL[0], b: IMG_POOL[1] || IMG_POOL[0], open: false });
-            const applySiteBg = (name) => {
-                const path = name ? 'Images/' + name : '';
-                if (path) document.documentElement.style.setProperty('--site-bg-image', `url('${path}')`);
-                else document.documentElement.style.removeProperty('--site-bg-image');
-                if (name) localStorage.setItem('site_bg_img', name); else localStorage.removeItem('site_bg_img');
-            };
-            const saveBanner = (name) => { setImgBanner('Images/' + name); localStorage.setItem('site_banner_img', name); };
-            const saveRating = (name, crit, val) => {
-                setImgRatings(prev => {
-                    const next = { ...prev, [name]: { ...(prev[name] || {}), [crit]: val } };
-                    localStorage.setItem('img_ratings', JSON.stringify(next));
-                    return next;
-                });
-            };
-            const recommendation = (meta) => {
-                if (!meta) return null;
-                const lum = meta.lum;         // 0 (noir) à 100 (blanc)
-                const wide = meta.w / meta.h;
-                let usage, justif;
-                if (lum < 30 && wide > 1.2) { usage = 'Fond global (thème sombre)'; justif = `Image très sombre (luminance ${Math.round(lum)}/100) : sur fond sombre elle reste discrète ; en clair elle alourdit. Format large (${meta.w}×${meta.h}) : bien en couverture.`; }
-                else if (lum > 70) { usage = 'À éviter en fond'; justif = `Image très claire (luminance ${Math.round(lum)}/100) : à 6 % d'opacité elle rend le mode clair « laiteux » et le mode sombre grisé. Réserver à la bannière où l'overlay sombre fait le travail.`; }
-                else if (wide > 1.8) { usage = 'Bannière Dashboard'; justif = `Format très panoramique (${meta.w}×${meta.h}) : composition pensée pour une bande horizontale — en fond plein écran elle se dégrade en mosaïque ; en bannière elle s'affiche sans recadrage forcé.`; }
-                else { usage = 'Fond global ou bannière'; justif = `Luminance médiane (≈${Math.round(lum)}/100) et ratio ${wide.toFixed(1)} : assez neutre pour les deux usages — à juger après le test visuel (bouton « Tester »).`; }
-                return { usage, justif };
-            };
             const [selectedLabId, setSelectedLabId] = useState(null);
             const [labChecklist, setLabChecklist] = useState(() => {
                 try { return JSON.parse(localStorage.getItem('tssr_lab_checklist') || '{}'); } catch (e) { return {}; }
@@ -7358,7 +7293,7 @@
 
                         {/* ===== 2. BANNER CENTRAL ===== */}
                         <div className="fade-up-2 relative rounded-2xl overflow-hidden shadow-lg border border-slate-200 dark:border-slate-700">
-                            <img src={imgBanner} alt="Infrastructure réseau et datacenter" className="w-full h-40 md:h-56 object-cover" />
+                            <img src="assets/images/dashboard-banner-network.jpg" alt="Infrastructure réseau et datacenter" className="w-full h-40 md:h-56 object-cover" />
                             <div className="absolute inset-0 bg-gradient-to-r from-slate-950/85 via-slate-900/60 to-slate-900/30 flex flex-col justify-center px-6 md:px-10">
                                 <h2 className="text-xl md:text-2xl font-bold text-white leading-tight max-w-xl">Plateforme de formation Systèmes, Réseaux, Cybersécurité et CCNA</h2>
                                 <p className="text-sky-300 text-sm md:text-base font-semibold mt-1.5">Apprenez, pratiquez, dépannez.</p>
@@ -8619,145 +8554,6 @@
                 );
             };
 
-            // Rendu Onglet Images (prévisualisation et choix manuel des visuels)
-            const IMG_CRITERIA = ['Lisibilité', 'Style IT', 'Aspect professionnel', 'Intégration sombre'];
-            const critsAvg = (name, ratings) => {
-                const r = ratings[name];
-                if (!r) return null;
-                const vals = IMG_CRITERIA.map(c => r[c]).filter(v => v > 0);
-                return vals.length ? vals.reduce((a, b) => a + b, 0) / vals.length : null;
-            };
-            const renderImagesTab = () => {
-                const crits = IMG_CRITERIA;
-                const imgCard = (name, role) => {
-                    const meta = imgMeta[name];
-                    const rec = recommendation(meta);
-                    const currentBg = (localStorage.getItem('site_bg_img') || 'assets/images/background-network.jpg') === 'Images/' + name;
-                    const currentBan = imgBanner === 'Images/' + name;
-                    const crits = ['Lisibilité', 'Style IT', 'Aspect professionnel', 'Intégration sombre'];
-                    const stars = (crit) => {
-                        const val = (imgRatings[name] || {})[crit] || 0;
-                        return (
-                            <div className="flex gap-0.5">
-                                {[1, 2, 3, 4, 5].map(v => (
-                                    <button key={v} onClick={() => saveRating(name, crit, val === v ? 0 : v)} className={`text-xs ${v <= val ? 'text-amber-500' : 'text-slate-300 dark:text-slate-600 hover:text-amber-400'}`}>★</button>
-                                ))}
-                            </div>
-                        );
-                    };
-                    return (
-                        <div key={name + role} className="p-4 bg-slate-50 dark:bg-slate-900/50 rounded-xl border border-slate-200 dark:border-slate-700 space-y-2">
-                            <img src={'Images/' + name} alt={name} className="w-full h-32 object-cover rounded-lg border border-slate-200 dark:border-slate-700" />
-                            <p className="text-[11px] font-bold text-slate-900 dark:text-white break-all">{name}</p>
-                            <p className="text-[10px] text-slate-500 font-mono">{meta ? `${meta.w} × ${meta.h} px · luminance ${Math.round(meta.lum)}/100` : 'Chargement…'}</p>
-                            <div className="flex flex-wrap gap-2">
-                                {role === 'fond' && (
-                                    <>
-                                        <button onClick={() => applySiteBg(name)} className="px-2.5 py-1 text-[11px] font-bold rounded-lg bg-brand-600 text-white hover:bg-brand-700">👀 Tester comme fond</button>
-                                        <button onClick={() => applySiteBg('')} className="px-2.5 py-1 text-[11px] font-bold rounded-lg bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300">Réinitialiser</button>
-                                    </>
-                                )}
-                                {role === 'banner' && (
-                                    <>
-                                        <button onClick={() => saveBanner(name)} className="px-2.5 py-1 text-[11px] font-bold rounded-lg bg-brand-600 text-white hover:bg-brand-700">👀 Tester dans le Dashboard</button>
-                                        <button onClick={() => { setImgBanner('assets/images/dashboard-banner-network.jpg'); localStorage.removeItem('site_banner_img'); }} className="px-2.5 py-1 text-[11px] font-bold rounded-lg bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300">Réinitialiser</button>
-                                    </>
-                                )}
-                            </div>
-                            <div className="flex flex-wrap gap-2">
-                                <button onClick={() => applySiteBg(name)} className="px-2.5 py-1 text-[11px] font-bold rounded-lg bg-emerald-600 text-white hover:bg-emerald-700">✅ Fond : utiliser définitivement</button>
-                                <button onClick={() => saveBanner(name)} className="px-2.5 py-1 text-[11px] font-bold rounded-lg bg-emerald-600 text-white hover:bg-emerald-700">✅ Bannière : utiliser définitivement</button>
-                                <button onClick={() => { applySiteBg(name); saveBanner(name); }} className="px-2.5 py-1 text-[11px] font-bold rounded-lg bg-indigo-600 text-white hover:bg-indigo-700">✅ Les deux</button>
-                            </div>
-                            {(currentBg || currentBan) && (
-                                <p className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400">✔ En usage actuel : {currentBg && currentBan ? 'fond global + bannière' : currentBg ? 'fond global' : 'bannière Dashboard'}</p>
-                            )}
-                            {rec && (
-                                <div className="p-2.5 bg-sky-500/10 border-l-4 border-sky-500/50 rounded text-xs text-slate-700 dark:text-slate-300">
-                                    <span className="font-bold uppercase text-[10px] text-sky-600 dark:text-sky-400 block mb-0.5">Utilisation recommandée : {rec.usage}</span>
-                                    {rec.justif}
-                                </div>
-                            )}
-                            <div className="p-2 rounded border border-slate-200 dark:border-slate-700 space-y-1">
-                                <span className="text-[10px] font-bold uppercase text-slate-500 block">Ma notation (cliquer pour noter)</span>
-                                {crits.map(c => (
-                                    <div key={c} className="flex justify-between items-center">
-                                        <span className="text-[11px] text-slate-600 dark:text-slate-400">{c}</span>
-                                        {stars(c)}
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-                    );
-                };
-                const metaA = imgMeta[imgCompare.a]; const metaB = imgMeta[imgCompare.b];
-                const scoreOf = (name) => critsAvg(name, imgRatings);
-                return (
-                    <div className="space-y-6">
-                        <div className="bg-white dark:bg-slate-800 rounded-xl p-4 md:p-6 border border-slate-200 dark:border-slate-700 space-y-5">
-                            <div>
-                                <h2 className="text-xl font-bold text-slate-900 dark:text-white">🖼️ Choix des visuels du site</h2>
-                                <p className="text-xs text-slate-500 dark:text-slate-400">{IMG_POOL.length} images détectées dans le dossier Images/. Testez chaque rendu directement (fond global / bannière), notez, comparez, puis validez définitivement. Le choix est 100 % manuel.</p>
-                            </div>
-
-                            {/* Comparaison côte à côte */}
-                            <div className="p-4 rounded-xl border-2 border-amber-500/40 bg-amber-500/5 space-y-3">
-                                <div className="flex flex-wrap justify-between items-center gap-2">
-                                    <h3 className="text-sm font-bold text-slate-900 dark:text-white">⚖️ Mode comparaison A / B</h3>
-                                    <button onClick={() => setImgCompare(c => ({ ...c, open: !c.open }))} className="px-3 py-1 text-xs font-bold rounded-lg bg-amber-500 text-white">{imgCompare.open ? 'Masquer' : 'Comparer'}</button>
-                                </div>
-                                {imgCompare.open && (
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                        {['a', 'b'].map(slot => (
-                                            <div key={slot} className="space-y-2">
-                                                <div className="flex gap-2 items-center">
-                                                    <span className="w-7 h-7 rounded-full bg-brand-600 text-white text-xs font-black flex items-center justify-center">{slot.toUpperCase()}</span>
-                                                    <select value={imgCompare[slot]} onChange={(e) => setImgCompare(c => ({ ...c, [slot]: e.target.value }))} className="flex-1 bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-lg px-2 py-1.5 text-[11px] text-slate-900 dark:text-slate-100">
-                                                        {IMG_POOL.map(n => <option key={n} value={n}>{n}</option>)}
-                                                    </select>
-                                                    {metaA && metaB && slot === 'a' && scoreOf(imgCompare.a) !== null && scoreOf(imgCompare.b) !== null && scoreOf(imgCompare.a) >= scoreOf(imgCompare.b) && <span className="text-[10px] font-bold text-emerald-500">🏆</span>}
-                                                    {metaA && metaB && slot === 'b' && scoreOf(imgCompare.a) !== null && scoreOf(imgCompare.b) !== null && scoreOf(imgCompare.b) > scoreOf(imgCompare.a) && <span className="text-[10px] font-bold text-emerald-500">🏆</span>}
-                                                </div>
-                                                <img src={'Images/' + imgCompare[slot]} alt={imgCompare[slot]} className="w-full h-40 object-cover rounded-lg border border-slate-300 dark:border-slate-600" />
-                                                <div className="p-2 rounded bg-white dark:bg-slate-900/70 border border-slate-200 dark:border-slate-700 space-y-1">
-                                                    {['Lisibilité', 'Style IT', 'Aspect professionnel', 'Intégration sombre'].map(c => (
-                                                        <div key={c} className="flex justify-between items-center">
-                                                            <span className="text-[10px] text-slate-600 dark:text-slate-400">{c}</span>
-                                                            {(() => { const val = (imgRatings[imgCompare[slot]] || {})[c] || 0; return (
-                                                                <span className="flex gap-0.5">{[1,2,3,4,5].map(v => (
-                                                                    <button key={v} onClick={() => saveRating(imgCompare[slot], c, val === v ? 0 : v)} className={`text-[11px] ${v <= val ? 'text-amber-500' : 'text-slate-300 dark:text-slate-600'}`}>★</button>
-                                                                ))}</span>
-                                                            ); })()}
-                                                        </div>
-                                                    ))}
-                                                    <p className="text-[10px] text-slate-500 font-mono">{metaA && metaB ? (slot === 'a' ? `${metaA.w}×${metaA.h} · lum ${Math.round(metaA.lum)}` : `${metaB.w}×${metaB.h} · lum ${Math.round(metaB.lum)}`) : ''}</p>
-                                                </div>
-                                            </div>
-                                        ))}
-                                    </div>
-                                )}
-                            </div>
-
-                            {/* Section Fond */}
-                            <div className="space-y-3">
-                                <h3 className="text-sm font-bold text-brand-600 dark:text-brand-400 border-b border-slate-200 dark:border-slate-700 pb-1">1. Choix du fond du site <span className="text-slate-400 font-normal">— le « Tester » s'applique instantanément sur tout le site</span></h3>
-                                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-                                    {IMG_POOL.map(n => imgCard(n, 'fond'))}
-                                </div>
-                            </div>
-
-                            {/* Section Bannière */}
-                            <div className="space-y-3">
-                                <h3 className="text-sm font-bold text-brand-600 dark:text-brand-400 border-b border-slate-200 dark:border-slate-700 pb-1">2. Choix de la bannière Dashboard <span className="text-slate-400 font-normal">— le « Tester » remplace la bannière immédiatement</span></h3>
-                                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-                                    {IMG_POOL.map(n => imgCard(n, 'banner'))}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                );
-            };
-
             // Rendu Onglet Examen Blanc
             return (
                 <div className="min-h-screen flex flex-col">
@@ -8857,7 +8653,6 @@
                                     { id: 'dashboard', label: '🏠 Dashboard' },
                                     { id: 'courses', label: '📚 Cours & Fiches' },
                                     { id: 'essentiels', label: '🛠️ Les Indispensables' },
-                                    { id: 'images', label: '🖼️ Images' },
                                     { id: 'qcm', label: '✍️ Banque QCM' },
                                     { id: 'labs', label: '🧪 Labos Guidés' },
                                     { id: 'commands', label: '⚙️ Commandes' },
@@ -8887,7 +8682,6 @@
                         {currentTab === 'dashboard' && renderDashboard()}
                         {currentTab === 'courses' && renderCourses()}
                         {currentTab === 'essentiels' && renderEssentielsTab()}
-                        {currentTab === 'images' && renderImagesTab()}
                         {currentTab === 'qcm' && renderQCM()}
                         {currentTab === 'labs' && renderLabs()}
                         {currentTab === 'commands' && renderCommandsTab()}
