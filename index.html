@@ -6984,6 +6984,7 @@
             const [scriptsOs, setScriptsOs] = useState('Windows');
             const [scriptsSearch, setScriptsSearch] = useState('');
             const [dashSeed, setDashSeed] = useState(0); // actualisation des indispensables du jour
+            const [modsOpen, setModsOpen] = useState(false); // liste des modules repliée sur mobile
             const [selectedLabId, setSelectedLabId] = useState(null);
             const [labChecklist, setLabChecklist] = useState(() => {
                 try { return JSON.parse(localStorage.getItem('tssr_lab_checklist') || '{}'); } catch (e) { return {}; }
@@ -7373,7 +7374,7 @@
             const renderCourses = () => (
                 <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
                     {/* Barre latérale des cours */}
-                    <div className="lg:col-span-1 space-y-2 bg-white dark:bg-slate-800 p-4 rounded-xl border border-slate-200 dark:border-slate-700 lg:sticky lg:top-20 lg:max-h-[calc(100vh-6rem)] overflow-y-auto self-start">
+                    <div className={`order-2 lg:order-1 lg:col-span-1 space-y-2 bg-white dark:bg-slate-800 p-4 rounded-xl border border-slate-200 dark:border-slate-700 lg:sticky lg:top-20 lg:max-h-[calc(100vh-6rem)] overflow-y-auto self-start ${modsOpen ? '' : 'hidden lg:block'}`}>
                         <div className="flex justify-between items-center mb-2">
                             <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider">Modules</h3>
                             <select
@@ -7396,7 +7397,7 @@
                             return (
                                 <button
                                     key={c.id}
-                                    onClick={() => setSelectedCourse(c)}
+                                    onClick={() => { setSelectedCourse(c); setModsOpen(false); }}
                                     className={`w-full text-left p-2.5 rounded-lg text-xs transition-all flex items-center justify-between ${
                                         isSelected
                                             ? 'bg-brand-600 text-white font-semibold'
@@ -7417,8 +7418,14 @@
                         })}
                     </div>
 
+                    {/* Bascule mobile : la liste des modules se replie sous le contenu sur téléphone */}
+                    <button onClick={() => setModsOpen(o => !o)} className="order-1 lg:hidden w-full flex items-center justify-between p-3 rounded-xl bg-brand-600 text-white text-xs font-bold shadow">
+                        <span>📚 {modsOpen ? 'Masquer' : 'Afficher'} les modules de cours</span>
+                        <span className="font-mono text-[10px] opacity-80">{filteredCourses.length} fiches · en cours : {selectedCourse.parcours} {selectedCourse.code}</span>
+                    </button>
+
                     {/* Contenu principal de la fiche de cours */}
-                    <div className="lg:col-span-3 space-y-6">
+                    <div className="order-3 lg:order-2 lg:col-span-3 space-y-6">
                         {selectedCourse ? (
                             selectedCourse.isPlaceholder ? (
                                 <div className="bg-white dark:bg-slate-800 rounded-xl p-12 border border-slate-200 dark:border-slate-700 shadow-sm text-center space-y-4">
