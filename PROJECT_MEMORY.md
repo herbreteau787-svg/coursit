@@ -1,5 +1,8 @@
 # PROJECT_MEMORY.md
 
+## Objectif
+Plateforme de révision + apprentissage TSSR (CP1-CP9), AIS (CP1-CP10) et CCNA 200-301 (parcours unique) : cours approfondis, QCM, labos guidés, commandes, scripts, centre de dépannage, glossaire, vocabulaire. Contenu pédagogique > fonctionnalités (interdiction de nouveaux widgets/onglets sauf demande explicite).
+
 ## Architecture
 - Site SPA single-file : `index.html` (React via Babel in-browser + Tailwind CDN). Tout est embarqué : données + rendu + logique.
 - Dépôt : `github.com/herbreteau787-svg/coursit` (compte CLI `herbreteau787-svg`). Pages : `https://herbreteau787-svg.github.io/coursit/`. Branche `master`. `.nojekyll`.
@@ -27,7 +30,7 @@
 - CDN : React 18, ReactDOM, Babel standalone, Tailwind (chunks). Aucun build tooling.
 - localStorage : progression modules, checklist labos.
 
-## Réalisées (synthèse)
+## Réalisées / historique récent (synthèse)
 - Logo cliquable Dashboard ; blocs « Renvois utiles » retirés ; Examen Blanc supprimé ; sidebar sticky.
 - CCNA unifié v1/v2 → parcours unique `CCNA` ; CCNA1.pdf et SpyKeeR exclus du dépôt.
 - CP2 enrichi (AD, AGDLP, Kerberos, FSMO) ; CP1/CP3 enrichis ; 6 maquettes SVG GUI (ADUC, Server Manager, GPMC, terminal Linux, Cisco CLI, Hyper-V).
