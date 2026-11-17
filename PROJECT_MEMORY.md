@@ -24,7 +24,7 @@ Plateforme de révision + apprentissage TSSR (CP1-CP9), AIS (CP1-CP10) et CCNA 2
 - `COURSES_DATA` (CCNA) : 13 entrées — cours complets 1.1, 1.3, 1.4, 1.5 (9 leçons), 1.7, 2.1, 2.2, 3.1, 4.1, 4.2 + fiches 1.2, 1.6, dom4.
 - `TSSR_COURSES` CP1-CP9 et `AIS_COURSES` CP1-CP10 : format leçon, guiSteps/deepDive variables.
 - `DEPANNAGE_DATA` : 30 fiches, 6 cats. `SCRIPTS_DATA` : 9 scripts, 3 cats.
-- Labs : `LABS_DATA` (~23), CCNA labs lab-ccna-01..N. QCM : `QCM_DATA`. Glossaire 177, vocab 321, commandes 223.
+- Labs : `LABS_DATA` (~23), CCNA labs lab-ccna-01..N. QCM : `QCM_DATA` (61 — CCNA 1.1-1.7 + 25 nouvelles pour 2.1-4.2, ids 141-165). Glossaire 177, vocab 321, commandes 223.
 
 ## Dépendances critiques
 - CDN : React 18, ReactDOM, Babel standalone, Tailwind (chunks). Aucun build tooling.
@@ -38,7 +38,7 @@ Plateforme de révision + apprentissage TSSR (CP1-CP9), AIS (CP1-CP10) et CCNA 2
 - `.gitignore` à jour (sources + build).
 
 ## Prochaines tâches
-1. QCM : importer QCM PrepaExamTSSR (30-40Q/CP) et PrepaCertifs (ENCOR QCM modules) dans `QCM_DATA` avec corrections détaillées.
+1. QCM : importer QCM PrepaExamTSSR (30-40Q/CP) et PrepaCertifs (ENCOR QCM modules) dans `QCM_DATA` avec corrections détaillées. (fait partiellement : CCNA 2.1-4.2 couverts)
 2. Labos : enrichir contexte entreprise + dépannage + validation depuis Labs-playground-main.
 3. Convertir fiches CCNA restantes 1.2, 1.6 en format leçon.
 4. Exploiter ENCOR Notes Modules 1-5 (170 Ko) pour approfondir 1.1/2.1/2.2/3.1.
