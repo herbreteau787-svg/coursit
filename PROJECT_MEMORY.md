@@ -7,7 +7,8 @@ Plateforme de révision + apprentissage TSSR (CP1-CP9), AIS (CP1-CP10) et CCNA 2
 - Site SPA single-file : `index.html` (React via Babel in-browser + Tailwind CDN). Tout est embarqué : données + rendu + logique.
 - Dépôt : `github.com/herbreteau787-svg/coursit` (compte CLI `herbreteau787-svg`). Pages : `https://herbreteau787-svg.github.io/coursit/`. Branche `master`. `.nojekyll`.
 - Serveur local : `python -m http.server 8741 --directory "C:\Users\Léo\Documents\Site-Cours IT"`.
-- Onglets : Dashboard, Cours & Fiches, Banque QCM, Labos Guidés, Commandes, Scripts, Dépannage, Glossaire, Vocabulaire Anglais. Logo → Dashboard. Pas d'onglet Examen Blanc.
+- Onglets : Dashboard (« Les indispensables du jour » : commande/port/PS tip/Linux tip/question réseau, indexés sur le jour de l'année), Cours & Fiches, **Les Indispensables** (`essentiels` : ports 36 entrées + quiz + favoris localStorage `ess_port_favs`, commandes 90 Windows/Linux/Cisco × 6 cats, adresses privées, CIDR /8-/32 calculé, codes HTTP, 15 outils), Banque QCM (180 — incl. 119 questions réinjectées de l'ancien Prépa Examen via conversion PREP_QCM→QCM_DATA ids 300+), Labos, Commandes, Scripts (29 scripts SCRIPTS_LIB Windows 15/Linux 14 par fréquence), Dépannage, Glossaire, Vocabulaire. Logo → Dashboard. Onglet « Prépa Examen » SUPPRIMÉ (PREP_QCM conservé pour la conversion, PREP_FICHES supprimé).
+- Fond visuel : `body::before` SVG circuit/topologie en data-URI, opacity 0.055, masqué en print.
 - Sources locales (git-ignorées, non publiées) : PrepaExamTSSR-main, Knowledge-base-main, Labs-playground-main, PrepaCertifs-main, Scripts-main, Cheatsheets-main, Anki-Cards-main, cours_IT-main, Cours_TSSR-main, CCNA1.pdf.
 
 ## Conventions
@@ -24,8 +25,9 @@ Plateforme de révision + apprentissage TSSR (CP1-CP9), AIS (CP1-CP10) et CCNA 2
 ## Données clés (état actuel)
 - `COURSES_DATA` (CCNA) : 13 entrées — cours complets 1.1, 1.3, 1.4, 1.5 (9 leçons), 1.7, 2.1, 2.2, 3.1, 4.1, 4.2 + fiches 1.2, 1.6, dom4.
 - `TSSR_COURSES` CP1-CP9 et `AIS_COURSES` CP1-CP10 : format leçon, guiSteps/deepDive variables.
-- `DEPANNAGE_DATA` : 30 fiches, 6 cats. `SCRIPTS_DATA` : 9 scripts, 3 cats.
-- Labs : `LABS_DATA` (~23), CCNA labs lab-ccna-01..N. QCM : `QCM_DATA` (61 — CCNA 1.1-1.7 + 25 nouvelles pour 2.1-4.2, ids 141-165). Glossaire 177, vocab 321, commandes 223.
+- `DEPANNAGE_DATA` : 30 fiches, 6 cats. `SCRIPTS_LIB` : 29 scripts (os win/lin, type PowerShell/Batch/Bash, freq ordre, description/usage/code/sortie/niveau). Ancien `SCRIPTS_DATA` supprimé.
+- **Les Indispensables** : `PORTS_DATA` 36, `ESSENTIALS_COMMANDS` (os/cat/items{c,d}), `PRIVATE_RANGES`, `HTTP_CODES` 12, `TOOLS_DATA` 15, `PS_TIPS`/`LIN_TIPS` 10 chacun. États : essTab/essPortSearch/essPortProto/essPortFavs/essOs/essCat/portQuiz/scriptsOs/scriptsSearch.
+- Labs : `LABS_DATA` (~23), CCNA labs lab-ccna-01..N. QCM : `QCM_DATA` (180 : 61 historiques + 25 CCNA 2.1-4.2 ids 141-165 + 119 réinjectées ids 300+, cp = nom de domaine D1-D14). Glossaire 177, vocab 321, commandes 223.
 
 ## Dépendances critiques
 - CDN : React 18, ReactDOM, Babel standalone, Tailwind (chunks). Aucun build tooling.
@@ -39,8 +41,8 @@ Plateforme de révision + apprentissage TSSR (CP1-CP9), AIS (CP1-CP10) et CCNA 2
 - `.gitignore` à jour (sources + build).
 
 ## Prochaines tâches
-1. Étendre `PREP_QCM` vers 200-300 questions (types dépannage/subnet explicites, drag-drop non supporté nativement en HTML — simuler par options). Ajouter un cours CCNA complet « OSI/TCP-IP + ARP » (code 1.8) et « Services réseau (DNS/HTTP/FTP/TFTP/SSH) » (code 1.9).
-2. QCM PrepaExamTSSR (30-40Q/CP) à importer dans `QCM_DATA` (fait partiellement : CCNA 2.1-4.2 couverts).
+1. Étendre `PREP_QCM`/QCM vers 200-300 questions. Ajouter des cours CCNA complets « OSI/TCP-IP + ARP » (1.8) et « Services réseau » (1.9).
+2. QCM PrepaExamTSSR (30-40Q/CP) à importer dans `QCM_DATA`.
 3. Labos : enrichir contexte entreprise + dépannage + validation depuis Labs-playground-main.
 3. Convertir fiches CCNA restantes 1.2, 1.6 en format leçon.
 4. Exploiter ENCOR Notes Modules 1-5 (170 Ko) pour approfondir 1.1/2.1/2.2/3.1.
