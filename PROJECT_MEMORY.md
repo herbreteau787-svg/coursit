@@ -33,7 +33,8 @@ Plateforme de révision + apprentissage TSSR (CP1-CP9), AIS (CP1-CP10) et CCNA 2
 
 ## Dépendances critiques
 - CDN : React 18, ReactDOM, Babel standalone, Tailwind (chunks). Aucun build tooling.
-- localStorage : progression modules, checklist labos.
+- localStorage : progression modules, checklist labos, `ess_port_favs`, `site_bg_img`/`site_banner_img` (obsolètes, ignorés), `img_ratings` (obsolète).
+- Mobile : liste des modules repliée par défaut sous lg (état `modsOpen`, bouton bascule `lg:hidden`, ordre grid `order-1/2/3` = toggle → sidebar → contenu ; sélection d'un module referme la liste). Desktop ≥ lg inchangé (sidebar sticky). Nav header déjà scrollable (`overflow-x-auto`) ; nav rapide mobile fixe en bas existe.
 
 ## Réalisées / historique récent (synthèse)
 - Logo cliquable Dashboard ; blocs « Renvois utiles » retirés ; Examen Blanc supprimé ; sidebar sticky.
