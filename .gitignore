@@ -3,6 +3,17 @@ cours_IT-main/
 Cours_TSSR-main/
 CCNA1.pdf
 
+# Build
+node_modules/
+dist/
+build/
+coverage/
+.vscode/
+.next/
+target/
+bin/
+obj/
+
 # Sauvegardes locales du site
 sauvegarde_*.html
 
