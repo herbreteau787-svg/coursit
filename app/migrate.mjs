@@ -3,7 +3,7 @@ import fs from 'fs';
 import path from 'path';
 
 const ROOT = process.cwd();
-const SRC = path.join(ROOT, 'index.html');
+const SRC = path.join(ROOT, 'legacy', 'index.html');
 const APP = path.join(ROOT, 'app', 'src');
 
 const html = fs.readFileSync(SRC, 'utf8');

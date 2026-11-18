@@ -44,9 +44,7 @@ Le workflow `.github/workflows/deploy.yml` construit `app/dist` et le déploie a
 
 Le site est alors publié sur `https://herbreteau787-svg.github.io/coursit/`.
 
-## L'ancienne version mono-fichier
-
-`index.html` à la racine reste la version « legacy » auto-contenue (React CDN + Babel). Elle sert de source historique ; la version Vite est désormais la version de référence.
+## La version historique mono-fichier est archivée dans **`legacy/index.html`** (React CDN + Babel — source de l'extraction modulaire). Le `index.html` à la racine est désormais un simple **chargeur** : il redirige automatiquement vers `app/dist/index.html` (le build Vite local) ou vers la version en ligne — aucune logique métier.
 
 ## Contenu pédagogique
 

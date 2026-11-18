@@ -1,10 +1,10 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 
-// GitHub Pages : déploiement sous https://herbreteau787-svg.github.io/coursit/
+// Base relative : le build fonctionne partout (GitHub Pages /coursit/, serveur local, sous-dossier)
 export default defineConfig({
   plugins: [react()],
-  base: '/coursit/',
+  base: './',
   build: {
     outDir: 'dist',
     chunkSizeWarningLimit: 900
