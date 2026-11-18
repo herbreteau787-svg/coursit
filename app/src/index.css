@@ -1,0 +1,48 @@
+﻿@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+        body { font-family: 'Inter', sans-serif; }
+        code, pre { font-family: 'Fira Code', monospace; }
+        
+        /* Fond d'identité visuelle : photo datacenter/réseau, fixe et discrète (3-8 %) */
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            z-index: -2;
+            opacity: 0.16;
+            pointer-events: none;
+            background-image: url('./assets/robynne.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+        /* Overlay sombre supplémentaire par-dessus la photo, sous le contenu */
+        body::after {
+            content: "";
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            pointer-events: none;
+            background: linear-gradient(180deg, rgba(2,6,23,0.28), rgba(2,6,23,0.16));
+        }
+        html.dark body::after {
+            background: linear-gradient(180deg, rgba(2,6,23,0.55), rgba(15,23,42,0.35));
+        }
+
+        /* Animations légères du Dashboard */
+        @keyframes fadeUp { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+        .fade-up { animation: fadeUp 0.45s ease-out both; }
+        .fade-up-2 { animation: fadeUp 0.55s ease-out 0.08s both; }
+        .fade-up-3 { animation: fadeUp 0.65s ease-out 0.16s both; }
+
+        /* Cheat Sheets imprimables sur une page A4 sans perte (NF-08 / REC-06) */
+        @media print {
+            body::before, body::after { display: none; }
+            body * { visibility: hidden; }
+            #printable-area, #printable-area * { visibility: visible; }
+            #printable-area { position: absolute; left: 0; top: 0; width: 100%; color: black !important; background: white !important; }
+            .no-print { display: none !important; }
+            .print-card { border: 1px solid #ccc !important; break-inside: avoid; page-break-inside: avoid; }
+        }

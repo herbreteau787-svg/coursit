@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://herbreteau787-svg.github.io/coursit/sitemap.xml

@@ -29,3 +29,7 @@ Labs-playground-main/
 PrepaCertifs-main/
 PrepaExamTSSR-main/
 Scripts-main/CURRENT_TASK.md
+
+# Application Vite
+app/node_modules/
+app/dist/
