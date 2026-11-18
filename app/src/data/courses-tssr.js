@@ -17,7 +17,7 @@ export const TSSR_COURSES = [
                         { h: "Exemple concret", t: "Un utilisateur ne reçoit plus ses mails : incident. Le même utilisateur demande une boîte mail partagée pour son équipe : demande de service. Même outil (le ticket), mais circuits et priorités différents." }
                     ]},
                     { title: "Leçon 2 — Le cycle de vie d'un ticket", parts: [
-                        { h: "Enregistrement", t: "À la prise du ticket, notez : qui appelle, sur quel équipement, depuis quand, le message d'erreur exact, ce qui a déjà été tenté, et l'impact métier (une personne bloquée ? un service entier ?). Sans ces éléments, la qualification sera approximative." },
+                        { h: "Enregistrement", t: "À la prise du ticket, notez : qui appelle, sur quel équipement, depuis quand, le message d'erreur exact, ce qui a déjà été tenté, et l'impact métier (une personne bloquée ? un service entier ?). Sans ces éléments, la qualification sera approximative.", schema: 'support-cycle-v2' },
                         { h: "Qualification et priorité", t: "La priorité croise l'impact (combien d'utilisateurs touchés, criticité du service) et l'urgence (délai acceptable). Un atelier entier bloqué passe avant la souris d'un directeur : c'est l'impact sur l'activité qui décide, pas le grade." },
                         { h: "Traitement, escalade et clôture", t: "Le niveau 1 traite les cas courants (câble, mot de passe, compte). En cas d'échec, le ticket passe au niveau 2 (spécialistes) puis au niveau 3 (concepteurs, éditeurs). On clôture seulement après confirmation de l'utilisateur, avec une synthèse courte de la cause et de la solution." }
                     ]},
