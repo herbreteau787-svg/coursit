@@ -297,7 +297,7 @@ export const TSSR_COURSES = [
                     ]},
                     { title: "Leçon 2 — Les services qui font marcher le réseau", parts: [
                         { h: "DHCP", t: "Le serveur DHCP distribue automatiquement adresse + masque + passerelle + serveurs DNS. S'il ne répond pas, le poste garde une adresse de repli 169.254.x.x. La séquence d'attribution (Discover, Offer, Request, Acknowledge) est détaillée dans la fiche CCNA 1.7." , schema: 'sequence-dora-dhcp' },
-                        { h: "DNS", t: "Le DNS traduit les noms (intranet.exemple.fr) en adresses IP. Symptôme classique : un poste peut joindre une IP mais pas un nom — le réseau va bien, c'est la résolution qui cloche." , schema: 'dns-resolution' },
+                        { h: "DNS", t: "Le DNS traduit les noms (intranet.exemple.fr) en adresses IP. Symptôme classique : un poste peut joindre une IP mais pas un nom — le réseau va bien, c'est la résolution qui cloche."  , img: 'images/dns-real-world.svg', imgCaption: 'Le DNS « dans le monde réel » (domaine public, Wikimedia Commons — Lion Kimbro) : cache du navigateur → résolveur de l\'OS → résolveur du FAI → recherche récursive. Chaque étage a son cache : une réponse mise en cache évite toute la chaîne.' },
                         { h: "Relire une configuration en dix secondes", t: "ipconfig /all (Windows) et ip a (Linux) affichent adresse, masque, passerelle et DNS. Ce réflexe d'affichage précède toute modification : on regarde, puis on conclut." }
                     ]},
                     { title: "Leçon 3 — Équipements et méthode de diagnostic", parts: [

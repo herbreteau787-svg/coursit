@@ -593,6 +593,12 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
                                 <div key={j} className="pl-3 border-l-2 border-brand-500/30">
                                     <h5 className="text-xs font-bold text-brand-600 dark:text-sky-300">{p.h}</h5>
                                     <p className="text-xs text-slate-700 dark:text-slate-300 leading-relaxed mt-1">{p.t}</p>
+                                    {p.img && (
+                                        <figure className="mt-2 p-2 bg-white dark:bg-slate-100 rounded-lg border border-slate-200 shadow-sm">
+                                            <img src={`${import.meta.env.BASE_URL}${p.img}`} alt={p.imgCaption || p.h} loading="lazy" className="w-full h-auto rounded" />
+                                            <figcaption className="text-[10px] text-slate-500 dark:text-slate-600 mt-1.5 px-1">{p.imgCaption}</figcaption>
+                                        </figure>
+                                    )}
                                     {p.schema && <div className="mt-2"><DynamicSVGDiagram type={p.schema} /></div>}
                                 </div>
                             ))}
