@@ -50,9 +50,8 @@ Plateforme de révision + apprentissage TSSR (CP1-CP9), AIS (CP1-CP10) et CCNA 2
 - `.gitignore` à jour (sources + build).
 
 ## Prochaines tâches
-1. Étendre `PREP_QCM`/QCM vers 200-300 questions. Ajouter des cours CCNA complets « OSI/TCP-IP + ARP » (1.8) et « Services réseau » (1.9).
-2. QCM PrepaExamTSSR (30-40Q/CP) à importer dans `QCM_DATA`.
-3. Labos : enrichir contexte entreprise + dépannage + validation depuis Labs-playground-main.
+1. Enrichissement progressif des labos (contexte entreprise, dépannage, validation) depuis Labs-playground-main.
+2. Évaluations supprimées des cours (redondance avec Banque QCM). QCM préférentiel pour l'auto-évaluation.
 3. Convertir fiches CCNA restantes 1.2, 1.6 en format leçon.
 4. Exploiter ENCOR Notes Modules 1-5 (170 Ko) pour approfondir 1.1/2.1/2.2/3.1.
 5. Glossaire/commands : extension depuis Cheatsheets-main.
