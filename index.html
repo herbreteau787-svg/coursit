@@ -81,6 +81,7 @@
 </head>
 <body class="bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-slate-100 min-h-screen transition-colors duration-200">
     <div id="root"></div>
+    <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#94a3b8"/></marker></defs></svg>
 
     <script type="text/babel">
         const { useState, useEffect, useMemo } = React;
@@ -105,9 +106,9 @@
                 ],
                 lessons: [
                     { title: "Leçon 1 — Le modèle OSI comme outil de diagnostic", parts: [
-                        { h: "Sept couches, un ordre de lecture", t: "7 Application (HTTP, DNS vu par l'utilisateur) ; 6 Présentation ; 5 Session ; 4 Transport (TCP/UDP, ports) ; 3 Réseau (IP, routage) ; 2 Liaison (Ethernet, MAC, VLAN) ; 1 Physique (câbles, signaux). En pratique, on diagnostique en remontant : couche 1 (lien physique ?), couche 2 (VLAN, duplex, erreurs de trames ?), couche 3 (adresse, passerelle, route ?), couche 7 (service, DNS ?). Chaque couche validée élimine la moitié des hypothèses restantes." },
+                        { h: "Sept couches, un ordre de lecture", t: "7 Application (HTTP, DNS vu par l'utilisateur) ; 6 Présentation ; 5 Session ; 4 Transport (TCP/UDP, ports) ; 3 Réseau (IP, routage) ; 2 Liaison (Ethernet, MAC, VLAN) ; 1 Physique (câbles, signaux). En pratique, on diagnostique en remontant : couche 1 (lien physique ?), couche 2 (VLAN, duplex, erreurs de trames ?), couche 3 (adresse, passerelle, route ?), couche 7 (service, DNS ?). Chaque couche validée élimine la moitié des hypothèses restantes." , schema: 'osi-tcpip' },
                         { h: "Encapsulation : l'emboîtement russe", t: "Une donnée applicative s'emballe : segment (couche 4, en-tête TCP avec ports), paquet (couche 3, en-tête IP avec adresses), trame (couche 2, en-tête Ethernet avec MAC + FCS de contrôle). Chaque couche ne lit que son en-tête : un switch lit les MAC (couche 2), un routeur les IP (couche 3). Le FCS (Frame Check Sequence) en fin de trame détecte la corruption : c'est lui qui alimente les compteurs CRC — une trame abîmée par un câble défectueux est jetée et comptée." },
-                        { h: "Ethernet et MAC", t: "Ethernet (IEEE 802.3) identifie chaque interface par son adresse MAC : 48 bits (6 octets, ex : 00:1A:2B:3C:4D:5E), les 24 premiers identifiant le constructeur (OUI). Le switch apprend les MAC source des trames entrantes pour bâtir sa table (show mac address-table) — une table qui « oscille » (la même MAC vue sur plusieurs ports) signale une boucle de couche 2." }
+                        { h: "Ethernet et MAC", t: "Ethernet (IEEE 802.3) identifie chaque interface par son adresse MAC : 48 bits (6 octets, ex : 00:1A:2B:3C:4D:5E), les 24 premiers identifiant le constructeur (OUI). Le switch apprend les MAC source des trames entrantes pour bâtir sa table (show mac address-table) — une table qui « oscille » (la même MAC vue sur plusieurs ports) signale une boucle de couche 2." , schema: 'arp-resolution' }
                     ]},
                     { title: "Leçon 2 — Collision, duplex et CSMA/CD", parts: [
                         { h: "Half-duplex et le domaine de collision", t: "En half-duplex, une interface émet OU reçoit, jamais les deux : deux émissions simultanées sur le même segment produisent une collision. Le CSMA/CD (détection de collision) gère ce partage : écouter avant d'émettre, détecter la collision, attendre un temps aléatoire (backoff) et réessayer. Le hub — aujourd'hui disparu — forçait tout le monde en half-duplex : un seul domaine de collision pour tous ses ports." },
@@ -333,7 +334,7 @@
                         { h: "Anycast", t: "Une même adresse affectée à plusieurs serveurs : le paquet atteint le plus proche en métrique de routage. Usage : résolveurs DNS racine (K-root, etc.) et CDN. Un anycast se configure comme une unicast — c'est le routage qui crée l'effet." }
                     ]},
                     { title: "Leçon 3 — Attribution : SLAAC, RA et EUI-64", parts: [
-                        { h: "SLAAC : l'autoconfiguration sans serveur", t: "En SLAAC (StateLess Address AutoConfiguration), l'hôte construit son adresse globale seul : il écoute les Router Advertisement (RA) que le routeur émet périodiquement (ou en réponse à un Router Solicitation). Le RA annonce le préfixe (/64) ; l'hôte y colle son identifiant d'interface — soit dérivé de sa MAC (EUI-64), soit aléatoire (privacy extensions, par défaut sur les OS modernes). Aucun serveur à gérer : c'est le mode par défaut d'Internet IPv6." },
+                        { h: "SLAAC : l'autoconfiguration sans serveur", t: "En SLAAC (StateLess Address AutoConfiguration), l'hôte construit son adresse globale seul : il écoute les Router Advertisement (RA) que le routeur émet périodiquement (ou en réponse à un Router Solicitation). Le RA annonce le préfixe (/64) ; l'hôte y colle son identifiant d'interface — soit dérivé de sa MAC (EUI-64), soit aléatoire (privacy extensions, par défaut sur les OS modernes). Aucun serveur à gérer : c'est le mode par défaut d'Internet IPv6." , schema: 'ipv6-slaac' },
                         { h: "EUI-64 : de la MAC à l'identifiant", t: "La MAC (48 bits) se coupe en deux moitiés, FFFE s'insère au milieu (48+16 = 64 bits), et le 7e bit du premier octet (bit U/L) s'inverse. MAC 00:1A:2B:3C:4D:5E → coupe en 001A:2B et 3C:4D:5E → insère FFFE → 001A:2BFF:FE3C:4D:5E → inverse le bit → 021A:2BFF:FE3C:4D:5E. L'identifiant complète le préfixe : 2001:db8:1::021A:2BFF:FE3C:4D:5E/64." },
                         { h: "DHCPv6 : stateless ou stateful", t: "Le routeur peut signaler dans ses RA deux autres modes : M-flag → DHCPv6 stateful (le serveur attribue tout, comme DHCPv4) ; O-flag → DHCPv6 stateless (l'hôte construit son adresse en SLAAC mais récupère les options — DNS — auprès du serveur). Sur Cisco : ipv6 nd other-config-flag (stateless) ou ipv6 nd managed-config-flag (stateful)." },
                         { h: "NDP, le remplaçant d'ARP", t: "Neighbor Discovery Protocol (ICMPv6) fait tout ce qu'ARP faisait et plus : résolution MAC (Neighbor Solicitation/Advertisement), détection de routeur (RS/RA), détection d'adresses dupliquées (DAD — l'hôte vérifie son unicité avant d'utiliser l'adresse) et découverte de préfixes obsolètes." }
@@ -675,7 +676,7 @@
                 ],
                 lessons: [
                     { title: "Leçon 1 — Pourquoi segmenter en VLAN", parts: [
-                        { h: "Le problème du réseau à plat", t: "Un commutateur relie tout le monde au niveau 2 : une trame de diffusion (broadcast) envoyée par un poste atteint les 400 autres postes du plateau. ARP, DHCP, les annonces Windows s'accumulent : c'est la tempête silencieuse qui ralentit tout le monde. Le VLAN (Virtual LAN) découpe logiquement ce commutateur en îlots : un broadcast VLAN 10 ne sort jamais du VLAN 10." },
+                        { h: "Le problème du réseau à plat", t: "Un commutateur relie tout le monde au niveau 2 : une trame de diffusion (broadcast) envoyée par un poste atteint les 400 autres postes du plateau. ARP, DHCP, les annonces Windows s'accumulent : c'est la tempête silencieuse qui ralentit tout le monde. Le VLAN (Virtual LAN) découpe logiquement ce commutateur en îlots : un broadcast VLAN 10 ne sort jamais du VLAN 10." , schema: 'vlan-segmentation' },
                         { h: "Un VLAN = un domaine de diffusion = (souvent) un sous-réseau", t: "La règle d'architecture : un VLAN correspond à un sous-réseau IP (VLAN 10 = 192.168.10.0/24, VLAN 20 = 192.168.20.0/24). Deux postes de VLAN différents peuvent être branchés sur le même switch : ils ne communiqueront jamais directement — il faut un routeur ou un switch couche 3 pour passer de l'un à l'autre." },
                         { h: "Ce que ça apporte en entreprise", t: "Sécurité : la comptabilité et les invités ne partagent plus le même espace broadcast — impossible d'écouter le trafic de l'autre VLAN. Performance : moins de broadcast, moins de charge CPU sur les postes. Organisation : l'affectation se fait par port, par adresse MAC ou par 802.1x, indépendamment de la prise murale où branche l'utilisateur." },
                         { h: "Les plages de VLAN", t: "VLAN 1 : par défaut, tous les ports y vivent à la sortie d'usine — on ne l'utilise pas en production. VLANs normaux : 2-1001. VLANs étendus : 1006-4094 (réservés en interne aux protocoles, utilisables avec VTP v3 ou en mode transparent). Les VLAN 1002-1005 sont historiquement réservés (Token Ring, FDDI)." }
@@ -770,7 +771,7 @@
                     { title: "Leçon 1 — La boucle de niveau 2, l'ennemi silencieux", parts: [
                         { h: "Trois symptômes d'une boucle", t: "Une boucle L2 (deux chemins entre deux commutateurs) produit : (1) des tempêtes de broadcast — une trame de diffusion tourne en boucle et sature tous les liens ; (2) l'instabilité de la table MAC — le commutateur voit la même MAC apparaître sur plusieurs ports ; (3) des trames dupliquées — les hôtes reçoivent tout en double. Le réseau ralentit puis meurt, souvent sans un seul message d'erreur dans les logs." },
                         { h: "Pourquoi le TTL ne sauve pas", t: "Les trames Ethernet de niveau 2 n'ont pas de TTL (contrairement aux paquets IP) : une trame de broadcast boucle indéfiniment. C'est tout le problème que STP vient résoudre : couper préventivement les chemins redondants au niveau 2 tout en gardant la redondance physique pour la panne." },
-                        { h: "Le mécanisme de STP", t: "Spanning Tree Protocol (IEEE 802.1D) élit un pont racine (root bridge), puis chaque commutateur calcule son meilleur chemin vers la racine. Les ports sur le meilleur chemin deviennent root port (un par switch) ou designated port (un par segment) et forwarded ; les autres passent en blocking : la topologie logique devient un arbre — sans boucle — en gardant les liens bloqués en réserve." }
+                        { h: "Le mécanisme de STP", t: "Spanning Tree Protocol (IEEE 802.1D) élit un pont racine (root bridge), puis chaque commutateur calcule son meilleur chemin vers la racine. Les ports sur le meilleur chemin deviennent root port (un par switch) ou designated port (un par segment) et forwarded ; les autres passent en blocking : la topologie logique devient un arbre — sans boucle — en gardant les liens bloqués en réserve." , schema: 'stp-election' }
                     ]},
                     { title: "Leçon 2 — L'élection du pont racine", parts: [
                         { h: "Qui devient racine", t: "Chaque commutateur envoie des BPDU (Bridge Protocol Data Units, toutes les 2 s par défaut — Hello Time) qui portent son Bridge ID = priorité + MAC. Est élu racine le Bridge ID le plus bas : priorité d'abord (32768 par défaut, multiple de 4096, moins = mieux placé), puis MAC la plus basse en cas d'égalité." },
@@ -785,7 +786,7 @@
                         { h: "UplinkFast/BackboneFast", t: "Améliorations Cisco héritées de l'époque 802.1D : UplinkFast accélère la bascule quand un lien vers la racine tombe ; BackboneFast détecte indirectement les changements de topologie en amont. Avec RSTP, elles sont intégrées de fait — plus besoin de les configurer." }
                     ]},
                     { title: "Leçon 4 — EtherChannel : agréger les liens", parts: [
-                        { h: "Le principe", t: "Un EtherChannel groupe 2 à 8 liens physiques entre deux commutateurs en un seul canal logique (interface Port-Channel). Les protocoles STP ne voient qu'un lien : plus de blocage par redondance, et la charge se répartit (src-dst-mac, src-dst-ip...). Pour la STP, le coût du canal correspond à un seul lien de cette vitesse." },
+                        { h: "Le principe", t: "Un EtherChannel groupe 2 à 8 liens physiques entre deux commutateurs en un seul canal logique (interface Port-Channel). Les protocoles STP ne voient qu'un lien : plus de blocage par redondance, et la charge se répartit (src-dst-mac, src-dst-ip...). Pour la STP, le coût du canal correspond à un seul lien de cette vitesse." , schema: 'etherchannel-lacp' },
                         { h: "PAgP et LACP", t: "Deux protocoles de négociation : PAgP (propriétaire Cisco : modes desirable/auto) et LACP (standard IEEE 802.3ad : modes active/passive). LACP active initie la négociation, passive attend. Pour qu'un canal se forme : active+active, active+passive ou passive+passive ne marche pas (côté LACP). Le réflexe : LACP active des deux côtés." },
                         { h: "La règle d'homogénéité", t: "Tous les liens du canal doivent être identiques : même vitesse, même duplex, même mode access/trunk, mêmes VLAN autorisés. Une seule différence et le canal ne se forme pas (les liens restent individuels, avec risque de boucle côté STP). Vérification : show etherchannel summary — la lettre P (ports bundled) doit apparaître sur chaque membre ; I/S = inutilisé/suspendu." },
                         { h: "Le load-balancing", t: "port-channel load-balance src-dst-ip répartit les flux selon les IP source/destination — adapté au trafic routé ; src-dst-mac au trafic commuté. Attention : la répartition est par flux, pas par paquet — un unique gros transfert n'exploitera qu'un seul lien du canal." }
@@ -869,7 +870,7 @@
                     { title: "Leçon 2 — OSPF : la logique link-state", parts: [
                         { h: "Chaque routeur connaît la carte complète", t: "OSPF est un protocole link-state : chaque routeur décrit ses liens (réseaux connectés, coûts) dans des LSA (Link-State Advertisements), inondés à tous les routeurs de la zone. Résultat : chaque routeur construit la même LSDB (Link-State Database) — une carte identique de la zone — et exécute l'algorithme SPF (Dijkstra) pour calculer ses propres meilleurs chemins. Contrairement à RIP (distance-vector : 'je connais une route à 3 sauts'), OSPF ne propage pas des rumeurs mais une topologie." },
                         { h: "La métrique : le coût du lien", t: "La métrique OSPF est le coût, proportionnel à la bande passante (référence 100 Mbps : coût = 100 Mb / bande passante du lien ; 100 Mbps = 1, 1 Gbps = 1 après auto-reference, 10 Mbps = 10). Un chemin cumule les coûts ; SPF choisit le total le plus faible. On peut le modifier : ip ospf cost 10 sur une interface pour orienter le trafic." },
-                        { h: "Les zones (areas)", t: "OSPF découpe le domaine en zones numériques : la zone 0 (backbone) est obligatoire et centrale ; les autres zones s'y raccordent via un routeur ABR (Area Border Router). L'intérêt : les LSA ne débordent pas d'une zone — la zone 10 peut changer sans reconstruire la table SPF de la zone 20. Le dimensionnement usuel : 50 routeurs par zone maximum." },
+                        { h: "Les zones (areas)", t: "OSPF découpe le domaine en zones numériques : la zone 0 (backbone) est obligatoire et centrale ; les autres zones s'y raccordent via un routeur ABR (Area Border Router). L'intérêt : les LSA ne débordent pas d'une zone — la zone 10 peut changer sans reconstruire la table SPF de la zone 20. Le dimensionnement usuel : 50 routeurs par zone maximum." , schema: 'ospf-zones' },
                         { h: "Les paquets et les adresses", t: "OSPF s'encapsule directement en IP (protocole 89) et parle en multicast : 224.0.0.5 (tous les routeurs OSPF) pour les Hello et les mises à jour générales, 224.0.0.6 (DR/BDR) pour les remontées des non-DR. Un routeur s'identifie par son Router ID (RID), une IPv4 32 bits : choisie en priorité configurée (router-id 1.1.1.1), sinon la plus haute IP de loopback, sinon la plus haute IP d'interface physique active." }
                     ]},
                     { title: "Leçon 3 — Voisins, adjacences et DR/BDR", parts: [
@@ -963,7 +964,7 @@
                     ]},
                     { title: "Leçon 2 — Le vocabulaire inside/outside", parts: [
                         { h: "Les quatre termes", t: "Inside local : l'adresse privée du poste vu de l'intérieur (10.1.1.10). Inside global : l'adresse publique que prend ce même flux à la sortie (203.0.113.5). Outside local : l'adresse du serveur externe telle que vue de l'intérieur. Outside global : l'adresse réelle du serveur externe. En PAT simple, outside local = outside global (203.0.113.20 d'un site web) : seule la partie inside est traduite." },
-                        { h: "Suivre un paquet", t: "Le poste 10.1.1.10 ouvre une connexion vers 198.51.100.80:443. À la sortie : source devient 203.0.113.5:49152 (IP publique + port source choisi). Le routeur note la translation dans sa table. La réponse 198.51.100.80:443 → 203.0.113.5:49152 revient : le routeur lit sa table et restaure la destination 10.1.1.10:xxxx. Sans entrée dans la table, le paquet entrant est détruit — c'est aussi ce qui bloque les connexions entrantes non publiées." },
+                        { h: "Suivre un paquet", t: "Le poste 10.1.1.10 ouvre une connexion vers 198.51.100.80:443. À la sortie : source devient 203.0.113.5:49152 (IP publique + port source choisi). Le routeur note la translation dans sa table. La réponse 198.51.100.80:443 → 203.0.113.5:49152 revient : le routeur lit sa table et restaure la destination 10.1.1.10:xxxx. Sans entrée dans la table, le paquet entrant est détruit — c'est aussi ce qui bloque les connexions entrantes non publiées." , schema: 'nat-flow' },
                         { h: "Timeout et cycle de vie", t: "Chaque entrée PAT vit le temps du flux (défaut 86400 s pour les simples translations, quelques minutes pour les flux TCP fin de session). Un pool dynamique épuisé = plus aucune nouvelle sortie : les postes restent connectés en interne mais n'atteignent plus Internet — symptôme diagnostiqué avec show ip nat translations (table pleine) et debug ip nat." }
                     ]},
                     { title: "Leçon 3 — Configurer PAT sur un routeur de sortie", parts: [
@@ -1044,7 +1045,7 @@
                 ],
                 lessons: [
                     { title: "Leçon 1 — Le rôle d'une ACL", parts: [
-                        { h: "Une liste de règles lues de haut en bas", t: "Une ACL (Access Control List) est une suite de lignes de permit/deny évaluées dans l'ordre : la première ligne qui matche le paquet décide, et le reste de la liste est ignoré. À la fin de toute ACL s'ajoute un deny any implicite : si aucune ligne ne matche, le paquet est rejeté. Conséquence directe : l'ordre des lignes est une décision d'architecture — une ligne large en tête masque toutes les suivantes." },
+                        { h: "Une liste de règles lues de haut en bas", t: "Une ACL (Access Control List) est une suite de lignes de permit/deny évaluées dans l'ordre : la première ligne qui matche le paquet décide, et le reste de la liste est ignoré. À la fin de toute ACL s'ajoute un deny any implicite : si aucune ligne ne matche, le paquet est rejeté. Conséquence directe : l'ordre des lignes est une décision d'architecture — une ligne large en tête masque toutes les suivantes." , schema: 'acl-evaluation' },
                         { h: "Standard ou étendue", t: "ACL standard (1-99, 1300-1999) : ne regarde que l'IP source — 'je bloque tout ce qui vient de 10.1.2.0/24'. ACL étendue (100-199, 2000-2699) : source ET destination, protocole et ports — 'j'interdis le telnet du bureau A vers le serveur B, mais j'autorise le HTTPS'. La règle de placement : standard près de la destination (elle ne sait pas viser), étendue près de la source (précise, elle économise le réseau en bloquant tôt)." },
                         { h: "Le masque générique (wildcard)", t: "Le wildcard inverse le masque de sous-réseau : 0.0.0.255 sur une IP 192.168.1.0 signifie 'les trois premiers octets doivent correspondre, le dernier est libre' (= tout le /24). 0.0.0.0 = l'hôte exact (host), 255.255.255.255 = n'importe quelle adresse (any). Se familiariser avec ce masque est le prérequis numéro un pour écrire des ACL qui matchent ce qu'on vise vraiment." },
                         { h: "Ce qu'une ACL n'est pas", t: "Une ACL filtre : elle ne chiffre pas, ne détecte pas d'attaque, ne remplace pas un pare-feu à états (elle est sans état : chaque paquet est jugé seul, sans mémoire de la connexion). Elle sert aussi d'outil de sélection pour NAT, le routage par politique, ou les files QoS — dans ces cas, elle ne bloque rien du tout, elle trie." }
@@ -1251,11 +1252,11 @@
                     { title: "Leçon 2 — Comptes, mots de passe et authentification", parts: [
                         { h: "Créer un compte proprement", t: "Un compte suit une convention de nommage cohérente (par exemple prenom.nom pour claire.martin), est rangé dans la bonne OU, intègre les bons groupes, et son mot de passe initial est à changer à la première connexion (option standard « l'utilisateur doit changer le mot de passe à la prochaine ouverture de session »)." },
                         { h: "La politique de mots de passe", t: "Longueur minimale, complexité, historique, verrouillage après échecs répétés… Ces réglages font partie des stratégies appliquées par l'annuaire. Les valeurs exactes se règlent selon votre organisation : ce sont des choix de politique internes, pas des constantes universelles." },
-                        { h: "Kerberos, le ticket d'entrée", t: "AD authentifie les utilisateurs grâce au protocole Kerberos : après l'ouverture de session, l'utilisateur reçoit des tickets (comme des billets de cinéma) qu'il présente aux services, sans transmettre son mot de passe à chacun d'eux." }
+                        { h: "Kerberos, le ticket d'entrée", t: "AD authentifie les utilisateurs grâce au protocole Kerberos : après l'ouverture de session, l'utilisateur reçoit des tickets (comme des billets de cinéma) qu'il présente aux services, sans transmettre son mot de passe à chacun d'eux." , schema: 'kerberos-flow' }
                     ]},
                     { title: "Leçon 3 — GPO et PowerShell du quotidien", parts: [
                         { h: "Une GPO, c'est quoi ?", t: "Une stratégie de groupe (GPO) est un paquet de réglages appliqué aux ordinateurs et aux utilisateurs : sécurité, lecteurs mappés, fond d'écran… On la « lie » à un site, au domaine ou à une OU, et tous les objets situés dessous en héritent." },
-                        { h: "L'ordre d'application (LSDOU)", t: "Les stratégies s'appliquent dans l'ordre : Local, puis Site, puis Domaine, puis OU. La dernière appliquée (la plus spécifique, l'OU) gagne en cas de conflit. Pour forcer l'actualisation : gpupdate /force ; pour vérifier ce qui a été appliqué : gpresult." },
+                        { h: "L'ordre d'application (LSDOU)", t: "Les stratégies s'appliquent dans l'ordre : Local, puis Site, puis Domaine, puis OU. La dernière appliquée (la plus spécifique, l'OU) gagne en cas de conflit. Pour forcer l'actualisation : gpupdate /force ; pour vérifier ce qui a été appliqué : gpresult." , schema: 'gpo-lsdou' },
                         { h: "PowerShell pour aller vite", t: "Une fois le module ActiveDirectory installé (via les outils RSAT), Get-ADUser claire.martin lit un compte, New-ADUser le crée, Set-ADUser le modifie. La console graphique reste très bien pour apprendre ; PowerShell démultiplie quand il y a des dizaines de comptes (renvoi au CP6 pour les scripts)." }
                     ]}
                 ],
@@ -1456,8 +1457,8 @@
                         { h: "Trois adresses à connaître", t: "L'adresse réseau (tous les bits d'hôte à 0) désigne le bloc, l'adresse de diffusion (tous à 1) parle à tout le bloc, et la passerelle est la porte menant aux autres réseaux. Configurer un poste sans passerelle le confine à son sous-réseau." }
                     ]},
                     { title: "Leçon 2 — Les services qui font marcher le réseau", parts: [
-                        { h: "DHCP", t: "Le serveur DHCP distribue automatiquement adresse + masque + passerelle + serveurs DNS. S'il ne répond pas, le poste garde une adresse de repli 169.254.x.x. La séquence d'attribution (Discover, Offer, Request, Acknowledge) est détaillée dans la fiche CCNA 1.7." },
-                        { h: "DNS", t: "Le DNS traduit les noms (intranet.exemple.fr) en adresses IP. Symptôme classique : un poste peut joindre une IP mais pas un nom — le réseau va bien, c'est la résolution qui cloche." },
+                        { h: "DHCP", t: "Le serveur DHCP distribue automatiquement adresse + masque + passerelle + serveurs DNS. S'il ne répond pas, le poste garde une adresse de repli 169.254.x.x. La séquence d'attribution (Discover, Offer, Request, Acknowledge) est détaillée dans la fiche CCNA 1.7." , schema: 'sequence-dora-dhcp' },
+                        { h: "DNS", t: "Le DNS traduit les noms (intranet.exemple.fr) en adresses IP. Symptôme classique : un poste peut joindre une IP mais pas un nom — le réseau va bien, c'est la résolution qui cloche." , schema: 'dns-resolution' },
                         { h: "Relire une configuration en dix secondes", t: "ipconfig /all (Windows) et ip a (Linux) affichent adresse, masque, passerelle et DNS. Ce réflexe d'affichage précède toute modification : on regarde, puis on conclut." }
                     ]},
                     { title: "Leçon 3 — Équipements et méthode de diagnostic", parts: [
@@ -1545,7 +1546,7 @@
                 lessons: [
                     { title: "Leçon 1 — Pourquoi et comment virtualiser", parts: [
                         { h: "Le principe", t: "La virtualisation fait tourner plusieurs systèmes isolés (VM) sur une même machine physique grâce à l'hyperviseur. Bénéfices : consolidation (moins de serveurs sous-utilisés), isolement des pannes, création et duplication rapides — le serveur devient un fichier que l'on copie, sauvegarde… et teste." },
-                        { h: "Deux familles d'hyperviseurs", t: "Type 1 (bare metal) : l'hyperviseur est installé directement sur la machine — Hyper-V de Microsoft, ESXi de VMware, Proxmox VE. Type 2 (hébergé) : il s'installe comme une application au-dessus d'un OS — par exemple VirtualBox ou VMware Workstation. En production, on reste sur du type 1." },
+                        { h: "Deux familles d'hyperviseurs", t: "Type 1 (bare metal) : l'hyperviseur est installé directement sur la machine — Hyper-V de Microsoft, ESXi de VMware, Proxmox VE. Type 2 (hébergé) : il s'installe comme une application au-dessus d'un OS — par exemple VirtualBox ou VMware Workstation. En production, on reste sur du type 1." , schema: 'cloud-modeles' },
                         { h: "Les bonnes questions avant de créer", t: "Combien de RAM et de CPU donner (garder de la marge pour l'hyperviseur) ? Quels disques et quel réseau ? Ces choix se font avec la supervision à l'appui — on ajuste à l'usage plutôt qu'on suralloue d'emblée." }
                     ]},
                     { title: "Leçon 2 — Créer une VM, étape par étape", parts: [
@@ -1781,8 +1782,8 @@
                 ],
                 lessons: [
                     { title: "Leçon 1 — Le vocabulaire pour ne rien mélanger", parts: [
-                        { h: "Sauvegarde ou réplique ?", t: "Une sauvegarde est une copie volontairement conservée, à un instant donné, restaurable. Une réplique (miroir RAID, cluster) protège uniquement la panne d'un matériel : si vous effacez un fichier par erreur, la réplique efface le même fichier en même temps. La réplique protège la disponibilité, la sauvegarde protège la mémoire." },
-                        { h: "RPO et RTO", t: "Le RPO (Recovery Point Objective) exprime la perte de données acceptable : avec une sauvegarde chaque nuit, le RPO est au maximum une nuit de travail. Le RTO (Recovery Time Objective) est le délai maximum pour remettre le service. On détermine ces deux chiffres AVEC le métier, avant d'acheter quoi que ce soit." },
+                        { h: "Sauvegarde ou réplique ?", t: "Une sauvegarde est une copie volontairement conservée, à un instant donné, restaurable. Une réplique (miroir RAID, cluster) protège uniquement la panne d'un matériel : si vous effacez un fichier par erreur, la réplique efface le même fichier en même temps. La réplique protège la disponibilité, la sauvegarde protège la mémoire." , schema: 'raid-niveaux' },
+                        { h: "RPO et RTO", t: "Le RPO (Recovery Point Objective) exprime la perte de données acceptable : avec une sauvegarde chaque nuit, le RPO est au maximum une nuit de travail. Le RTO (Recovery Time Objective) est le délai maximum pour remettre le service. On détermine ces deux chiffres AVEC le métier, avant d'acheter quoi que ce soit." , schema: 'pra-pca-321' },
                         { h: "Trois types de sauvegarde", t: "Complète : tout, toujours. Incrémentielle : ce qui a changé depuis la dernière sauvegarde, quel qu'en soit le type. Différentielle : tout depuis la dernière complète. Restaurer une différentielle est simple (la complète + la différentielle concernée). Restaurer une incrémentielle impose de suivre toute la chaîne depuis la dernière complète." }
                     ]},
                     { title: "Leçon 2 — La stratégie 3-2-1", parts: [
@@ -2283,7 +2284,7 @@
                         { h: "Une alerte, une action", t: "Toute alerte doit être actionnable : « disque de S1 > 95 % → voilà la procédure ». Une alerte sans réponse possible est un bruit qui enseigne à ignorer — le poison de la supervision." }
                     ]},
                     { title: "Leçon 2 — Collecter sans se noyer", parts: [
-                        { h: "Comment les informations remontent", t: "Trois canaux standards : les agents logiciels installés sur les machines, SNMP (protocole standard d'interrogation des équipements réseau) et syslog (protocole standard d'envoi des journaux). Les trois cohabitent dans la plupart des environnements." },
+                        { h: "Comment les informations remontent", t: "Trois canaux standards : les agents logiciels installés sur les machines, SNMP (protocole standard d'interrogation des équipements réseau) et syslog (protocole standard d'envoi des journaux). Les trois cohabitent dans la plupart des environnements." , schema: 'supervision-architecture' },
                         { h: "La hiérarchie des alertes", t: "Deux niveaux suffisent pour débuter : avertissement (à investiguer dans la journée) et critique (à traiter immédiatement). On regroupe les alertes dépendantes (toutes les machines d'un même site hors service = probablement le lien, pas 30 pannes indépendantes)." },
                         { h: "Faire taire le bruit", t: "Seuils trop bas = mille alertes inutiles ; trop hauts = la vraie panne n'apparaît plus. La règle : on teste d'abord chaque alerte sur une machine réelle, puis on affine. On supprime tout ce qui a été ignoré trois fois de suite — soit faux, soit mal rédigé." }
                     ]},
@@ -6073,6 +6074,442 @@
             }
 
             // --- MAQUETTES D'INTERFACES PROFESSIONNELLES (réorientation pédagogique : GUI d'abord) ---
+            if (type === 'vlan-segmentation') {
+                return (
+                    <div className="w-full bg-slate-900 text-white p-4 rounded-lg overflow-x-auto">
+                        <h4 className="text-xs uppercase font-bold text-sky-400 mb-2">SVG : VLAN = domaines de diffusion séparés</h4>
+                        <p className="text-[11px] text-slate-300 mb-2"><strong className="text-amber-300">Lecture :</strong> SW1 porte deux VLAN ; un broadcast du VLAN 10 (flèches rouges) atteint uniquement les ports du VLAN 10. Le trunk 802.1Q transporte les deux VLAN tagués ; les trames du VLAN 20 (flèches bleues) n'atteignent jamais les PC du VLAN 10 sans passer par le routeur.</p>
+                        <svg viewBox="0 0 560 220" role="img" aria-label="Deux VLAN isolés sur un switch avec trunk" className="w-full h-auto text-xs">
+                            <rect x="40" y="60" width="120" height="110" rx="8" fill="#1e293b" stroke="#38bdf8" />
+                            <text x="70" y="80" fill="#38bdf8" fontWeight="bold">SW1</text>
+                            <rect x="60" y="95" width="80" height="22" rx="3" fill="#dc2626" />
+                            <text x="66" y="110" fill="white" fontSize="10">Fa0/1 · VLAN 10</text>
+                            <rect x="60" y="125" width="80" height="22" rx="3" fill="#2563eb" />
+                            <text x="66" y="140" fill="white" fontSize="10">Fa0/2 · VLAN 20</text>
+                            <rect x="52" y="160" width="96" height="4" fill="#f59e0b" />
+                            <text x="62" y="180" fill="#f59e0b" fontSize="9">trunk Gi0/1</text>
+                            <rect x="260" y="60" width="120" height="110" rx="8" fill="#1e293b" stroke="#38bdf8" />
+                            <text x="290" y="80" fill="#38bdf8" fontWeight="bold">SW2</text>
+                            <rect x="280" y="95" width="80" height="22" rx="3" fill="#dc2626" />
+                            <text x="286" y="110" fill="white" fontSize="10">Fa0/1 · VLAN 10</text>
+                            <rect x="380" y="95" width="90" height="22" rx="3" fill="#64748b" />
+                            <text x="386" y="110" fill="white" fontSize="10">Gi0/1 · trunk</text>
+                            <line x1="148" y1="162" x2="380" y2="106" stroke="#f59e0b" strokeWidth="3" />
+                            <text x="205" y="150" fill="#f59e0b" fontSize="9">tag 802.1Q</text>
+                            <rect x="30" y="200" width="20" height="14" rx="2" fill="#dc2626" />
+                            <text x="55" y="212" fill="white" fontSize="10">PC-RH (VLAN 10)</text>
+                            <rect x="170" y="200" width="20" height="14" rx="2" fill="#2563eb" />
+                            <text x="195" y="212" fill="white" fontSize="10">PC-IT (VLAN 20)</text>
+                            <path d="M65 105 Q100 40 70 95" stroke="#dc2626" strokeWidth="2" fill="none" markerEnd="url(#ar)" />
+                            <text x="120" y="45" fill="#dc2626" fontSize="10">broadcast VLAN 10 : reste dans VLAN 10</text>
+                            <path d="M100 135 Q140 185 105 140" stroke="#2563eb" strokeWidth="2" fill="none" />
+                            <text x="150" y="185" fill="#93c5fd" fontSize="10">broadcast VLAN 20 : jamais vu du VLAN 10</text>
+                        </svg>
+                    </div>
+                );
+            }
+
+            if (type === 'stp-election') {
+                return (
+                    <div className="w-full bg-slate-900 text-white p-4 rounded-lg overflow-x-auto">
+                        <h4 className="text-xs uppercase font-bold text-sky-400 mb-2">SVG : élection STP et rôles de ports</h4>
+                        <p className="text-[11px] text-slate-300 mb-2"><strong className="text-amber-300">Lecture :</strong> SW1 (priorité 24576) est pont racine ; ses ports sont tous designated. SW3 a deux chemins vers la racine : coût 4 direct (root port) et coût 8 via SW2 (port bloqué/alternatif). Le triangle reste sans boucle.</p>
+                        <svg viewBox="0 0 520 200" role="img" aria-label="Triangle STP avec pont racine et port bloqué" className="w-full h-auto text-xs">
+                            <rect x="200" y="20" width="120" height="46" rx="8" fill="#059669" />
+                            <text x="220" y="40" fill="white" fontWeight="bold">SW1 — RACINE</text>
+                            <text x="228" y="58" fill="#a7f3d0" fontSize="10">priorité 24576 · ports : FWD</text>
+                            <rect x="30" y="130" width="110" height="46" rx="8" fill="#1e293b" stroke="#38bdf8" />
+                            <text x="52" y="150" fill="white" fontWeight="bold">SW2</text>
+                            <text x="40" y="168" fill="#93c5fd" fontSize="10">root port → SW1</text>
+                            <rect x="380" y="130" width="110" height="46" rx="8" fill="#1e293b" stroke="#38bdf8" />
+                            <text x="402" y="150" fill="white" fontWeight="bold">SW3</text>
+                            <text x="390" y="168" fill="#93c5fd" fontSize="10">root port → SW1</text>
+                            <line x1="230" y1="66" x2="85" y2="130" stroke="#22c55e" strokeWidth="3" />
+                            <text x="100" y="95" fill="#22c55e" fontSize="10">coût 4 (1 Gbps)</text>
+                            <line x1="290" y1="66" x2="435" y2="130" stroke="#22c55e" strokeWidth="3" />
+                            <text x="360" y="95" fill="#22c55e" fontSize="10">coût 4 (1 Gbps)</text>
+                            <line x1="140" y1="153" x2="380" y2="153" stroke="#ef4444" strokeWidth="3" strokeDasharray="8 6" />
+                            <text x="185" y="141" fill="#ef4444" fontSize="10">secours : port blocking (ALTN) sur SW3</text>
+                            <text x="150" y="196" fill="#94a3b8" fontSize="10">Élection : priorité la plus BASSE gagne, puis MAC la plus basse · root port = meilleur coût vers la racine</text>
+                        </svg>
+                    </div>
+                );
+            }
+
+            if (type === 'etherchannel-lacp') {
+                return (
+                    <div className="w-full bg-slate-900 text-white p-4 rounded-lg overflow-x-auto">
+                        <h4 className="text-xs uppercase font-bold text-sky-400 mb-2">SVG : EtherChannel LACP — deux liens, un canal logique</h4>
+                        <p className="text-[11px] text-slate-300 mb-2"><strong className="text-amber-300">Lecture :</strong> Gi0/1 et Gi0/2 négocient via LACP (mode active des deux côtés) et forment l'interface logique Po1. STP ne voit qu'un seul lien de 2 Gbps : plus de port bloqué, la charge se répartit par flux.</p>
+                        <svg viewBox="0 0 520 180" role="img" aria-label="EtherChannel agrégant deux liens entre deux commutateurs" className="w-full h-auto text-xs">
+                            <rect x="30" y="50" width="120" height="80" rx="8" fill="#1e293b" stroke="#38bdf8" />
+                            <text x="60" y="95" fill="#38bdf8" fontWeight="bold">SW1</text>
+                            <rect x="370" y="50" width="120" height="80" rx="8" fill="#1e293b" stroke="#38bdf8" />
+                            <text x="400" y="95" fill="#38bdf8" fontWeight="bold">SW2</text>
+                            <line x1="150" y1="70" x2="370" y2="70" stroke="#22c55e" strokeWidth="3" />
+                            <line x1="150" y1="110" x2="370" y2="110" stroke="#22c55e" strokeWidth="3" />
+                            <rect x="210" y="40" width="100" height="100" rx="10" fill="none" stroke="#f59e0b" strokeWidth="2" strokeDasharray="6 4" />
+                            <text x="222" y="36" fill="#f59e0b" fontWeight="bold">Port-Channel Po1</text>
+                            <text x="205" y="160" fill="#94a3b8" fontSize="10">2 × 1 Gbps = 2 Gbps · LACP active ⇄ active · mêmes VLAN autorisés obligatoires</text>
+                        </svg>
+                    </div>
+                );
+            }
+
+            if (type === 'ospf-zones') {
+                return (
+                    <div className="w-full bg-slate-900 text-white p-4 rounded-lg overflow-x-auto">
+                        <h4 className="text-xs uppercase font-bold text-sky-400 mb-2">SVG : OSPF multi-zones — le backbone 0 est obligatoire</h4>
+                        <p className="text-[11px] text-slate-300 mb-2"><strong className="text-amber-300">Lecture :</strong> chaque zone a sa LSDB (carte locale) ; les zones se raccordent à la zone 0 via un ABR. Sur un segment Ethernet, un DR et un BDR sont élus : les autres routeurs restent en 2-Way avec eux.</p>
+                        <svg viewBox="0 0 560 200" role="img" aria-label="Domaine OSPF multi-zones avec ABR et DR" className="w-full h-auto text-xs">
+                            <rect x="180" y="30" width="200" height="60" rx="10" fill="#059669" opacity="0.9" />
+                            <text x="230" y="55" fill="white" fontWeight="bold">Zone 0 (backbone)</text>
+                            <text x="225" y="75" fill="#a7f3d0" fontSize="10">R1 ⇄ R2 · DR élu sur le segment</text>
+                            <rect x="40" y="120" width="170" height="50" rx="10" fill="#0284c7" />
+                            <text x="80" y="142" fill="white" fontWeight="bold">Zone 1 (site Lyon)</text>
+                            <text x="60" y="160" fill="#bae6fd" fontSize="10">LSDB locale de la zone 1</text>
+                            <rect x="350" y="120" width="170" height="50" rx="10" fill="#7c3aed" />
+                            <text x="385" y="142" fill="white" fontWeight="bold">Zone 2 (site Lille)</text>
+                            <text x="370" y="160" fill="#ddd6fe" fontSize="10">LSDB locale de la zone 2</text>
+                            <line x1="230" y1="90" x2="125" y2="120" stroke="#94a3b8" strokeWidth="3" />
+                            <line x1="330" y1="90" x2="435" y2="120" stroke="#94a3b8" strokeWidth="3" />
+                            <rect x="108" y="92" width="34" height="22" rx="4" fill="#f59e0b" />
+                            <text x="112" y="107" fill="white" fontSize="9">ABR</text>
+                            <rect x="418" y="92" width="34" height="22" rx="4" fill="#f59e0b" />
+                            <text x="422" y="107" fill="white" fontSize="9">ABR</text>
+                            <text x="120" y="195" fill="#94a3b8" fontSize="10">Les LSA ne franchissent pas les zones : une panne locale ne recalcule pas tout le domaine (SPF par zone).</text>
+                        </svg>
+                    </div>
+                );
+            }
+
+            if (type === 'nat-flow') {
+                return (
+                    <div className="w-full bg-slate-900 text-white p-4 rounded-lg overflow-x-auto">
+                        <h4 className="text-xs uppercase font-bold text-sky-400 mb-2">SVG : un paquet à travers le NAT (PAT)</h4>
+                        <p className="text-[11px] text-slate-300 mb-2"><strong className="text-amber-300">Lecture :</strong> à l'aller le routeur réécrit la source (10.1.1.10:1025 → 203.0.113.5:49213) et note la correspondance ; au retour il restaure la destination. L'IP publique est partagée par TOUS les postes, différenciés par les ports.</p>
+                        <svg viewBox="0 0 560 190" role="img" aria-label="Traduction NAT aller et retour" className="w-full h-auto text-xs">
+                            <rect x="20" y="60" width="130" height="60" rx="10" fill="#0284c7" />
+                            <text x="40" y="85" fill="white" fontWeight="bold">PC interne</text>
+                            <text x="35" y="105" fill="#bae6fd" fontSize="10">10.1.1.10:1025</text>
+                            <rect x="215" y="45" width="130" height="90" rx="10" fill="#059669" />
+                            <text x="235" y="70" fill="white" fontWeight="bold">Routeur NAT</text>
+                            <text x="228" y="90" fill="#a7f3d0" fontSize="10">table de traduction :</text>
+                            <text x="228" y="106" fill="#a7f3d0" fontSize="10">10.1.1.10:1025 ⇄</text>
+                            <text x="228" y="122" fill="#a7f3d0" fontSize="10">203.0.113.5:49213</text>
+                            <rect x="410" y="60" width="130" height="60" rx="10" fill="#7c3aed" />
+                            <text x="435" y="85" fill="white" fontWeight="bold">Serveur Internet</text>
+                            <text x="430" y="105" fill="#ddd6fe" fontSize="10">198.51.100.80:443</text>
+                            <line x1="150" y1="80" x2="215" y2="80" stroke="#22c55e" strokeWidth="3" markerEnd="url(#ar)" />
+                            <line x1="345" y1="80" x2="410" y2="80" stroke="#22c55e" strokeWidth="3" markerEnd="url(#ar)" />
+                            <text x="170" y="70" fill="#22c55e" fontSize="10">source réécrite →</text>
+                            <text x="352" y="70" fill="#22c55e" fontSize="10">203.0.113.5:49213 →</text>
+                            <line x1="410" y1="120" x2="345" y2="120" stroke="#f59e0b" strokeWidth="3" markerEnd="url(#ar)" />
+                            <line x1="215" y1="120" x2="150" y2="120" stroke="#f59e0b" strokeWidth="3" markerEnd="url(#ar)" />
+                            <text x="250" y="140" fill="#f59e0b" fontSize="10">retour : destination restaurée via la table</text>
+                            <text x="140" y="170" fill="#94a3b8" fontSize="10">Un paquet ENTRANT sans entrée dans la table est détruit — d'où l'isolation naturelle du réseau interne.</text>
+                        </svg>
+                    </div>
+                );
+            }
+
+            if (type === 'acl-evaluation') {
+                return (
+                    <div className="w-full bg-slate-900 text-white p-4 rounded-lg overflow-x-auto">
+                        <h4 className="text-xs uppercase font-bold text-sky-400 mb-2">SVG : une ACL se lit de haut en bas — premier match gagnant</h4>
+                        <p className="text-[11px] text-slate-300 mb-2"><strong className="text-amber-300">Lecture :</strong> chaque paquet descend la liste ; la première ligne qui matche tranche (permit ou deny) et le reste est ignoré. Si rien ne matche : le deny any IMPLICITE rejette tout — une ACL « permit seulement » coupe donc tout le reste.</p>
+                        <svg viewBox="0 0 560 200" role="img" aria-label="Évaluation séquentielle d'une ACL" className="w-full h-auto text-xs">
+                            <rect x="20" y="85" width="90" height="34" rx="8" fill="#0284c7" />
+                            <text x="35" y="107" fill="white" fontWeight="bold">Paquet</text>
+                            <rect x="170" y="15" width="230" height="28" rx="5" fill="#059669" />
+                            <text x="180" y="34" fill="white">1. permit tcp … eq 443 → ✔ passe</text>
+                            <rect x="170" y="55" width="230" height="28" rx="5" fill="#dc2626" />
+                            <text x="180" y="74" fill="white">2. deny ip … → ✕ rejeté</text>
+                            <rect x="170" y="95" width="230" height="28" rx="5" fill="#475569" />
+                            <text x="180" y="114" fill="white">3. permit ip any → ✔ passe</text>
+                            <rect x="170" y="140" width="230" height="28" rx="5" fill="#1e293b" stroke="#ef4444" />
+                            <text x="180" y="159" fill="#fca5a5">implicite : deny any → ✕ rejeté</text>
+                            <line x1="110" y1="102" x2="165" y2="29" stroke="#94a3b8" strokeWidth="2" />
+                            <line x1="110" y1="102" x2="165" y2="69" stroke="#94a3b8" strokeWidth="2" />
+                            <line x1="110" y1="102" x2="165" y2="109" stroke="#94a3b8" strokeWidth="2" />
+                            <line x1="110" y1="102" x2="165" y2="154" stroke="#94a3b8" strokeWidth="2" />
+                            <text x="410" y="34" fill="#94a3b8" fontSize="10">stop au 1er match</text>
+                            <text x="410" y="54" fill="#94a3b8" fontSize="10">l'ordre est une</text>
+                            <text x="410" y="68" fill="#94a3b8" fontSize="10">décision d'archi :</text>
+                            <text x="410" y="82" fill="#94a3b8" fontSize="10">une ligne large</text>
+                            <text x="410" y="96" fill="#94a3b8" fontSize="10">en tête masque</text>
+                            <text x="410" y="110" fill="#94a3b8" fontSize="10">tout ce qui suit.</text>
+                        </svg>
+                    </div>
+                );
+            }
+
+            if (type === 'ipv6-slaac') {
+                return (
+                    <div className="w-full bg-slate-900 text-white p-4 rounded-lg overflow-x-auto">
+                        <h4 className="text-xs uppercase font-bold text-sky-400 mb-2">SVG : SLAAC — l'hôte construit son adresse IPv6 seul</h4>
+                        <p className="text-[11px] text-slate-300 mb-2"><strong className="text-amber-300">Lecture :</strong> le routeur diffuse le préfixe (RA multicast ff02::1) ; l'hôte colle son identifiant EUI-64 (dérivé de la MAC) puis vérifie l'unicité (DAD) avant d'utiliser l'adresse. Sans Router Advertisement : aucune adresse globale.</p>
+                        <svg viewBox="0 0 560 190" role="img" aria-label="Séquence SLAAC : RA, EUI-64, DAD" className="w-full h-auto text-xs">
+                            <rect x="20" y="70" width="130" height="56" rx="10" fill="#059669" />
+                            <text x="40" y="92" fill="white" fontWeight="bold">Routeur</text>
+                            <text x="32" y="112" fill="#a7f3d0" fontSize="10">RA : 2001:db8:1::/64</text>
+                            <rect x="410" y="70" width="130" height="56" rx="10" fill="#0284c7" />
+                            <text x="430" y="92" fill="white" fontWeight="bold">Hôte</text>
+                            <text x="425" y="112" fill="#bae6fd" fontSize="10">MAC 00:1A:2B:3C:4D:5E</text>
+                            <line x1="150" y1="85" x2="410" y2="85" stroke="#22c55e" strokeWidth="3" markerEnd="url(#ar)" />
+                            <text x="200" y="78" fill="#22c55e" fontSize="10">1. RA (multicast ff02::1) — préfixe /64</text>
+                            <rect x="180" y="105" width="200" height="52" rx="8" fill="#1e293b" stroke="#f59e0b" />
+                            <text x="192" y="122" fill="#fbbf24" fontSize="10">2. EUI-64 : insère FFFE + bit inversé</text>
+                            <text x="192" y="140" fill="#fbbf24" fontSize="10">→ 2001:db8:1::021A:2BFF:FE3C:4D:5E</text>
+                            <rect x="180" y="165" width="200" height="22" rx="5" fill="#7c3aed" />
+                            <text x="192" y="181" fill="white" fontSize="10">3. DAD : Neighbor Solicitation → adresse unique ?</text>
+                            <line x1="410" y1="120" x2="382" y2="140" stroke="#94a3b8" strokeWidth="2" />
+                        </svg>
+                    </div>
+                );
+            }
+
+            if (type === 'arp-resolution') {
+                return (
+                    <div className="w-full bg-slate-900 text-white p-4 rounded-lg overflow-x-auto">
+                        <h4 className="text-xs uppercase font-bold text-sky-400 mb-2">SVG : ARP — de l'adresse IP à l'adresse MAC</h4>
+                        <p className="text-[11px] text-slate-300 mb-2"><strong className="text-amber-300">Lecture :</strong> la requête ARP est une DIFFUSION : tout le segment la traite ; seul le propriétaire de l'IP répond (unicast) ; le demandeur met la réponse en cache. Le routeur ne transmet jamais l'ARP au-delà du segment.</p>
+                        <svg viewBox="0 0 560 200" role="img" aria-label="Résolution ARP : diffusion puis réponse" className="w-full h-auto text-xs">
+                            <rect x="20" y="40" width="110" height="44" rx="8" fill="#0284c7" />
+                            <text x="35" y="60" fill="white" fontWeight="bold">PC-A</text>
+                            <text x="30" y="76" fill="#bae6fd" fontSize="10">10.1.1.20</text>
+                            <rect x="180" y="40" width="110" height="44" rx="8" fill="#475569" />
+                            <text x="195" y="60" fill="white" fontWeight="bold">PC-B</text>
+                            <text x="190" y="76" fill="#cbd5e1" fontSize="10">10.1.1.21</text>
+                            <rect x="340" y="40" width="110" height="44" rx="8" fill="#dc2626" />
+                            <text x="355" y="60" fill="white" fontWeight="bold">PC-C</text>
+                            <text x="350" y="76" fill="#fecaca" fontSize="10">10.1.1.30 ← cible</text>
+                            <line x1="130" y1="55" x2="340" y2="55" stroke="#f59e0b" strokeWidth="2" markerEnd="url(#ar)" />
+                            <text x="155" y="45" fill="#f59e0b" fontSize="10">1. « Qui a 10.1.1.30 ? » — diffusion : TOUS écoutent</text>
+                            <line x1="340" y1="75" x2="135" y2="75" stroke="#22c55e" strokeWidth="2" markerEnd="url(#ar)" />
+                            <text x="170" y="95" fill="#22c55e" fontSize="10">2. réponse unicast : 10.1.1.30 = MAC 00-1C-…-C3</text>
+                            <rect x="130" y="115" width="290" height="40" rx="8" fill="#1e293b" stroke="#38bdf8" />
+                            <text x="145" y="135" fill="#93c5fd" fontSize="10">3. cache ARP de PC-A (arp -a) :</text>
+                            <text x="145" y="151" fill="#93c5fd" fontSize="10">10.1.1.30 → 00-1C-xx-xx-C3 (dynamique)</text>
+                            <text x="90" y="180" fill="#94a3b8" fontSize="10">Sans réponse : pas de MAC → pas de trame → « destination unreachable » au niveau local.</text>
+                        </svg>
+                    </div>
+                );
+            }
+
+            if (type === 'dns-resolution') {
+                return (
+                    <div className="w-full bg-slate-900 text-white p-4 rounded-lg overflow-x-auto">
+                        <h4 className="text-xs uppercase font-bold text-sky-400 mb-2">SVG : résolution DNS — la chaîne complète</h4>
+                        <p className="text-[11px] text-slate-300 mb-2"><strong className="text-amber-300">Lecture :</strong> le client interroge son résolveur ; si le nom n'est pas en cache, le résolveur descend la hiérarchie (racine → .fr → autoritaire) et met la réponse en cache. Ping IP OK + nom KO = problème dans CETTE chaîne.</p>
+                        <svg viewBox="0 0 560 190" role="img" aria-label="Chaîne de résolution DNS" className="w-full h-auto text-xs">
+                            <rect x="15" y="70" width="105" height="50" rx="8" fill="#0284c7" />
+                            <text x="30" y="92" fill="white" fontWeight="bold">Client</text>
+                            <text x="25" y="110" fill="#bae6fd" fontSize="10">www.entreprise.fr</text>
+                            <rect x="150" y="70" width="105" height="50" rx="8" fill="#059669" />
+                            <text x="162" y="92" fill="white" fontWeight="bold">Résolveur</text>
+                            <text x="158" y="110" fill="#a7f3d0" fontSize="10">cache ? → sinon</text>
+                            <rect x="285" y="25" width="120" height="36" rx="8" fill="#7c3aed" />
+                            <text x="305" y="47" fill="white" fontSize="10">Racine « . » → .fr ?</text>
+                            <rect x="285" y="77" width="120" height="36" rx="8" fill="#7c3aed" />
+                            <text x="303" y="99" fill="white" fontSize="10">TLD .fr → NS autoritaire ?</text>
+                            <rect x="440" y="77" width="105" height="36" rx="8" fill="#dc2626" />
+                            <text x="452" y="99" fill="white" fontSize="10">Autoritaire zone</text>
+                            <line x1="120" y1="95" x2="150" y2="95" stroke="#22c55e" strokeWidth="3" markerEnd="url(#ar)" />
+                            <line x1="255" y1="85" x2="285" y2="48" stroke="#94a3b8" strokeWidth="2" />
+                            <line x1="255" y1="95" x2="285" y2="95" stroke="#94a3b8" strokeWidth="2" />
+                            <line x1="405" y1="95" x2="440" y2="95" stroke="#94a3b8" strokeWidth="2" />
+                            <text x="200" y="145" fill="#fbbf24" fontSize="10">4. réponse : A 192.0.2.10 — mise en cache pour le TTL</text>
+                            <text x="120" y="172" fill="#94a3b8" fontSize="10">En interne, c'est le serveur DNS du domaine qui joue le résolveur : enregistrements A, AAAA, MX, NS, CNAME.</text>
+                        </svg>
+                    </div>
+                );
+            }
+
+            if (type === 'gpo-lsdou') {
+                return (
+                    <div className="w-full bg-slate-900 text-white p-4 rounded-lg overflow-x-auto">
+                        <h4 className="text-xs uppercase font-bold text-sky-400 mb-2">SVG : ordre d'application des GPO (LSDOU) — la dernière gagne</h4>
+                        <p className="text-[11px] text-slate-300 mb-2"><strong className="text-amber-300">Lecture :</strong> les stratégies s'appliquent du général au spécifique ; en cas de conflit, la plus proche de l'utilisateur (l'OU) écrase les précédentes. gpupdate /force applique, gpresult /R vérifie.</p>
+                        <svg viewBox="0 0 560 200" role="img" aria-label="Ordre LSDOU des GPO" className="w-full h-auto text-xs">
+                            <rect x="40" y="15" width="250" height="30" rx="6" fill="#475569" />
+                            <text x="55" y="35" fill="white">L — Local (stratégie de la machine)</text>
+                            <rect x="40" y="60" width="250" height="30" rx="6" fill="#7c3aed" />
+                            <text x="55" y="80" fill="white">S — Site (AD Sites and Services)</text>
+                            <rect x="40" y="105" width="250" height="30" rx="6" fill="#0284c7" />
+                            <text x="55" y="125" fill="white">D — Domaine (entreprise.local)</text>
+                            <rect x="40" y="150" width="250" height="30" rx="6" fill="#059669" />
+                            <text x="55" y="170" fill="white">OU — ex : OU=RH → la plus spécifique</text>
+                            <line x1="290" y1="30" x2="290" y2="165" stroke="#f59e0b" strokeWidth="3" markerEnd="url(#ar)" />
+                            <text x="305" y="80" fill="#fbbf24" fontSize="10">ordre d'application ↓</text>
+                            <text x="305" y="130" fill="#fbbf24" fontSize="10">conflit : l'OU gagne</text>
+                            <rect x="330" y="55" width="200" height="100" rx="10" fill="#1e293b" stroke="#38bdf8" />
+                            <text x="345" y="80" fill="#93c5fd" fontSize="10">Vérifier côté poste :</text>
+                            <text x="345" y="100" fill="#93c5fd" fontSize="10">gpupdate /force → applique</text>
+                            <text x="345" y="120" fill="#93c5fd" fontSize="10">gpresult /R → liste les GPO</text>
+                            <text x="345" y="140" fill="#93c5fd" fontSize="10">appliquées ET filtrées</text>
+                            <text x="100" y="196" fill="#94a3b8" fontSize="10">Héritage bloqué / Enforced / filtrage WMI modifient ce flux — gpresult montre la raison.</text>
+                        </svg>
+                    </div>
+                );
+            }
+
+            if (type === 'kerberos-flow') {
+                return (
+                    <div className="w-full bg-slate-900 text-white p-4 rounded-lg overflow-x-auto">
+                        <h4 className="text-xs uppercase font-bold text-sky-400 mb-2">SVG : Kerberos — des tickets, pas des mots de passe</h4>
+                        <p className="text-[11px] text-slate-300 mb-2"><strong className="text-amber-300">Lecture :</strong> à l'ouverture de session, le KDC (DC) délivre un TGT ; ensuite chaque service reçoit un ticket de service (TGS) du TGT. Le mot de passe ne circule JAMAIS vers les services — une horloge décalée casse tout (tolérance 5 min).</p>
+                        <svg viewBox="0 0 560 190" role="img" aria-label="Flux Kerberos : TGT puis TGS" className="w-full h-auto text-xs">
+                            <rect x="20" y="70" width="120" height="50" rx="10" fill="#0284c7" />
+                            <text x="40" y="92" fill="white" fontWeight="bold">Client</text>
+                            <text x="35" y="112" fill="#bae6fd" fontSize="10">claire.martin</text>
+                            <rect x="230" y="60" width="130" height="70" rx="10" fill="#059669" />
+                            <text x="250" y="85" fill="white" fontWeight="bold">KDC (DC)</text>
+                            <text x="243" y="105" fill="#a7f3d0" fontSize="10">1. AS : délivre TGT</text>
+                            <text x="243" y="122" fill="#a7f3d0" fontSize="10">2. TGS : ticket service</text>
+                            <rect x="430" y="70" width="110" height="50" rx="10" fill="#7c3aed" />
+                            <text x="445" y="92" fill="white" fontWeight="bold">Service</text>
+                            <text x="442" y="112" fill="#ddd6fe" fontSize="10">SRV-FILE01</text>
+                            <line x1="140" y1="85" x2="230" y2="85" stroke="#22c55e" strokeWidth="3" markerEnd="url(#ar)" />
+                            <text x="150" y="78" fill="#22c55e" fontSize="10">1. ouverture de session</text>
+                            <line x1="230" y1="115" x2="140" y2="115" stroke="#fbbf24" strokeWidth="3" markerEnd="url(#ar)" />
+                            <text x="140" y="135" fill="#fbbf24" fontSize="10">← TGT (valable ~10 h)</text>
+                            <line x1="360" y1="95" x2="430" y2="95" stroke="#fbbf24" strokeWidth="3" markerEnd="url(#ar)" />
+                            <text x="360" y="85" fill="#fbbf24" fontSize="10">TGS →</text>
+                            <text x="130" y="170" fill="#94a3b8" fontSize="10">klist : voir les tickets · klist purge : les effacer · erreur « horloge » = écart &gt; 5 min client/DC.</text>
+                        </svg>
+                    </div>
+                );
+            }
+
+            if (type === 'raid-niveaux') {
+                return (
+                    <div className="w-full bg-slate-900 text-white p-4 rounded-lg overflow-x-auto">
+                        <h4 className="text-xs uppercase font-bold text-sky-400 mb-2">SVG : RAID 0 / 1 / 5 / 10 — les quatre architectures à connaître</h4>
+                        <p className="text-[11px] text-slate-300 mb-2"><strong className="text-amber-300">Lecture :</strong> chaque mini-graphe montre comment les données se répartissent sur les disques. RAID 0 = vitesse sans redondance ; RAID 1 = miroir ; RAID 5 = parité répartie (tolère 1 panne) ; RAID 10 = miroirs en bande (vitesse + tolérance).</p>
+                        <svg viewBox="0 0 560 210" role="img" aria-label="Quatre niveaux de RAID" className="w-full h-auto text-xs">
+                            <rect x="15" y="15" width="125" height="90" rx="6" fill="#1e293b" stroke="#dc2626" />
+                            <text x="25" y="35" fill="#fca5a5" fontWeight="bold">RAID 0 — striping</text>
+                            <rect x="25" y="45" width="50" height="40" rx="3" fill="#334155" /><text x="35" y="60" fill="white" fontSize="9">A</text><text x="35" y="75" fill="white" fontSize="9">C</text>
+                            <rect x="80" y="45" width="50" height="40" rx="3" fill="#334155" /><text x="90" y="60" fill="white" fontSize="9">B</text><text x="90" y="75" fill="white" fontSize="9">D</text>
+                            <text x="22" y="100" fill="#94a3b8" fontSize="9">rapide · 0 disque mort = tout perdu</text>
+                            <rect x="150" y="15" width="125" height="90" rx="6" fill="#1e293b" stroke="#22c55e" />
+                            <text x="160" y="35" fill="#86efac" fontWeight="bold">RAID 1 — miroir</text>
+                            <rect x="160" y="45" width="50" height="40" rx="3" fill="#334155" /><text x="170" y="60" fill="white" fontSize="9">A</text><text x="170" y="75" fill="white" fontSize="9">B</text>
+                            <rect x="215" y="45" width="50" height="40" rx="3" fill="#334155" /><text x="225" y="60" fill="white" fontSize="9">A</text><text x="225" y="75" fill="white" fontSize="9">B</text>
+                            <text x="157" y="100" fill="#94a3b8" fontSize="9">2 disques · tolère 1 panne</text>
+                            <rect x="285" y="15" width="135" height="90" rx="6" fill="#1e293b" stroke="#f59e0b" />
+                            <text x="295" y="35" fill="#fcd34d" fontWeight="bold">RAID 5 — parité</text>
+                            <rect x="295" y="45" width="38" height="40" rx="3" fill="#334155" /><text x="303" y="60" fill="white" fontSize="9">A</text><text x="303" y="75" fill="white" fontSize="9">P</text>
+                            <rect x="336" y="45" width="38" height="40" rx="3" fill="#334155" /><text x="344" y="60" fill="white" fontSize="9">B</text><text x="344" y="75" fill="white" fontSize="9">C</text>
+                            <rect x="377" y="45" width="38" height="40" rx="3" fill="#334155" /><text x="385" y="60" fill="white" fontSize="9">D</text><text x="385" y="75" fill="white" fontSize="9">P</text>
+                            <text x="292" y="100" fill="#94a3b8" fontSize="9">n-1 utiles · tolère 1 panne · reconstr. lente</text>
+                            <rect x="430" y="15" width="125" height="90" rx="6" fill="#1e293b" stroke="#38bdf8" />
+                            <text x="440" y="35" fill="#7dd3fc" fontWeight="bold">RAID 10 — 1+0</text>
+                            <rect x="440" y="45" width="55" height="20" rx="3" fill="#334155" /><text x="460" y="60" fill="white" fontSize="9">miroir 1</text>
+                            <rect x="500" y="45" width="55" height="20" rx="3" fill="#334155" /><text x="520" y="60" fill="white" fontSize="9">miroir 2</text>
+                            <rect x="440" y="70" width="115" height="16" rx="3" fill="#0f172a" /><text x="455" y="82" fill="white" fontSize="9">striping entre les paires</text>
+                            <text x="437" y="100" fill="#94a3b8" fontSize="9">vitesse + tolérance · 4 disques min</text>
+                            <text x="40" y="130" fill="#fbbf24" fontSize="10">À retenir : le RAID n'est PAS une sauvegarde — il protège de la panne disque, pas de la suppression ni du ransomware.</text>
+                            <text x="40" y="152" fill="#94a3b8" fontSize="10">Hot spare : disque de réserve qui remplace automatiquement un membre défaillant, puis reconstruction.</text>
+                        </svg>
+                    </div>
+                );
+            }
+
+            if (type === 'cloud-modeles') {
+                return (
+                    <div className="w-full bg-slate-900 text-white p-4 rounded-lg overflow-x-auto">
+                        <h4 className="text-xs uppercase font-bold text-sky-400 mb-2">SVG : IaaS / PaaS / SaaS — qui gère quoi ?</h4>
+                        <p className="text-[11px] text-slate-300 mb-2"><strong className="text-amber-300">Lecture :</strong> plus on monte vers le SaaS, moins le client gère. La barre orange = responsabilité du CLIENT ; la barre bleue = géré par le fournisseur.</p>
+                        <svg viewBox="0 0 560 210" role="img" aria-label="Répartition des responsabilités IaaS PaaS SaaS" className="w-full h-auto text-xs">
+                            <text x="10" y="18" fill="#94a3b8" fontSize="10">Couches : Applications · Données · Runtime · OS · Virtualisation · Serveurs · Stockage · Réseau</text>
+                            <rect x="10" y="28" width="170" height="150" rx="8" fill="#1e293b" stroke="#0284c7" />
+                            <text x="55" y="48" fill="#38bdf8" fontWeight="bold">IaaS (EC2, VM Azure)</text>
+                            <rect x="20" y="58" width="150" height="14" rx="2" fill="#f59e0b" />
+                            <rect x="20" y="75" width="150" height="14" rx="2" fill="#f59e0b" />
+                            <rect x="20" y="92" width="150" height="14" rx="2" fill="#f59e0b" />
+                            <rect x="20" y="109" width="150" height="14" rx="2" fill="#f59e0b" />
+                            <rect x="20" y="126" width="150" height="14" rx="2" fill="#0ea5e9" />
+                            <rect x="20" y="143" width="150" height="30" rx="2" fill="#0ea5e9" />
+                            <text x="24" y="186" fill="#94a3b8" fontSize="9">client gère : apps, données, runtime, OS</text>
+                            <rect x="195" y="28" width="170" height="150" rx="8" fill="#1e293b" stroke="#059669" />
+                            <text x="240" y="48" fill="#34d399" fontWeight="bold">PaaS (App Service)</text>
+                            <rect x="205" y="58" width="150" height="14" rx="2" fill="#f59e0b" />
+                            <rect x="205" y="75" width="150" height="14" rx="2" fill="#f59e0b" />
+                            <rect x="205" y="92" width="150" height="66" rx="2" fill="#0ea5e9" />
+                            <text x="209" y="186" fill="#94a3b8" fontSize="9">client gère : applications et données</text>
+                            <rect x="380" y="28" width="170" height="150" rx="8" fill="#1e293b" stroke="#7c3aed" />
+                            <text x="425" y="48" fill="#c4b5fd" fontWeight="bold">SaaS (M365, Salesforce)</text>
+                            <rect x="390" y="58" width="150" height="100" rx="2" fill="#f59e0b" />
+                            <text x="400" y="112" fill="white" fontSize="10">client : ses données + comptes</text>
+                            <rect x="390" y="163" width="150" height="14" rx="2" fill="#0ea5e9" />
+                            <text x="384" y="186" fill="#94a3b8" fontSize="9">fournisseur gère TOUT le reste</text>
+                        </svg>
+                    </div>
+                );
+            }
+
+            if (type === 'pra-pca-321') {
+                return (
+                    <div className="w-full bg-slate-900 text-white p-4 rounded-lg overflow-x-auto">
+                        <h4 className="text-xs uppercase font-bold text-sky-400 mb-2">SVG : PRA / PCA — règle 3-2-1 et objectifs RTO / RPO</h4>
+                        <p className="text-[11px] text-slate-300 mb-2"><strong className="text-amber-300">Lecture :</strong> PRA = reprendre l'activité après sinistre (site de secours) ; PCA = continuer pendant l'incident (redondance). La sauvegarde respecte la règle 3-2-1 et vise des RTO/RPO définis avec le métier.</p>
+                        <svg viewBox="0 0 560 200" role="img" aria-label="PRA PCA et règle 3-2-1" className="w-full h-auto text-xs">
+                            <rect x="15" y="20" width="255" height="60" rx="8" fill="#7c3aed" />
+                            <text x="30" y="42" fill="white" fontWeight="bold">PRA — Plan de Reprise</text>
+                            <text x="30" y="62" fill="#ddd6fe" fontSize="10">reprise APRÈS sinistre : site de secours,</text>
+                            <text x="30" y="76" fill="#ddd6fe" fontSize="10">restauration, délai accepté = RTO</text>
+                            <rect x="290" y="20" width="255" height="60" rx="8" fill="#0284c7" />
+                            <text x="305" y="42" fill="white" fontWeight="bold">PCA — Plan de Continuité</text>
+                            <text x="305" y="62" fill="#bae6fd" fontSize="10">continuer PENDANT : redondance matérielle,</text>
+                            <text x="305" y="76" fill="#bae6fd" fontSize="10">cluster, second FAI, génératrice</text>
+                            <rect x="15" y="100" width="255" height="80" rx="8" fill="#1e293b" stroke="#22c55e" />
+                            <text x="30" y="122" fill="#86efac" fontWeight="bold">Règle 3-2-1 de sauvegarde</text>
+                            <text x="30" y="142" fill="white" fontSize="10">3 copies · 2 supports différents</text>
+                            <text x="30" y="160" fill="white" fontSize="10">1 copie HORS SITE (le ransomware</text>
+                            <text x="30" y="176" fill="white" fontSize="10">chiffre aussi les sauvegardes connectées)</text>
+                            <rect x="290" y="100" width="255" height="80" rx="8" fill="#1e293b" stroke="#f59e0b" />
+                            <text x="305" y="122" fill="#fcd34d" fontWeight="bold">Deux objectifs à négocier avec le métier</text>
+                            <text x="305" y="142" fill="white" fontSize="10">RTO : combien de temps d'arrêt accepté ?</text>
+                            <text x="305" y="160" fill="white" fontSize="10">RPO : combien de données perdues (bail</text>
+                            <text x="305" y="176" fill="white" fontSize="10">de sauvegarde) accepté ?</text>
+                        </svg>
+                    </div>
+                );
+            }
+
+            if (type === 'supervision-architecture') {
+                return (
+                    <div className="w-full bg-slate-900 text-white p-4 rounded-lg overflow-x-auto">
+                        <h4 className="text-xs uppercase font-bold text-sky-400 mb-2">SVG : architecture de supervision (Zabbix/PRTG)</h4>
+                        <p className="text-[11px] text-slate-300 mb-2"><strong className="text-amber-300">Lecture :</strong> le serveur de supervision collecte (SNMP, agents, ICMP) depuis toute l'infrastructure, stocke les métriques, déclenche des seuils → alertes (mail, SMS, ticket GLPI). SNMP trap = alerte spontanée, SNMP poll = interrogation régulière.</p>
+                        <svg viewBox="0 0 560 190" role="img" aria-label="Architecture de supervision" className="w-full h-auto text-xs">
+                            <rect x="215" y="55" width="140" height="70" rx="10" fill="#059669" />
+                            <text x="245" y="80" fill="white" fontWeight="bold">Serveur de</text>
+                            <text x="245" y="98" fill="white" fontWeight="bold">supervision</text>
+                            <text x="228" y="116" fill="#a7f3d0" fontSize="10">seuils → alertes → tickets</text>
+                            <rect x="20" y="20" width="130" height="40" rx="8" fill="#1e293b" stroke="#38bdf8" />
+                            <text x="35" y="45" fill="#93c5fd" fontSize="10">Switchs / routeurs (SNMP)</text>
+                            <rect x="20" y="80" width="130" height="40" rx="8" fill="#1e293b" stroke="#38bdf8" />
+                            <text x="40" y="100" fill="#93c5fd" fontSize="10">Serveurs (agents)</text>
+                            <rect x="20" y="140" width="130" height="40" rx="8" fill="#1e293b" stroke="#38bdf8" />
+                            <text x="42" y="160" fill="#93c5fd" fontSize="10">Postes (ping/service)</text>
+                            <rect x="410" y="20" width="130" height="40" rx="8" fill="#1e293b" stroke="#fbbf24" />
+                            <text x="428" y="45" fill="#fcd34d" fontSize="10">Email / SMS / GLPI</text>
+                            <rect x="410" y="140" width="130" height="40" rx="8" fill="#1e293b" stroke="#fbbf24" />
+                            <text x="425" y="160" fill="#fcd34d" fontSize="10">Tableaux de bord / NOC</text>
+                            <line x1="150" y1="40" x2="215" y2="70" stroke="#38bdf8" strokeWidth="2" markerEnd="url(#ar)" />
+                            <line x1="150" y1="100" x2="215" y2="90" stroke="#38bdf8" strokeWidth="2" markerEnd="url(#ar)" />
+                            <line x1="150" y1="160" x2="215" y2="110" stroke="#38bdf8" strokeWidth="2" markerEnd="url(#ar)" />
+                            <line x1="355" y1="70" x2="410" y2="40" stroke="#fbbf24" strokeWidth="2" markerEnd="url(#ar)" />
+                            <line x1="355" y1="110" x2="410" y2="160" stroke="#fbbf24" strokeWidth="2" markerEnd="url(#ar)" />
+                            <text x="160" y="185" fill="#94a3b8" fontSize="10">collecte : SNMP poll (161) · trap (162) · agents · ICMP ping · WMI/WinRM</text>
+                        </svg>
+                    </div>
+                );
+            }
+
             if (type === 'mockup-aduc') {
                 return (
                     <div className="w-full bg-slate-900 text-white p-4 rounded-lg overflow-x-auto">
@@ -6791,8 +7228,25 @@
                                 <div key={j} className="pl-3 border-l-2 border-brand-500/30">
                                     <h5 className="text-xs font-bold text-brand-600 dark:text-sky-300">{p.h}</h5>
                                     <p className="text-xs text-slate-700 dark:text-slate-300 leading-relaxed mt-1">{p.t}</p>
+                                    {p.schema && <div className="mt-2"><DynamicSVGDiagram type={p.schema} /></div>}
                                 </div>
                             ))}
+                            {l.schema && <DynamicSVGDiagram type={l.schema} />}
+                            {l.table && l.table.length > 0 && (
+                                <div className="overflow-x-auto rounded-lg border border-slate-200 dark:border-slate-700">
+                                    <table className="w-full text-xs">
+                                        <tbody>
+                                            {l.table.map((row, ri) => (
+                                                <tr key={ri} className={ri === 0 ? 'bg-slate-100 dark:bg-slate-900/70' : 'border-t border-slate-100 dark:border-slate-800'}>
+                                                    {row.map((cell, ci) => (
+                                                        <td key={ci} className={`p-2 ${ri === 0 ? 'font-bold text-slate-600 dark:text-slate-300' : 'text-slate-700 dark:text-slate-300'} ${ci === 0 && ri > 0 ? 'font-semibold text-slate-900 dark:text-white' : ''}`}>{cell}</td>
+                                                    ))}
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            )}
                         </div>
                     ))}
                 </div>
