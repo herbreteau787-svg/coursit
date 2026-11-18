@@ -65,11 +65,6 @@ export const TSSR_COURSES = [
                 ],
                 resume: "Le centre de services transforme un appel stressant en un ticket exploitable : qualifier (incident ou demande), prioriser (impact × urgence), traiter ou escalader, puis clôturer avec l'accord de l'utilisateur. La base de connaissances fait gagner du temps à toute l'équipe.",
                 suite: "CP2 — Windows et Active Directory : vous passerez du ticket à l'action sur les comptes.",
-                evaluation: [
-                    { q: "Quelle situation décrit un incident ?", options: [ "Installer un nouveau logiciel demandé par les RH", "Une imprimante partagée qui n'imprime plus", "Créer une boîte mail pour un nouvel employé" ], answer: 1, exp: "Correct : un incident est une interruption ou dégradation d'un service existant. Les deux autres sont des demandes de service." },
-                    { q: "La priorité d'un ticket se décide surtout selon :", options: [ "L'ancienneté de la personne qui appelle", "L'impact sur l'activité croisé avec l'urgence", "L'ordre d'arrivée des appels" ], answer: 1, exp: "Correct : la matrice impact × urgence est la base standard de la priorisation ; ni le grade ni l'ordre d'arrivée ne suffisent." },
-                    { q: "Passer un ticket du niveau 1 au niveau 2 signifie :", options: [ "Abandonner le ticket car il est trop difficile", "Le transmettre à des spécialistes car il dépasse les compétences ou les droits du niveau 1", "Demander à l'utilisateur de rappeler plus tard" ], answer: 1, exp: "Correct : l'escalade est un transfert organisé vers un niveau d'expertise supérieur, documenté dans le ticket et tracé pour l'utilisateur." }
-                ]
             },
             {
                 id: 'tssr-cp2', parcours: 'TSSR', code: 'CP2',
@@ -164,11 +159,6 @@ export const TSSR_COURSES = [
                 ],
                 resume: "Active Directory centralise comptes et droits ; les OU rangent, les groupes délèguent les droits, les GPO uniformisent la configuration selon l'ordre Local → Site → Domaine → OU. Le module PowerShell (RSAT) fait gagner beaucoup de temps dès qu'on gère plus d'une poignée de comptes.",
                 suite: "CP3 — Serveurs Linux : le même métier, un autre système.",
-                evaluation: [
-                    { q: "À quoi sert un contrôleur de domaine ?", options: [ "Il héberge le site web de l'entreprise", "Il gère l'annuaire Active Directory et authentifie les utilisateurs", "Il remplace le pare-feu du réseau" ], answer: 1, exp: "Correct : le contrôleur de domaine héberge l'annuaire et délivre l'authentification (Kerberos). Site web et pare-feu sont des services différents." },
-                    { q: "Quelle commande force l'application des stratégies de groupe sur un poste ?", options: [ "ipconfig /renew", "Get-ADUser", "gpupdate /force" ], answer: 2, exp: "Correct : gpupdate /force demande l'actualisation immédiate des GPO ; ipconfig /renew concerne le DHCP et Get-ADUser lit l'annuaire." },
-                    { q: "Vous devez donner l'accès à un outil aux 25 techniciens. Quelle méthode est la bonne pratique ?", options: [ "Modifier les droits de chaque compte un par un", "Partager le compte administrateur", "Créer un groupe de sécurité et l'ajouter une seule fois" ], answer: 2, exp: "Correct : le groupe évite les oublis et les erreurs, documente l'intention, et se réutilise pour tout nouveau technicien. Partager un compte empêche la traçabilité." }
-                ]
             },
             {
                 id: 'tssr-cp3', parcours: 'TSSR', code: 'CP3',
@@ -272,11 +262,6 @@ export const TSSR_COURSES = [
                 ],
                 resume: "Sur Linux, la ligne de commande est l'interface normale d'administration : arborescence standard, droits 755/640, gestionnaire de paquets (apt/dnf), services pilotés par systemctl, connexion à distance par SSH et diagnostic par les journaux (journalctl, /var/log).",
                 suite: "CP4 — Réseau IP : ces serveurs ne restent utiles que s'ils communiquent.",
-                evaluation: [
-                    { q: "Que signifient les droits 640 sur un fichier ?", options: [ "Lecture+écriture pour le propriétaire, lecture pour le groupe, rien pour les autres", "Tout le monde peut tout faire", "Seul le propriétaire peut exécuter le fichier" ], answer: 0, exp: "Correct : 6 = r+w (4+2) pour le propriétaire, 4 = r pour le groupe, 0 = rien pour les autres. C'est le réglage classique d'un fichier de données sensible." },
-                    { q: "Quelle commande active le démarrage automatique d'un service au redémarrage ?", options: [ "systemctl start service", "systemctl enable service", "systemctl status service" ], answer: 1, exp: "Correct : enable programme le démarrage au boot ; start démarre maintenant, status affiche l'état. Les deux se combinent souvent : start puis enable." },
-                    { q: "Pourquoi préfère-t-on les clés SSH au mot de passe ?", options: [ "C'est plus rapide à taper", "La connexion reste possible mais la clé privée ne peut pas être devinée comme un mot de passe faible", "SSH refuse les mots de passe" ], answer: 1, exp: "Correct : la clé privée (longue, secrète) ne subit ni force brute ni dictionnaire comme un mot de passe court ; le refus des mots de passe est un réglage possible, pas une obligation." }
-                ]
             },
             {
                 id: 'tssr-cp4', parcours: 'TSSR', code: 'CP4',
@@ -365,11 +350,6 @@ export const TSSR_COURSES = [
                 ],
                 resume: "Une adresse IP + un masque définissent ce qui est directement joignable ; DHCP distribue la configuration, DNS traduit les noms, la passerelle sort des sous-réseaux. Le diagnostic s'escalade du câble vers le nom, une couche à la fois.",
                 suite: "CP5 — Serveurs virtualisés : héberger ces services proprement.",
-                evaluation: [
-                    { q: "Parmi ces blocs, lequel est une plage privée ?", options: [ "192.168.0.0/16", "8.8.8.0/24", "92.0.2.0/24" ], answer: 0, exp: "Correct : les plages privées RFC 1918 sont 10.0.0.0/8, 172.16.0.0/12 et 192.168.0.0/16. Les autres sont des adresses publiques." },
-                    { q: "Un poste atteint sa passerelle en ping mais pas un site externe par son nom. Première piste ?", options: [ "Le câble réseau", "Le serveur DNS", "Le VLAN du port" ], answer: 1, exp: "Correct : la passerelle répond donc la couche physique et l'affectation IP vont bien ; l'échec porte sur la résolution du nom, typique d'un DNS défaillant ou mal configuré." },
-                    { q: "Combien d'adresses utilisables dans un /26 ?", options: [ "64", "62", "126" ], answer: 1, exp: "Correct : un /26 contient 64 adresses, moins l'adresse réseau et l'adresse de diffusion = 62 utilisables." }
-                ]
             },
             {
                 id: 'tssr-cp5', parcours: 'TSSR', code: 'CP5',
@@ -440,11 +420,6 @@ export const TSSR_COURSES = [
                 ],
                 resume: "La virtualisation transforme le serveur en objet manipulable : allocations maîtrisées (vCPU, RAM, disque, réseau), snapshot pour l'instant T, sauvegarde pour la survivabilité, modèles pour la cohérence et migration à chaud pour l'entretien sans coupure.",
                 suite: "CP6 — Scripts : automatiser ces tâches répétitives.",
-                evaluation: [
-                    { q: "Quel hyperviseur s'installe directement sur la machine physique ?", options: [ "VirtualBox", "Un hyperviseur de type 1 comme Hyper-V ou ESXi", "Un conteneur Docker" ], answer: 1, exp: "Correct : le type 1 (bare metal) ne s'appuie sur aucun OS hôte. VirtualBox est de type 2 et Docker est un moteur de conteneurs, pas un hyperviseur de VM." },
-                    { q: "Que fait un snapshot par rapport à une sauvegarde ?", options: [ "C'est identique, un synonyme", "Il fige un état à un instant T sur le disque de la VM, sans copie vers un autre support", "Il transfère la VM sur un autre hôte" ], answer: 1, exp: "Correct : snapshot = point de retour arrière lié au disque de la VM ; sauvegarde = copie conservée sur un autre support, capable de survivre à la perte de la VM." },
-                    { q: "Le mode réseau « bridge » (pont) d'une VM signifie :", options: [ "La VM n'a pas d'accès réseau", "La VM partage l'IP de son hôte via une traduction de l'hyperviseur", "La VM apparaît sur le réseau physique avec sa propre adresse IP" ], answer: 2, exp: "Correct : le pont donne à la VM sa place directe sur le réseau de l'hôte, IP propre incluse. La traduction via l'hôte est le mode NAT." }
-                ]
             },
             {
                 id: 'tssr-cp6', parcours: 'TSSR', code: 'CP6',
@@ -528,11 +503,6 @@ export const TSSR_COURSES = [
                 ],
                 resume: "Scripter = moins d'erreurs et de temps perdu. PowerShell (Verbe-Nom, pipeline, .ps1) et bash (shebang, paramètres, chmod +x) suffisent pour automatiser le quotidien. Règle d'or intangible : comprendre avant d'exécuter.",
                 suite: "CP7 — Accès Internet et interconnexions : donner à tout ce monde l'accès au monde extérieur.",
-                evaluation: [
-                    { q: "À quoi sert le pipeline PowerShell ?", options: [ "À accélérer le réseau", "À faire passer le résultat d'une commande à la commande suivante", "À sauvegarder automatiquement" ], answer: 1, exp: "Correct : le pipeline (|) enchaîne les traitements — on filtre, on trie, on compte de façon enchaînée. Exemple du cours : Get-Service | Where-Object ..." },
-                    { q: "La stratégie d'exécution (execution policy) de PowerShell sert à :", options: [ "Empêcher tout script de tourner, sans exception", "Définir dans quelles conditions les scripts PowerShell peuvent s'exécuter", "Chiffrer les scripts" ], answer: 1, exp: "Correct : elle cadre l'exécution des scripts. La réformer « pour que ça marche » sans comprendre le script en question est un anti-pattern de sécurité." },
-                    { q: "Que fait la première ligne #!/bin/bash d'un script ?", options: [ "Un commentaire décoratif sans effet", "Elle indique au système quel interpréteur utiliser pour le script", "Elle définit la variable PATH" ], answer: 1, exp: "Correct : le shebang demande l'interpréteur indiqué (ici bash) à l'exécution de ./script.sh." }
-                ]
             },
             {
                 id: 'tssr-cp7', parcours: 'TSSR', code: 'CP7',
@@ -602,11 +572,6 @@ export const TSSR_COURSES = [
                 ],
                 resume: "Sortir sur Internet, c'est une chaîne : passerelle → NAT vers l'adresse publique → filtrage de sortie contrôlé → DNS externe. Préparez et testez le VPN site-à-site et le lien de secours ; le diagnostic suit la chaîne dans l'ordre, du poste vers l'extérieur.",
                 suite: "CP8 — Sauvegardes et restaurations : préserver ce que l'on vient de relier.",
-                evaluation: [
-                    { q: "Le NAT du routeur d'entreprise sert principalement à :", options: [ "Chiffrer le trafic sortant", "Traduire plusieurs adresses privées en une adresse publique", "Traduire les noms en IP" ], answer: 1, exp: "Correct : le NAT (traduction d'adresses) matérialise le passage de l'espace privé RFC 1918 vers l'espace public. Le chiffrement est l'affaire du VPN, la traduction des noms celle du DNS." },
-                    { q: "Un VPN site-à-site permet :", options: [ "Aux utilisateurs d'accéder au Internet par un tunnel", "De relier les réseaux de deux sites distants à travers Internet, de façon chiffrée", "D'accélérer les téléchargements" ], answer: 1, exp: "Correct : le VPN site-à-site connecte deux LAN entre eux via un tunnel chiffré sur Internet. L'intérêt utilisateur à distance c'est plutôt le VPN d'accès (poste → entreprise)." },
-                    { q: "Un ping vers 8.8.8.8 répond, mais un ping vers www.exemple.fr échoue. La panne est probablement :", options: [ "Le routage vers Internet", "La résolution DNS", "Le switch local" ], answer: 1, exp: "Correct : l'IP publique est atteignable donc la chaîne Internet fonctionne ; l'échec sur un nom pointe la résolution DNS (serveur interne en panne, mauvaise config client)." }
-                ]
             },
             {
                 id: 'tssr-cp8', parcours: 'TSSR', code: 'CP8',
@@ -666,11 +631,6 @@ export const TSSR_COURSES = [
                 ],
                 resume: "Définissez d'abord RPO et RTO avec le métier, choisissez vos types de sauvegarde (complète, incrémentielle, différentielle), appliquez la règle 3-2-1 avec des copies protégées, et surtout testez la restauration : c'est elle, pas la sauvegarde, qui est la preuve de votre sécurité.",
                 suite: "CP9 — Déploiement de postes : bâtir et mettre à disposition du matériel, avec image et automatisation.",
-                evaluation: [
-                    { q: "La règle 3-2-1 impose :", options: [ "3 sauvegardes par jour, 2 serveurs, 1 cloud", "3 copies des données, sur 2 supports différents, dont 1 hors du site", "3 équipes de sauvegarde et 1 test annuel" ], answer: 1, exp: "Correct : 3 copies, 2 supports distincts (survie à la panne d'un support), 1 copie hors site (survie à l'accident global du local)." },
-                    { q: "Le RPO (Recovery Point Objective) mesure :", options: [ "Le temps maximum pour remettre le service en marche", "La quantité de données que l'on accepte de perdre", "Le nombre de copies nécessaires" ], answer: 1, exp: "Correct : le RPO concerne la perte de données acceptable entre deux points de restauration ; le premier item décrit le RTO et le troisième est faux." },
-                    { q: "Une sauvegarde incrémentielle contient :", options: [ "Tout, chaque fois", "Seulement les modifications depuis la dernière complète", "Seulement les modifications depuis la dernière sauvegarde, quel que soit son type" ], answer: 2, exp: "Correct : l'incrémentielle suit la dernière sauvegarde, quel que soit son type ; les changements depuis la dernière complète définissent plutôt la différentielle." }
-                ]
             },
             {
                 id: 'tssr-cp9', parcours: 'TSSR', code: 'CP9',
@@ -724,10 +684,5 @@ export const TSSR_COURSES = [
                 ],
                 resume: "Choisir une image standard régulièrement mise à jour, automatiser son déploiement (PXE/WDS + fichier de réponse, séquences MDT), intégrer proprement au domaine avec GPO et inventaire — et retirer les postes sortants avec le même soin (effacement des données, mise à jour du parc).",
                 suite: "Vous avez terminé les 9 CP du TSSR. Le parcours AIS (CP1) vous attend pour monter d'un niveau.",
-                evaluation: [
-                    { q: "PXE permet :", options: [ "D'installer Windows depuis une clé USB", "De démarrer un poste sur le réseau pour recevoir une installation", "De mettre à jour uniquement les pilotes" ], answer: 1, exp: "Correct : PXE est le protocole de démarrage réseau ; le poste neuf interpelle un service de déploiement (comme WDS) et reçoit son image d'installation." },
-                    { q: "Le fichier de réponse (unattend.xml) sert à :", options: [ "Chiffrer les disques automatiquement", "Pré-remplir toutes les questions de l'installateur pour rendre l'installation non interactive", "Récupérer le mot de passe admin oublié" ], answer: 1, exp: "Correct : langue, partitionnement, locale, comptes… tout est pré-décidé, l'installation se déroule sans intervenir — base indispensable du déploiement en volume." },
-                    { q: "Avant de sortir un poste du parc (revente), on doit :", options: [ "Juste réinitialiser le mot de passe utilisateur", "Effacer/détruire les données des disques avec un outil dédié, et mettre à jour l'inventaire", "Laisser le disque au nouveau propriétaire sans vérification" ], answer: 1, exp: "Correct : les données de l'entreprise restent sa propriété — un effacement réalisé avec un outil dédié avant la sortie, et un inventaire à jour qui témoigne de la chaîne." }
-                ]
             }
         ];

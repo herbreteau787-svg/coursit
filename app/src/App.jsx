@@ -458,24 +458,6 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
         };
 
         // --- COMPOSANTS POUR LES COURS A LEÇONS (TSSR / AIS PAR CP) ---
-        const CorrigeMasque = ({ texte }) => {
-            const [open, setOpen] = useState(false);
-            return (
-                <div className="p-4 bg-emerald-500/5 border border-emerald-500/20 rounded-lg space-y-2 mt-4">
-                    <h4 className="text-xs font-bold uppercase text-emerald-600 dark:text-emerald-400">Corrigé complet du labo</h4>
-                    <p className="text-[11px] text-slate-500 dark:text-slate-400">Essayez d'abord chaque étape vous-même : le corrigé reste replié jusqu'à votre clic.</p>
-                    <button
-                        onClick={() => setOpen(!open)}
-                        className="px-3 py-1.5 rounded-lg text-xs font-bold bg-emerald-600 text-white hover:bg-emerald-700 transition-colors"
-                    >
-                        {open ? 'Masquer le corrigé' : 'Voir le corrigé'}
-                    </button>
-                    {open && (
-                        <p className="text-xs bg-emerald-500/10 p-3 rounded border border-emerald-500/20 text-slate-700 dark:text-slate-300 leading-relaxed">{texte}</p>
-                    )}
-                </div>
-            );
-        };
 
         const ExerciseItem = ({ ex, num }) => {
             const [open, setOpen] = useState(false);
@@ -499,37 +481,6 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
             );
         };
 
-        const EvaluationQuestion = ({ q, num }) => {
-            const [sel, setSel] = useState(null);
-            return (
-                <div className="p-4 bg-slate-50 dark:bg-slate-900/50 rounded-lg border border-slate-200 dark:border-slate-700 space-y-2">
-                    <p className="text-sm font-semibold text-slate-800 dark:text-slate-200">Question {num} — {q.q}</p>
-                    <div className="space-y-1.5">
-                        {q.options.map((opt, i) => {
-                            let style = "border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 hover:border-brand-500";
-                            if (sel !== null) {
-                                if (i === q.answer) style = "border-emerald-500 bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 font-medium";
-                                else if (i === sel) style = "border-rose-500 bg-rose-500/10 text-rose-700 dark:text-rose-300 font-medium";
-                            }
-                            return (
-                                <button
-                                    key={i}
-                                    onClick={() => setSel(i)}
-                                    className={`block w-full text-left p-2 rounded border text-xs transition-colors ${style}`}
-                                >
-                                    {String.fromCharCode(65 + i)}. {opt}
-                                </button>
-                            );
-                        })}
-                    </div>
-                    {sel !== null && (
-                        <p className="text-xs text-slate-600 dark:text-slate-400 bg-slate-100 dark:bg-slate-900 p-2 rounded leading-relaxed">
-                            {sel === q.answer ? '✓ ' : '✗ '}{q.exp}
-                        </p>
-                    )}
-                </div>
-            );
-        };
 
         const LessonCourseView = ({ course, isDone, onToggleDone, prev, next, onGoTo, onOpenTab }) => (
             <div className="bg-white dark:bg-slate-800 rounded-xl p-6 border border-slate-200 dark:border-slate-700 shadow-sm space-y-6">
@@ -707,14 +658,6 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
 
                 {/* Renvois supprimés : QCM, Labos, Commandes et Glossaire restent dans la navigation principale */}
 
-                {/* Évaluation */}
-                <div className="space-y-3">
-                    <h3 className="text-xs uppercase font-bold text-brand-500 tracking-wider">Évaluation de fin de CP — testez-vous</h3>
-                    <p className="text-xs text-slate-500 dark:text-slate-400">Choisissez une réponse : le résultat s'affiche immédiatement, avec l'explication.</p>
-                    {course.evaluation.map((q, i) => (
-                        <EvaluationQuestion key={i} q={q} num={i + 1} />
-                    ))}
-                </div>
 
                 {/* Navigation entre CP */}
                 <div className="pt-4 border-t border-slate-200 dark:border-slate-700 flex flex-wrap gap-3 justify-between items-center">
@@ -1588,8 +1531,6 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
                                         ))}
                                     </ul>
                                 </div>
-                                {/* Corrigé masqué jusqu'au clic (FONC-08 / section 4.3) */}
-                                <CorrigeMasque texte={selLab.solution} />
                             </div>
                         </div>
                     );

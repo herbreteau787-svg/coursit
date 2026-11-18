@@ -52,11 +52,6 @@ export const AIS_COURSES = [
                 ],
                 resume: "L'administration saine repose sur quatre habitudes : comptes séparés et moindre privilège, MFA sur les accès sensibles, changements annoncés avec plan de retour arrière, et documentation + centralisation des journaux. Ce socle est réutilisé dans tous les autres CP de l'AIS.",
                 suite: "AIS CP2 — Infrastructures réseaux : appliquer ces principes à la construction du réseau.",
-                evaluation: [
-                    { q: "Pourquoi séparer le compte ordinaire du compte d'administration ?", options: [ "Pour économiser des licences", "Parce qu'un compromis du compte de tous les jours ne doit pas donner les clés de tout le système", "Par tradition, cela n'a pas d'effet de sécurité" ], answer: 1, exp: "Correct : la séparation limite la portée d'un compromis. Le compte ordinaire sert à la navigation et aux mails, les surfaces d'attaque les plus exposées." },
-                    { q: "Avant une modification sensibles en production, l'indispensable est :", options: [ "Un plan de retour arrière écrit et un état initial sauvegardé", "Un mail de politesse au directeur", "Augmenter la vitesse du réseau pour compenser" ], answer: 0, exp: "Correct : savoir revenir en arrière (comment, quand, qui décide) transforme un pari en changement maîtrisé. Les autres actions sont nuisibles ou inutiles." },
-                    { q: "Quel est le but d'une revue périodique des accès ?", options: [ "Libérer de la place sur les serveurs", "Supprimer les droits obsolètes qui ont tendance à s'accumuler avec le temps", "Réinitialiser tous les mots de passe chaque mois" ], answer: 1, exp: "Correct : sans revue, les droits ne meurent jamais (personnes parties, projets fermés, comptes de service oubliés). La revue remet le moindre privilège en équilibre." }
-                ]
             },
             {
                 id: 'ais-cp2', parcours: 'AIS', code: 'CP2',
@@ -129,11 +124,6 @@ export const AIS_COURSES = [
                 ],
                 resume: "Un réseau maîtrisé se segmente par usage (VLAN), contrôle explicitement les flux entre zones avec un refus par défaut, se prémunit des boucles avec le STP et se documente en continu (schéma + tableau des flux). La redondance se teste, jamais supposée.",
                 suite: "AIS CP3 — Infrastructures systèmes : même logique, côté serveurs.",
-                evaluation: [
-                    { q: "Quel est l'intérêt principal d'une segmentation en zones ?", options: [ "Accélérer l'installation des postes", "Limiter les flux entre usages, réduire la propagation des incidents et permettre des politiques ciblées", "Économiser des adresses IP" ], answer: 1, exp: "Correct : la segmentation sert la maîtrise (sécurité, confinement, politiques) ; la performance des plans de diffusion en est un bonus, pas l'objectif premier." },
-                    { q: "Que signifie une politique de flux « refusé par défaut » ?", options: [ "Tous les flux sont interdits, sans exception", "Tout ce qui n'est pas explicitement autorisé par une règle documentée est refusé", "Le pare-feu refuse automatiquement les sites web" ], answer: 1, exp: "Correct : on n'ouvre que ce qui est justifié, et la justification est documentée. C'est le complément réseau du moindre privilège (AIS CP1)." },
-                    { q: "À quoi sert le STP (Spanning Tree) ?", options: [ "Chiffrer le trafic entre switches", "Couper automatiquement un chemin redondant pour éviter les boucles, et le réactiver en cas de panne", "Attribuer automatiquement les adresses IP des switches" ], answer: 1, exp: "Correct : sans STP, une boucle de sauvegarde noircit le réseau ; le protocole bloque un chemin tant que l'autre fonctionne." }
-                ]
             },
             {
                 id: 'ais-cp3', parcours: 'AIS', code: 'CP3',
@@ -198,11 +188,6 @@ export const AIS_COURSES = [
                 ],
                 resume: "Un système en production se construit avec des rôles clairs et séparés quand ils sont critiques, une surface minimale (services utiles seuls, SSH en clés), des mises à jour maîtrisées, et une administration à distance percée par VPN avec MFA et journalisation.",
                 suite: "AIS CP4 — Infrastructures virtualisées : héberger ces serveurs proprement.",
-                evaluation: [
-                    { q: "Pourquoi séparer AD DS des autres rôles quand c'est possible ?", options: [ "Parce que l'annuaire est le service dont dépendent tous les autres : sa panne compromet tout", "Pour que le serveur chauffe moins", "Parce que l'AD DS ne coexiste pas avec d'autres rôles" ], answer: 0, exp: "Correct : l'annuaire est le service pivot — défaut de connexion = plus rien ne marche. Les autres regroupements restent étudiés cas par cas." },
-                    { q: "Où doit se faire l'administration à distance d'un serveur ?", options: [ "Directement via Internet sur le port RDP", "Via le VPN (ou portail protégé), avec des comptes nominatifs et si possible MFA", "Uniquement depuis le serveur lui-même" ], answer: 1, exp: "Correct : on n'expose pas les portes d'administration sur Internet ; le VPN les met à l'abri et la traçabilité reste possible (AIS CP1)." },
-                    { q: "Sur un serveur Linux, quel réflexe réduit la surface d'attaque ?", options: [ "Installer tous les paquets disponibles pour être prêt", "Lister les services actifs et désactiver ceux qui ne servent pas", "Changer d'éditeur de texte" ], answer: 1, exp: "Correct : moins de services actifs = moins d'éventuelles failles. La commande systemctl list-units --type=service donne la liste de départ." }
-                ]
             },
             {
                 id: 'ais-cp4', parcours: 'AIS', code: 'CP4',
@@ -255,11 +240,6 @@ export const AIS_COURSES = [
                 ],
                 resume: "Le cluster apporte la continuité face à la panne d'hôte, le stockage partagé en est la condition, la sauvegarde externe (3-2-1) la mémoire, et la plateforme d'administration (interface, comptes, mises à jour) se verrouille comme un joyau : réseau dédié, MFA, revues périodiques.",
                 suite: "AIS CP5 — Concevoir une solution : passer de l'exploitation à la construction.",
-                evaluation: [
-                    { q: "Pourquoi le stockage partagé est-il indispensable à un cluster ?", options: [ "Pour économiser des disques", "Pour que les VM soient accessibles par tous les hôtes et puissent basculer ou migrer", "Pour que les utilisateurs accèdent à leurs fichiers" ], answer: 1, exp: "Correct : la bascule et la migration reposent sur le fait que différents hôtes voient le même stockage de VM. Ce stockage devient critique et se redonde." },
-                    { q: "La sauvegarde d'une VM en marche nécessite une attention particulière car :", options: [ "Les VM ne peuvent pas se sauvegarder", "Les fichiers en écriture au moment de la copie risquent d'être incohérents sans dispositif adapté", "Les snapshots consomment plus d'espace que la sauvegarde" ], answer: 1, exp: "Correct : la cohérence (agent ou snapshot assisté) est la question centrale de la sauvegarde à chaud ; sinon la restauration peut donner une VM instable." },
-                    { q: "L'interface d'administration de l'hyperviseur doit être :", options: [ "Accessible à tous depuis le VLAN utilisateur", "Restreinte au réseau d'administration, avec comptes nominatifs et MFA", "Publiée sur Internet pour l'intervention à distance" ], answer: 1, exp: "Correct : c'est la porte maîtresse de la plateforme : réseau dédié (AIS CP2), comptes propres (AIS CP1), MFA, jamais exposée." }
-                ]
             },
             {
                 id: 'ais-cp5', parcours: 'AIS', code: 'CP5',
@@ -318,11 +298,6 @@ export const AIS_COURSES = [
                 ],
                 resume: "Concevoir = écouter le besoin, le formaliser (cahier des charges), dessiner la logique avant le physique, intégrer les risques (repère : EBIOS RM de l'ANSSI), écrire chaque hypothèse, dimensionner avec marge et documenter la proposition. La conception honnête évite les mises en production douloureuses.",
                 suite: "AIS CP6 — Mettre en production : transformer le dossier de conception en service réel.",
-                evaluation: [
-                    { q: "Quelle est la différence entre architecture logique et architecture physique ?", options: [ "Aucune, ce sont des synonymes", "La logique décrit blocs fonctionnels et flux (indépendante des produits), la physique les projette avec du matériel concret", "La logique concerne le cloud, la physique les serveurs" ], answer: 1, exp: "Correct : on pense d'abord en blocs et flux, puis on projette en serveurs, VLAN et licences. L'ordre évite d'acheter avant de comprendre." },
-                    { q: "À quoi sert d'écrire les hypothèses d'une solution ?", options: [ "À remplir le dossier", "À rendre les limites assumées et discutables avant l'engagement, plutôt que des litiges après coup", "À déclarer les impôts" ], answer: 1, exp: "Correct : « dimensionnée pour 150 utilisateurs » est une promesse mesurable ; l'hypothèse tacite est la source principale des déceptions de projet." },
-                    { q: "EBIOS RM est :", options: [ "Un protocole de routage", "Une méthode française d'analyse des risques, publiée par l'ANSSI", "Une norme de câblage" ], answer: 1, exp: "Correct : EBIOS RM structure l'identification des scénarios de risque et le choix des mesures de protection. C'est le repère national pour l'analyse de risque d'une conception." }
-                ]
             },
             {
                 id: 'ais-cp6', parcours: 'AIS', code: 'CP6',
@@ -365,11 +340,6 @@ export const AIS_COURSES = [
                 ],
                 resume: "La recette vérifie le besoin (pas seulement « ça allume »), le plan de bascule formalise étapes, critères et rollback, le Go/No-Go protège la décision, les contrôles post-bascule et le REX ferment correctement le dossier. La documentation se met à jour pendant l'opération, pas après.",
                 suite: "AIS CP7 — Supervision : garder l'œil ouvert sur ce qu'on vient de mettre en service.",
-                evaluation: [
-                    { q: "Le plan de retour arrière (rollback) se déclenche :", options: [ "Seulement si la panne est visible de l'extérieur", "Selon les critères écrits à l'avance : étape fautive, temps dépassé, service critique non rétabli", "Jamais, sinon on admet l'échec" ], answer: 1, exp: "Correct : les critères du rollback sont écrits au moment de la préparation, à froid, pour éliminer la pression du moment. Les déclencher n'est pas un échec mais l'application du plan." },
-                    { q: "La recette d'une solution vérifie :", options: [ "Que le serveur s'allume", "Que la solution répond au besoin exprimé dans le cahier des charges, pas seulement qu'elle fonctionne techniquement", "Que le client a bien signé" ], answer: 1, exp: "Correct : « ça marche » ≠ « ça répond au contrat ». La recette est l'application du cahier des charges de l'AIS CP5." },
-                    { q: "Après la bascule, la première action de consolidation est :", options: [ "Abandonner l'équipe en vacances", "Des contrôles rapprochés quelques jours (services, données, sauvegarde de la nouvelle config), et la documentation à jour", "Organiser une fête" ], answer: 1, exp: "Correct : la stabilité se vérifie sur plusieurs jours, avec la sauvegarde de la nouvelle configuration et la documentation à jour — sinon le service n'existe que sur papier." }
-                ]
             },
             {
                 id: 'ais-cp7', parcours: 'AIS', code: 'CP7',
@@ -422,11 +392,6 @@ export const AIS_COURSES = [
                 ],
                 resume: "La supervision consiste à choisir des métriques de base (CPU, RAM, disque, services), à écrire des seuils en deux niveaux avec une action attendue pour chaque alerte, à regrouper les alertes dépendantes, et à tester la chaîne d'alerte. Les produits (Zabbix, Centreon, Grafana) servent la méthode, ils ne la remplacent pas.",
                 suite: "AIS CP8 — Mesure du niveau de sécurité : élargir la question des métriques du sécuritaire.",
-                evaluation: [
-                    { q: "Le but principal de la supervision est :", options: [ "Remplir des tableaux pour le comité de direction", "Détecter les dérives et incidents avant que les utilisateurs ne les signalent", "Changer les mots de passe automatiquement" ], answer: 1, exp: "Correct : anticiper plutôt que réagir. Un disque à 90 % est une alerte ; un disque plein est un appel en panique." },
-                    { q: "Quand dit-on d'une alerte qu'elle est « bien formulée » ?", options: [ "Elle arrive par courrier postal", "Elle est actionnable : la condition est précise et une réponse possible est documentée", "Elle reste faible pour ne pas déranger" ], answer: 1, exp: "Correct : une alerte impossible à traiter enseigne à l'équipe à ignorer les alertes — l'affaiblissement progressif de tout le dispositif." },
-                    { q: "SNMP et syslog sont :", options: [ "Des protocoles standards de collecte (interrogation d'équipements et transmission de journaux)", "Des marques propriétaires d'outils de supervision", "Des protocoles de sauvegarde" ], answer: 0, exp: "Correct : SNMP interroge et surveille les équipements (standard du secteur), syslog transporte les journaux. Les agents logiciels complètent le tableau côté serveurs." }
-                ]
             },
             {
                 id: 'ais-cp8', parcours: 'AIS', code: 'CP8',
@@ -480,11 +445,6 @@ export const AIS_COURSES = [
                 ],
                 resume: "Mesurer la sécurité, c'est inventorier, qualifier correctement (vulnérabilité, menace, risque), scanner à l'aide des bases publiques (CVE/NVD), corriger en priorisant l'exposition, suivre des indicateurs dans le temps — et se faire tester avec mandat écrit. Le tout est un cycle, pas un anniversaire annuel.",
                 suite: "AIS CP9 — Politique de sécurité : donner un cadre d'équipe à ces pratiques.",
-                evaluation: [
-                    { q: "Une vulnérabilité est :", options: [ "Une attaque en cours", "Une faiblesse d'un système qu'une menace peut exploiter", "Un virus téléchargé" ], answer: 1, exp: "Correct : la vulnérabilité est la faiblesse (état du système) ; la menace est l'acteur ou l'évènement qui peut l'exploiter ; le risque croise les deux avec l'impact." },
-                    { q: "Pourquoi corriger d'abord les systèmes exposés à Internet ?", options: [ "Parce qu'ils sont plus anciens", "Parce qu'ils sont la surface attaquable par n'importe qui, à tout instant : le risque d'exploitation y est le plus immédiat", "Parce que les correctifs internes n'existent pas" ], answer: 1, exp: "Correct : la priorité suit l'exposition réelle, pas l'ordre du scan. Un serveur public est sollicité par toute la planète en permanence." },
-                    { q: "Un test d'intrusion professionnel exige :", options: [ "Un mandat écrit précisant périmètre, méthodes et contacts d'urgence", "Qu'il soit totalement secret dans l'entreprise", "Un mot de passe d'administrateur général avant de commencer" ], answer: 0, exp: "Correct : mandat écrit obligatoire, fenêtre coordonnée, les équipes qui doivent savoir le savent. La surprise totale est une pratique à éviter." }
-                ]
             },
             {
                 id: 'ais-cp9', parcours: 'AIS', code: 'CP9',
@@ -538,11 +498,6 @@ export const AIS_COURSES = [
                 ],
                 resume: "La PSSI fixe le cap avec l'engagement de la direction (repère : ISO/IEC 27001 pour le SMSI), les règles utilisateur se rédigent claires et courtes (charte, mots de passe longs, RGPD appliqué aux données personnelles), et la sensibilisation continue est ce qui fait vivre le papier chaque jour.",
                 suite: "AIS CP10 — Incidents de sécurité : ce que fait une équipe le jour où, malgré tout, une règle est contournée.",
-                evaluation: [
-                    { q: "La PSSI (politique de sécurité des systèmes d'information) est :", options: [ "Un antivirus centralisé", "Le document qui fixe les règles, responsabilités et engagements de l'organisation en matière de sécurité", "Un mot de passe généraliste" ], answer: 1, exp: "Correct : c'est le cadre énoncé et signé par la direction, décliné en règles et procédures. Sans engagement direction, elle ne vit pas." },
-                    { q: "Le RGPD concerne :", options: [ "Toutes les données de l'entreprise", "Les données personnelles des personnes physiques (finalité, minimisation, information, conservation)", "Uniquement les données des serveurs hébergés en France" ], answer: 1, exp: "Correct : le RGPD encadre le traitement des données personnelles quel que soit le support. Un CV, une base de contacts clients en sont des données personnelles." },
-                    { q: "Quel est le remède le plus efficace d'une sensibilisation utilisateur ?", options: [ "Un poster affiché une fois l'an", "Des formats courts, répétés et concrets (mails, exercices simulés non punitifs)", "Un test de connaissances noté sans droit à l'erreur" ], answer: 1, exp: "Correct : le comportement change par la répétition concrète, pas par l'édition d'un document. Les exercices de phishing simulés servent à créer le réflexe, avec correction sans culpabilité." }
-                ]
             },
             {
                 id: 'ais-cp10', parcours: 'AIS', code: 'CP10',
@@ -594,10 +549,5 @@ export const AIS_COURSES = [
                 ],
                 resume: "Face à un incident : qualifier vite (ce qui est touché et où), isoler sans éteindre (préserver les indices), horodater chaque action, alerter la bonne chaîne de décision, remettre en service progressivement, et toujours conduire un REX sans blâme qui transforme l'incident en renforcement durable.",
                 suite: "Vous avez terminé les 10 CP du parcours AIS. Bravo ! Revenez aux fiches CCNA pour préparer la certification.",
-                evaluation: [
-                    { q: "La première action face à un poste affichant un écran de rançon est :", options: [ "L'éteindre immédiatement", "L'isoler du réseau (débrancher/couper Wi-Fi) sans l'éteindre", "Redémarrer plusieurs fois pour casser l'attaque" ], answer: 1, exp: "Correct : l'isolation stoppe la propagation, l'extinction détruit potentiellement des indices mémoire. Chaque action suivante est horodatée et décidée au niveau de la chaîne d'incident." },
-                    { q: "Le journal d'incident (horodatage des actions) sert surtout à :", options: [ "Remplir les formalités", "Préserver la compréhension de l'attaque et garantir la traçabilité des décisions prises sous pression", "Satisfaire le client" ], answer: 1, exp: "Correct : sous pression, la mémoire flanche ; le journal donne une chronologie fiable pour comprendre, pour communiquer et pour le REX." },
-                    { q: "Le REX (retour d'expérience) après incident sert :", options: [ "À identifier un coupable interne", "À comprendre comment on est entré, combien de temps l'incident vit inaperçu, et quels contrôles renforcer", "À éviter d'avoir à écrire un rapport" ], answer: 1, exp: "Correct : le REX sans blâme transforme l'incident en apprentissage : durcissement (CP8), sensibilisation (CP9) et supervision améliorée (CP7)." }
-                ]
             }
         ];
