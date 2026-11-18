@@ -697,9 +697,9 @@ export const DynamicSVGDiagram = ({ type }) => {
                             <rect x="20" y="85" width="90" height="34" rx="8" fill="#0284c7" />
                             <text x="35" y="107" fill="white" fontWeight="bold">Paquet</text>
                             <rect x="170" y="15" width="230" height="28" rx="5" fill="#059669" />
-                            <text x="180" y="34" fill="white">1. permit tcp ÔÇª eq 443 ÔåÆ Ô£ö passe</text>
+                            <text x="180" y="34" fill="white">1. permit tcp … eq 443 ÔåÆ Ô£ö passe</text>
                             <rect x="170" y="55" width="230" height="28" rx="5" fill="#dc2626" />
-                            <text x="180" y="74" fill="white">2. deny ip ÔÇª ÔåÆ Ô£ò rejet├®</text>
+                            <text x="180" y="74" fill="white">2. deny ip … ÔåÆ Ô£ò rejet├®</text>
                             <rect x="170" y="95" width="230" height="28" rx="5" fill="#475569" />
                             <text x="180" y="114" fill="white">3. permit ip any ÔåÆ Ô£ö passe</text>
                             <rect x="170" y="140" width="230" height="28" rx="5" fill="#1e293b" stroke="#ef4444" />
@@ -762,7 +762,7 @@ export const DynamicSVGDiagram = ({ type }) => {
                             <line x1="130" y1="55" x2="340" y2="55" stroke="#f59e0b" strokeWidth="2" markerEnd="url(#ar)" />
                             <text x="155" y="45" fill="#f59e0b" fontSize="10">1. ┬½ Qui a 10.1.1.30 ? ┬╗ ÔÇö diffusion : TOUS ├®coutent</text>
                             <line x1="340" y1="75" x2="135" y2="75" stroke="#22c55e" strokeWidth="2" markerEnd="url(#ar)" />
-                            <text x="170" y="95" fill="#22c55e" fontSize="10">2. r├®ponse unicast : 10.1.1.30 = MAC 00-1C-ÔÇª-C3</text>
+                            <text x="170" y="95" fill="#22c55e" fontSize="10">2. r├®ponse unicast : 10.1.1.30 = MAC 00-1C-…-C3</text>
                             <rect x="130" y="115" width="290" height="40" rx="8" fill="#1e293b" stroke="#38bdf8" />
                             <text x="145" y="135" fill="#93c5fd" fontSize="10">3. cache ARP de PC-A (arp -a) :</text>
                             <text x="145" y="151" fill="#93c5fd" fontSize="10">10.1.1.30 ÔåÆ 00-1C-xx-xx-C3 (dynamique)</text>
