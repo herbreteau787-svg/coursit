@@ -2589,20 +2589,24 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
                                     </div>
                                 )}
                                 <div className="flex flex-col">
-                                    <span className="text-[11px] font-semibold italic text-sky-300" style={{ fontFamily: "'Georgia', 'Times New Roman', serif" }}>Plateforme de révisions pour tous</span>
+                                    <span className="text-[11px] font-semibold italic text-sky-500" style={{ fontFamily: "'Georgia', 'Times New Roman', serif" }}>Plateforme de révisions pour tous</span>
                                 </div>
                             </button>
 
                             {/* Barre de Recherche Plein Texte Dynamic */}
-                            <div className="w-full md:w-72">
-                                <input
-                                    type="text"
-                                    aria-label="Rechercher un cours, un mot-clé"
-                                    placeholder="🔍 Rechercher un cours ou mot-clé (titre, code, sommaire...)"
-                                    value={searchQuery}
-                                    onChange={(e) => { setSearchQuery(e.target.value); if (currentTab !== 'courses') setCurrentTab('courses'); }}
-                                    className="w-full bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-1.5 text-xs text-slate-900 dark:text-slate-100 focus:outline-none focus:border-brand-500"
-                                />
+                            <div className="w-full md:w-96 lg:w-[26rem]">
+                                <div className="relative">
+                                    <svg className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
+                                    <input
+                                        type="text"
+                                        aria-label="Rechercher un cours, un mot-clé"
+                                        placeholder="Rechercher un cours, un code, un mot-clé…"
+                                        value={searchQuery}
+                                        onChange={(e) => { setSearchQuery(e.target.value); if (currentTab !== 'courses') setCurrentTab('courses'); }}
+                                        className="w-full bg-slate-100/70 dark:bg-slate-900/70 backdrop-blur border border-slate-300 dark:border-slate-700 rounded-full pl-10 pr-4 py-2 text-sm text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-sky-500/40 focus:border-sky-500 transition-all shadow-sm hover:shadow-md"
+                                    />
+                                </div>
+                            </div>
                                 {searchQuery && (
                                     <p className="text-[10px] mt-1 text-slate-500 dark:text-slate-400" role="status">
                                         🔎 « {searchQuery} » : {filteredCourses.length} cours correspondant(s) dans l'onglet « Cours » (titres, codes, descriptions et sommaires).
@@ -2659,27 +2663,40 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
                         <nav aria-label="Navigation principale" className="bg-slate-50 dark:bg-slate-900/80 border-t border-slate-200 dark:border-slate-800">
                             <div className="max-w-7xl mx-auto px-4 flex space-x-1 overflow-x-auto text-xs font-medium py-2">
                                 {[
-                                    { id: 'dashboard', label: '🏠 Dashboard' },
-                                    { id: 'courses', label: '📚 Cours & Fiches' },
-                                    { id: 'essentiels', label: '🛠️ Les Indispensables' },
-                                    { id: 'qcm', label: '✍️ Banque QCM' },
-                                    { id: 'labs', label: '🧪 Labos Guidés' },
-                                    { id: 'commands', label: '⚙️ Commandes' },
-                                    { id: 'scripts', label: '💻 Scripts' },
-                                    { id: 'depannage', label: '\u{1F9F0} Dépannage' },
-                                    { id: 'glossary', label: '📖 Glossaire' },
-                                    { id: 'vocab', label: '🌐 Vocabulaire Anglais' }
+                                    { id: 'dashboard', label: 'Dashboard' },
+                                    { id: 'courses', label: 'Cours & Fiches' },
+                                    { id: 'essentiels', label: 'Les Indispensables' },
+                                    { id: 'qcm', label: 'Banque QCM' },
+                                    { id: 'labs', label: 'Labos Guidés' },
+                                    { id: 'commands', label: 'Commandes' },
+                                    { id: 'scripts', label: 'Scripts' },
+                                    { id: 'depannage', label: 'Dépannage' },
+                                    { id: 'glossary', label: 'Glossaire' },
+                                    { id: 'vocab', label: 'Vocabulaire Anglais' }
                                 ].map(tab => (
                                     <button
                                         key={tab.id}
                                         onClick={() => setCurrentTab(tab.id)}
                                         aria-current={currentTab === tab.id ? 'page' : undefined}
-                                        className={`px-3 py-2 rounded-lg whitespace-nowrap transition-colors ${
+                                        className={`flex items-center gap-1.5 px-3 py-2 rounded-lg whitespace-nowrap transition-colors ${
                                             currentTab === tab.id
                                                 ? 'bg-brand-600 text-white font-bold'
                                                 : 'text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-800'
                                         }`}
                                     >
+                                        <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                                            {tab.id === 'dashboard' && <path strokeLinecap="round" strokeLinejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />}
+                                            {tab.id === 'courses' && <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />}
+                                            {tab.id === 'essentiels' && <path strokeLinecap="round" strokeLinejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />}
+                                            {tab.id === 'essentiels' && <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />}
+                                            {tab.id === 'qcm' && <path strokeLinecap="round" strokeLinejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />}
+                                            {tab.id === 'labs' && <path strokeLinecap="round" strokeLinejoin="round" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />}
+                                            {tab.id === 'commands' && <path strokeLinecap="round" strokeLinejoin="round" d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />}
+                                            {tab.id === 'scripts' && <path strokeLinecap="round" strokeLinejoin="round" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />}
+                                            {tab.id === 'depannage' && <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />}
+                                            {tab.id === 'glossary' && <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />}
+                                            {tab.id === 'vocab' && <path strokeLinecap="round" strokeLinejoin="round" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129" />}
+                                        </svg>
                                         {tab.label}
                                     </button>
                                 ))}
@@ -2704,11 +2721,11 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
                     <nav aria-label="Navigation rapide mobile" className="md:hidden fixed bottom-0 inset-x-0 z-50 bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-700 shadow-[0_-2px_10px_rgba(0,0,0,0.08)]">
                         <div className="grid grid-cols-5 text-[10px] font-semibold">
                             {[
-                                { id: 'dashboard', icon: '🏠', label: 'Accueil' },
-                                { id: 'courses', icon: '📚', label: 'Cours' },
-                                { id: 'qcm', icon: '✍️', label: 'QCM' },
-                                { id: 'labs', icon: '🧪', label: 'Labos' },
-                                { id: 'glossary', icon: '📖', label: 'Glossaire' }
+                                { id: 'dashboard', label: 'Accueil' },
+                                { id: 'courses', label: 'Cours' },
+                                { id: 'qcm', label: 'QCM' },
+                                { id: 'labs', label: 'Labos' },
+                                { id: 'glossary', label: 'Glossaire' }
                             ].map(tab => (
                                 <button
                                     key={tab.id}
@@ -2720,7 +2737,13 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
                                             : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800'
                                     }`}
                                 >
-                                    <span className="text-base" aria-hidden="true">{tab.icon}</span>
+                                    <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                                        {tab.id === 'dashboard' && <path strokeLinecap="round" strokeLinejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />}
+                                        {tab.id === 'courses' && <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />}
+                                        {tab.id === 'qcm' && <path strokeLinecap="round" strokeLinejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />}
+                                        {tab.id === 'labs' && <path strokeLinecap="round" strokeLinejoin="round" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />}
+                                        {tab.id === 'glossary' && <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />}
+                                    </svg>
                                     {tab.label}
                                 </button>
                             ))}
