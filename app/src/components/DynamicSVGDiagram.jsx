@@ -818,11 +818,11 @@ export const DynamicSVGDiagram = ({ type }) => {
                             <line x1="290" y1="30" x2="290" y2="165" stroke="#f59e0b" strokeWidth="3" markerEnd="url(#ar)" />
                             <text x="305" y="80" fill="#fbbf24" fontSize="10">ordre d'application ↓</text>
                             <text x="305" y="130" fill="#fbbf24" fontSize="10">conflit : l'OU gagne</text>
-                            <rect x="330" y="55" width="200" height="100" rx="10" fill="#1e293b" stroke="#38bdf8" />
-                            <text x="345" y="80" fill="#93c5fd" fontSize="10">Vérifier côté poste :</text>
-                            <text x="345" y="100" fill="#93c5fd" fontSize="10">gpupdate /force → applique</text>
-                            <text x="345" y="120" fill="#93c5fd" fontSize="10">gpresult /R → liste les GPO</text>
-                            <text x="345" y="140" fill="#93c5fd" fontSize="10">appliquées ET filtrées</text>
+                            <rect x="360" y="55" width="200" height="100" rx="10" fill="#1e293b" stroke="#38bdf8" />
+                            <text x="375" y="80" fill="#93c5fd" fontSize="10">Vérifier côté poste :</text>
+                            <text x="375" y="100" fill="#93c5fd" fontSize="10">gpupdate /force → applique</text>
+                            <text x="375" y="120" fill="#93c5fd" fontSize="10">gpresult /R → liste les GPO</text>
+                            <text x="375" y="140" fill="#93c5fd" fontSize="10">appliquées ET filtrées</text>
                             <text x="100" y="196" fill="#94a3b8" fontSize="10">Héritage bloqué / Enforced / filtrage WMI modifient ce flux — gpresult montre la raison.</text>
                         </svg>
                     </div>
@@ -1054,26 +1054,26 @@ export const DynamicSVGDiagram = ({ type }) => {
                             <text x="8" y="44" fill="#a0c0e0" fontSize="10">Fichier  Action  Affichage  Aide</text>
                             <rect x="0" y="52" width="240" height="268" fill="#1a1a2e" stroke="#333" />
                             <text x="8" y="68" fill="#e0a020" fontSize="10" fontWeight="bold">■ lab.lan</text>
-                            <text x="24" y="84" fill="#60c060" fontSize="10">­ƒôü Builtin</text>
-                            <text x="24" y="100" fill="#60c060" fontSize="10">­ƒôü Computers</text>
+                            <text x="24" y="84" fill="#60c060" fontSize="10"> Builtin</text>
+                            <text x="24" y="100" fill="#60c060" fontSize="10"> Computers</text>
                             <rect x="18" y="106" width="210" height="16" fill="#2a4a6e" rx="2" />
-                            <text x="24" y="118" fill="#60c060" fontSize="10">­ƒôü Domain Controllers</text>
-                            <text x="24" y="136" fill="#60c060" fontSize="10">­ƒôü Users</text>
-                            <text x="24" y="152" fill="#60c060" fontSize="10">­ƒôü Compta ◄ UO créée par vous</text>
-                            <text x="24" y="168" fill="#60c060" fontSize="10">­ƒôü Direction</text>
-                            <text x="24" y="184" fill="#60c060" fontSize="10">­ƒôü Informatique</text>
+                            <text x="24" y="118" fill="#60c060" fontSize="10"> Domain Controllers</text>
+                            <text x="24" y="136" fill="#60c060" fontSize="10"> Users</text>
+                            <text x="24" y="152" fill="#60c060" fontSize="10"> Compta ◄ UO créée par vous</text>
+                            <text x="24" y="168" fill="#60c060" fontSize="10"> Direction</text>
+                            <text x="24" y="184" fill="#60c060" fontSize="10"> Informatique</text>
                             <rect x="240" y="52" width="400" height="268" fill="#0d0d1a" stroke="#333" />
                             <text x="250" y="70" fill="#a0c0e0" fontSize="10" fontWeight="bold">Objets dans Compta :</text>
-                            <text x="250" y="88" fill="#c0d0e0" fontSize="10">­ƒæñ claire.martin        Utilisateur</text>
-                            <text x="250" y="104" fill="#c0d0e0" fontSize="10">­ƒæñ jean.dupont         Utilisateur</text>
-                            <text x="250" y="120" fill="#c0d0e0" fontSize="10">­ƒæÑ GG-Compta           Groupe de sécurité</text>
-                            <text x="250" y="136" fill="#c0d0e0" fontSize="10">­ƒæñ SRV-PAIE$           Ordinateur</text>
+                            <text x="250" y="88" fill="#c0d0e0" fontSize="10"> claire.martin        Utilisateur</text>
+                            <text x="250" y="104" fill="#c0d0e0" fontSize="10"> jean.dupont         Utilisateur</text>
+                            <text x="250" y="120" fill="#c0d0e0" fontSize="10"> GG-Compta           Groupe de sécurité</text>
+                            <text x="250" y="136" fill="#c0d0e0" fontSize="10"> SRV-PAIE$           Ordinateur</text>
                             <text x="250" y="160" fill="#8090a0" fontSize="9">Double-cliquez sur un objet pour voir ses propriétés</text>
                             <text x="250" y="176" fill="#8090a0" fontSize="9">(onglets : Général, Compte, Membre de, ...)</text>
                             <rect x="250" y="220" width="380" height="80" fill="#1a2a1e" stroke="#2a5a3e" rx="4" />
-                            <text x="260" y="238" fill="#60e080" fontSize="10" fontWeight="bold">­ƒÆí Ce qu'il faut observer :</text>
+                            <text x="260" y="238" fill="#60e080" fontSize="10" fontWeight="bold"> Ce qu'il faut observer :</text>
                             <text x="260" y="254" fill="#b0d0b0" fontSize="10">- L'arborescence reflète votre organisation (par service)</text>
-                            <text x="260" y="268" fill="#b0d0b0" fontSize="10">- Les icônes : ­ƒæñ utilisateur, ­ƒæÑ groupe, ­ƒôü UO, ­ƒûÑ´©Å ordinateur</text>
+                            <text x="260" y="268" fill="#b0d0b0" fontSize="10">- Les icônes :  utilisateur,  groupe,  UO, Å ordinateur</text>
                             <text x="260" y="282" fill="#b0d0b0" fontSize="10">- Clic droit sur une UO → New → User pour créer un compte</text>
                         </svg>
                     </div>
@@ -1107,7 +1107,7 @@ export const DynamicSVGDiagram = ({ type }) => {
                             <text x="190" y="160" fill="#60e060" fontSize="10">✔ DNS Server</text>
                             <text x="190" y="176" fill="#8090a0" fontSize="10">+ Add roles and features (pour installer DHCP, Hyper-V...)</text>
                             <rect x="180" y="198" width="460" height="60" fill="#1a2a1e" stroke="#2a5a3e" rx="4" />
-                            <text x="190" y="216" fill="#60e080" fontSize="10" fontWeight="bold">­ƒÆí Ce qu'il faut observer :</text>
+                            <text x="190" y="216" fill="#60e080" fontSize="10" fontWeight="bold"> Ce qu'il faut observer :</text>
                             <text x="190" y="232" fill="#b0d0b0" fontSize="10">- Le nom du serveur et le domaine en haut (vous confirmez que vous ûtes sur le bon serveur)</text>
                             <text x="190" y="248" fill="#b0d0b0" fontSize="10">- "Add roles and features" est l'assistant qui installe AD DS, DHCP, Hyper-V...</text>
                         </svg>
@@ -1129,16 +1129,16 @@ export const DynamicSVGDiagram = ({ type }) => {
                             <text x="32" y="80" fill="#a0c0e0" fontSize="10">■ lab.lan</text>
                             <rect x="36" y="86" width="230" height="16" fill="#2a4a6e" rx="2" />
                             <text x="42" y="98" fill="#c0d0e0" fontSize="10">Default Domain Policy (lié au domaine)</text>
-                            <text x="32" y="116" fill="#60c060" fontSize="10">­ƒôü Compta</text>
+                            <text x="32" y="116" fill="#60c060" fontSize="10"> Compta</text>
                             <text x="44" y="132" fill="#8090a0" fontSize="9">— No GPO linked yet</text>
-                            <text x="32" y="150" fill="#60c060" fontSize="10">­ƒôü Informatique</text>
+                            <text x="32" y="150" fill="#60c060" fontSize="10"> Informatique</text>
                             <text x="44" y="166" fill="#80c0e0" fontSize="9">— COMPUTER-WSUS-Config</text>
                             <rect x="280" y="28" width="360" height="272" fill="#0d0d1a" stroke="#333" />
                             <text x="290" y="48" fill="#e0a020" fontSize="10" fontWeight="bold">Linked Group Policy Objects</text>
                             <text x="290" y="66" fill="#c0d0e0" fontSize="10">Default Domain Policy    Enforced: No</text>
                             <text x="290" y="84" fill="#c0d0e0" fontSize="10">Link Order: 1</text>
                             <rect x="290" y="100" width="340" height="70" fill="#1a2a1e" stroke="#2a5a3e" rx="4" />
-                            <text x="300" y="118" fill="#60e080" fontSize="10" fontWeight="bold">­ƒÆí Ce qu'il faut observer :</text>
+                            <text x="300" y="118" fill="#60e080" fontSize="10" fontWeight="bold"> Ce qu'il faut observer :</text>
                             <text x="300" y="134" fill="#b0d0b0" fontSize="10">- Les GPO liées à chaque UO apparaissent ici</text>
                             <text x="300" y="150" fill="#b0d0b0" fontSize="10">- Clic droit sur une UO → "Create a GPO in this domain"</text>
                             <text x="300" y="164" fill="#b0d0b0" fontSize="10">- Clic droit sur la GPO → "Edit" ouvre l'éditeur de stratégies</text>
@@ -1175,7 +1175,7 @@ export const DynamicSVGDiagram = ({ type }) => {
                             <text x="10" y="236" fill="#e0e0e0" fontSize="11" fontFamily="monospace">Netid State  Local Address:Port  Process</text>
                             <text x="10" y="252" fill="#e0e0e0" fontSize="11" fontFamily="monospace">tcp   LISTEN 0.0.0.0:22            sshd</text>
                             <text x="10" y="268" fill="#e0e0e0" fontSize="11" fontFamily="monospace">tcp   LISTEN 127.0.0.1:5432       postgres</text>
-                            <text x="10" y="300" fill="#8090a0" fontSize="10">­ƒÆí Ce qu'il faut observer :</text>
+                            <text x="10" y="300" fill="#8090a0" fontSize="10"> Ce qu'il faut observer :</text>
                             <text x="10" y="316" fill="#b0c0b0" fontSize="10">- Le prompt vert confirme votre identité (admin) et le serveur (SRV-LNX01)</text>
                             <text x="10" y="330" fill="#b0c0b0" fontSize="10">- df -h montre l'espace disque (40% utilisé = tout va bien)</text>
                         </svg>
@@ -1246,10 +1246,10 @@ export const DynamicSVGDiagram = ({ type }) => {
                             <text x="450" y="68" fill="#80c0e0" fontSize="10">New → Virtual Machine...</text>
                             <text x="450" y="86" fill="#80c0e0" fontSize="10">■ Start</text>
                             <text x="450" y="104" fill="#80c0e0" fontSize="10">⏹ Turn Off</text>
-                            <text x="450" y="122" fill="#80c0e0" fontSize="10">­ƒöù Connect...</text>
-                            <text x="450" y="140" fill="#80c0e0" fontSize="10">­ƒô© Checkpoint</text>
+                            <text x="450" y="122" fill="#80c0e0" fontSize="10">­öù Connect...</text>
+                            <text x="450" y="140" fill="#80c0e0" fontSize="10">­ô© Checkpoint</text>
                             <rect x="160" y="200" width="280" height="80" fill="#1a2a1e" stroke="#2a5a3e" rx="4" />
-                            <text x="170" y="218" fill="#60e080" fontSize="10" fontWeight="bold">­ƒÆí Ce qu'il faut observer :</text>
+                            <text x="170" y="218" fill="#60e080" fontSize="10" fontWeight="bold"> Ce qu'il faut observer :</text>
                             <text x="170" y="234" fill="#b0d0b0" fontSize="10">- L'état Running = la VM est démarrée et utilisable</text>
                             <text x="170" y="250" fill="#b0d0b0" fontSize="10">- Le panneau Actions propose Start, Connect, Checkpoint</text>
                             <text x="170" y="266" fill="#b0d0b0" fontSize="10">- "Connect" ouvre la console graphique de la VM</text>

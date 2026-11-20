@@ -1,0 +1,39 @@
+gpo-lsdou') {
+                return (
+                    <div className="w-full bg-slate-900 text-white p-4 rounded-lg overflow-x-auto">
+                        <h4 className="text-xs uppercase font-bold text-sky-400 mb-2">SVG : ordre d'application des GPO (LSDOU) — la dernière gagne</h4>
+                        <p className="text-[11px] text-slate-300 mb-2"><strong className="text-amber-300">Lecture :</strong> les stratégies s'appliquent du général au spécifique ; en cas de conflit, la plus proche de l'utilisateur (l'OU) écrase les précédentes. gpupdate /force applique, gpresult /R vérifie.</p>
+                        <svg viewBox="0 0 560 200" role="img" aria-label="Ordre LSDOU des GPO" className="w-full h-auto text-xs">
+                            <rect x="40" y="15" width="250" height="30" rx="6" fill="#475569" />
+                            <text x="55" y="35" fill="white">L — Local (stratégie de la machine)</text>
+                            <rect x="40" y="60" width="250" height="30" rx="6" fill="#7c3aed" />
+                            <text x="55" y="80" fill="white">S — Site (AD Sites and Services)</text>
+                            <rect x="40" y="105" width="250" height="30" rx="6" fill="#0284c7" />
+                            <text x="55" y="125" fill="white">D — Domaine (entreprise.local)</text>
+                            <rect x="40" y="150" width="250" height="30" rx="6" fill="#059669" />
+                            <text x="55" y="170" fill="white">OU — ex : OU=RH → la plus spécifique</text>
+                            <line x1="290" y1="30" x2="290" y2="165" stroke="#f59e0b" strokeWidth="3" markerEnd="url(#ar)" />
+                            <text x="305" y="80" fill="#fbbf24" fontSize="10">ordre d'application ↓</text>
+                            <text x="305" y="130" fill="#fbbf24" fontSize="10">conflit : l'OU gagne</text>
+                            <rect x="330" y="55" width="200" height="100" rx="10" fill="#1e293b" stroke="#38bdf8" />
+                            <text x="345" y="80" fill="#93c5fd" fontSize="10">Vérifier côté poste :</text>
+                            <text x="345" y="100" fill="#93c5fd" fontSize="10">gpupdate /force → applique</text>
+                            <text x="345" y="120" fill="#93c5fd" fontSize="10">gpresult /R → liste les GPO</text>
+                            <text x="345" y="140" fill="#93c5fd" fontSize="10">appliquées ET filtrées</text>
+                            <text x="100" y="196" fill="#94a3b8" fontSize="10">Héritage bloqué / Enforced / filtrage WMI modifient ce flux — gpresult montre la raison.</text>
+                        </svg>
+                    </div>
+                );
+            }
+
+            if (type === 'kerberos-flow') {
+                return (
+                    <div className="w-full bg-slate-900 text-white p-4 rounded-lg overflow-x-auto">
+                        <h4 className="text-xs uppercase font-bold text-sky-400 mb-2">SVG : Kerberos — des tickets, pas des mots de passe</h4>
+                        <p className="text-[11px] text-slate-300 mb-2"><strong className="text-amber-300">Lecture :</strong> à l'ouverture de session, le KDC (DC) délivre un TGT ; ensuite chaque service reçoit un ticket de service (TGS) du TGT. Le mot de passe ne circule JAMAIS vers les services — une horloge décalée casse tout (tolérance 5 min).</p>
+                        <svg viewBox="0 0 560 190" role="img" aria-label="Flux Kerberos : TGT puis TGS" className="w-full h-auto text-xs">
+                            <rect x="20" y="70" width="120" height="50" rx="10" fill="#0284c7" />
+                            <text x="40" y="92" fill="white" fontWeight="bold">Client</text>
+                            <text x="35" y="112" fill="#bae6fd" fontSize="10">claire.martin</text>
+                            <rect x="230" y="60" width="130" height="70" rx="10" fill="#059669" />
+                            <text x="250" y="85" fill="white" font
