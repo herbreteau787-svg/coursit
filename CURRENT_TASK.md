@@ -25,7 +25,13 @@ Candidats confirmés : `Defense In Depth - Onion Model.svg` (fait), `VLAN Concep
 | stp-election | stp-topology.png | Wikimedia (lic. à noter) |
 | cyber-defense-v2 | defense-depth.svg | CC BY-SA 3.0 (Kbolino) |
 | cloud-modeles | cloud-computing-types.svg | CC BY-SA 3.0 (Sam Johnston) |
-Restants (9) : voir « Prochaine tâche ». Wireshark-3.6.png copié dans public/images (AIS CP7, à câbler si pas déjà fait).
+| arp-resolution | arp-resolution.svg | CC BY-SA 3.0 (0x55534C) |
+| etherchannel-lacp | etherchannel-lacp.jpg | CC BY-SA 3.0 (Iria.novoa) |
+| ospf-zones | ospf-zones.svg | CC BY-SA 4.0 (Luca Ghio) |
+| acl-evaluation | acl-evaluation.png | CC BY-SA 4.0 (Cbarille) |
+| support-cycle-v2 | support-cycle-v2.jpg | CC BY-SA 3.0 (HBEL) |
+| pra-pca-321 | pra-pca-321.png | CC BY-SA 4.0 (Olaf Pichler) |
+Restants (3) : `ipv6-slaac` (aucun candidat Commons acceptable — reste en SVG), `gpo-lsdou`, `supervision-architecture`. Wireshark-3.6.png copié dans public/images (AIS CP7, à câbler si pas déjà fait).
 
 ## Règles
 - Vérifier build + site déployé + rendu après chaque modif. UTF-8 sans BOM, jamais PowerShell pour lire/éditer du texte.
