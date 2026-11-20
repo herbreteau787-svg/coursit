@@ -1,0 +1,9 @@
+[build]
+  command = "cd app && npm install && npm run build"
+  publish = "."
+
+[[redirects]]
+  from = "/"
+  to = "/app/dist/index.html"
+  status = 302
+  force = false
