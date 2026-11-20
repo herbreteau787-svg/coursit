@@ -816,6 +816,7 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
                 "Sécurité": "Cybersécurité"
             })[t] || t;
             const [logoError, setLogoError] = useState(false);
+            const [logoTextColor, setLogoTextColor] = useState(() => { try { return localStorage.getItem('coursit_logo_text_color') || '#7dd3fc'; } catch (e) { return '#7dd3fc'; } });
 
             const [progress, setProgress] = useState(() => {
                 const saved = localStorage.getItem('tssr_ais_ccna_progress_v2');
@@ -2576,6 +2577,14 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
                                         IT
                                     </div>
                                 )}
+                                <div className="flex flex-col">
+                                    <span className="text-[11px] font-semibold" style={{ color: logoTextColor }}>Plateforme de révisions pour tous</span>
+                                    <div className="flex gap-1 mt-0.5">
+                                        {['#7dd3fc', '#86efac', '#fcd34d', '#fca5a5', '#c4b5fd', '#f0abfc'].map(c => (
+                                            <button key={c} onClick={() => { setLogoTextColor(c); try { localStorage.setItem('coursit_logo_text_color', c); } catch (e) {} }} title={c} className="w-3 h-3 rounded-full border border-slate-400/40" style={{ background: c }} />
+                                        ))}
+                                    </div>
+                                </div>
                             </button>
 
                             {/* Barre de Recherche Plein Texte Dynamic */}
