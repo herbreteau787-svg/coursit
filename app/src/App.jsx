@@ -1983,10 +1983,7 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
                         <div className="bg-white dark:bg-slate-800 rounded-xl p-4 md:p-6 border border-slate-200 dark:border-slate-700 space-y-4">
                             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-3 border-b border-slate-200 dark:border-slate-700 pb-3">
                                 <div>
-                                    <h2 className="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
-                                        <svg className="w-6 h-6 text-sky-500" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
-                                        Centre de dépannage
-                                    </h2>
+                                    <h2 className="text-xl font-bold text-slate-900 dark:text-white">Centre de dépannage</h2>
                                     <p className="text-xs text-slate-500 dark:text-slate-400">{DEPANNAGE_DATA.length} problèmes réels du technicien — du plus fréquent au plus rare. Choisir un problème pour afficher la fiche complète. TSSR {byParcours('TSSR')} · AIS {byParcours('AIS')} · CCNA {byParcours('CCNA')}</p>
                                 </div>
                                 <div className="w-full md:w-72">
@@ -2126,13 +2123,13 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
             // Rendu Onglet Les Indispensables (référence quotidienne)
             const renderEssentielsTab = () => {
                 const essTabs = [
-                    { id: 'ports', label: 'Ports réseau' },
-                    { id: 'simulateurs', label: 'Simulateurs' },
-                    { id: 'commandes', label: 'Commandes essentielles' },
-                    { id: 'adresses', label: 'Adresses privées' },
-                    { id: 'cidr', label: 'Masques CIDR' },
-                    { id: 'http', label: 'Codes HTTP' },
-                    { id: 'outils', label: 'Outils' }
+                    { id: 'ports', label: '🔌 Ports réseau' },
+                    { id: 'simulateurs', label: '🧮 Simulateurs' },
+                    { id: 'commandes', label: '⌨️ Commandes essentielles' },
+                    { id: 'adresses', label: '🏠 Adresses privées' },
+                    { id: 'cidr', label: '📏 Masques CIDR' },
+                    { id: 'http', label: '🌐 Codes HTTP' },
+                    { id: 'outils', label: '🧰 Outils' }
                 ];
                 const filteredPorts = PORTS_DATA.filter(p => {
                     if (essPortProto !== 'Tous' && p.proto !== essPortProto && p.proto !== 'TCP/UDP' && (essPortProto === 'TCP' ? !p.proto.includes('TCP') : !p.proto.includes('UDP'))) return false;
@@ -2174,19 +2171,7 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
                             </div>
                             <div className="flex gap-2 flex-wrap">
                                 {essTabs.map(t => (
-                                    <button key={t.id} onClick={() => setEssTab(t.id)} className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold rounded-lg border transition-colors ${essTab === t.id ? 'bg-brand-600 text-white border-brand-600' : 'bg-slate-100 dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-200'}`}>
-                                        <svg className="w-3.5 h-3.5 text-sky-500" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                                            {t.id === 'ports' && <path strokeLinecap="round" strokeLinejoin="round" d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2" />}
-                                            {t.id === 'simulateurs' && <path strokeLinecap="round" strokeLinejoin="round" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" />}
-                                            {t.id === 'commandes' && <path strokeLinecap="round" strokeLinejoin="round" d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />}
-                                            {t.id === 'adresses' && <path strokeLinecap="round" strokeLinejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />}
-                                            {t.id === 'cidr' && <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h7" />}
-                                            {t.id === 'http' && <path strokeLinecap="round" strokeLinejoin="round" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />}
-                                            {t.id === 'outils' && <path strokeLinecap="round" strokeLinejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />}
-                                            {t.id === 'outils' && <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />}
-                                        </svg>
-                                        {t.label}
-                                    </button>
+                                    <button key={t.id} onClick={() => setEssTab(t.id)} className={`px-3 py-1.5 text-xs font-bold rounded-lg border transition-colors ${essTab === t.id ? 'bg-brand-600 text-white border-brand-600' : 'bg-slate-100 dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-200'}`}>{t.label}</button>
                                 ))}
                             </div>
 
@@ -2655,11 +2640,7 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
                                     title={darkMode ? 'Mode clair' : 'Mode sombre'}
                                     className="p-2 rounded-lg bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-bold hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors"
                                 >
-                                    {darkMode ? (
-                                        <svg className="w-4 h-4 text-amber-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
-                                    ) : (
-                                        <svg className="w-4 h-4 text-sky-500" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" /></svg>
-                                    )}
+                                    {darkMode ? '☀️' : '🌙'}
                                 </button>
                             </div>
                         </div>
@@ -2668,40 +2649,27 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
                         <nav aria-label="Navigation principale" className="bg-slate-50 dark:bg-slate-900/80 border-t border-slate-200 dark:border-slate-800">
                             <div className="max-w-7xl mx-auto px-4 flex space-x-1 overflow-x-auto text-xs font-medium py-2">
                                 {[
-                                    { id: 'dashboard', label: 'Dashboard' },
-                                    { id: 'courses', label: 'Cours & Fiches' },
-                                    { id: 'essentiels', label: 'Les Indispensables' },
-                                    { id: 'qcm', label: 'Banque QCM' },
-                                    { id: 'labs', label: 'Labos Guidés' },
-                                    { id: 'commands', label: 'Commandes' },
-                                    { id: 'scripts', label: 'Scripts' },
-                                    { id: 'depannage', label: 'Dépannage' },
-                                    { id: 'glossary', label: 'Glossaire' },
-                                    { id: 'vocab', label: 'Vocabulaire Anglais' }
+                                    { id: 'dashboard', label: '🏠 Dashboard' },
+                                    { id: 'courses', label: '📚 Cours & Fiches' },
+                                    { id: 'essentiels', label: '🛠️ Les Indispensables' },
+                                    { id: 'qcm', label: '✍️ Banque QCM' },
+                                    { id: 'labs', label: '🧪 Labos Guidés' },
+                                    { id: 'commands', label: '⚙️ Commandes' },
+                                    { id: 'scripts', label: '💻 Scripts' },
+                                    { id: 'depannage', label: '\u{1F9F0} Dépannage' },
+                                    { id: 'glossary', label: '📖 Glossaire' },
+                                    { id: 'vocab', label: '🌐 Vocabulaire Anglais' }
                                 ].map(tab => (
                                     <button
                                         key={tab.id}
                                         onClick={() => setCurrentTab(tab.id)}
                                         aria-current={currentTab === tab.id ? 'page' : undefined}
-                                        className={`flex items-center gap-1.5 px-3 py-2 rounded-lg whitespace-nowrap transition-colors ${
+                                        className={`px-3 py-2 rounded-lg whitespace-nowrap transition-colors ${
                                             currentTab === tab.id
                                                 ? 'bg-brand-600 text-white font-bold'
                                                 : 'text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-800'
                                         }`}
                                     >
-                                        <svg className="w-4 h-4 text-sky-500" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                                            {tab.id === 'dashboard' && <path strokeLinecap="round" strokeLinejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />}
-                                            {tab.id === 'courses' && <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />}
-                                            {tab.id === 'essentiels' && <path strokeLinecap="round" strokeLinejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />}
-                                            {tab.id === 'essentiels' && <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />}
-                                            {tab.id === 'qcm' && <path strokeLinecap="round" strokeLinejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />}
-                                            {tab.id === 'labs' && <path strokeLinecap="round" strokeLinejoin="round" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />}
-                                            {tab.id === 'commands' && <path strokeLinecap="round" strokeLinejoin="round" d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />}
-                                            {tab.id === 'scripts' && <path strokeLinecap="round" strokeLinejoin="round" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />}
-                                            {tab.id === 'depannage' && <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />}
-                                            {tab.id === 'glossary' && <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />}
-                                            {tab.id === 'vocab' && <path strokeLinecap="round" strokeLinejoin="round" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129" />}
-                                        </svg>
                                         {tab.label}
                                     </button>
                                 ))}
@@ -2726,11 +2694,11 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
                     <nav aria-label="Navigation rapide mobile" className="md:hidden fixed bottom-0 inset-x-0 z-50 bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-700 shadow-[0_-2px_10px_rgba(0,0,0,0.08)]">
                         <div className="grid grid-cols-5 text-[10px] font-semibold">
                             {[
-                                { id: 'dashboard', label: 'Accueil' },
-                                { id: 'courses', label: 'Cours' },
-                                { id: 'qcm', label: 'QCM' },
-                                { id: 'labs', label: 'Labos' },
-                                { id: 'glossary', label: 'Glossaire' }
+                                { id: 'dashboard', icon: '🏠', label: 'Accueil' },
+                                { id: 'courses', icon: '📚', label: 'Cours' },
+                                { id: 'qcm', icon: '✍️', label: 'QCM' },
+                                { id: 'labs', icon: '🧪', label: 'Labos' },
+                                { id: 'glossary', icon: '📖', label: 'Glossaire' }
                             ].map(tab => (
                                 <button
                                     key={tab.id}
@@ -2742,13 +2710,7 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
                                             : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800'
                                     }`}
                                 >
-                                    <svg className="w-5 h-5 text-sky-500" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                                        {tab.id === 'dashboard' && <path strokeLinecap="round" strokeLinejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />}
-                                        {tab.id === 'courses' && <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />}
-                                        {tab.id === 'qcm' && <path strokeLinecap="round" strokeLinejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />}
-                                        {tab.id === 'labs' && <path strokeLinecap="round" strokeLinejoin="round" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />}
-                                        {tab.id === 'glossary' && <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />}
-                                    </svg>
+                                    <span className="text-base" aria-hidden="true">{tab.icon}</span>
                                     {tab.label}
                                 </button>
                             ))}
