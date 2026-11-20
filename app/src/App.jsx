@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo } from 'react';
-import bannerImg from './assets/alexander.jpg';
-import bgHint from './assets/robynne.jpg';
+import bannerImg from './assets/alexander.webp';
+import bgHint from './assets/robynne.webp';
 import logoUrl from './assets/logo.png';
 import { DynamicSVGDiagram } from './components/DynamicSVGDiagram.jsx';
 import { COURSES_DATA } from './data/courses-ccna.js';
