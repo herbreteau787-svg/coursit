@@ -756,6 +756,7 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
             const [subCidr, setSubCidr] = useState({ ip: '192.168.10.70', pfx: 26 });
             const [subVlsm, setSubVlsm] = useState({ base: '192.168.20.0/24', hosts: '60, 25, 10, 2, 2' });
             const [subV6, setSubV6] = useState({ addr: '2001:db8:1::a1:0:0:1', mac: '00:1A:2B:3C:4D:5E' });
+            const [subHex, setSubHex] = useState({ dec: '255', hex: 'FF' });
             const subVlsmResult = useMemo(() => {
                 const base = subVlsm.base.trim();
                 const bm = base.match(/^(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})\/(\d{1,2})$/);
@@ -2506,6 +2507,28 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
                                                     <span className="text-slate-500"> — à coller derrière un préfixe /64 (ex : 2001:db8:1::{eui64.toLowerCase()})</span>
                                                 </div>
                                             )}
+                                        </div>
+                                        {/* Hexadécimal */}
+                                        <div className="p-4 bg-slate-50 dark:bg-slate-900/50 rounded-xl border border-slate-200 dark:border-slate-700 space-y-3">
+                                            <h4 className="text-sm font-bold text-slate-900 dark:text-white">🔢 Conversions décimal / hexadécimal / binaire</h4>
+                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                                                <input value={subHex.dec} onChange={(e) => { const v = e.target.value; const n = Number(v); setSubHex({ dec: v, hex: isNaN(n) ? '' : n.toString(16).toUpperCase() }); }} placeholder="Décimal : 255" className="bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-1.5 text-xs font-mono text-slate-900 dark:text-slate-100 focus:outline-none focus:border-brand-500" />
+                                                <input value={subHex.hex} onChange={(e) => { const v = e.target.value.trim(); const n = parseInt(v, 16); setSubHex({ dec: isNaN(n) ? '' : String(n), hex: v.toUpperCase() }); }} placeholder="Hexadécimal : FF" className="bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-1.5 text-xs font-mono text-slate-900 dark:text-slate-100 focus:outline-none focus:border-brand-500" />
+                                            </div>
+                                            {(() => {
+                                                const n = Number(subHex.dec);
+                                                if (isNaN(n)) return null;
+                                                return (
+                                                    <div className="grid grid-cols-2 md:grid-cols-4 gap-2 text-[11px]">
+                                                        {[['Décimal', n], ['Hexadécimal', '0x' + n.toString(16).toUpperCase()], ['Binaire', n.toString(2)], ['Octet (8 bits)', n.toString(2).padStart(8, '0')]].map((kv, i) => (
+                                                            <div key={i} className="p-2 bg-white dark:bg-slate-800 rounded border border-slate-200 dark:border-slate-700">
+                                                                <span className="text-[9px] uppercase font-bold text-slate-500 block">{kv[0]}</span>
+                                                                <span className="font-mono text-slate-900 dark:text-white break-all">{kv[1]}</span>
+                                                            </div>
+                                                        ))}
+                                                    </div>
+                                                );
+                                            })()}
                                         </div>
                                     </div>
                                 );

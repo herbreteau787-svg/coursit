@@ -283,4 +283,27 @@ export const CHEAT_SHEETS = [
                 { cmd: "ss -tnlp | grep LISTEN", desc: "Liste les sockets TCP en écoute avec le nom du process.", ex: "ss -tnlp", risk: "consultation", freq: 5, case: "Tracer quel service écoute sur quel port inventaire audit sécurité." },
                 { cmd: "curl -o /dev/null -s -w '%{http_code}\\n' http://localhost", desc: "Retourne le code HTTP de l'URL pour un test express du service web.", ex: "curl -o /dev/null -s -w '%{http_code}\\n' http://localhost/", risk: "consultation", freq: 3, case: "Surveillance express d'un service HTTP sans pollution du journal." }
             ]},
-        ];
+            { title: "Nmap - scan réseau", env: "Nmap", cat: "Réseau", certif: "AIS / TSSR / CCNA", commands: [
+        { cmd: "nmap -sn 192.168.1.0/24", desc: "Découverte d'hôtes (ping sweep) sans scan de ports.", ex: "nmap -sn 192.168.1.0/24", risk: "consultation", freq: 5, case: "Inventaire rapide des machines vivantes d'un sous-réseau." },
+        { cmd: "nmap -sS -p 1-1000 192.168.1.10", desc: "Scan SYN (demi-ouvert) sur les 1000 premiers ports.", ex: "nmap -sS -p 1-1000 192.168.1.10", risk: "consultation", freq: 5, case: "Repérage des services exposés sans compléter la connexion TCP." },
+        { cmd: "nmap -sV 192.168.1.10", desc: "Détection des versions de services (bannières).", ex: "nmap -sV 192.168.1.10", risk: "consultation", freq: 4, case: "Identifier la version exacte d'un serveur web, SSH, DB." },
+        { cmd: "nmap -O 192.168.1.10", desc: "Détection de l'OS (fingerprint TCP/IP).", ex: "nmap -O 192.168.1.10", risk: "consultation", freq: 4, case: "Savoir si la cible est Windows/Linux/Cisco sans accès." },
+        { cmd: "nmap -A 192.168.1.10", desc: "Scan agressif : OS + versions + scripts + traceroute.", ex: "nmap -A 192.168.1.10", risk: "consultation", freq: 3, case: "Audit complet d'une machine en un seul passage." },
+        { cmd: "nmap -p 80,443,22 192.168.1.0/24", desc: "Scan de ports précis sur tout un réseau.", ex: "nmap -p 80,443,22 192.168.1.0/24", risk: "consultation", freq: 4, case: "Vérifier quels hôtes exposent HTTP/HTTPS/SSH." },
+        { cmd: "nmap --script vuln 192.168.1.10", desc: "Scripts NSE de détection de vulnérabilités.", ex: "nmap --script vuln 192.168.1.10", risk: "modification", freq: 3, case: "Audit de sécurité automatisé (CVE connues)." },
+        { cmd: "nmap -sU -p 53,161 192.168.1.10", desc: "Scan UDP des ports DNS/SNMP.", ex: "nmap -sU -p 53,161 192.168.1.10", risk: "consultation", freq: 2, case: "Repérer un serveur DNS ou un agent SNMP exposé." },
+        { cmd: "nmap -Pn 192.168.1.10", desc: "Scan sans ping préalable (hôte qui bloque ICMP).", ex: "nmap -Pn 192.168.1.10", risk: "consultation", freq: 3, case: "Cible filtrant le ping mais services ouverts." }
+    ]},
+    { title: "Wireshark - capture et analyse", env: "Wireshark", cat: "Réseau", certif: "AIS / TSSR / CCNA", commands: [
+        { cmd: "ip.addr == 192.168.1.10", desc: "Filtre d'affichage : trafic impliquant cette IP.", ex: "ip.addr == 192.168.1.10", risk: "consultation", freq: 5, case: "Isoler le trafic d'un poste précis." },
+        { cmd: "tcp.port == 443", desc: "Filtre sur le port TCP 443 (HTTPS).", ex: "tcp.port == 443", risk: "consultation", freq: 5, case: "Analyser le trafic HTTPS (métadonnées, SNI)." },
+        { cmd: 'http.request.method == "GET"', desc: "Filtre les requêtes HTTP GET.", ex: 'http.request.method == "GET"', risk: "consultation", freq: 4, case: "Suivre les requêtes web d'un client." },
+        { cmd: "dns", desc: "Affiche uniquement le trafic DNS.", ex: "dns", risk: "consultation", freq: 4, case: "Vérifier les résolutions de noms et détecter un DNS malveillant." },
+        { cmd: "arp", desc: "Affiche le trafic ARP.", ex: "arp", risk: "consultation", freq: 4, case: "Détecter un ARP spoofing ou un conflit d'IP." },
+        { cmd: "tcp.flags.syn == 1 && tcp.flags.ack == 0", desc: "Paquets SYN seuls (demandes de connexion).", ex: "tcp.flags.syn == 1 && tcp.flags.ack == 0", risk: "consultation", freq: 4, case: "Repérer un scan de ports ou une avalanche de connexions." },
+        { cmd: "tcp.analysis.retransmission", desc: "Paquets retransmis (perte réseau).", ex: "tcp.analysis.retransmission", risk: "consultation", freq: 3, case: "Diagnostiquer une liaison dégradée (pertes, latence)." },
+        { cmd: "icmp", desc: "Affiche le trafic ICMP (ping, traceroute).", ex: "icmp", risk: "consultation", freq: 3, case: "Vérifier la joignabilité au niveau IP." },
+        { cmd: 'frame contains "password"', desc: "Recherche d'une chaîne dans les trames.", ex: 'frame contains "password"', risk: "consultation", freq: 3, case: "Détection de données en clair (audit sécurité)." },
+        { cmd: "follow tcp stream", desc: "Reconstruit le flux TCP (clic droit → Follow → TCP Stream).", ex: "clic droit sur une trame → Follow → TCP Stream", risk: "consultation", freq: 4, case: "Lire une conversation complète client/serveur." }
+    ]},
+];
