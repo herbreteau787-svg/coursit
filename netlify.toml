@@ -2,6 +2,9 @@
   command = "cd app && npm install && npm run build"
   publish = "."
 
+[build.environment]
+  NODE_VERSION = "20"
+
 [[redirects]]
   from = "/"
   to = "/app/dist/index.html"
