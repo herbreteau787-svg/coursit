@@ -1983,7 +1983,10 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
                         <div className="bg-white dark:bg-slate-800 rounded-xl p-4 md:p-6 border border-slate-200 dark:border-slate-700 space-y-4">
                             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-3 border-b border-slate-200 dark:border-slate-700 pb-3">
                                 <div>
-                                    <h2 className="text-xl font-bold text-slate-900 dark:text-white">Centre de dépannage</h2>
+                                    <h2 className="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                                        <svg className="w-6 h-6 text-sky-500" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
+                                        Centre de dépannage
+                                    </h2>
                                     <p className="text-xs text-slate-500 dark:text-slate-400">{DEPANNAGE_DATA.length} problèmes réels du technicien — du plus fréquent au plus rare. Choisir un problème pour afficher la fiche complète. TSSR {byParcours('TSSR')} · AIS {byParcours('AIS')} · CCNA {byParcours('CCNA')}</p>
                                 </div>
                                 <div className="w-full md:w-72">
