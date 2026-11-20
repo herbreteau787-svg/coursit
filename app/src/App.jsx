@@ -2320,6 +2320,19 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
                                         </table>
                                     </div>
                                     <p className="text-[11px] text-slate-500">Lignes surlignées : les /24 à /30, les plus utilisés en entreprise. Rappel : wildcard = masque inversé (255.255.255.192 → 0.0.0.63) ; host = 0.0.0.0 ; any = 255.255.255.255.</p>
+                                    <div className="mt-3">
+                                        <p className="text-xs font-bold text-slate-700 dark:text-slate-300 mb-2">Équivalence hexadécimal ↔ binaire (1 chiffre hex = 4 bits)</p>
+                                        <div className="grid grid-cols-4 md:grid-cols-8 gap-1.5 text-[11px]">
+                                            {Array.from({ length: 16 }, (_, i) => (
+                                                <div key={i} className="p-1.5 bg-white dark:bg-slate-800 rounded border border-slate-200 dark:border-slate-700 text-center">
+                                                    <span className="font-mono font-bold text-brand-600 dark:text-brand-400">{i.toString(16).toUpperCase()}</span>
+                                                    <span className="text-slate-400 mx-1">=</span>
+                                                    <span className="font-mono text-slate-700 dark:text-slate-300">{i.toString(2).padStart(4, '0')}</span>
+                                                </div>
+                                            ))}
+                                        </div>
+                                        <p className="text-[10px] text-slate-500 mt-2">Exemple : 0xA3 = 1010 0011 ; 0xFF = 1111 1111 (8 bits à 1 = masque /8 sur un octet).</p>
+                                    </div>
                                 </div>
                             )}
 
