@@ -2618,8 +2618,6 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
                                         )}
                                     </p>
                                 )}
-                            </div>
-
                             <div className="flex items-center gap-3">
                                 {/* Réglage de la taille de police (FONC-22) */}
                                 <div className="flex items-center gap-1" role="group" aria-label="Taille de la police">
