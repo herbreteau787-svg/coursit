@@ -2576,10 +2576,6 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
                                         IT
                                     </div>
                                 )}
-                                <div>
-                                    <h1 className="font-bold text-base text-slate-900 dark:text-white">CoursIT</h1>
-                                    <span className="text-[11px] text-slate-500 dark:text-slate-400">Plateforme TSSR · AIS · CCNA — cliquer pour revenir à l'accueil</span>
-                                </div>
                             </button>
 
                             {/* Barre de Recherche Plein Texte Dynamic */}
