@@ -1545,7 +1545,7 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
                         <div className="bg-white dark:bg-slate-800 rounded-xl p-4 md:p-6 border border-slate-200 dark:border-slate-700 space-y-4">
                             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-3 border-b border-slate-200 dark:border-slate-700 pb-3">
                                 <div>
-                                    <h2 className="text-xl font-bold text-slate-900 dark:text-white">Bibliothèque de Labos Guidés</h2>
+                                    <h2 className="text-xl font-bold text-slate-900 dark:text-white">🧪 Bibliothèque de Labos Guidés</h2>
                                     <p className="text-xs text-slate-500 dark:text-slate-400">{LABS_DATA.length} labos — TSSR {byParcours('TSSR')} · AIS {byParcours('AIS')} · CCNA {byParcours('CCNA')} — {doneLabs} terminé(s). Progression sauvegardée dans le navigateur.</p>
                                 </div>
                                 <div className="w-full md:w-72">
@@ -1618,7 +1618,7 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
                         <div className="bg-white dark:bg-slate-800 p-4 md:p-6 rounded-xl border border-slate-200 dark:border-slate-700 space-y-4">
                             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-3 border-b border-slate-200 dark:border-slate-700 pb-3">
                                 <div>
-                                    <h2 className="text-xl font-bold text-slate-900 dark:text-white">Vocabulaire Anglais IT</h2>
+                                    <h2 className="text-xl font-bold text-slate-900 dark:text-white">🌐 Vocabulaire Anglais IT</h2>
                                     <p className="text-xs text-slate-500 dark:text-slate-400">{ENGLISH_VOCAB.length} termes — définition, traduction et exemple en contexte. Recherche insensible à la casse et aux accents.</p>
                                 </div>
                                 <div className="flex flex-col md:flex-row gap-2 items-stretch md:items-center w-full md:w-auto">
@@ -1764,7 +1764,7 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
                     <div id="printable-area" className="space-y-6">
                         <div className="flex justify-between items-center no-print border-b border-slate-200 dark:border-slate-700 pb-4">
                             <div>
-                                <h2 className="text-xl font-bold text-slate-900 dark:text-white">Commandes — classées par fréquence d'usage</h2>
+                                <h2 className="text-xl font-bold text-slate-900 dark:text-white">⌨️ Commandes — classées par fréquence d'usage</h2>
                                 <p className="text-xs text-slate-500 dark:text-slate-400">
                                     {all.length} commandes — Cisco {countsAll.Cisco} · Windows/PS {countsAll.Windows} · Linux {countsAll.Linux} · Autres {countsAll.Autres} — favoris {favCount}.
                                 </p>
@@ -1834,7 +1834,7 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
                         <div className="bg-white dark:bg-slate-800 p-6 rounded-xl border border-slate-200 dark:border-slate-700 space-y-4">
                             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-3 border-b border-slate-200 dark:border-slate-700 pb-3">
                                 <div>
-                                    <h2 className="text-xl font-bold text-slate-900 dark:text-white">Glossaire Bilingue IT</h2>
+                                    <h2 className="text-xl font-bold text-slate-900 dark:text-white">📖 Glossaire IT</h2>
                                     <p className="text-xs text-slate-500 dark:text-slate-400">{GLOSSARY_DATA.length} definitions bilingues, recherche insensible a la casse et aux accents.</p>
                                 </div>
                                 <div className="flex flex-col md:flex-row gap-2 items-stretch md:items-center w-full md:w-auto">
@@ -1983,7 +1983,7 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
                         <div className="bg-white dark:bg-slate-800 rounded-xl p-4 md:p-6 border border-slate-200 dark:border-slate-700 space-y-4">
                             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-3 border-b border-slate-200 dark:border-slate-700 pb-3">
                                 <div>
-                                    <h2 className="text-xl font-bold text-slate-900 dark:text-white">Centre de dépannage</h2>
+                                    <h2 className="text-xl font-bold text-slate-900 dark:text-white">🛠️ Centre de dépannage</h2>
                                     <p className="text-xs text-slate-500 dark:text-slate-400">{DEPANNAGE_DATA.length} problèmes réels du technicien — du plus fréquent au plus rare. Choisir un problème pour afficher la fiche complète. TSSR {byParcours('TSSR')} · AIS {byParcours('AIS')} · CCNA {byParcours('CCNA')}</p>
                                 </div>
                                 <div className="w-full md:w-72">
