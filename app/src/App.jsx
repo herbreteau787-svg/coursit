@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo } from 'react';
 import bannerImg from './assets/alexander.webp';
 import bgHint from './assets/robynne.webp';
-import logoUrl from './assets/logo.png';
+import logoUrl from './assets/logo.webp';
 import { DynamicSVGDiagram } from './components/DynamicSVGDiagram.jsx';
 import { COURSES_DATA } from './data/courses-ccna.js';
 import { TSSR_COURSES } from './data/courses-tssr.js';
