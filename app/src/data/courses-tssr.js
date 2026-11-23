@@ -173,7 +173,7 @@ export const TSSR_COURSES = [
                 ],
                 lessons: [
                     { title: "Leçon 1 — Se repérer dans Linux", parts: [
-                        { h: "Le shell, votre poste de pilotage", t: "Le shell est le programme qui exécute les commandes tapées au clavier. Sur un serveur Linux, tout peut se faire en ligne de commande : c'est l'outil normal du métier, pas un auxiliaire compliqué. Tapez, corrigez, relisez : la précision vient avec la pratique." },
+                        { h: "Le shell, votre poste de pilotage", t: "Le shell est le programme qui exécute les commandes tapées au clavier. Sur un serveur Linux, tout peut se faire en ligne de commande : c'est l'outil normal du métier, pas un auxiliaire compliqué. Tapez, corrigez, relisez : la précision vient avec la pratique." , schema: 'linux-architecture' },
                         { h: "L'arborescence standard", t: "Tout part de la racine / : /etc regroupe les fichiers de configuration, /var les données variables (dont /var/log pour les journaux), /home les dossiers personnels, /usr les programmes installés. On se déplace avec cd, on liste avec ls, on lit avec less ou cat, et man commande donne le manuel de la commande." },
                         { h: "Exemple concret", t: "Pour lire le journal système sur une Debian/Ubuntu : less /var/log/syslog. Pour comprendre les droits : man chmod. Prendre l'habitude de consulter le manuel est le réflexe le plus rentable de l'administrateur débutant." }
                     ]},
@@ -364,7 +364,7 @@ export const TSSR_COURSES = [
                 ],
                 lessons: [
                     { title: "Leçon 1 — Pourquoi et comment virtualiser", parts: [
-                        { h: "Le principe", t: "La virtualisation fait tourner plusieurs systèmes isolés (VM) sur une même machine physique grâce à l'hyperviseur. Bénéfices : consolidation (moins de serveurs sous-utilisés), isolement des pannes, création et duplication rapides — le serveur devient un fichier que l'on copie, sauvegarde… et teste." },
+                        { h: "Le principe", t: "La virtualisation fait tourner plusieurs systèmes isolés (VM) sur une même machine physique grâce à l'hyperviseur. Bénéfices : consolidation (moins de serveurs sous-utilisés), isolement des pannes, création et duplication rapides — le serveur devient un fichier que l'on copie, sauvegarde… et teste." , schema: 'hyper-v-architecture' },
                         { h: "Deux familles d'hyperviseurs", t: "Type 1 (bare metal) : l'hyperviseur est installé directement sur la machine — Hyper-V de Microsoft, ESXi de VMware, Proxmox VE. Type 2 (hébergé) : il s'installe comme une application au-dessus d'un OS — par exemple VirtualBox ou VMware Workstation. En production, on reste sur du type 1."   },
                         { h: "Les bonnes questions avant de créer", t: "Combien de RAM et de CPU donner (garder de la marge pour l'hyperviseur) ? Quels disques et quel réseau ? Ces choix se font avec la supervision à l'appui — on ajuste à l'usage plutôt qu'on suralloue d'emblée." }
                     ]},
@@ -434,7 +434,7 @@ export const TSSR_COURSES = [
                 ],
                 lessons: [
                     { title: "Leçon 1 — Pourquoi scripter", parts: [
-                        { h: "L'automatisation réduit les erreurs", t: "Créer 30 comptes à la main donne 30 occasions de se tromper ; une boucle les crée identiquement et relit la source de données. Le script fait exactement ce qui est écrit, chaque fois de la même façon : fiabilité avant tout." },
+                        { h: "L'automatisation réduit les erreurs", t: "Créer 30 comptes à la main donne 30 occasions de se tromper ; une boucle les crée identiquement et relit la source de données. Le script fait exactement ce qui est écrit, chaque fois de la même façon : fiabilité avant tout." , schema: 'automatisation-scripts' },
                         { h: "Deux mondes, deux langages", t: "Windows : PowerShell (pilotable sur tout l'écosystème Microsoft, y compris AD — voir le module du CP2). Linux : bash, présent partout. Un bon technicien sait au moins lire les deux." },
                         { h: "La règle d'or", t: "Jamais de copier-coller un script trouvé en ligne sans le comprendre : un script malveillant peut tout détruire ou exfiltrer. On lit, on teste sur une machine de labo, puis seulement en production." }
                     ]},
@@ -517,7 +517,7 @@ export const TSSR_COURSES = [
                 ],
                 lessons: [
                     { title: "Leçon 1 — Sortir du réseau local", parts: [
-                        { h: "La passerelle, porte du réseau", t: "Tout trafic destiné à l'extérieur passe par la passerelle (le routeur du réseau local). Sans elle, un poste reste confiné dans son sous-réseau : ce n'est pas une panne, c'est une configuration absente." },
+                        { h: "La passerelle, porte du réseau", t: "Tout trafic destiné à l'extérieur passe par la passerelle (le routeur du réseau local). Sans elle, un poste reste confiné dans son sous-réseau : ce n'est pas une panne, c'est une configuration absente." , schema: 'vpn-tunnel' },
                         { h: "NAT : beaucoup d'adresses privées, une adresse publique", t: "Le NAT (address translation) transforme les adresses privées du LAN en l'adresse publique du routeur en sortie. Le poste de l'utilisateur et le serveur partagent cette identité publique vers Internet. C'est le mécanisme général des PME et des foyers." },
                         { h: "IP publique : fixe ou dynamique", t: "Votre adresse publique vient du fournisseur d'accès et peut être fixe ou changer périodiquement selon l'offre. Pour faire pointer un service de l'extérieur, il faut le savoir : demandez à votre FAI ou consultez votre contrat — ne l'improvisez pas." }
                     ]},
@@ -645,7 +645,7 @@ export const TSSR_COURSES = [
                 ],
                 lessons: [
                     { title: "Leçon 1 — Pourquoi standardiser les postes", parts: [
-                        { h: "Cohérence = temps et fiabilité", t: "Installer 30 postes un à un consomme des journées et produit 30 postes hétérogènes (oublis variés). L'image standard (golden image) — un poste de référence installé à la main, correctement configuré, puis capturé — rend chaque nouveau poste identique au précédent." },
+                        { h: "Cohérence = temps et fiabilité", t: "Installer 30 postes un à un consomme des journées et produit 30 postes hétérogènes (oublis variés). L'image standard (golden image) — un poste de référence installé à la main, correctement configuré, puis capturé — rend chaque nouveau poste identique au précédent." , schema: 'deploiement-postes' },
                         { h: "La sécurité par la répétition", t: "Avec une image mise à jour régulièrement, chaque poste part avec les correctifs du moment, les réglages de sécurité et les logiciels validés : pas d'installation « comme j'ai pu ». L'image devient l'outil principal de la conformité du parc — comme le modèle du CP5 pour les serveurs." },
                         { h: "Une image, ça vieillit", t: "L'image doit rester à jour : une image vieillissante livre des postes périmés dès l'installation. On la réactualise périodiquement (correctifs, nouveaux logiciels) — un rendez-vous de maintenance planifié." }
                     ]},

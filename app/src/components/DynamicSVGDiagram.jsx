@@ -1944,6 +1944,41 @@ export const DynamicSVGDiagram = ({ type }) => {
                 );
             }
 
+            if (type === 'linux-architecture') {
+                return (
+                    <div className="w-full bg-slate-900 text-white p-5 rounded-xl border border-slate-700 shadow-xl overflow-x-auto">
+                        <div className="flex items-center justify-between mb-3">
+                            <h4 className="text-xs uppercase font-extrabold tracking-wider text-sky-400">Linux - Architecture Systeme</h4>
+                            <span className="text-[10px] bg-sky-950 text-sky-300 px-2 py-0.5 rounded border border-sky-800">systemd / services</span>
+                        </div>
+                        <p className="text-[11px] text-slate-300 mb-3 leading-relaxed"><strong className="text-amber-300">Lecture :</strong> le noyau Linux gere le materiel ; systemd orchestre les services (daemons) ; les permissions (rwx) controlent l'acces aux fichiers et repertoires.</p>
+                        <svg viewBox="0 0 640 280" role="img" aria-label="Architecture Linux" className="w-full h-auto font-sans">
+                            <rect x="20" y="220" width="600" height="40" rx="6" fill="#334155" />
+                            <text x="250" y="245" fill="white" fontWeight="bold" fontSize="12">Noyau Linux (Kernel)</text>
+                            <rect x="20" y="170" width="600" height="40" rx="6" fill="#0284c7" />
+                            <text x="250" y="195" fill="white" fontWeight="bold" fontSize="12">systemd (PID 1)</text>
+                            <rect x="20" y="110" width="140" height="50" rx="6" fill="#059669" />
+                            <text x="40" y="135" fill="white" fontSize="10" fontWeight="bold">sshd</text>
+                            <text x="40" y="150" fill="#a7f3d0" fontSize="9">port 22</text>
+                            <rect x="180" y="110" width="140" height="50" rx="6" fill="#059669" />
+                            <text x="200" y="135" fill="white" fontSize="10" fontWeight="bold">nginx</text>
+                            <text x="200" y="150" fill="#a7f3d0" fontSize="9">port 80/443</text>
+                            <rect x="340" y="110" width="140" height="50" rx="6" fill="#059669" />
+                            <text x="360" y="135" fill="white" fontSize="10" fontWeight="bold">postgres</text>
+                            <text x="360" y="150" fill="#a7f3d0" fontSize="9">port 5432</text>
+                            <rect x="500" y="110" width="120" height="50" rx="6" fill="#059669" />
+                            <text x="515" y="135" fill="white" fontSize="10" fontWeight="bold">cron</text>
+                            <text x="515" y="150" fill="#a7f3d0" fontSize="9">taches planifiees</text>
+                            <rect x="20" y="40" width="600" height="60" rx="6" fill="#1e293b" stroke="#475569" />
+                            <text x="32" y="62" fill="#fbbf24" fontSize="10" fontWeight="bold">Permissions (rwx) :</text>
+                            <text x="32" y="80" fill="#94a3b8" fontSize="10">r (read) = 4 - w (write) = 2 - x (execute) = 1 - chmod 755 = rwxr-xr-x</text>
+                            <text x="32" y="95" fill="#94a3b8" fontSize="10">Proprietaire - Groupe - Autres - chown user:group fichier</text>
+                        </svg>
+                        <p className="text-[11px] text-slate-300 mt-2"><strong className="text-amber-300">Contexte pro :</strong> verification : systemctl status, systemctl --failed, journalctl -u service, ls -l, ps aux, ss -tulpn.</p>
+                    </div>
+                );
+            }
+
             if (type === 'hyper-v-architecture') {
                 return (
                     <div className="w-full bg-slate-900 text-white p-5 rounded-xl border border-slate-700 shadow-xl overflow-x-auto">
