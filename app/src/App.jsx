@@ -1069,13 +1069,13 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
                                                 <div className="flex justify-between text-[11px] font-semibold text-slate-600 dark:text-slate-400 mb-1">
                                                     <span>Avancement</span><span>{p.done} / {p.total} · {pct} %</span>
                                                 </div>
-                                                <div className="h-2 bg-slate-100 dark:bg-slate-900 rounded-full overflow-hidden">
-                                                    <div className="h-full rounded-full bg-gradient-to-r from-brand-500 to-sky-400 transition-all" style={{ width: pct + '%' }}></div>
+                                                <div className="h-2 bg-slate-700 rounded-full overflow-hidden">
+                                                    <div className="h-full rounded-full bg-cyan-600 transition-all" style={{ width: pct + '%' }}></div>
                                                 </div>
                                             </div>
                                             <button
                                                 onClick={() => { const c = ALL_MODULE_ENTRIES.find(x => x.id === p.premierId); if (c) setSelectedCourse(c); setCourseFilter(p.key); setCurrentTab('courses'); }}
-                                                className="w-full py-2 rounded-lg bg-brand-600 hover:bg-brand-700 text-white text-xs font-bold transition-colors"
+                                                className="w-full py-2 rounded-lg bg-gradient-to-r from-cyan-500 to-cyan-600 shadow-lg shadow-cyan-500/30 text-white text-xs font-bold transition-all hover:brightness-110 hover:translate-y-[-2px]"
                                             >
                                 Accéder →
                                             </button>
