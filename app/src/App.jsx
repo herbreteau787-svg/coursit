@@ -1059,11 +1059,11 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
                                                 <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${p.badgeClass} bg-slate-100 dark:bg-slate-900/70`}>
                                                     <ParcoursIcon name={p.icon} />
                                                 </div>
-                                                <span className={`text-[10px] font-bold font-mono bg-slate-100 dark:bg-slate-900/70 px-2 py-0.5 rounded ${p.badgeClass}`}>{p.badge}</span>
+                                                <span className={`text-[10px] font-bold font-mono bg-slate-100 dark:bg-slate-900/70 px-2 py-0.5 rounded text-slate-300 ${p.badgeClass}`}>{p.badge}</span>
                                             </div>
                                             <div>
-                                                <h3 className="font-bold text-lg text-slate-900 dark:text-white">{p.nom}</h3>
-                                                <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">{p.desc}</p>
+                                                <h3 className="font-bold text-lg text-white">{p.nom}</h3>
+                                                <p className="text-slate-200 text-sm leading-relaxed mt-0.5">{p.desc}</p>
                                             </div>
                                             <div>
                                                 <div className="flex justify-between text-[11px] font-semibold text-slate-600 dark:text-slate-400 mb-1">
@@ -1098,7 +1098,7 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
                         <div className="fade-up-3 bg-white dark:bg-slate-800 rounded-xl p-5 border border-slate-200 dark:border-slate-700 shadow-sm space-y-4">
                             <div className="flex flex-wrap justify-between items-center gap-2">
                                 <div>
-                                    <h3 className="text-lg font-bold text-slate-900 dark:text-white">Les indispensables du jour</h3>
+                                    <h3 className="text-lg font-bold text-white">Les indispensables du jour</h3>
                                     <p className="text-xs text-slate-500 dark:text-slate-400">{now.toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' })} — cinq pépites terrain renouvelées chaque jour.</p>
                                 </div>
                                 <button onClick={() => setDashSeed(s => s + 1)} className="px-3 py-1.5 text-xs font-bold rounded-lg bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors">🔄 Actualiser</button>
