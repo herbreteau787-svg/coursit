@@ -1133,34 +1133,72 @@ export const DynamicSVGDiagram = ({ type }) => {
 
             if (type === 'raid-niveaux') {
                 return (
-                    <div className="w-full bg-slate-900 text-white p-4 rounded-lg overflow-x-auto">
-                        <h4 className="text-xs uppercase font-bold text-sky-400 mb-2">SVG : RAID 0 / 1 / 5 / 10 — les quatre architectures à connaëtre</h4>
-                        <p className="text-[11px] text-slate-300 mb-2"><strong className="text-amber-300">Lecture :</strong> chaque mini-graphe montre comment les données se répartissent sur les disques. RAID 0 = vitesse sans redondance ; RAID 1 = miroir ; RAID 5 = parité répartie (tolère 1 panne) ; RAID 10 = miroirs en bande (vitesse + tolérance).</p>
-                        <svg viewBox="0 0 560 210" role="img" aria-label="Quatre niveaux de RAID" className="w-full h-auto text-xs">
-                            <rect x="15" y="15" width="125" height="90" rx="6" fill="#1e293b" stroke="#dc2626" />
-                            <text x="25" y="35" fill="#fca5a5" fontWeight="bold">RAID 0 — striping</text>
-                            <rect x="25" y="45" width="50" height="40" rx="3" fill="#334155" /><text x="35" y="60" fill="white" fontSize="9">A</text><text x="35" y="75" fill="white" fontSize="9">C</text>
-                            <rect x="80" y="45" width="50" height="40" rx="3" fill="#334155" /><text x="90" y="60" fill="white" fontSize="9">B</text><text x="90" y="75" fill="white" fontSize="9">D</text>
-                            <text x="22" y="100" fill="#94a3b8" fontSize="9">rapide · 0 disque mort = tout perdu</text>
-                            <rect x="150" y="15" width="125" height="90" rx="6" fill="#1e293b" stroke="#22c55e" />
-                            <text x="160" y="35" fill="#86efac" fontWeight="bold">RAID 1 — miroir</text>
-                            <rect x="160" y="45" width="50" height="40" rx="3" fill="#334155" /><text x="170" y="60" fill="white" fontSize="9">A</text><text x="170" y="75" fill="white" fontSize="9">B</text>
-                            <rect x="215" y="45" width="50" height="40" rx="3" fill="#334155" /><text x="225" y="60" fill="white" fontSize="9">A</text><text x="225" y="75" fill="white" fontSize="9">B</text>
-                            <text x="157" y="100" fill="#94a3b8" fontSize="9">2 disques · tolère 1 panne</text>
-                            <rect x="285" y="15" width="135" height="90" rx="6" fill="#1e293b" stroke="#f59e0b" />
-                            <text x="295" y="35" fill="#fcd34d" fontWeight="bold">RAID 5 — parité</text>
-                            <rect x="295" y="45" width="38" height="40" rx="3" fill="#334155" /><text x="303" y="60" fill="white" fontSize="9">A</text><text x="303" y="75" fill="white" fontSize="9">P</text>
-                            <rect x="336" y="45" width="38" height="40" rx="3" fill="#334155" /><text x="344" y="60" fill="white" fontSize="9">B</text><text x="344" y="75" fill="white" fontSize="9">C</text>
-                            <rect x="377" y="45" width="38" height="40" rx="3" fill="#334155" /><text x="385" y="60" fill="white" fontSize="9">D</text><text x="385" y="75" fill="white" fontSize="9">P</text>
-                            <text x="292" y="100" fill="#94a3b8" fontSize="9">n-1 utiles · tolère 1 panne · reconstr. lente</text>
-                            <rect x="430" y="15" width="125" height="90" rx="6" fill="#1e293b" stroke="#38bdf8" />
-                            <text x="440" y="35" fill="#7dd3fc" fontWeight="bold">RAID 10 — 1+0</text>
-                            <rect x="440" y="45" width="55" height="20" rx="3" fill="#334155" /><text x="460" y="60" fill="white" fontSize="9">miroir 1</text>
-                            <rect x="500" y="45" width="55" height="20" rx="3" fill="#334155" /><text x="520" y="60" fill="white" fontSize="9">miroir 2</text>
-                            <rect x="440" y="70" width="115" height="16" rx="3" fill="#0f172a" /><text x="455" y="82" fill="white" fontSize="9">striping entre les paires</text>
-                            <text x="437" y="100" fill="#94a3b8" fontSize="9">vitesse + tolérance · 4 disques min</text>
-                            <text x="40" y="130" fill="#fbbf24" fontSize="10">Ç retenir : le RAID n'est PAS une sauvegarde — il protège de la panne disque, pas de la suppression ni du ransomware.</text>
-                            <text x="40" y="152" fill="#94a3b8" fontSize="10">Hot spare : disque de réserve qui remplace automatiquement un membre défaillant, puis reconstruction.</text>
+                    <div className="w-full bg-slate-900 text-white p-5 rounded-xl border border-slate-700 shadow-xl overflow-x-auto">
+                        <div className="flex items-center justify-between mb-3">
+                            <h4 className="text-xs uppercase font-extrabold tracking-wider text-sky-400">Stockage &amp; Disponibilité · Niveaux de RAID</h4>
+                            <span className="text-[10px] bg-sky-950 text-sky-300 px-2 py-0.5 rounded border border-sky-800">RAID 0/1/5/10</span>
+                        </div>
+                        <p className="text-[11px] text-slate-300 mb-3 leading-relaxed"><strong className="text-amber-300">Lecture :</strong> chaque mini-graphe montre comment les données se répartissent sur les disques. RAID 0 = vitesse sans redondance ; RAID 1 = miroir ; RAID 5 = parité répartie (tolère 1 panne) ; RAID 10 = miroirs en bande.</p>
+                        <svg viewBox="0 0 640 260" role="img" aria-label="Quatre niveaux de RAID" className="w-full h-auto font-sans">
+                            <defs>
+                                <marker id="ar" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                                    <path d="M 0 1 L 10 5 L 0 9 z" fill="#38bdf8" />
+                                </marker>
+                            </defs>
+                            {/* RAID 0 */}
+                            <rect x="20" y="20" width="145" height="95" rx="6" fill="#1e293b" stroke="#dc2626" strokeWidth="1.5" />
+                            <text x="30" y="40" fill="#fca5a5" fontWeight="bold" fontSize="11">RAID 0 — striping</text>
+                            <rect x="30" y="50" width="60" height="45" rx="3" fill="#334155" />
+                            <text x="40" y="68" fill="white" fontSize="9">A</text>
+                            <text x="40" y="83" fill="white" fontSize="9">C</text>
+                            <rect x="95" y="50" width="60" height="45" rx="3" fill="#334155" />
+                            <text x="105" y="68" fill="white" fontSize="9">B</text>
+                            <text x="105" y="83" fill="white" fontSize="9">D</text>
+                            <text x="28" y="110" fill="#94a3b8" fontSize="9">rapide · 1 panne = tout perdu</text>
+
+                            {/* RAID 1 */}
+                            <rect x="180" y="20" width="145" height="95" rx="6" fill="#1e293b" stroke="#22c55e" strokeWidth="1.5" />
+                            <text x="190" y="40" fill="#86efac" fontWeight="bold" fontSize="11">RAID 1 — miroir</text>
+                            <rect x="190" y="50" width="60" height="45" rx="3" fill="#334155" />
+                            <text x="200" y="68" fill="white" fontSize="9">A</text>
+                            <text x="200" y="83" fill="white" fontSize="9">B</text>
+                            <rect x="255" y="50" width="60" height="45" rx="3" fill="#334155" />
+                            <text x="265" y="68" fill="white" fontSize="9">A</text>
+                            <text x="265" y="83" fill="white" fontSize="9">B</text>
+                            <text x="188" y="110" fill="#94a3b8" fontSize="9">2 disques · tolère 1 panne</text>
+
+                            {/* RAID 5 */}
+                            <rect x="340" y="20" width="145" height="95" rx="6" fill="#1e293b" stroke="#f59e0b" strokeWidth="1.5" />
+                            <text x="350" y="40" fill="#fcd34d" fontWeight="bold" fontSize="11">RAID 5 — parité</text>
+                            <rect x="350" y="50" width="42" height="45" rx="3" fill="#334155" />
+                            <text x="358" y="68" fill="white" fontSize="9">A</text>
+                            <text x="358" y="83" fill="white" fontSize="9">P</text>
+                            <rect x="395" y="50" width="42" height="45" rx="3" fill="#334155" />
+                            <text x="403" y="68" fill="white" fontSize="9">B</text>
+                            <text x="403" y="83" fill="white" fontSize="9">C</text>
+                            <rect x="440" y="50" width="42" height="45" rx="3" fill="#334155" />
+                            <text x="448" y="68" fill="white" fontSize="9">D</text>
+                            <text x="448" y="83" fill="white" fontSize="9">P</text>
+                            <text x="348" y="110" fill="#94a3b8" fontSize="9">n-1 utiles · tolère 1 panne</text>
+
+                            {/* RAID 10 */}
+                            <rect x="495" y="20" width="135" height="95" rx="6" fill="#1e293b" stroke="#38bdf8" strokeWidth="1.5" />
+                            <text x="505" y="40" fill="#7dd3fc" fontWeight="bold" fontSize="11">RAID 10 — 1+0</text>
+                            <rect x="505" y="50" width="55" height="20" rx="3" fill="#334155" />
+                            <text x="515" y="64" fill="white" fontSize="9">miroir 1</text>
+                            <rect x="565" y="50" width="55" height="20" rx="3" fill="#334155" />
+                            <text x="575" y="64" fill="white" fontSize="9">miroir 2</text>
+                            <rect x="505" y="75" width="115" height="16" rx="3" fill="#0f172a" />
+                            <text x="520" y="87" fill="white" fontSize="9">striping entre paires</text>
+                            <text x="503" y="110" fill="#94a3b8" fontSize="9">vitesse + tolérance · 4 disques min</text>
+
+                            {/* Note de bas */}
+                            <rect x="20" y="140" width="600" height="100" rx="6" fill="#1e293b" stroke="#475569" />
+                            <text x="32" y="162" fill="#fbbf24" fontSize="10" fontWeight="bold">À retenir :</text>
+                            <text x="115" y="162" fill="#94a3b8" fontSize="10">le RAID n'est PAS une sauvegarde — il protège de la panne disque, pas de la suppression ni du ransomware.</text>
+                            <text x="32" y="182" fill="#94a3b8" fontSize="10">Hot spare : disque de réserve qui remplace automatiquement un membre défaillant, puis reconstruction.</text>
+                            <text x="32" y="202" fill="#94a3b8" fontSize="10">Contexte pro : RAID 1 pour les serveurs critiques, RAID 5/6 pour le stockage, RAID 10 pour les bases de données.</text>
+                            <text x="32" y="222" fill="#94a3b8" fontSize="10">Vérification : mdadm --detail /dev/md0 (Linux) · Get-PhysicalDisk (Windows) · storcli /c0 show (contrôleur RAID).</text>
                         </svg>
                     </div>
                 );
