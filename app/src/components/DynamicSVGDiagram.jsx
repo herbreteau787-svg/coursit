@@ -1972,6 +1972,99 @@ export const DynamicSVGDiagram = ({ type }) => {
                 );
             }
 
+            if (type === 'automatisation-scripts') {
+                return (
+                    <div className="w-full bg-slate-900 text-white p-5 rounded-xl border border-slate-700 shadow-xl overflow-x-auto">
+                        <div className="flex items-center justify-between mb-3">
+                            <h4 className="text-xs uppercase font-extrabold tracking-wider text-sky-400">Automatisation - Scripts et CI/CD</h4>
+                            <span className="text-[10px] bg-sky-950 text-sky-300 px-2 py-0.5 rounded border border-sky-800">Bash / PowerShell</span>
+                        </div>
+                        <p className="text-[11px] text-slate-300 mb-3 leading-relaxed"><strong className="text-amber-300">Lecture :</strong> les scripts (Bash/PowerShell) automatisent les taches repetitives. Le CI/CD (GitHub Actions, GitLab CI) orchestre l'execution sur les cibles (serveurs, postes).</p>
+                        <svg viewBox="0 0 640 200" role="img" aria-label="Automatisation : scripts vers CI/CD vers cibles" className="w-full h-auto font-sans">
+                            <rect x="20" y="40" width="180" height="80" rx="8" fill="#0284c7" />
+                            <text x="40" y="65" fill="white" fontSize="11" fontWeight="bold">Scripts</text>
+                            <text x="40" y="82" fill="#bae6fd" fontSize="9">Bash / PowerShell</text>
+                            <text x="40" y="98" fill="#bae6fd" fontSize="9">Ansible / Terraform</text>
+                            <rect x="240" y="40" width="180" height="80" rx="8" fill="#059669" />
+                            <text x="260" y="65" fill="white" fontSize="11" fontWeight="bold">CI/CD</text>
+                            <text x="260" y="82" fill="#a7f3d0" fontSize="9">GitHub Actions</text>
+                            <text x="260" y="98" fill="#a7f3d0" fontSize="9">GitLab CI / Jenkins</text>
+                            <rect x="460" y="40" width="160" height="80" rx="8" fill="#7c3aed" />
+                            <text x="480" y="65" fill="white" fontSize="11" fontWeight="bold">Cibles</text>
+                            <text x="480" y="82" fill="#ddd6fe" fontSize="9">Serveurs Linux</text>
+                            <text x="480" y="98" fill="#ddd6fe" fontSize="9">Postes Windows</text>
+                            <line x1="200" y1="80" x2="240" y2="80" stroke="#22c55e" strokeWidth="2.5" />
+                            <line x1="420" y1="80" x2="460" y2="80" stroke="#22c55e" strokeWidth="2.5" />
+                            <rect x="20" y="140" width="600" height="45" rx="6" fill="#1e293b" stroke="#475569" />
+                            <text x="32" y="162" fill="#94a3b8" fontSize="10">Contexte pro : un script bien ecrit est idempotent, logue ses actions, et gere les erreurs.</text>
+                            <text x="32" y="178" fill="#94a3b8" fontSize="10">Verification : shellcheck (Bash), PSScriptAnalyzer (PowerShell), test en dev avant prod.</text>
+                        </svg>
+                    </div>
+                );
+            }
+
+            if (type === 'deploiement-postes') {
+                return (
+                    <div className="w-full bg-slate-900 text-white p-5 rounded-xl border border-slate-700 shadow-xl overflow-x-auto">
+                        <div className="flex items-center justify-between mb-3">
+                            <h4 className="text-xs uppercase font-extrabold tracking-wider text-sky-400">Deploiement - PXE / WDS / MDT</h4>
+                            <span className="text-[10px] bg-sky-950 text-sky-300 px-2 py-0.5 rounded border border-sky-800">Deploiement automatise</span>
+                        </div>
+                        <p className="text-[11px] text-slate-300 mb-3 leading-relaxed"><strong className="text-amber-300">Lecture :</strong> le poste demarre en PXE (reseau), charge l'image WDS, puis MDT applique la configuration (nom, domaine, logiciels). Le flux va du serveur vers le poste.</p>
+                        <svg viewBox="0 0 640 200" role="img" aria-label="Deploiement PXE/WDS/MDT" className="w-full h-auto font-sans">
+                            <rect x="20" y="40" width="180" height="80" rx="8" fill="#0284c7" />
+                            <text x="40" y="65" fill="white" fontSize="11" fontWeight="bold">Serveur WDS/MDT</text>
+                            <text x="40" y="82" fill="#bae6fd" fontSize="9">Image Windows</text>
+                            <text x="40" y="98" fill="#bae6fd" fontSize="9">Drivers + applications</text>
+                            <rect x="240" y="40" width="180" height="80" rx="8" fill="#059669" />
+                            <text x="260" y="65" fill="white" fontSize="11" fontWeight="bold">Reseau (PXE)</text>
+                            <text x="260" y="82" fill="#a7f3d0" fontSize="9">DHCP Option 66/67</text>
+                            <text x="260" y="98" fill="#a7f3d0" fontSize="9">TFTP / HTTP</text>
+                            <rect x="460" y="40" width="160" height="80" rx="8" fill="#7c3aed" />
+                            <text x="480" y="65" fill="white" fontSize="11" fontWeight="bold">Poste cible</text>
+                            <text x="480" y="82" fill="#ddd6fe" fontSize="9">Boot PXE</text>
+                            <text x="480" y="98" fill="#ddd6fe" fontSize="9">Installation + config</text>
+                            <line x1="200" y1="80" x2="240" y2="80" stroke="#22c55e" strokeWidth="2.5" />
+                            <line x1="420" y1="80" x2="460" y2="80" stroke="#22c55e" strokeWidth="2.5" />
+                            <rect x="20" y="140" width="600" height="45" rx="6" fill="#1e293b" stroke="#475569" />
+                            <text x="32" y="162" fill="#94a3b8" fontSize="10">Contexte pro : le deploiement automatise garantit l'homogeneite des postes.</text>
+                            <text x="32" y="178" fill="#94a3b8" fontSize="10">Verification : capture reseau (DHCP Discover/Request), logs MDT (BDD.log), etat du poste.</text>
+                        </svg>
+                    </div>
+                );
+            }
+
+            if (type === 'vpn-tunnel') {
+                return (
+                    <div className="w-full bg-slate-900 text-white p-5 rounded-xl border border-slate-700 shadow-xl overflow-x-auto">
+                        <div className="flex items-center justify-between mb-3">
+                            <h4 className="text-xs uppercase font-extrabold tracking-wider text-sky-400">Reseau - Tunnel VPN (IPsec / WireGuard)</h4>
+                            <span className="text-[10px] bg-sky-950 text-sky-300 px-2 py-0.5 rounded border border-sky-800">Site-a-Site / Remote</span>
+                        </div>
+                        <p className="text-[11px] text-slate-300 mb-3 leading-relaxed"><strong className="text-amber-300">Lecture :</strong> un tunnel VPN chiffre le trafic entre deux sites (site-a-site) ou entre un client et un site (remote access). IPsec (IKEv2) ou WireGuard sont les protocoles courants.</p>
+                        <svg viewBox="0 0 640 200" role="img" aria-label="Tunnel VPN entre deux sites" className="w-full h-auto font-sans">
+                            <rect x="20" y="40" width="180" height="80" rx="8" fill="#0284c7" />
+                            <text x="40" y="65" fill="white" fontSize="11" fontWeight="bold">Site A (LAN)</text>
+                            <text x="40" y="82" fill="#bae6fd" fontSize="9">10.1.1.0/24</text>
+                            <text x="40" y="98" fill="#bae6fd" fontSize="9">Routeur VPN A</text>
+                            <rect x="240" y="40" width="160" height="80" rx="8" fill="#059669" />
+                            <text x="260" y="65" fill="white" fontSize="11" fontWeight="bold">Tunnel VPN</text>
+                            <text x="260" y="82" fill="#a7f3d0" fontSize="9">IPsec / WireGuard</text>
+                            <text x="260" y="98" fill="#a7f3d0" fontSize="9">Chiffre + authentifie</text>
+                            <rect x="440" y="40" width="180" height="80" rx="8" fill="#7c3aed" />
+                            <text x="460" y="65" fill="white" fontSize="11" fontWeight="bold">Site B (LAN)</text>
+                            <text x="460" y="82" fill="#ddd6fe" fontSize="9">10.2.2.0/24</text>
+                            <text x="460" y="98" fill="#ddd6fe" fontSize="9">Routeur VPN B</text>
+                            <line x1="200" y1="80" x2="240" y2="80" stroke="#22c55e" strokeWidth="2.5" />
+                            <line x1="400" y1="80" x2="440" y2="80" stroke="#22c55e" strokeWidth="2.5" />
+                            <rect x="20" y="140" width="600" height="45" rx="6" fill="#1e293b" stroke="#475569" />
+                            <text x="32" y="162" fill="#94a3b8" fontSize="10">Contexte pro : le VPN permet d'interconnecter des sites distants de maniere securisee sur Internet.</text>
+                            <text x="32" y="178" fill="#94a3b8" fontSize="10">Verification : ping entre les LAN, show crypto ipsec sa (Cisco), wg show (WireGuard).</text>
+                        </svg>
+                    </div>
+                );
+            }
+
             return null;
         };
 
