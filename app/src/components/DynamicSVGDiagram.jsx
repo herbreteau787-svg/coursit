@@ -1831,10 +1831,13 @@ export const DynamicSVGDiagram = ({ type }) => {
 
             if (type === 'mockup-linux-terminal') {
                 return (
-                    <div className="w-full bg-slate-900 text-white p-4 rounded-lg overflow-x-auto">
-                        <h4 className="text-xs uppercase font-bold text-sky-400 mb-1">Figure : Terminal Linux — première session de diagnostic</h4>
-                        <p className="text-[11px] text-slate-300 mb-2"><strong className="text-amber-300">Ce que vous voyez :</strong> le prompt <code>admin@SRV-LNX01:~$</code> signifie que vous ûtes connecté avec le compte <code>admin</code> sur le serveur <code>SRV-LNX01</code>. Le symbole <code>~</code> indique votre répertoire personnel (<code>/home/admin</code>). Le curseur clignote après le <code>$</code>.</p>
-                        <svg viewBox="0 0 640 340" role="img" aria-label="Maquette terminal Linux : prompt, commandes, résultat" className="w-full h-auto text-xs rounded border border-slate-700">
+                    <div className="w-full bg-slate-900 text-white p-5 rounded-xl border border-slate-700 shadow-xl overflow-x-auto">
+                        <div className="flex items-center justify-between mb-3">
+                            <h4 className="text-xs uppercase font-extrabold tracking-wider text-sky-400">Linux · Terminal de Diagnostic</h4>
+                            <span className="text-[10px] bg-sky-950 text-sky-300 px-2 py-0.5 rounded border border-sky-800">Bash / Shell</span>
+                        </div>
+                        <p className="text-[11px] text-slate-300 mb-3 leading-relaxed"><strong className="text-amber-300">Ce que vous voyez :</strong> le prompt admin@SRV-LNX01:~$ signifie que vous êtes connecté avec le compte admin sur le serveur SRV-LNX01. Le symbole ~ indique votre répertoire personnel (/home/admin).</p>
+                        <svg viewBox="0 0 640 340" role="img" aria-label="Maquette terminal Linux : prompt, commandes, résultat" className="w-full h-auto font-sans rounded border border-slate-700">
                             <rect x="0" y="0" width="640" height="340" fill="#0a0a0a" stroke="#333" />
                             <rect x="0" y="0" width="640" height="24" fill="#2d2d2d" />
                             <circle cx="14" cy="12" r="5" fill="#ff6060" /><circle cx="30" cy="12" r="5" fill="#ffc040" /><circle cx="46" cy="12" r="5" fill="#40e040" />
