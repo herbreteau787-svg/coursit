@@ -1865,10 +1865,13 @@ export const DynamicSVGDiagram = ({ type }) => {
 
             if (type === 'mockup-cisco-cli') {
                 return (
-                    <div className="w-full bg-slate-900 text-white p-4 rounded-lg overflow-x-auto">
-                        <h4 className="text-xs uppercase font-bold text-sky-400 mb-1">Figure : Cisco IOS CLI — configuration d'un VLAN</h4>
-                        <p className="text-[11px] text-slate-300 mb-2"><strong className="text-amber-300">Ce que vous voyez :</strong> le prompt change selon le mode. <code>Switch&gt;</code> = mode utilisateur, <code>Switch#</code> = mode privilégié (après <code>enable</code>), <code>Switch(config)#</code> = mode configuration (après <code>configure terminal</code>). C'est la hiérarchie de modes qui déroute les débutants.</p>
-                        <svg viewBox="0 0 640 340" role="img" aria-label="Maquette Cisco CLI : modes utilisateur, privilégié, configuration" className="w-full h-auto text-xs rounded border border-slate-700">
+                    <div className="w-full bg-slate-900 text-white p-5 rounded-xl border border-slate-700 shadow-xl overflow-x-auto">
+                        <div className="flex items-center justify-between mb-3">
+                            <h4 className="text-xs uppercase font-extrabold tracking-wider text-sky-400">Cisco IOS · CLI Configuration VLAN</h4>
+                            <span className="text-[10px] bg-sky-950 text-sky-300 px-2 py-0.5 rounded border border-sky-800">Switch / Routeur</span>
+                        </div>
+                        <p className="text-[11px] text-slate-300 mb-3 leading-relaxed"><strong className="text-amber-300">Ce que vous voyez :</strong> le prompt change selon le mode. Switch&gt; = mode utilisateur, Switch# = mode privilégié, Switch(config)# = mode configuration. C'est la hiérarchie de modes qui déroute les débutants.</p>
+                        <svg viewBox="0 0 640 340" role="img" aria-label="Maquette Cisco CLI : modes utilisateur, privilégié, configuration" className="w-full h-auto font-sans rounded border border-slate-700">
                             <rect x="0" y="0" width="640" height="340" fill="#0a0a0a" stroke="#333" />
                             <rect x="0" y="0" width="640" height="24" fill="#2d2d2d" />
                             <circle cx="14" cy="12" r="5" fill="#ff6060" /><circle cx="30" cy="12" r="5" fill="#ffc040" /><circle cx="46" cy="12" r="5" fill="#40e040" />
