@@ -2602,7 +2602,7 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
                                     </button>
                                 </div>
                                 {searchQuery && (
-                                    <p className="mt-1 w-full md:w-2/3 text-[10px] text-gray-600 dark:text-slate-400" role="status">
+                                    <p className="mt-2 w-full md:w-2/3 text-center text-[10px] text-gray-600 dark:text-slate-400" role="status">
                                         🔎 « {searchQuery} » : {filteredCourses.length} cours correspondant(s) dans l'onglet « Cours » (titres, codes, descriptions et sommaires).
                                         {filteredCourses.length === 0 && searchHints && (searchHints.inGloss + searchHints.inCmds + searchHints.inVocab) > 0 && (
                                             <span className="text-brand-500 font-semibold"> · Le terme existe par ailleurs : Glossaire ({searchHints.inGloss}), Commandes ({searchHints.inCmds}), Vocabulaire ({searchHints.inVocab}).</span>
@@ -2660,13 +2660,21 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
                                         key={tab.id}
                                         onClick={() => setCurrentTab(tab.id)}
                                         aria-current={currentTab === tab.id ? 'page' : undefined}
-                                        className={`min-w-0 min-h-[52px] px-0.5 py-1.5 rounded-lg transition-colors flex flex-col items-center justify-center gap-1 leading-tight tracking-tight text-[9px] sm:text-[10px] lg:text-[11px] [&_svg]:w-5 [&_svg]:h-5 [&_svg]:shrink-0 ${
+                                        className={`min-w-0 min-h-[52px] px-0.5 py-1.5 rounded-lg transition-colors flex flex-col items-center justify-center gap-1 leading-tight tracking-tight text-[9px] sm:text-[10px] lg:text-[11px] ${
                                             currentTab === tab.id
-                                                ? 'bg-cyan-600 text-white font-bold [&_svg]:text-white'
-                                                : 'bg-transparent text-gray-700 dark:text-white font-medium [&_svg]:text-cyan-600 dark:[&_svg]:text-cyan-400 hover:bg-gray-100 dark:hover:bg-slate-700/90'
+                                                ? 'bg-cyan-600 text-white font-bold'
+                                                : 'bg-transparent text-gray-900 dark:text-white font-medium hover:bg-gray-100 dark:hover:bg-slate-700/90'
                                         }`}
                                     >
-                                        {tab.label}
+                                        <Icon
+                                            name={tab.icon}
+                                            className={`w-5 h-5 shrink-0 ${
+                                                currentTab === tab.id
+                                                    ? 'text-cyan-600 bg-white rounded-full'
+                                                    : 'text-gray-500 dark:text-cyan-400'
+                                            }`}
+                                        />
+                                        <span>{tab.label}</span>
                                     </button>
                                 ))}
                             </div>

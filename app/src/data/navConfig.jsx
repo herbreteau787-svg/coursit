@@ -1,16 +1,15 @@
-import { Icon } from '../components/Icon';
 
 export const NAV_ITEMS = [
-    { id: 'dashboard', label: <><Icon name="house" /> Dashboard</>, path: '/' },
-    { id: 'courses', label: <><Icon name="book-open" /> Cours & Fiches</>, path: '/courses' },
-    { id: 'essentiels', label: <><Icon name="star" /> Les Indispensables</>, path: '/essentiels' },
-    { id: 'qcm', label: <><Icon name="help-circle" /> Banque QCM</>, path: '/qcm' },
-    { id: 'labs', label: <><Icon name="flask" /> Labos Guidés</>, path: '/labs' },
-    { id: 'commands', label: <><Icon name="settings" /> Commandes</>, path: '/commands' },
-    { id: 'scripts', label: <><Icon name="file-text" /> Scripts</>, path: '/scripts' },
-    { id: 'depannage', label: <><Icon name="wrench" /> Dépannage</>, path: '/depannage' },
-    { id: 'glossary', label: <><Icon name="book" /> Glossaire</>, path: '/glossary' },
-    { id: 'vocab', label: <><Icon name="globe" /> Vocabulaire Anglais</>, path: '/vocab' },
+    { id: 'dashboard', icon: 'house', label: 'Dashboard', path: '/' },
+    { id: 'courses', icon: 'book-open', label: 'Cours & Fiches', path: '/courses' },
+    { id: 'essentiels', icon: 'star', label: 'Les Indispensables', path: '/essentiels' },
+    { id: 'qcm', icon: 'help-circle', label: 'Banque QCM', path: '/qcm' },
+    { id: 'labs', icon: 'flask', label: 'Labos Guidés', path: '/labs' },
+    { id: 'commands', icon: 'settings', label: 'Commandes', path: '/commands' },
+    { id: 'scripts', icon: 'file-text', label: 'Scripts', path: '/scripts' },
+    { id: 'depannage', icon: 'wrench', label: 'Dépannage', path: '/depannage' },
+    { id: 'glossary', icon: 'book', label: 'Glossaire', path: '/glossary' },
+    { id: 'vocab', icon: 'globe', label: 'Vocabulaire Anglais', path: '/vocab' },
 ];
 
 export const DASHBOARD_CARDS = [
