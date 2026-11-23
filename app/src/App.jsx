@@ -2551,7 +2551,7 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
             return (
                 <div className="min-h-screen flex flex-col">
                     <header className="bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 sticky top-0 z-50">
-                        <div className="max-w-7xl mx-auto px-4 py-3 flex flex-col md:flex-row justify-between items-center gap-4">
+                        <div className="w-full px-4 md:px-6 py-3 flex flex-col md:flex-row justify-between items-center gap-4">
                             {/* Logo + titre cliquables : retour au Dashboard depuis n'importe quelle page */}
                             <button
                                 onClick={() => { setCurrentTab('dashboard'); window.scrollTo({ top: 0 }); }}
@@ -2672,7 +2672,7 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
                         </nav>
                     </header>
 
-                    <main className="flex-1 max-w-7xl w-full mx-auto px-4 py-6 pb-24 md:pb-6">
+                    <main className="flex-1 w-full px-4 md:px-6 py-6 pb-24 md:pb-6">
                         {currentTab === 'dashboard' && renderDashboard()}
                         {currentTab === 'courses' && renderCourses()}
                         {currentTab === 'essentiels' && renderEssentielsTab()}
@@ -2713,7 +2713,7 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
                     </nav>
 
                     <footer className="bg-white dark:bg-slate-800 border-t border-slate-200 dark:border-slate-700 py-4 text-xs text-slate-500 dark:text-slate-400 space-y-3">
-                        <div className="max-w-7xl mx-auto px-4 flex flex-wrap gap-3 justify-between items-center">
+                        <div className="w-full px-4 md:px-6 flex flex-wrap gap-3 justify-between items-center">
                             <span>Plateforme de révision autonome TSSR, AIS et CCNA 200-301 · Contenu vérifié le {CONTENT_LAST_CHECK}</span>
                             <div className="flex gap-3">
                                 <button onClick={reportIssue} className="font-semibold text-amber-600 dark:text-amber-400 hover:underline">
@@ -2721,7 +2721,7 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
                                 </button>
                             </div>
                         </div>
-                        <details className="max-w-7xl mx-auto px-4">
+                        <details className="w-full px-4 md:px-6">
                             <summary className="cursor-pointer font-semibold text-slate-600 dark:text-slate-300">Mentions légales & confidentialité (NF-11)</summary>
                             <div className="mt-2 space-y-1 leading-relaxed">
                                 <p><strong>Éditeur :</strong> site de révision édité à titre personnel par son constructeur, à des fins pédagogiques. Coordonnées de l'éditeur : à compléter (e-mail de contact à renseigner ici).</p>
