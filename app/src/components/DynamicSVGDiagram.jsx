@@ -698,23 +698,44 @@ export const DynamicSVGDiagram = ({ type }) => {
 
             if (type === 'network-topology') {
                 return (
-                    <div className="w-full bg-slate-900 text-white p-4 rounded-lg overflow-x-auto">
-                        <h4 className="text-xs uppercase font-bold text-purple-400 mb-2">Génération SVG : Topologie Inter-VLAN (Router-on-a-Stick)</h4>
-                        <p className="text-[11px] text-slate-300 mb-2"><strong className="text-amber-300">Description textuelle :</strong> deux commutateurs, chacun relié à des machines d'un VLAN différent (VLAN 10 et VLAN 20) ; un trunk unique (liaison transportant les deux VLAN) remonte vers une sous-interface du routeur qui route le trafic entre les VLAN.</p>
-                        <svg viewBox="0 0 550 180" role="img" aria-label="Router-on-a-Stick : deux VLAN reliés au routeur par un trunk, sous-interfaces par VLAN" className="w-full h-auto text-xs">
-                            <rect x="220" y="10" width="110" height="30" rx="6" fill="#7c3aed" />
-                            <text x="235" y="30" fill="white" fontWeight="bold">Routeur R1</text>
-                            <line x1="275" y1="40" x2="275" y2="80" stroke="#f59e0b" strokeWidth="3" />
-                            <text x="285" y="65" fill="#f59e0b" fontWeight="bold">Trunk 802.1Q</text>
-                            <rect x="220" y="80" width="110" height="30" rx="6" fill="#2563eb" />
-                            <text x="240" y="100" fill="white" fontWeight="bold">Switch S1</text>
-                            <line x1="240" y1="110" x2="120" y2="140" stroke="#38bdf8" strokeWidth="2" />
-                            <line x1="310" y1="110" x2="430" y2="140" stroke="#4ade80" strokeWidth="2" />
-                            <rect x="60" y="135" width="120" height="35" rx="4" fill="#0f172a" stroke="#38bdf8" />
-                            <text x="70" y="152" fill="#38bdf8" fontWeight="bold">PC1 (VLAN 10)</text>
-                            <rect x="370" y="135" width="120" height="35" rx="4" fill="#0f172a" stroke="#4ade80" />
-                            <text x="380" y="152" fill="#4ade80" fontWeight="bold">PC2 (VLAN 20)</text>
+                    <div className="w-full bg-slate-900 text-white p-5 rounded-xl border border-slate-700 shadow-xl overflow-x-auto">
+                        <div className="flex items-center justify-between mb-3">
+                            <h4 className="text-xs uppercase font-extrabold tracking-wider text-sky-400">Réseaux &amp; Virtualisation · Router-on-a-Stick</h4>
+                            <span className="text-[10px] bg-sky-950 text-sky-300 px-2 py-0.5 rounded border border-sky-800">Inter-VLAN</span>
+                        </div>
+                        <p className="text-[11px] text-slate-300 mb-3 leading-relaxed"><strong className="text-amber-300">Lecture :</strong> deux commutateurs, chacun relié à des machines d'un VLAN différent ; un trunk unique remonte vers une sous-interface du routeur qui route le trafic entre les VLAN.</p>
+                        <svg viewBox="0 0 640 220" role="img" aria-label="Router-on-a-Stick : deux VLAN reliés au routeur par un trunk, sous-interfaces par VLAN" className="w-full h-auto font-sans">
+                            <defs>
+                                <marker id="ar" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                                    <path d="M 0 1 L 10 5 L 0 9 z" fill="#38bdf8" />
+                                </marker>
+                            </defs>
+                            {/* Routeur */}
+                            <rect x="270" y="10" width="100" height="35" rx="6" fill="#7c3aed" />
+                            <text x="285" y="32" fill="white" fontWeight="bold" fontSize="11">Routeur R1</text>
+
+                            <line x1="320" y1="45" x2="320" y2="85" stroke="#f59e0b" strokeWidth="3" />
+                            <text x="330" y="70" fill="#f59e0b" fontWeight="bold" fontSize="10">Trunk 802.1Q</text>
+
+                            {/* Switch */}
+                            <rect x="270" y="85" width="100" height="35" rx="6" fill="#2563eb" />
+                            <text x="290" y="107" fill="white" fontWeight="bold" fontSize="11">Switch S1</text>
+
+                            <line x1="290" y1="120" x2="170" y2="160" stroke="#38bdf8" strokeWidth="2" />
+                            <line x1="350" y1="120" x2="470" y2="160" stroke="#4ade80" strokeWidth="2" />
+
+                            {/* PC VLAN 10 */}
+                            <rect x="110" y="160" width="120" height="40" rx="4" fill="#0f172a" stroke="#38bdf8" strokeWidth="1.5" />
+                            <text x="120" y="185" fill="#38bdf8" fontWeight="bold" fontSize="11">PC1 (VLAN 10)</text>
+
+                            {/* PC VLAN 20 */}
+                            <rect x="410" y="160" width="120" height="40" rx="4" fill="#0f172a" stroke="#4ade80" strokeWidth="1.5" />
+                            <text x="420" y="185" fill="#4ade80" fontWeight="bold" fontSize="11">PC2 (VLAN 20)</text>
+
+                            {/* Note de bas */}
+                            <rect x="20" y="205" width="600" height="10" rx="4" fill="#1e293b" />
                         </svg>
+                        <p className="text-[11px] text-slate-300 mt-2"><strong className="text-amber-300">Contexte pro :</strong> le routeur fait du routage inter-VLAN via des sous-interfaces (ex: G0/0.10, G0/0.20). Chaque sous-interface a une adresse IP dans le VLAN correspondant.</p>
                     </div>
                 );
             }
