@@ -2553,13 +2553,13 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
             return (
                 <div className="min-h-screen flex flex-col bg-gray-50 dark:bg-transparent">
                     <header className="bg-white dark:bg-slate-800 border-b border-gray-200 dark:border-slate-700 sticky top-0 z-50">
-                        <div className="w-full px-4 md:px-6 py-3 flex flex-col md:flex-row justify-between items-center gap-4">
-                            {/* Logo + titre cliquables : retour au Dashboard depuis n'importe quelle page */}
+                        <div className="w-full px-4 md:px-6 py-3 flex flex-col lg:flex-row items-center justify-between gap-4">
+                            {/* Logo + tagline Vice City — gauche */}
                             <button
                                 onClick={() => { setCurrentTab('dashboard'); window.scrollTo({ top: 0 }); }}
                                 aria-label="Retour à l'accueil (Dashboard)"
                                 title="Retour au Dashboard"
-                                className="flex items-center gap-4 text-left rounded-lg px-2 py-1 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors focus:outline-none focus:ring-2 focus:ring-brand-500"
+                                className="shrink-0 flex items-center gap-4 text-left rounded-lg px-2 py-1 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors focus:outline-none focus:ring-2 focus:ring-brand-500"
                             >
                                 <div className="flex flex-col">
                                     {!logoError ? (
@@ -2574,33 +2574,24 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
                                             IT
                                         </div>
                                     )}
-                                    <GtaText className="mt-1 text-2xl tracking-widest whitespace-nowrap">
+                                    <GtaText className="mt-1 text-3xl tracking-widest uppercase whitespace-nowrap">
                                         Plateforme de révisions pour tous
                                     </GtaText>
                                 </div>
                             </button>
 
-                            {/* Barre de Recherche Plein Texte Dynamic */}
-                            <div className="flex-1 flex flex-col items-center gap-1">
-                                <div className="w-full md:w-2/3 mx-auto flex items-center gap-3">
-                                    <div className="relative flex-1">
-                                        <svg className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 dark:text-slate-500" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
-                                        <input
-                                            type="text"
-                                            aria-label="Rechercher un cours, un mot-clé"
-                                            placeholder="Rechercher un cours, un code, un mot-clé…"
-                                            value={searchQuery}
-                                            onChange={(e) => { setSearchQuery(e.target.value); if (currentTab !== 'courses') setCurrentTab('courses'); }}
-                                            className="w-full h-12 px-6 pl-12 rounded-xl border border-slate-600 bg-slate-100/70 dark:bg-slate-900/70 backdrop-blur text-sm text-gray-900 dark:text-slate-100 placeholder-gray-500 dark:placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-sky-500/40 focus:border-sky-500 transition-all"
-                                        />
-                                    </div>
-                                    <button
-                                        type="button"
-                                        title="Espace personnel"
-                                        className="shrink-0 px-6 py-3 rounded-lg bg-gradient-to-r from-cyan-500 to-blue-600 text-white text-sm font-bold shadow-lg shadow-cyan-500/20 transition-all hover:brightness-110 hover:shadow-xl"
-                                    >
-                                        Se connecter
-                                    </button>
+                            {/* Recherche centrée */}
+                            <div className="w-full lg:flex-1 flex flex-col items-center gap-1">
+                                <div className="w-full md:w-2/3 mx-auto relative">
+                                    <svg className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 dark:text-slate-500" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
+                                    <input
+                                        type="text"
+                                        aria-label="Rechercher un cours, un mot-clé"
+                                        placeholder="Rechercher un cours, un code, un mot-clé…"
+                                        value={searchQuery}
+                                        onChange={(e) => { setSearchQuery(e.target.value); if (currentTab !== 'courses') setCurrentTab('courses'); }}
+                                        className="w-full h-12 px-6 pl-12 rounded-xl border border-slate-600 bg-slate-100/70 dark:bg-slate-900/70 backdrop-blur text-sm text-gray-900 dark:text-slate-100 placeholder-gray-500 dark:placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-sky-500/40 focus:border-sky-500 transition-all"
+                                    />
                                 </div>
                                 {searchQuery && (
                                     <p className="mt-2 w-full md:w-2/3 text-center text-[10px] text-gray-600 dark:text-slate-400" role="status">
@@ -2614,33 +2605,20 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
                                     </p>
                                 )}
                             </div>
-                            <div className="flex items-center gap-3">
-                                {/* Réglage de la taille de police (FONC-22) */}
+
+                            {/* Bouton + contrôles — droite */}
+                            <div className="shrink-0 flex items-center gap-3">
+                                <button
+                                    type="button"
+                                    title="Espace personnel"
+                                    className="px-6 py-3 rounded-lg bg-gradient-to-r from-cyan-500 to-blue-600 text-white text-sm font-bold shadow-lg shadow-cyan-500/20 transition-all hover:brightness-110 hover:shadow-xl"
+                                >
+                                    Se connecter
+                                </button>
                                 <div className="flex items-center gap-1" role="group" aria-label="Taille de la police">
-                                    <button
-                                        onClick={() => setFontScale('93')}
-                                        aria-label="Police plus petite"
-                                        title="Réduire la taille du texte"
-                                        className="px-2 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-bold hover:bg-slate-200 dark:hover:bg-slate-600"
-                                    >
-                                        A−
-                                    </button>
-                                    <button
-                                        onClick={() => setFontScale('110')}
-                                        aria-label="Police plus grande"
-                                        title="Augmenter la taille du texte"
-                                        className="px-2 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-bold hover:bg-slate-200 dark:hover:bg-slate-600"
-                                    >
-                                        A+
-                                    </button>
-                                    <button
-                                        onClick={() => setFontScale('100')}
-                                        aria-label="Taille de police normale"
-                                        title="Taille normale"
-                                        className="px-2 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-bold hover:bg-slate-200 dark:hover:bg-slate-600"
-                                    >
-                                        A
-                                    </button>
+                                    <button onClick={() => setFontScale('93')} aria-label="Police plus petite" title="Réduire la taille du texte" className="px-2 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-bold hover:bg-slate-200 dark:hover:bg-slate-600">A−</button>
+                                    <button onClick={() => setFontScale('110')} aria-label="Police plus grande" title="Augmenter la taille du texte" className="px-2 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-bold hover:bg-slate-200 dark:hover:bg-slate-600">A+</button>
+                                    <button onClick={() => setFontScale('100')} aria-label="Taille de police normale" title="Taille normale" className="px-2 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-bold hover:bg-slate-200 dark:hover:bg-slate-600">A</button>
                                 </div>
                                 <button
                                     onClick={() => setDarkMode(!darkMode)}
@@ -2653,7 +2631,7 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
                             </div>
                         </div>
 
-                        {/* Navigation principale finale */}
+                        {/* Navigation principale — ligne unique */}
                         <nav aria-label="Navigation principale" className="w-full bg-white dark:bg-slate-900/80 border-b border-gray-200 dark:border-slate-800">
                             <div className="w-full px-2 md:px-4 grid grid-cols-10 gap-1 py-2">
                                 {NAV_ITEMS.map(tab => (
@@ -2661,7 +2639,7 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
                                         key={tab.id}
                                         onClick={() => setCurrentTab(tab.id)}
                                         aria-current={currentTab === tab.id ? 'page' : undefined}
-                                        className={`min-w-0 min-h-[52px] px-0.5 py-1.5 rounded-lg transition-colors flex flex-col items-center justify-center gap-1 leading-tight tracking-tight text-[9px] sm:text-[10px] lg:text-[11px] ${
+                                        className={`min-w-0 min-h-[64px] px-0.5 py-1.5 rounded-lg transition-colors flex flex-col items-center justify-center gap-1 leading-tight tracking-tight text-[9px] sm:text-[10px] lg:text-[11px] ${
                                             currentTab === tab.id
                                                 ? 'bg-cyan-600 text-white font-bold'
                                                 : 'bg-transparent text-gray-900 dark:text-white font-medium hover:bg-gray-100 dark:hover:bg-slate-700/90'
@@ -2669,7 +2647,8 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
                                     >
                                         <Icon
                                             name={tab.icon}
-                                            className={`gta-icon w-6 h-6 shrink-0 ${
+                                            strokeWidth={2.5}
+                                            className={`gta-icon w-7 h-7 shrink-0 ${
                                                 currentTab === tab.id
                                                     ? 'text-white'
                                                     : 'text-cyan-400'
