@@ -2574,7 +2574,7 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
                                             IT
                                         </div>
                                     )}
-                                    <GtaText className="mt-1 text-2xl whitespace-nowrap">
+                                    <GtaText className="mt-1 text-2xl tracking-widest whitespace-nowrap">
                                         Plateforme de révisions pour tous
                                     </GtaText>
                                 </div>
@@ -2669,10 +2669,10 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
                                     >
                                         <Icon
                                             name={tab.icon}
-                                            className={`gta-icon w-5 h-5 shrink-0 ${
+                                            className={`gta-icon w-6 h-6 shrink-0 ${
                                                 currentTab === tab.id
-                                                    ? 'text-cyan-600 bg-white rounded-full'
-                                                    : 'text-gray-500 dark:text-cyan-400'
+                                                    ? 'text-white'
+                                                    : 'text-cyan-400'
                                             }`}
                                         />
                                         <span>{tab.label}</span>
