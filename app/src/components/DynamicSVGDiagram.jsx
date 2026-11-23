@@ -652,24 +652,45 @@ export const DynamicSVGDiagram = ({ type }) => {
 
             if (type === 'active-directory') {
                 return (
-                    <div className="w-full bg-slate-900 text-white p-4 rounded-lg overflow-x-auto">
-                        <h4 className="text-xs uppercase font-bold text-emerald-400 mb-2">Génération SVG : Structure Domaine & UO Active Directory</h4>
-                        <p className="text-[11px] text-slate-300 mb-2"><strong className="text-amber-300">Description textuelle :</strong> un encadré « domaine » regroupe des unités d'organisation (UO), chacune contenant des objets (utilisateurs, ordinateurs, groupes) ; ce découpage hiérarchique sert à organiser et déléguer l'administration du domaine.</p>
-                        <svg viewBox="0 0 500 180" role="img" aria-label="Arborescence Active Directory : un domaine contenant des unités d'organisation et des objets" className="w-full h-auto text-xs">
-                            <rect x="180" y="10" width="140" height="30" rx="6" fill="#059669" />
-                            <text x="195" y="30" fill="white" fontWeight="bold">Domaine : corp.local</text>
-                            <line x1="250" y1="40" x2="100" y2="70" stroke="#94a3b8" strokeWidth="2" />
-                            <line x1="250" y1="40" x2="250" y2="70" stroke="#94a3b8" strokeWidth="2" />
-                            <line x1="250" y1="40" x2="400" y2="70" stroke="#94a3b8" strokeWidth="2" />
-                            <rect x="40" y="70" width="120" height="30" rx="4" fill="#0284c7" />
-                            <text x="50" y="90" fill="white">OU_Utilisateurs</text>
-                            <rect x="190" y="70" width="120" height="30" rx="4" fill="#0284c7" />
-                            <text x="205" y="90" fill="white">OU_Ordinateurs</text>
-                            <rect x="340" y="70" width="120" height="30" rx="4" fill="#0284c7" />
-                            <text x="365" y="90" fill="white">OU_Serveurs</text>
-                            <rect x="40" y="120" width="120" height="40" rx="4" fill="#1e293b" stroke="#38bdf8" />
-                            <text x="48" y="138" fill="#38bdf8">User: jdupont</text>
-                            <text x="48" y="152" fill="#94a3b8" fontSize="10">GPO: SecuPostes</text>
+                    <div className="w-full bg-slate-900 text-white p-5 rounded-xl border border-slate-700 shadow-xl overflow-x-auto">
+                        <div className="flex items-center justify-between mb-3">
+                            <h4 className="text-xs uppercase font-extrabold tracking-wider text-sky-400">Active Directory · Structure Domaine &amp; UO</h4>
+                            <span className="text-[10px] bg-sky-950 text-sky-300 px-2 py-0.5 rounded border border-sky-800">AD DS</span>
+                        </div>
+                        <p className="text-[11px] text-slate-300 mb-3 leading-relaxed"><strong className="text-amber-300">Lecture :</strong> un encadré « domaine » regroupe des unités d'organisation (UO), chacune contenant des objets (utilisateurs, ordinateurs, groupes). Ce découpage hiérarchique sert à organiser et déléguer l'administration.</p>
+                        <svg viewBox="0 0 640 220" role="img" aria-label="Arborescence Active Directory : un domaine contenant des unités d'organisation et des objets" className="w-full h-auto font-sans">
+                            <defs>
+                                <marker id="ar" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                                    <path d="M 0 1 L 10 5 L 0 9 z" fill="#38bdf8" />
+                                </marker>
+                            </defs>
+                            {/* Domaine */}
+                            <rect x="200" y="10" width="240" height="35" rx="6" fill="#059669" />
+                            <text x="220" y="32" fill="white" fontWeight="bold" fontSize="12">Domaine : corp.local</text>
+
+                            {/* Lignes */}
+                            <line x1="320" y1="45" x2="120" y2="80" stroke="#94a3b8" strokeWidth="2" />
+                            <line x1="320" y1="45" x2="320" y2="80" stroke="#94a3b8" strokeWidth="2" />
+                            <line x1="320" y1="45" x2="520" y2="80" stroke="#94a3b8" strokeWidth="2" />
+
+                            {/* UO */}
+                            <rect x="60" y="80" width="130" height="35" rx="4" fill="#0284c7" />
+                            <text x="70" y="102" fill="white" fontSize="11" fontWeight="bold">OU_Utilisateurs</text>
+
+                            <rect x="255" y="80" width="130" height="35" rx="4" fill="#0284c7" />
+                            <text x="265" y="102" fill="white" fontSize="11" fontWeight="bold">OU_Ordinateurs</text>
+
+                            <rect x="455" y="80" width="130" height="35" rx="4" fill="#0284c7" />
+                            <text x="470" y="102" fill="white" fontSize="11" fontWeight="bold">OU_Serveurs</text>
+
+                            {/* Objet exemple */}
+                            <rect x="60" y="135" width="130" height="50" rx="4" fill="#1e293b" stroke="#38bdf8" strokeWidth="1.5" />
+                            <text x="70" y="155" fill="#38bdf8" fontSize="10" fontWeight="bold">User: jdupont</text>
+                            <text x="70" y="172" fill="#94a3b8" fontSize="9">GPO: SecuPostes</text>
+
+                            {/* Note de bas */}
+                            <rect x="20" y="195" width="600" height="20" rx="4" fill="#1e293b" stroke="#475569" />
+                            <text x="32" y="209" fill="#94a3b8" fontSize="10">Contexte pro : la structure UO reflète l'organisation (par service, par site). Les GPO s'appliquent selon LSDOU.</text>
                         </svg>
                     </div>
                 );
