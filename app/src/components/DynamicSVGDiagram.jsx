@@ -778,29 +778,51 @@ export const DynamicSVGDiagram = ({ type }) => {
 
             if (type === 'nat-flow') {
                 return (
-                    <div className="w-full bg-slate-900 text-white p-4 rounded-lg overflow-x-auto">
-                        <h4 className="text-xs uppercase font-bold text-sky-400 mb-2">SVG : un paquet à travers le NAT (PAT)</h4>
-                        <p className="text-[11px] text-slate-300 mb-2"><strong className="text-amber-300">Lecture :</strong> à l'aller le routeur réécrit la source (10.1.1.10:1025 → 203.0.113.5:49213) et note la correspondance ; au retour il restaure la destination. L'IP publique est partagée par TOUS les postes, différenciés par les ports.</p>
-                        <svg viewBox="0 0 560 190" role="img" aria-label="Traduction NAT aller et retour" className="w-full h-auto text-xs">
-                            <rect x="20" y="60" width="130" height="60" rx="10" fill="#0284c7" />
-                            <text x="40" y="85" fill="white" fontWeight="bold">PC interne</text>
+                    <div className="w-full bg-slate-900 text-white p-5 rounded-xl border border-slate-700 shadow-xl overflow-x-auto">
+                        <div className="flex items-center justify-between mb-3">
+                            <h4 className="text-xs uppercase font-extrabold tracking-wider text-sky-400">Réseaux &amp; Internet · Flux NAT (PAT)</h4>
+                            <span className="text-[10px] bg-sky-950 text-sky-300 px-2 py-0.5 rounded border border-sky-800">RFC 3022</span>
+                        </div>
+                        <p className="text-[11px] text-slate-300 mb-3 leading-relaxed"><strong className="text-amber-300">Lecture :</strong> à l'aller le routeur réécrit la source (10.1.1.10:1025 → 203.0.113.5:49213) et note la correspondance ; au retour il restaure la destination. L'IP publique est partagée par TOUS les postes, différenciés par les ports.</p>
+                        <svg viewBox="0 0 640 260" role="img" aria-label="Traduction NAT aller et retour" className="w-full h-auto font-sans">
+                            <defs>
+                                <marker id="ar" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                                    <path d="M 0 1 L 10 5 L 0 9 z" fill="#22c55e" />
+                                </marker>
+                            </defs>
+                            {/* PC interne */}
+                            <rect x="20" y="60" width="140" height="60" rx="6" fill="#0284c7" />
+                            <text x="40" y="85" fill="white" fontWeight="bold" fontSize="11">PC interne</text>
                             <text x="35" y="105" fill="#bae6fd" fontSize="10">10.1.1.10:1025</text>
-                            <rect x="215" y="45" width="130" height="90" rx="10" fill="#059669" />
-                            <text x="235" y="70" fill="white" fontWeight="bold">Routeur NAT</text>
-                            <text x="228" y="90" fill="#a7f3d0" fontSize="10">table de traduction :</text>
-                            <text x="228" y="106" fill="#a7f3d0" fontSize="10">10.1.1.10:1025 ⇄</text>
-                            <text x="228" y="122" fill="#a7f3d0" fontSize="10">203.0.113.5:49213</text>
-                            <rect x="410" y="60" width="130" height="60" rx="10" fill="#7c3aed" />
-                            <text x="435" y="85" fill="white" fontWeight="bold">Serveur Internet</text>
-                            <text x="430" y="105" fill="#ddd6fe" fontSize="10">198.51.100.80:443</text>
-                            <line x1="150" y1="80" x2="215" y2="80" stroke="#22c55e" strokeWidth="3" markerEnd="url(#ar)" />
-                            <line x1="345" y1="80" x2="410" y2="80" stroke="#22c55e" strokeWidth="3" markerEnd="url(#ar)" />
-                            <text x="170" y="70" fill="#22c55e" fontSize="10">source réécrite →</text>
-                            <text x="352" y="70" fill="#22c55e" fontSize="10">203.0.113.5:49213 →</text>
-                            <line x1="410" y1="120" x2="345" y2="120" stroke="#f59e0b" strokeWidth="3" markerEnd="url(#ar)" />
-                            <line x1="215" y1="120" x2="150" y2="120" stroke="#f59e0b" strokeWidth="3" markerEnd="url(#ar)" />
-                            <text x="250" y="140" fill="#f59e0b" fontSize="10">retour : destination restaurée via la table</text>
-                            <text x="140" y="170" fill="#94a3b8" fontSize="10">Un paquet ENTRANT sans entrée dans la table est détruit — d'où l'isolation naturelle du réseau interne.</text>
+
+                            {/* Routeur NAT */}
+                            <rect x="230" y="45" width="180" height="90" rx="8" fill="#059669" />
+                            <text x="250" y="70" fill="white" fontWeight="bold" fontSize="11">Routeur NAT</text>
+                            <text x="243" y="90" fill="#a7f3d0" fontSize="10">table de traduction :</text>
+                            <text x="243" y="106" fill="#a7f3d0" fontSize="10">10.1.1.10:1025 ⇄</text>
+                            <text x="243" y="122" fill="#a7f3d0" fontSize="10">203.0.113.5:49213</text>
+
+                            {/* Serveur Internet */}
+                            <rect x="480" y="60" width="140" height="60" rx="6" fill="#7c3aed" />
+                            <text x="505" y="85" fill="white" fontWeight="bold" fontSize="11">Serveur Internet</text>
+                            <text x="500" y="105" fill="#ddd6fe" fontSize="10">198.51.100.80:443</text>
+
+                            {/* Aller */}
+                            <line x1="160" y1="80" x2="230" y2="80" stroke="#22c55e" strokeWidth="2.5" markerEnd="url(#ar)" />
+                            <line x1="410" y1="80" x2="480" y2="80" stroke="#22c55e" strokeWidth="2.5" markerEnd="url(#ar)" />
+                            <text x="170" y="70" fill="#22c55e" fontSize="10" fontWeight="bold">source réécrite →</text>
+                            <text x="415" y="70" fill="#22c55e" fontSize="10" fontWeight="bold">203.0.113.5:49213 →</text>
+
+                            {/* Retour */}
+                            <line x1="480" y1="120" x2="410" y2="120" stroke="#f59e0b" strokeWidth="2.5" markerEnd="url(#ar)" />
+                            <line x1="230" y1="120" x2="160" y2="120" stroke="#f59e0b" strokeWidth="2.5" markerEnd="url(#ar)" />
+                            <text x="250" y="140" fill="#f59e0b" fontSize="10" fontWeight="bold">retour : destination restaurée via la table</text>
+
+                            {/* Note de bas */}
+                            <rect x="20" y="180" width="600" height="60" rx="6" fill="#1e293b" stroke="#475569" />
+                            <text x="32" y="200" fill="#94a3b8" fontSize="10">Un paquet ENTRANT sans entrée dans la table est détruit — d'où l'isolation naturelle du réseau interne.</text>
+                            <text x="32" y="218" fill="#94a3b8" fontSize="10">Contexte pro : le NAT masque l'architecture interne et permet de partager une seule IP publique entre tous les postes.</text>
+                            <text x="32" y="236" fill="#94a3b8" fontSize="10">Vérification : show ip nat translations · show ip nat statistics · clear ip nat translation * (pour vider la table).</text>
                         </svg>
                     </div>
                 );
