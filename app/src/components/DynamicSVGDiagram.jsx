@@ -808,30 +808,55 @@ export const DynamicSVGDiagram = ({ type }) => {
 
             if (type === 'acl-evaluation') {
                 return (
-                    <div className="w-full bg-slate-900 text-white p-4 rounded-lg overflow-x-auto">
-                        <h4 className="text-xs uppercase font-bold text-sky-400 mb-2">SVG : une ACL se lit de haut en bas — premier match gagnant</h4>
-                        <p className="text-[11px] text-slate-300 mb-2"><strong className="text-amber-300">Lecture :</strong> chaque paquet descend la liste ; la première ligne qui matche tranche (permit ou deny) et le reste est ignoré. Si rien ne matche : le deny any IMPLICITE rejette tout — une ACL « permit seulement » coupe donc tout le reste.</p>
-                        <svg viewBox="0 0 560 200" role="img" aria-label="Évaluation séquentielle d'une ACL" className="w-full h-auto text-xs">
-                            <rect x="20" y="85" width="90" height="34" rx="8" fill="#0284c7" />
-                            <text x="35" y="107" fill="white" fontWeight="bold">Paquet</text>
-                            <rect x="170" y="15" width="230" height="28" rx="5" fill="#059669" />
-                            <text x="180" y="34" fill="white">1. permit tcp … eq 443 → ✓ passe</text>
-                            <rect x="170" y="55" width="230" height="28" rx="5" fill="#dc2626" />
-                            <text x="180" y="74" fill="white">2. deny ip … → ✕ rejeté</text>
-                            <rect x="170" y="95" width="230" height="28" rx="5" fill="#475569" />
-                            <text x="180" y="114" fill="white">3. permit ip any → ✓ passe</text>
-                            <rect x="170" y="140" width="230" height="28" rx="5" fill="#1e293b" stroke="#ef4444" />
-                            <text x="180" y="159" fill="#fca5a5">implicite : deny any → ✕ rejeté</text>
-                            <line x1="110" y1="102" x2="165" y2="29" stroke="#94a3b8" strokeWidth="2" />
-                            <line x1="110" y1="102" x2="165" y2="69" stroke="#94a3b8" strokeWidth="2" />
-                            <line x1="110" y1="102" x2="165" y2="109" stroke="#94a3b8" strokeWidth="2" />
-                            <line x1="110" y1="102" x2="165" y2="154" stroke="#94a3b8" strokeWidth="2" />
-                            <text x="410" y="34" fill="#94a3b8" fontSize="10">stop au 1er match</text>
-                            <text x="410" y="54" fill="#94a3b8" fontSize="10">l'ordre est une</text>
-                            <text x="410" y="68" fill="#94a3b8" fontSize="10">décision d'archi :</text>
-                            <text x="410" y="82" fill="#94a3b8" fontSize="10">une ligne large</text>
-                            <text x="410" y="96" fill="#94a3b8" fontSize="10">en tûte masque</text>
-                            <text x="410" y="110" fill="#94a3b8" fontSize="10">tout ce qui suit.</text>
+                    <div className="w-full bg-slate-900 text-white p-5 rounded-xl border border-slate-700 shadow-xl overflow-x-auto">
+                        <div className="flex items-center justify-between mb-3">
+                            <h4 className="text-xs uppercase font-extrabold tracking-wider text-sky-400">Réseaux &amp; Sécurité · Évaluation d'une ACL</h4>
+                            <span className="text-[10px] bg-sky-950 text-sky-300 px-2 py-0.5 rounded border border-sky-800">Cisco IOS</span>
+                        </div>
+                        <p className="text-[11px] text-slate-300 mb-3 leading-relaxed"><strong className="text-amber-300">Lecture :</strong> chaque paquet descend la liste ; la première ligne qui matche tranche (permit ou deny) et le reste est ignoré. Si rien ne matche : le deny any IMPLICITE rejette tout.</p>
+                        <svg viewBox="0 0 640 260" role="img" aria-label="Évaluation séquentielle d'une ACL" className="w-full h-auto font-sans">
+                            <defs>
+                                <marker id="ar" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                                    <path d="M 0 1 L 10 5 L 0 9 z" fill="#94a3b8" />
+                                </marker>
+                            </defs>
+                            {/* Paquet */}
+                            <rect x="20" y="100" width="100" height="40" rx="6" fill="#0284c7" />
+                            <text x="35" y="125" fill="white" fontWeight="bold" fontSize="11">Paquet</text>
+
+                            {/* Règles ACL */}
+                            <rect x="170" y="20" width="260" height="30" rx="5" fill="#059669" />
+                            <text x="180" y="40" fill="white" fontSize="10">1. permit tcp … eq 443 → ✓ passe</text>
+
+                            <rect x="170" y="60" width="260" height="30" rx="5" fill="#dc2626" />
+                            <text x="180" y="80" fill="white" fontSize="10">2. deny ip … → ✕ rejeté</text>
+
+                            <rect x="170" y="100" width="260" height="30" rx="5" fill="#475569" />
+                            <text x="180" y="120" fill="white" fontSize="10">3. permit ip any → ✓ passe</text>
+
+                            <rect x="170" y="140" width="260" height="30" rx="5" fill="#1e293b" stroke="#ef4444" strokeWidth="1.5" />
+                            <text x="180" y="160" fill="#fca5a5" fontSize="10">implicite : deny any → ✕ rejeté</text>
+
+                            {/* Liens */}
+                            <line x1="120" y1="120" x2="165" y2="35" stroke="#94a3b8" strokeWidth="2" />
+                            <line x1="120" y1="120" x2="165" y2="75" stroke="#94a3b8" strokeWidth="2" />
+                            <line x1="120" y1="120" x2="165" y2="115" stroke="#94a3b8" strokeWidth="2" />
+                            <line x1="120" y1="120" x2="165" y2="155" stroke="#94a3b8" strokeWidth="2" />
+
+                            {/* Note de droite */}
+                            <rect x="460" y="40" width="160" height="160" rx="6" fill="#1e293b" stroke="#475569" />
+                            <text x="472" y="62" fill="#94a3b8" fontSize="10" fontWeight="bold">Règles d'or :</text>
+                            <text x="472" y="84" fill="#94a3b8" fontSize="10">• stop au 1er match</text>
+                            <text x="472" y="104" fill="#94a3b8" fontSize="10">• l'ordre est une</text>
+                            <text x="472" y="118" fill="#94a3b8" fontSize="10">  décision d'archi</text>
+                            <text x="472" y="138" fill="#94a3b8" fontSize="10">• une ligne large</text>
+                            <text x="472" y="152" fill="#94a3b8" fontSize="10">  en tête masque</text>
+                            <text x="472" y="166" fill="#94a3b8" fontSize="10">  tout ce qui suit</text>
+
+                            {/* Note de bas */}
+                            <rect x="20" y="200" width="600" height="45" rx="6" fill="#1e293b" stroke="#475569" />
+                            <text x="32" y="220" fill="#94a3b8" fontSize="10">Contexte pro : une ACL « permit seulement » coupe tout le reste. Toujours ajouter un deny explicite pour la lisibilité (show access-lists).</text>
+                            <text x="32" y="238" fill="#94a3b8" fontSize="10">Vérification : show ip access-lists · debug ip packet (à éviter en prod) · show ip interface (quelle ACL appliquée ?).</text>
                         </svg>
                     </div>
                 );
