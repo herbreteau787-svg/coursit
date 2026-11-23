@@ -12,7 +12,7 @@ export const AIS_COURSES = [
                 ],
                 lessons: [
                     { title: "Leçon 1 — L'hygiène de l'administrateur", parts: [
-                        { h: "Des comptes bien séparés", t: "On travaille au quotidien avec un compte utilisateur ordinaire, et on réserve le compte d'administration aux opérations sensibles. Si le compte de tous les jours est compromis (mail piégé, site usurpé), l'attaquant n'obtient pas les clés de tout le système." },
+                        { h: "Des comptes bien séparés", t: "On travaille au quotidien avec un compte utilisateur ordinaire, et on réserve le compte d'administration aux opérations sensibles. Si le compte de tous les jours est compromis (mail piégé, site usurpé), l'attaquant n'obtient pas les clés de tout le système." , schema: 'admin-it-bonnes-pratiques' },
                         { h: "Le moindre privilège", t: "Chaque personne (et chaque service logiciel) ne reçoit que les droits strictement nécessaires. Les droits passent par des groupes révisés périodiquement, jamais par des accumulations au fil de l'eau. Un compte qui quitte l'entreprise perd ses droits le jour même." },
                         { h: "La double authentification (MFA)", t: "Le MFA demande un second facteur : code temporaire, application d'authentification, clé physique. Un mot de passe volé ne suffit plus à l'attaquant. Priorité d'application : les accès distants et tous les comptes d'administration." }
                     ]},
@@ -137,7 +137,7 @@ export const AIS_COURSES = [
                 ],
                 lessons: [
                     { title: "Leçon 1 — Windows Server et ses rôles", parts: [
-                        { h: "Les rôles courants", t: "AD DS (l'annuaire du TSSR CP2), DNS, DHCP, serveur de fichiers… Chaque rôle répond à un service rendu aux utilisateurs ou au réseau. Un environnement « Windows » sobre tient souvent avec cet ensemble côté serveur." },
+                        { h: "Les rôles courants", t: "AD DS (l'annuaire du TSSR CP2), DNS, DHCP, serveur de fichiers… Chaque rôle répond à un service rendu aux utilisateurs ou au réseau. Un environnement « Windows » sobre tient souvent avec cet ensemble côté serveur." , schema: 'linux-architecture' },
                         { h: "Pourquoi séparer", t: "Mettre tout sur un seul serveur simplifie la gestion et crée un point de défaillance unique : une mise à jour ratée ou un incident touche l'annuaire, le DHCP et les fichiers en même temps. Les rôles critiques se séparent, surtout l'annuaire." },
                         { h: "Quand regrouper", t: "Une PME peut regrouper plusieurs rôles sur une même machine virtualisée (rappel TSSR CP5) quand le volume le permet. La séparation est un curseur à justifier, pas un dogme non plus : les rôles critiques (AD DS, fichiers sensibles) vont en priorité à leur propre machine." }
                     ]},
@@ -259,7 +259,7 @@ export const AIS_COURSES = [
                         { h: "Les questions à jamais oublier", t: "Que se passe-t-il en cas de panne (disponibilité attendue) ? Comment sont gérées les sauvegardes ? Qui administre après la livraison ? Ces trois questions structurent la plupart des débats." }
                     ]},
                     { title: "Leçon 2 — Architecturer", parts: [
-                        { h: "D'abord la logique, ensuite le physique", t: "Le cahier des charges décrit les services, les flux et les volumes AVANT de parler matériel. Une topologie se dessine après le besoin : étoile au bureau, arbre entre bâtiments, maillé entre sites critiques.", img: 'images/network-topologies.svg', imgCaption: 'Les topologies réseau classiques (domaine public, Wikimedia Commons) : bus, anneau, étoile, maillé, arbre. L\'étoile autour d\'un commutateur central est le standard moderne.' },
+                        { h: "D'abord la logique, ensuite le physique", t: "Le cahier des charges décrit les services, les flux et les volumes AVANT de parler matériel. Une topologie se dessine après le besoin : étoile au bureau, arbre entre bâtiments, maillé entre sites critiques.", schema: 'topologies-fr-v2', imgCaption: 'Schéma des topologies réseau classiques : bus, anneau, étoile, maillé, arbre. L\'étoile est le standard moderne.' },
                         { h: "Intégrer les risques", t: "En France, la méthode de référence pour l'analyse des risques est EBIOS RM (publiée par l'ANSSI, l'agence nationale de la sécurité des systèmes d'information) : elle identifie les scénarios redoutés et guide les mesures. Au minimum, on liste pour chaque bloc : que se passe-t-il si ce bloc tombe ou est compromis ?" },
                         { h: "Les hypothèses écrites", t: "« Cette solution est dimensionnée pour 150 utilisateurs avec une croissance estimée de 10 % par an, sur la base de 2 Go de données par utilisateur. » Chaque hypothèse écrite est une limite assumée et une base de discussion honnête. L'hypothèse tacite devient un litige." }
                     ]},
@@ -312,7 +312,7 @@ export const AIS_COURSES = [
                 ],
                 lessons: [
                     { title: "Leçon 1 — Préparer la bascule", parts: [
-                        { h: "La recette, c'est-à-dire vérifier le besoin", t: "La recette vérifie que la solution répond réellement au cahier des charges (AIS CP5) : temps de réponse, volumes, sauvegardes, fonction précise que le métier attendait. Tester « ça marche » ne suffit pas : on teste que ça répond au contrat." },
+                        { h: "La recette, c'est-à-dire vérifier le besoin", t: "La recette vérifie que la solution répond réellement au cahier des charges (AIS CP5) : temps de réponse, volumes, sauvegardes, fonction précise que le métier attendait. Tester « ça marche » ne suffit pas : on teste que ça répond au contrat." , schema: 'deploiement-postes' },
                         { h: "Le plan de bascule écrit", t: "Un document daté : étapes numérotées avec horaire prévu et responsable, critères de succès de chaque étape, points de contrôle, et surtout le plan de retour arrière (rollback) : quand on le déclenche, qui le décide, combien de temps on accepte d'avancer avant de renoncer." },
                         { h: "La fenêtre et l'annonce", t: "Fenêtre creuse choisie de préférence (soirée, week-end...), utilisateurs prévenus avec les impacts réels (indisponibilité de quoi pendant combien de temps, qui appeler en cas de problème le lendemain). Le support (TSSR CP1) doit aussi connaître l'opération pour traiter les appels de la matinée suivante." }
                     ]},
@@ -406,7 +406,7 @@ export const AIS_COURSES = [
                 ],
                 lessons: [
                     { title: "Leçon 1 — Inventorier, puis qualifier", parts: [
-                        { h: "On ne mesure que ce que l'on connaît", t: "Premier exercice de la mesure : l'inventaire des actifs (serveurs, équipements, comptes à privilèges, données sensibles). Ce qui n'est pas listé n'est ni surveillé ni protégé — et c'est toujours par là que passe le problème." },
+                        { h: "On ne mesure que ce que l'on connaît", t: "Premier exercice de la mesure : l'inventaire des actifs (serveurs, équipements, comptes à privilèges, données sensibles). Ce qui n'est pas listé n'est ni surveillé ni protégé — et c'est toujours par là que passe le problème." , schema: 'cyber-defense-v2' },
                         { h: "Trois mots bien employés", t: "La vulnérabilité est une faiblesse d'un système (logiciel non à jour, port ouvert). La menace est ce qui peut l'exploiter (un attaquant, un malware). Le risque croise les deux avec l'impact. Parler de « risque » seul ne dit rien : citez toujours ce qui rend le risque acceptable ou pas." },
                         { h: "La mesure n'est pas un score magique", t: "Aucun chiffre seul (score, note d'éditeur) ne résume la sécurité. La mesure utilise une série d'indicateurs suivis dans le temps — correctifs appliqués, comptes obsolètes, incidents traités — contre les objectifs internes de l'organisation." }
                     ]},
@@ -459,7 +459,7 @@ export const AIS_COURSES = [
                 ],
                 lessons: [
                     { title: "Leçon 1 — Cadrer par la politique", parts: [
-                        { h: "La PSSI, la loi du jeu", img: 'images/defense-depth.svg', imgCaption: 'Modèle de l\'oignon — défense en profondeur (Wikimedia Commons, CC BY-SA 3.0 — Kbolino) : chaque couche ralentit l\'attaquant. Si la périmètre cède, la donnée au centre reste protégée par les couches internes.', t: "La PSSI (politique de sécurité des systèmes d'information) énonce les règles, les responsabilités et les engagements de l'organisation en matière de sécurité. Courte et signée par la direction, elle décline en règles par domaine (accès, postes, réseaux, données). Sans engagement de la direction, une PSSI est un texte d'étagère." },
+                        { h: "La PSSI, la loi du jeu", schema: 'cyber-defense-v2', imgCaption: 'Schéma de défense en profondeur : couches de sécurité concentriques, de la périphérie aux données.', t: "La PSSI (politique de sécurité des systèmes d'information) énonce les règles, les responsabilités et les engagements de l'organisation en matière de sécurité. Courte et signée par la direction, elle décline en règles par domaine (accès, postes, réseaux, données). Sans engagement de la direction, une PSSI est un texte d'étagère." },
                         { h: "Le repère ISO/IEC 27001", t: "ISO/IEC 27001 est le standard international du management de la sécurité de l'information (SMSI) ; il est certifiable — une organisation peut faire auditer et certifier son SMSI. Beaucoup d'entreprises s'en inspirent sans chercher la certification : la structure est déjà valable." },
                         { h: "La déclinaison en procédures", t: "La PSSI dit le « pourquoi et le quoi » ; les procédures disent le « comment pas à pas » (ouvrir un accès, traiter un incident...). Une politique sans procédures ne s'applique pas ; des procédures sans politique n'ont pas de cap." }
                     ]},
@@ -511,7 +511,7 @@ export const AIS_COURSES = [
                 ],
                 lessons: [
                     { title: "Leçon 1 — Détecter et qualifier", parts: [
-                        { h: "Par où l'incident arrive", t: "Sources typiques d'alertes : antivirus/EDR, alertes de supervision inhabituelles (trafic anormal, authentifications bizarres), signalement utilisateur (« ce mail est bizarre »). En pratique, la qualité de la détection vient directement de la supervision (AIS CP7) et des journaux centralisés (AIS CP1)." },
+                        { h: "Par où l'incident arrive", t: "Sources typiques d'alertes : antivirus/EDR, alertes de supervision inhabituelles (trafic anormal, authentifications bizarres), signalement utilisateur (« ce mail est bizarre »). En pratique, la qualité de la détection vient directement de la supervision (AIS CP7) et des journaux centralisés (AIS CP1)." , schema: 'gestion-incidents' },
                         { h: "Qualifier avant d'agir", t: "Un incident de sécurité est un évènement qui compromet ou menace l'intégrité, la confidentialité ou la disponibilité du système d'information. On qualifie rapidement : quel équipement, quelle ampleur (un poste ? un serveur ? le domaine ?), quelle nature (vol de compte, malware, rançongiciel ?). La qualification décide de la réponse." },
                         { h: "L'équipe et la chaîne de décision", t: "Chaque organisation devrait connaître à l'avance : qui décide (DSI, direction selon la gravité), qui exécute, qui communique (en interne, vers les utilisateurs, les clients...), et quelles coordonnées d'urgence reconnues. En France, le CERT-FR (centre gouvernemental de veille, d'alerte et de réponse aux attaques informatiques) est un référent pour les alertes et conseils de sécurité." }
                     ]},

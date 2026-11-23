@@ -2088,6 +2088,78 @@ export const DynamicSVGDiagram = ({ type }) => {
                 );
             }
 
+            if (type === 'admin-it-bonnes-pratiques') {
+                return (
+                    <div className="w-full bg-slate-900 text-white p-5 rounded-xl border border-slate-700 shadow-xl overflow-x-auto">
+                        <div className="flex items-center justify-between mb-3">
+                            <h4 className="text-xs uppercase font-extrabold tracking-wider text-sky-400">Administration IT - Bonnes Pratiques</h4>
+                            <span className="text-[10px] bg-sky-950 text-sky-300 px-2 py-0.5 rounded border border-sky-800">Processus / Outils</span>
+                        </div>
+                        <p className="text-[11px] text-slate-300 mb-3 leading-relaxed"><strong className="text-amber-300">Lecture :</strong> l'administration IT repose sur des processus (ITIL), des outils (ticketing, supervision) et des bonnes pratiques (documentation, sauvegardes, sécurité).</p>
+                        <svg viewBox="0 0 640 200" role="img" aria-label="Administration IT : processus, outils, documentation, sauvegardes" className="w-full h-auto font-sans">
+                            <rect x="20" y="40" width="140" height="80" rx="8" fill="#0284c7" />
+                            <text x="40" y="65" fill="white" fontSize="11" fontWeight="bold">Processus</text>
+                            <text x="40" y="82" fill="#bae6fd" fontSize="9">ITIL / ITSM</text>
+                            <text x="40" y="98" fill="#bae6fd" fontSize="9">Incident / Demande</text>
+                            <rect x="180" y="40" width="140" height="80" rx="8" fill="#059669" />
+                            <text x="200" y="65" fill="white" fontSize="11" fontWeight="bold">Outils</text>
+                            <text x="200" y="82" fill="#a7f3d0" fontSize="9">Ticketing (GLPI)</text>
+                            <text x="200" y="98" fill="#a7f3d0" fontSize="9">Supervision (Zabbix)</text>
+                            <rect x="340" y="40" width="140" height="80" rx="8" fill="#7c3aed" />
+                            <text x="360" y="65" fill="white" fontSize="11" fontWeight="bold">Documentation</text>
+                            <text x="360" y="82" fill="#ddd6fe" fontSize="9">Base de connaissances</text>
+                            <text x="360" y="98" fill="#ddd6fe" fontSize="9">Procédures / Runbooks</text>
+                            <rect x="500" y="40" width="120" height="80" rx="8" fill="#d97706" />
+                            <text x="515" y="65" fill="white" fontSize="11" fontWeight="bold">Sauvegardes</text>
+                            <text x="515" y="82" fill="#fde68a" fontSize="9">Règle 3-2-1</text>
+                            <text x="515" y="98" fill="#fde68a" fontSize="9">PRA / PCA</text>
+                            <line x1="160" y1="80" x2="180" y2="80" stroke="#22c55e" strokeWidth="2.5" />
+                            <line x1="320" y1="80" x2="340" y2="80" stroke="#22c55e" strokeWidth="2.5" />
+                            <line x1="480" y1="80" x2="500" y2="80" stroke="#22c55e" strokeWidth="2.5" />
+                            <rect x="20" y="140" width="600" height="45" rx="6" fill="#1e293b" stroke="#475569" />
+                            <text x="32" y="162" fill="#94a3b8" fontSize="10">Contexte pro : l'administration IT efficace repose sur la documentation, l'automatisation et la traçabilité.</text>
+                            <text x="32" y="178" fill="#94a3b8" fontSize="10">Vérification : audit régulier, revue des processus, mise à jour de la base de connaissances.</text>
+                        </svg>
+                    </div>
+                );
+            }
+
+            if (type === 'gestion-incidents') {
+                return (
+                    <div className="w-full bg-slate-900 text-white p-5 rounded-xl border border-slate-700 shadow-xl overflow-x-auto">
+                        <div className="flex items-center justify-between mb-3">
+                            <h4 className="text-xs uppercase font-extrabold tracking-wider text-sky-400">Sécurité - Gestion d'Incidents</h4>
+                            <span className="text-[10px] bg-sky-950 text-sky-300 px-2 py-0.5 rounded border border-sky-800">Détection / Réponse</span>
+                        </div>
+                        <p className="text-[11px] text-slate-300 mb-3 leading-relaxed"><strong className="text-amber-300">Lecture :</strong> la gestion d'incidents suit un cycle : détection, qualification, réponse, remédiation, retour d'expérience. Chaque étape a son acteur et son outil.</p>
+                        <svg viewBox="0 0 640 200" role="img" aria-label="Gestion d'incidents : détection à remédiation" className="w-full h-auto font-sans">
+                            <rect x="20" y="40" width="110" height="60" rx="6" fill="#dc2626" />
+                            <text x="35" y="65" fill="white" fontSize="10" fontWeight="bold">Détection</text>
+                            <text x="30" y="82" fill="#fecaca" fontSize="9">SIEM / alertes</text>
+                            <rect x="145" y="40" width="110" height="60" rx="6" fill="#d97706" />
+                            <text x="155" y="65" fill="white" fontSize="10" fontWeight="bold">Qualification</text>
+                            <text x="150" y="82" fill="#fde68a" fontSize="9">Gravité / impact</text>
+                            <rect x="270" y="40" width="110" height="60" rx="6" fill="#0284c7" />
+                            <text x="280" y="65" fill="white" fontSize="10" fontWeight="bold">Réponse</text>
+                            <text x="275" y="82" fill="#bae6fd" fontSize="9">Isolation / blocage</text>
+                            <rect x="395" y="40" width="110" height="60" rx="6" fill="#059669" />
+                            <text x="400" y="65" fill="white" fontSize="10" fontWeight="bold">Remédiation</text>
+                            <text x="400" y="82" fill="#a7f3d0" fontSize="9">Correction / patch</text>
+                            <rect x="520" y="40" width="100" height="60" rx="6" fill="#7c3aed" />
+                            <text x="525" y="65" fill="white" fontSize="10" fontWeight="bold">Retour XP</text>
+                            <text x="525" y="82" fill="#ddd6fe" fontSize="9">Amélioration</text>
+                            <line x1="130" y1="70" x2="145" y2="70" stroke="#22c55e" strokeWidth="2.5" />
+                            <line x1="255" y1="70" x2="270" y2="70" stroke="#22c55e" strokeWidth="2.5" />
+                            <line x1="380" y1="70" x2="395" y2="70" stroke="#22c55e" strokeWidth="2.5" />
+                            <line x1="505" y1="70" x2="520" y2="70" stroke="#22c55e" strokeWidth="2.5" />
+                            <rect x="20" y="120" width="600" height="60" rx="6" fill="#1e293b" stroke="#475569" />
+                            <text x="32" y="142" fill="#94a3b8" fontSize="10">Contexte pro : la gestion d'incidents est un processus ITIL. La détection précoce réduit l'impact. Le retour d'expérience améliore la prévention.</text>
+                            <text x="32" y="160" fill="#94a3b8" fontSize="10">Vérification : logs SIEM, tickets, rapports d'incident, revue post-mortem.</text>
+                        </svg>
+                    </div>
+                );
+            }
+
             return null;
         };
 
