@@ -403,28 +403,43 @@ export const DynamicSVGDiagram = ({ type }) => {
 
             if (type === 'decoupage-subnet-v4') {
                 return (
-                    <div className="w-full bg-slate-900 text-white p-4 rounded-lg overflow-x-auto">
-                        <h4 className="text-xs uppercase font-bold text-sky-400 mb-2">Génération SVG : Découpage Sous-Réseau /26 (Sujet 1.3)</h4>
-                        <p className="text-[11px] text-slate-300 mb-2"><strong className="text-amber-300">Description textuelle :</strong> la barre du haut représente le réseau d'origine 192.168.10.0/24 (de .0 à .255). En dessous, quatre encadrés bleus représentent les sous-réseaux /26 découpés à partir de ce bloc : sous-réseau 1 de .0 à .63 (62 hôtes), sous-réseau 2 de .64 à .127 (62 hôtes), sous-réseau 3 de .128 à .191 (62 hôtes) et sous-réseau 4 de .192 à .255 (62 hôtes).</p>
-                        <svg viewBox="0 0 550 140" role="img" aria-label="Découpage d'un /24 en sous-réseaux /26 avec plages d'adresses" className="w-full h-auto text-xs">
-                            <rect x="20" y="20" width="510" height="30" rx="4" fill="#1e293b" stroke="#475569" />
-                            <text x="180" y="40" fill="white" fontWeight="bold">Réseau d'Origine /24 : 192.168.10.0 à 192.168.10.255</text>
+                    <div className="w-full bg-slate-900 text-white p-5 rounded-xl border border-slate-700 shadow-xl overflow-x-auto">
+                        <div className="flex items-center justify-between mb-3">
+                            <h4 className="text-xs uppercase font-extrabold tracking-wider text-sky-400">Réseaux &amp; Adressage · Découpage Sous-réseau /26</h4>
+                            <span className="text-[10px] bg-sky-950 text-sky-300 px-2 py-0.5 rounded border border-sky-800">RFC 1918 / CIDR</span>
+                        </div>
+                        <p className="text-[11px] text-slate-300 mb-3 leading-relaxed"><strong className="text-amber-300">Lecture :</strong> la barre du haut représente le réseau d'origine 192.168.10.0/24 (de .0 à .255). En dessous, quatre encadrés bleus représentent les sous-réseaux /26 découpés à partir de ce bloc.</p>
+                        <svg viewBox="0 0 640 220" role="img" aria-label="Découpage d'un /24 en sous-réseaux /26 avec plages d'adresses" className="w-full h-auto font-sans">
+                            <defs>
+                                <marker id="ar" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                                    <path d="M 0 1 L 10 5 L 0 9 z" fill="#38bdf8" />
+                                </marker>
+                            </defs>
+                            {/* Réseau d'origine */}
+                            <rect x="20" y="20" width="600" height="40" rx="6" fill="#1e293b" stroke="#475569" strokeWidth="1.5" />
+                            <text x="180" y="45" fill="white" fontWeight="bold" fontSize="12">Réseau d'Origine /24 : 192.168.10.0 à 192.168.10.255</text>
 
-                            <rect x="20" y="65" width="120" height="50" rx="4" fill="#0369a1" />
-                            <text x="30" y="85" fill="white" fontWeight="bold">Sous-réseau 1 (/26)</text>
-                            <text x="30" y="102" fill="#93c5fd" fontSize="10">.0 à .63 (62 hôtes)</text>
+                            {/* Sous-réseaux /26 */}
+                            <rect x="20" y="80" width="145" height="60" rx="6" fill="#0369a1" />
+                            <text x="30" y="102" fill="white" fontWeight="bold" fontSize="11">Sous-réseau 1 (/26)</text>
+                            <text x="30" y="120" fill="#93c5fd" fontSize="10">.0 à .63 (62 hôtes)</text>
 
-                            <rect x="150" y="65" width="120" height="50" rx="4" fill="#0284c7" />
-                            <text x="160" y="85" fill="white" fontWeight="bold">Sous-réseau 2 (/26)</text>
-                            <text x="160" y="102" fill="#93c5fd" fontSize="10">.64 à .127 (62 hôtes)</text>
+                            <rect x="175" y="80" width="145" height="60" rx="6" fill="#0284c7" />
+                            <text x="185" y="102" fill="white" fontWeight="bold" fontSize="11">Sous-réseau 2 (/26)</text>
+                            <text x="185" y="120" fill="#93c5fd" fontSize="10">.64 à .127 (62 hôtes)</text>
 
-                            <rect x="280" y="65" width="120" height="50" rx="4" fill="#0369a1" />
-                            <text x="290" y="85" fill="white" fontWeight="bold">Sous-réseau 3 (/26)</text>
-                            <text x="290" y="102" fill="#93c5fd" fontSize="10">.128 à .191 (62 hôtes)</text>
+                            <rect x="330" y="80" width="145" height="60" rx="6" fill="#0369a1" />
+                            <text x="340" y="102" fill="white" fontWeight="bold" fontSize="11">Sous-réseau 3 (/26)</text>
+                            <text x="340" y="120" fill="#93c5fd" fontSize="10">.128 à .191 (62 hôtes)</text>
 
-                            <rect x="410" y="65" width="120" height="50" rx="4" fill="#0284c7" />
-                            <text x="420" y="85" fill="white" fontWeight="bold">Sous-réseau 4 (/26)</text>
-                            <text x="420" y="102" fill="#93c5fd" fontSize="10">.192 à .255 (62 hôtes)</text>
+                            <rect x="485" y="80" width="135" height="60" rx="6" fill="#0284c7" />
+                            <text x="495" y="102" fill="white" fontWeight="bold" fontSize="11">Sous-réseau 4 (/26)</text>
+                            <text x="495" y="120" fill="#93c5fd" fontSize="10">.192 à .255 (62 hôtes)</text>
+
+                            {/* Note de bas */}
+                            <rect x="20" y="160" width="600" height="45" rx="6" fill="#1e293b" stroke="#475569" />
+                            <text x="32" y="180" fill="#94a3b8" fontSize="10">Contexte pro : le découpage en /26 permet de créer 4 sous-réseaux de 62 hôtes chacun à partir d'un /24.</text>
+                            <text x="32" y="198" fill="#94a3b8" fontSize="10">Vérification : ipcalc 192.168.10.0/26 · subnetcalc · ou calcul manuel : 2^(32-26) - 2 = 62 hôtes.</text>
                         </svg>
                     </div>
                 );
