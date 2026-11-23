@@ -447,20 +447,37 @@ export const DynamicSVGDiagram = ({ type }) => {
 
             if (type === 'transformation-eui64') {
                 return (
-                    <div className="w-full bg-slate-900 text-white p-4 rounded-lg overflow-x-auto">
-                        <h4 className="text-xs uppercase font-bold text-sky-400 mb-2">Génération SVG : Dérivation EUI-64 IPv6 (Sujet 1.4)</h4>
-                        <p className="text-[11px] text-slate-300 mb-2"><strong className="text-amber-300">Description textuelle :</strong> à gauche, l'adresse MAC d'origine (encadré gris : 00:1A:2B:3C:4D:5E) ; une flèche bleue mène à l'encadré bleu où la valeur FF:FE est insérée au milieu des 48 bits (001A:2BFF:FE3C:4D5E) ; en dessous, l'encadré vert indique la dernière étape : l'inversion du 7e bit (U/L), qui donne l'identifiant final 021A:2BFF:FE3C:4D5E.</p>
-                        <svg viewBox="0 0 550 140" role="img" aria-label="Étapes de calcul EUI-64 pour dériver une adresse IPv6 d'une adresse MAC" className="w-full h-auto text-xs">
-                            <rect x="20" y="20" width="220" height="35" rx="4" fill="#334155" />
-                            <text x="30" y="42" fill="white" className="font-mono">MAC: 00:1A:2B : 3C:4D:5E</text>
+                    <div className="w-full bg-slate-900 text-white p-5 rounded-xl border border-slate-700 shadow-xl overflow-x-auto">
+                        <div className="flex items-center justify-between mb-3">
+                            <h4 className="text-xs uppercase font-extrabold tracking-wider text-sky-400">Réseaux &amp; IPv6 · Dérivation EUI-64</h4>
+                            <span className="text-[10px] bg-sky-950 text-sky-300 px-2 py-0.5 rounded border border-sky-800">RFC 4291</span>
+                        </div>
+                        <p className="text-[11px] text-slate-300 mb-3 leading-relaxed"><strong className="text-amber-300">Lecture :</strong> l'adresse MAC (48 bits) est transformée en identifiant d'interface IPv6 (64 bits) en insérant FFFE au milieu et en inversant le 7e bit (U/L).</p>
+                        <svg viewBox="0 0 640 200" role="img" aria-label="Étapes de calcul EUI-64 pour dériver une adresse IPv6 d'une adresse MAC" className="w-full h-auto font-sans">
+                            <defs>
+                                <marker id="ar" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                                    <path d="M 0 1 L 10 5 L 0 9 z" fill="#38bdf8" />
+                                </marker>
+                            </defs>
+                            {/* MAC d'origine */}
+                            <rect x="20" y="20" width="260" height="40" rx="6" fill="#334155" />
+                            <text x="30" y="45" fill="white" className="font-mono" fontSize="12" fontWeight="bold">MAC: 00:1A:2B : 3C:4D:5E</text>
 
-                            <path d="M 240 37 L 300 37" stroke="#38bdf8" strokeWidth="2" markerEnd="url(#arrow)" />
+                            {/* Flèche */}
+                            <line x1="280" y1="40" x2="340" y2="40" stroke="#38bdf8" strokeWidth="2.5" markerEnd="url(#ar)" />
 
-                            <rect x="310" y="20" width="220" height="35" rx="4" fill="#0369a1" />
-                            <text x="320" y="42" fill="#fbbf24" className="font-mono font-bold">001A:2B FF:FE 3C:4D5E</text>
+                            {/* Insertion FFFE */}
+                            <rect x="350" y="20" width="270" height="40" rx="6" fill="#0369a1" />
+                            <text x="360" y="45" fill="#fbbf24" className="font-mono" fontSize="12" fontWeight="bold">001A:2B FF:FE 3C:4D5E</text>
 
-                            <rect x="150" y="80" width="260" height="40" rx="4" fill="#059669" />
-                            <text x="160" y="98" fill="white" className="font-mono font-bold">Inversion du 7e bit (U/L) → 021A:2BFF:FE3C:4D5E</text>
+                            {/* Inversion du 7e bit */}
+                            <rect x="150" y="90" width="340" height="50" rx="6" fill="#059669" />
+                            <text x="160" y="112" fill="white" className="font-mono" fontSize="12" fontWeight="bold">Inversion du 7e bit (U/L) → 021A:2BFF:FE3C:4D5E</text>
+                            <text x="160" y="132" fill="#a7f3d0" fontSize="10">00 → 02 (bit U/L inversé de 0 à 1)</text>
+
+                            {/* Note de bas */}
+                            <rect x="20" y="160" width="600" height="30" rx="6" fill="#1e293b" stroke="#475569" />
+                            <text x="32" y="180" fill="#94a3b8" fontSize="10">Contexte pro : EUI-64 est le mode par défaut de SLAAC. Les privacy extensions (RFC 4941) remplacent l'EUI-64 par un identifiant aléatoire.</text>
                         </svg>
                     </div>
                 );
