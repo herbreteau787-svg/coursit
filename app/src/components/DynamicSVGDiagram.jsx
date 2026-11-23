@@ -602,41 +602,49 @@ export const DynamicSVGDiagram = ({ type }) => {
 
             if (type === 'osi-tcpip') {
                 return (
-                    <div className="w-full bg-slate-900 text-white p-4 rounded-lg overflow-x-auto">
-                        <div className="flex justify-between items-center mb-2">
-                            <h4 className="text-xs uppercase font-bold text-sky-400">Génération SVG : Modèle OSI vs TCP/IP</h4>
-                            <span className="text-[10px] text-slate-400 font-mono">Figure 6.1</span>
+                    <div className="w-full bg-slate-900 text-white p-5 rounded-xl border border-slate-700 shadow-xl overflow-x-auto">
+                        <div className="flex items-center justify-between mb-3">
+                            <h4 className="text-xs uppercase font-extrabold tracking-wider text-sky-400">Réseaux &amp; Modèles · OSI vs TCP/IP</h4>
+                            <span className="text-[10px] bg-sky-950 text-sky-300 px-2 py-0.5 rounded border border-sky-800">RFC 1122</span>
                         </div>
-                        <p className="text-[11px] text-slate-300 mb-2"><strong className="text-amber-300">Description textuelle :</strong> le schéma juxtapose à gauche le modèle OSI à 7 couches, à droite le modèle TCP/IP à 4 couches ; chaque couche TCP/IP couvre une ou plusieurs couches OSI ; les protocoles de chaque niveau sont listés à côté des cases.</p>
-                        <svg viewBox="0 0 600 240" role="img" aria-label="Correspondance entre les 7 couches du modèle OSI et les 4 couches du modèle TCP/IP" className="w-full h-auto text-xs">
-                            <g>
-                                <text x="10" y="20" fill="#38bdf8" fontWeight="bold">Modèle OSI (7 Couches)</text>
-                                <rect x="10" y="30" width="260" height="25" rx="4" fill="#0369a1" />
-                                <text x="20" y="47" fill="white">7. Application (HTTP, DNS, SSH)</text>
-                                <rect x="10" y="58" width="260" height="25" rx="4" fill="#0284c7" />
-                                <text x="20" y="75" fill="white">6. Présentation (TLS, JPEG)</text>
-                                <rect x="10" y="86" width="260" height="25" rx="4" fill="#38bdf8" />
-                                <text x="20" y="103" fill="slate-900" fontWeight="bold">5. Session (NetBIOS, RPC)</text>
-                                <rect x="10" y="114" width="260" height="25" rx="4" fill="#475569" />
-                                <text x="20" y="131" fill="white">4. Transport (TCP, UDP)</text>
-                                <rect x="10" y="142" width="260" height="25" rx="4" fill="#334155" />
-                                <text x="20" y="159" fill="white">3. Réseau (IP, ICMP, ARP)</text>
-                                <rect x="10" y="170" width="260" height="25" rx="4" fill="#1e293b" stroke="#475569" />
-                                <text x="20" y="187" fill="white">2. Liaison (Ethernet, 802.1Q)</text>
-                                <rect x="10" y="198" width="260" height="25" rx="4" fill="#0f172a" stroke="#334155" />
-                                <text x="20" y="215" fill="white">1. Physique (Côblage, RJ45)</text>
-                            </g>
-                            <g>
-                                <text x="330" y="20" fill="#f59e0b" fontWeight="bold">Modèle TCP/IP (4 Couches)</text>
-                                <rect x="330" y="30" width="250" height="80" rx="4" fill="#d97706" />
-                                <text x="340" y="75" fill="white" fontWeight="bold">1. Application (HTTP, DNS, SSH)</text>
-                                <rect x="330" y="114" width="250" height="25" rx="4" fill="#475569" />
-                                <text x="340" y="131" fill="white" fontWeight="bold">2. Transport (TCP, UDP)</text>
-                                <rect x="330" y="142" width="250" height="25" rx="4" fill="#334155" />
-                                <text x="340" y="159" fill="white" fontWeight="bold">3. Internet (IP, ICMP)</text>
-                                <rect x="330" y="170" width="250" height="53" rx="4" fill="#1e293b" stroke="#f59e0b" />
-                                <text x="340" y="200" fill="white" fontWeight="bold">4. Accès Réseau (Ethernet, Wi-Fi)</text>
-                            </g>
+                        <p className="text-[11px] text-slate-300 mb-3 leading-relaxed"><strong className="text-amber-300">Lecture :</strong> le schéma juxtapose à gauche le modèle OSI à 7 couches, à droite le modèle TCP/IP à 4 couches ; chaque couche TCP/IP couvre une ou plusieurs couches OSI.</p>
+                        <svg viewBox="0 0 640 260" role="img" aria-label="Correspondance entre les 7 couches du modèle OSI et les 4 couches du modèle TCP/IP" className="w-full h-auto font-sans">
+                            <defs>
+                                <marker id="ar" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                                    <path d="M 0 1 L 10 5 L 0 9 z" fill="#38bdf8" />
+                                </marker>
+                            </defs>
+                            {/* OSI */}
+                            <text x="10" y="20" fill="#38bdf8" fontWeight="bold" fontSize="11">Modèle OSI (7 Couches)</text>
+                            <rect x="10" y="30" width="280" height="25" rx="4" fill="#0369a1" />
+                            <text x="20" y="47" fill="white" fontSize="10">7. Application (HTTP, DNS, SSH)</text>
+                            <rect x="10" y="58" width="280" height="25" rx="4" fill="#0284c7" />
+                            <text x="20" y="75" fill="white" fontSize="10">6. Présentation (TLS, JPEG)</text>
+                            <rect x="10" y="86" width="280" height="25" rx="4" fill="#38bdf8" />
+                            <text x="20" y="103" fill="#0f172a" fontWeight="bold" fontSize="10">5. Session (NetBIOS, RPC)</text>
+                            <rect x="10" y="114" width="280" height="25" rx="4" fill="#475569" />
+                            <text x="20" y="131" fill="white" fontSize="10">4. Transport (TCP, UDP)</text>
+                            <rect x="10" y="142" width="280" height="25" rx="4" fill="#334155" />
+                            <text x="20" y="159" fill="white" fontSize="10">3. Réseau (IP, ICMP, ARP)</text>
+                            <rect x="10" y="170" width="280" height="25" rx="4" fill="#1e293b" stroke="#475569" />
+                            <text x="20" y="187" fill="white" fontSize="10">2. Liaison (Ethernet, 802.1Q)</text>
+                            <rect x="10" y="198" width="280" height="25" rx="4" fill="#0f172a" stroke="#334155" />
+                            <text x="20" y="215" fill="white" fontSize="10">1. Physique (Câblage, RJ45)</text>
+
+                            {/* TCP/IP */}
+                            <text x="330" y="20" fill="#f59e0b" fontWeight="bold" fontSize="11">Modèle TCP/IP (4 Couches)</text>
+                            <rect x="330" y="30" width="290" height="80" rx="4" fill="#d97706" />
+                            <text x="340" y="75" fill="white" fontWeight="bold" fontSize="11">1. Application (HTTP, DNS, SSH)</text>
+                            <rect x="330" y="114" width="290" height="25" rx="4" fill="#475569" />
+                            <text x="340" y="131" fill="white" fontWeight="bold" fontSize="11">2. Transport (TCP, UDP)</text>
+                            <rect x="330" y="142" width="290" height="25" rx="4" fill="#334155" />
+                            <text x="340" y="159" fill="white" fontWeight="bold" fontSize="11">3. Internet (IP, ICMP)</text>
+                            <rect x="330" y="170" width="290" height="53" rx="4" fill="#1e293b" stroke="#f59e0b" />
+                            <text x="340" y="200" fill="white" fontWeight="bold" fontSize="11">4. Accès Réseau (Ethernet, Wi-Fi)</text>
+
+                            {/* Note de bas */}
+                            <rect x="20" y="235" width="600" height="20" rx="4" fill="#1e293b" stroke="#475569" />
+                            <text x="32" y="249" fill="#94a3b8" fontSize="10">Contexte pro : le modèle OSI est le référentiel théorique, le modèle TCP/IP est celui utilisé en pratique (Internet).</text>
                         </svg>
                     </div>
                 );
