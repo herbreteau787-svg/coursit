@@ -2160,6 +2160,44 @@ export const DynamicSVGDiagram = ({ type }) => {
                 );
             }
 
+            if (type === 'ethernet-frame-fr') {
+                return (
+                    <div className="w-full bg-slate-900 text-white p-5 rounded-xl border border-slate-700 shadow-xl overflow-x-auto">
+                        <div className="flex items-center justify-between mb-3">
+                            <h4 className="text-xs uppercase font-extrabold tracking-wider text-sky-400">Reseau - Trame Ethernet 802.3</h4>
+                            <span className="text-[10px] bg-sky-950 text-sky-300 px-2 py-0.5 rounded border border-sky-800">IEEE 802.3</span>
+                        </div>
+                        <p className="text-[11px] text-slate-300 mb-3 leading-relaxed"><strong className="text-amber-300">Lecture :</strong> la trame Ethernet contient le preambule, le SFD, les MAC destination/source, l'EtherType, les donnees et le FCS (controle d'integrite). Le FCS alimente les compteurs CRC.</p>
+                        <svg viewBox="0 0 640 160" role="img" aria-label="Structure de la trame Ethernet" className="w-full h-auto font-sans">
+                            <rect x="20" y="40" width="60" height="40" rx="4" fill="#475569" />
+                            <text x="25" y="62" fill="white" fontSize="9" fontWeight="bold">Preambule</text>
+                            <text x="30" y="75" fill="#94a3b8" fontSize="8">7 octets</text>
+                            <rect x="85" y="40" width="40" height="40" rx="4" fill="#334155" />
+                            <text x="90" y="62" fill="white" fontSize="9" fontWeight="bold">SFD</text>
+                            <text x="92" y="75" fill="#94a3b8" fontSize="8">1 octet</text>
+                            <rect x="130" y="40" width="80" height="40" rx="4" fill="#0284c7" />
+                            <text x="135" y="62" fill="white" fontSize="9" fontWeight="bold">MAC Dest</text>
+                            <text x="140" y="75" fill="#bae6fd" fontSize="8">6 octets</text>
+                            <rect x="215" y="40" width="80" height="40" rx="4" fill="#0284c7" />
+                            <text x="220" y="62" fill="white" fontSize="9" fontWeight="bold">MAC Src</text>
+                            <text x="225" y="75" fill="#bae6fd" fontSize="8">6 octets</text>
+                            <rect x="300" y="40" width="60" height="40" rx="4" fill="#059669" />
+                            <text x="305" y="62" fill="white" fontSize="9" fontWeight="bold">EtherType</text>
+                            <text x="310" y="75" fill="#a7f3d0" fontSize="8">2 octets</text>
+                            <rect x="365" y="40" width="180" height="40" rx="4" fill="#7c3aed" />
+                            <text x="420" y="62" fill="white" fontSize="9" fontWeight="bold">Donnees</text>
+                            <text x="420" y="75" fill="#ddd6fe" fontSize="8">46-1500 octets</text>
+                            <rect x="550" y="40" width="50" height="40" rx="4" fill="#dc2626" />
+                            <text x="555" y="62" fill="white" fontSize="9" fontWeight="bold">FCS</text>
+                            <text x="555" y="75" fill="#fecaca" fontSize="8">4 octets</text>
+                            <rect x="20" y="100" width="600" height="45" rx="6" fill="#1e293b" stroke="#475569" />
+                            <text x="32" y="122" fill="#94a3b8" fontSize="10">Contexte pro : le FCS est le controle d'integrite qui alimente les compteurs CRC. Une trame abimee par un cable defectueux est jetee et comptee.</text>
+                            <text x="32" y="140" fill="#94a3b8" fontSize="10">Vérification : show interfaces (errors, CRC), Wireshark (FCS), tcpdump -e.</text>
+                        </svg>
+                    </div>
+                );
+            }
+
             return null;
         };
 
