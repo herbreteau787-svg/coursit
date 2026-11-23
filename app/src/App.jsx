@@ -2584,15 +2584,15 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
 
                             {/* Recherche centrée */}
                             <div className="w-full lg:flex-1 flex flex-col items-center gap-1">
-                                <div className="w-full md:w-2/3 mx-auto relative">
-                                    <svg className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 dark:text-slate-500" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
+                                <div className="w-full md:w-2/3 mx-auto relative rounded-xl p-[1px] bg-gradient-to-r from-[#ff0080] via-[#ff8c00] to-[#ffd700] shadow-[0_0_12px_rgba(255,0,128,0.18)] transition-all focus-within:shadow-[0_0_22px_rgba(255,0,128,0.45),0_0_22px_rgba(34,211,238,0.35)]">
+                                    <svg className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 z-10 w-5 h-5 text-[#ff8c00]" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
                                     <input
                                         type="text"
                                         aria-label="Rechercher un cours, un mot-clé"
                                         placeholder="Rechercher un cours, un code, un mot-clé…"
                                         value={searchQuery}
                                         onChange={(e) => { setSearchQuery(e.target.value); if (currentTab !== 'courses') setCurrentTab('courses'); }}
-                                        className="w-full h-12 px-6 pl-12 rounded-xl border border-slate-600 bg-slate-100/70 dark:bg-slate-900/70 backdrop-blur text-sm text-gray-900 dark:text-slate-100 placeholder-gray-500 dark:placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-sky-500/40 focus:border-sky-500 transition-all"
+                                        className="w-full h-12 px-6 pl-12 rounded-[11px] border-0 bg-slate-100 dark:bg-slate-900 text-sm text-gray-900 dark:text-slate-100 placeholder-gray-500 dark:placeholder-slate-400 focus:outline-none focus:ring-0 transition-all"
                                     />
                                 </div>
                                 {searchQuery && (
@@ -2613,7 +2613,8 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
                                 <button
                                     type="button"
                                     title="Espace personnel"
-                                    className="px-6 py-3 rounded-lg bg-gradient-to-r from-cyan-500 to-blue-600 text-white text-sm font-bold shadow-lg shadow-cyan-500/20 transition-all hover:brightness-110 hover:shadow-xl"
+                                    style={{ background: 'linear-gradient(90deg, #ff0080 0%, #ff8c00 50%, #ffd700 100%)' }}
+                                    className="px-6 py-3 rounded-lg text-white text-sm font-bold tracking-wide shadow-[0_0_20px_rgba(255,0,128,0.6)] transition-all duration-200 hover:brightness-[1.2] hover:shadow-[0_0_35px_rgba(255,0,128,0.9),0_0_60px_rgba(255,140,0,0.55)]"
                                 >
                                     Se connecter
                                 </button>
@@ -2651,10 +2652,10 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
                                             name={tab.icon}
                                             active={currentTab === tab.id}
                                             strokeWidth={1.5}
-                                            className={`w-8 h-8 p-0.5 shrink-0 ${
+                                            className={`w-8 h-8 p-0.5 shrink-0 transition-[filter,opacity] duration-200 ${
                                                 currentTab === tab.id
-                                                    ? 'text-cyan-400'
-                                                    : 'text-gray-600 dark:text-gray-400'
+                                                    ? 'text-[#ff0080] opacity-100 [filter:drop-shadow(0_0_10px_rgba(255,0,128,0.85))_drop-shadow(0_0_18px_rgba(255,140,0,0.5))]'
+                                                    : 'text-[#ff8c00] opacity-60 [filter:drop-shadow(0_0_3px_rgba(255,0,128,0.25))] hover:!opacity-100 hover:[filter:drop-shadow(0_0_8px_rgba(255,0,128,0.5))]'
                                             }`}
                                         />
                                         <span>{tab.label}</span>

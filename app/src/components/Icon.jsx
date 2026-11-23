@@ -147,9 +147,9 @@ export const Icon = ({ name, className = '', strokeWidth = 1.5, active = false }
     if (!glyph) return null;
 
     const gradientId = `icon-grad-${uid}`;
-    const shadowId = `icon-shadow-${uid}`;
-    const from = active ? '#22d3ee' : '#4b5563';
-    const to = active ? '#67e8f9' : '#9ca3af';
+    const from = '#ff0080';
+    const via = '#ff8c00';
+    const to = '#ffd700';
 
     return (
         <svg
@@ -163,19 +163,16 @@ export const Icon = ({ name, className = '', strokeWidth = 1.5, active = false }
             <defs>
                 <linearGradient id={gradientId} x1="0%" y1="0%" x2="100%" y2="100%">
                     <stop offset="0%" stopColor={from} stopOpacity="0.95" />
-                    <stop offset="55%" stopColor={from} stopOpacity="0.8" />
-                    <stop offset="100%" stopColor={to} stopOpacity="0.55" />
+                    <stop offset="50%" stopColor={via} stopOpacity="0.85" />
+                    <stop offset="100%" stopColor={to} stopOpacity="0.65" />
                 </linearGradient>
-                <filter id={shadowId} x="-25%" y="-25%" width="150%" height="150%">
-                    <feDropShadow dx="0" dy="0.6" stdDeviation="0.5" floodColor="#0f172a" floodOpacity="0.28" />
-                </filter>
             </defs>
             <g
                 stroke={`url(#${gradientId})`}
                 strokeWidth={strokeWidth}
                 strokeLinecap="round"
                 strokeLinejoin="round"
-                filter={`url(#${shadowId})`}
+                opacity={active ? 1 : 0.9}
             >
                 {glyph}
             </g>
