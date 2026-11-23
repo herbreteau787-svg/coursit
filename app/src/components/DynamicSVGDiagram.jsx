@@ -1206,32 +1206,54 @@ export const DynamicSVGDiagram = ({ type }) => {
 
             if (type === 'cloud-modeles') {
                 return (
-                    <div className="w-full bg-slate-900 text-white p-4 rounded-lg overflow-x-auto">
-                        <h4 className="text-xs uppercase font-bold text-sky-400 mb-2">SVG : IaaS / PaaS / SaaS — qui gère quoi ?</h4>
-                        <p className="text-[11px] text-slate-300 mb-2"><strong className="text-amber-300">Lecture :</strong> plus on monte vers le SaaS, moins le client gère. La barre orange = responsabilité du CLIENT ; la barre bleue = géré par le fournisseur.</p>
-                        <svg viewBox="0 0 560 210" role="img" aria-label="Répartition des responsabilités IaaS PaaS SaaS" className="w-full h-auto text-xs">
+                    <div className="w-full bg-slate-900 text-white p-5 rounded-xl border border-slate-700 shadow-xl overflow-x-auto">
+                        <div className="flex items-center justify-between mb-3">
+                            <h4 className="text-xs uppercase font-extrabold tracking-wider text-sky-400">Cloud &amp; Virtualisation · IaaS / PaaS / SaaS</h4>
+                            <span className="text-[10px] bg-sky-950 text-sky-300 px-2 py-0.5 rounded border border-sky-800">NIST SP 800-145</span>
+                        </div>
+                        <p className="text-[11px] text-slate-300 mb-3 leading-relaxed"><strong className="text-amber-300">Lecture :</strong> plus on monte vers le SaaS, moins le client gère. La barre orange = responsabilité du CLIENT ; la barre bleue = géré par le fournisseur.</p>
+                        <svg viewBox="0 0 640 260" role="img" aria-label="Répartition des responsabilités IaaS PaaS SaaS" className="w-full h-auto font-sans">
+                            <defs>
+                                <marker id="ar" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                                    <path d="M 0 1 L 10 5 L 0 9 z" fill="#38bdf8" />
+                                </marker>
+                            </defs>
                             <text x="10" y="18" fill="#94a3b8" fontSize="10">Couches : Applications · Données · Runtime · OS · Virtualisation · Serveurs · Stockage · Réseau</text>
-                            <rect x="10" y="28" width="170" height="150" rx="8" fill="#1e293b" stroke="#0284c7" />
-                            <text x="55" y="48" fill="#38bdf8" fontWeight="bold">IaaS (EC2, VM Azure)</text>
-                            <rect x="20" y="58" width="150" height="14" rx="2" fill="#f59e0b" />
-                            <rect x="20" y="75" width="150" height="14" rx="2" fill="#f59e0b" />
-                            <rect x="20" y="92" width="150" height="14" rx="2" fill="#f59e0b" />
-                            <rect x="20" y="109" width="150" height="14" rx="2" fill="#f59e0b" />
-                            <rect x="20" y="126" width="150" height="14" rx="2" fill="#0ea5e9" />
-                            <rect x="20" y="143" width="150" height="30" rx="2" fill="#0ea5e9" />
-                            <text x="24" y="186" fill="#94a3b8" fontSize="9">client gère : apps, données, runtime, OS</text>
-                            <rect x="195" y="28" width="170" height="150" rx="8" fill="#1e293b" stroke="#059669" />
-                            <text x="240" y="48" fill="#34d399" fontWeight="bold">PaaS (App Service)</text>
-                            <rect x="205" y="58" width="150" height="14" rx="2" fill="#f59e0b" />
-                            <rect x="205" y="75" width="150" height="14" rx="2" fill="#f59e0b" />
-                            <rect x="205" y="92" width="150" height="66" rx="2" fill="#0ea5e9" />
-                            <text x="209" y="186" fill="#94a3b8" fontSize="9">client gère : applications et données</text>
-                            <rect x="380" y="28" width="170" height="150" rx="8" fill="#1e293b" stroke="#7c3aed" />
-                            <text x="425" y="48" fill="#c4b5fd" fontWeight="bold">SaaS (M365, Salesforce)</text>
-                            <rect x="390" y="58" width="150" height="100" rx="2" fill="#f59e0b" />
-                            <text x="400" y="112" fill="white" fontSize="10">client : ses données + comptes</text>
-                            <rect x="390" y="163" width="150" height="14" rx="2" fill="#0ea5e9" />
-                            <text x="384" y="186" fill="#94a3b8" fontSize="9">fournisseur gère TOUT le reste</text>
+
+                            {/* IaaS */}
+                            <rect x="20" y="30" width="190" height="160" rx="8" fill="#1e293b" stroke="#0284c7" strokeWidth="1.5" />
+                            <text x="75" y="50" fill="#38bdf8" fontWeight="bold" fontSize="11">IaaS (EC2, VM Azure)</text>
+                            <rect x="30" y="60" width="170" height="14" rx="2" fill="#f59e0b" />
+                            <rect x="30" y="78" width="170" height="14" rx="2" fill="#f59e0b" />
+                            <rect x="30" y="96" width="170" height="14" rx="2" fill="#f59e0b" />
+                            <rect x="30" y="114" width="170" height="14" rx="2" fill="#f59e0b" />
+                            <rect x="30" y="132" width="170" height="14" rx="2" fill="#0ea5e9" />
+                            <rect x="30" y="150" width="170" height="30" rx="2" fill="#0ea5e9" />
+                            <text x="34" y="198" fill="#94a3b8" fontSize="9">client gère : apps, données, runtime, OS</text>
+
+                            {/* PaaS */}
+                            <rect x="230" y="30" width="190" height="160" rx="8" fill="#1e293b" stroke="#059669" strokeWidth="1.5" />
+                            <text x="275" y="50" fill="#34d399" fontWeight="bold" fontSize="11">PaaS (App Service)</text>
+                            <rect x="240" y="60" width="170" height="14" rx="2" fill="#f59e0b" />
+                            <rect x="240" y="78" width="170" height="14" rx="2" fill="#f59e0b" />
+                            <rect x="240" y="96" width="170" height="66" rx="2" fill="#0ea5e9" />
+                            <text x="244" y="198" fill="#94a3b8" fontSize="9">client gère : applications et données</text>
+
+                            {/* SaaS */}
+                            <rect x="440" y="30" width="190" height="160" rx="8" fill="#1e293b" stroke="#7c3aed" strokeWidth="1.5" />
+                            <text x="485" y="50" fill="#c4b5fd" fontWeight="bold" fontSize="11">SaaS (M365, Salesforce)</text>
+                            <rect x="450" y="60" width="170" height="100" rx="2" fill="#f59e0b" />
+                            <text x="460" y="112" fill="white" fontSize="10">client : ses données + comptes</text>
+                            <rect x="450" y="165" width="170" height="14" rx="2" fill="#0ea5e9" />
+                            <text x="444" y="198" fill="#94a3b8" fontSize="9">fournisseur gère TOUT le reste</text>
+
+                            {/* Légende */}
+                            <rect x="20" y="215" width="600" height="30" rx="6" fill="#1e293b" stroke="#475569" />
+                            <rect x="30" y="222" width="14" height="14" rx="2" fill="#f59e0b" />
+                            <text x="50" y="233" fill="#94a3b8" fontSize="10">Responsabilité CLIENT</text>
+                            <rect x="200" y="222" width="14" height="14" rx="2" fill="#0ea5e9" />
+                            <text x="220" y="233" fill="#94a3b8" fontSize="10">Responsabilité FOURNISSEUR</text>
+                            <text x="420" y="233" fill="#94a3b8" fontSize="10">Contexte pro : choisir le bon modèle selon le besoin de contrôle.</text>
                         </svg>
                     </div>
                 );
