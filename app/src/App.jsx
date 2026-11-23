@@ -4,7 +4,6 @@ import bgHint from './assets/robynne.webp';
 import logoUrl from './assets/logo.webp';
 import { DynamicSVGDiagram } from './components/DynamicSVGDiagram.jsx';
 import { Icon } from './components/Icon.jsx';
-import GtaText from './components/GtaText.jsx';
 import { NAV_ITEMS } from './data/navConfig.jsx';
 import { COURSES_DATA } from './data/courses-ccna.js';
 import { TSSR_COURSES } from './data/courses-tssr.js';
@@ -2574,9 +2573,12 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
                                             IT
                                         </div>
                                     )}
-                                    <GtaText className="mt-1 text-3xl tracking-widest uppercase whitespace-nowrap">
+                                    <span
+                                        className="mt-1 text-3xl font-black tracking-widest uppercase whitespace-nowrap"
+                                        style={{ background: 'linear-gradient(90deg, #ff0080 0%, #ff8c00 50%, #ffd700 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', textShadow: '0 0 20px rgba(255,0,128,0.6), 0 0 40px rgba(255,140,0,0.4)' }}
+                                    >
                                         Plateforme de révisions pour tous
-                                    </GtaText>
+                                    </span>
                                 </div>
                             </button>
 
@@ -2647,11 +2649,12 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
                                     >
                                         <Icon
                                             name={tab.icon}
-                                            strokeWidth={2.5}
-                                            className={`gta-icon w-7 h-7 shrink-0 ${
+                                            active={currentTab === tab.id}
+                                            strokeWidth={1.5}
+                                            className={`w-8 h-8 p-0.5 shrink-0 ${
                                                 currentTab === tab.id
-                                                    ? 'text-white'
-                                                    : 'text-cyan-400'
+                                                    ? 'text-cyan-400'
+                                                    : 'text-gray-600 dark:text-gray-400'
                                             }`}
                                         />
                                         <span>{tab.label}</span>
