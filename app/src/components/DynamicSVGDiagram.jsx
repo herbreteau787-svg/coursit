@@ -563,23 +563,39 @@ export const DynamicSVGDiagram = ({ type }) => {
 
             if (type === 'sequence-dora-dhcp') {
                 return (
-                    <div className="w-full bg-slate-900 text-white p-4 rounded-lg overflow-x-auto">
-                        <h4 className="text-xs uppercase font-bold text-amber-400 mb-2">Génération SVG : Négociation DHCP D.O.R.A (Sujet 1.7)</h4>
-                        <p className="text-[11px] text-slate-300 mb-2"><strong className="text-amber-300">Description textuelle :</strong> dans l'ordre vertical : la demande Discover du client (message en diffusion), l'Offer du serveur, le Request du client et enfin l'Acknowledge du serveur ; le client obtient son bail après le quatrième message.</p>
-                        <svg viewBox="0 0 500 180" role="img" aria-label="Échange DHCP en quatre messages : Discover, Offer, Request, Acknowledge (DORA)" className="w-full h-auto text-xs">
-                            <line x1="100" y1="20" x2="100" y2="170" stroke="#475569" strokeWidth="2" />
-                            <line x1="400" y1="20" x2="400" y2="170" stroke="#475569" strokeWidth="2" />
-                            <text x="60" y="15" fill="#38bdf8" fontWeight="bold">Client DHCP</text>
-                            <text x="360" y="15" fill="#4ade80" fontWeight="bold">Serveur / Relais DHCP</text>
-                            <line x1="100" y1="40" x2="400" y2="65" stroke="#fbbf24" strokeWidth="2" />
-                            <text x="170" y="50" fill="#fbbf24">1. DISCOVER (Broadcast)</text>
-                            <line x1="400" y1="75" x2="100" y2="100" stroke="#38bdf8" strokeWidth="2" />
-                            <text x="180" y="85" fill="#38bdf8">2. OFFER (Unicast)</text>
-                            <line x1="100" y1="110" x2="400" y2="135" stroke="#fbbf24" strokeWidth="2" />
-                            <text x="170" y="120" fill="#fbbf24">3. REQUEST (Broadcast)</text>
-                            <line x1="400" y1="145" x2="100" y2="170" stroke="#4ade80" strokeWidth="2" />
-                            <text x="180" y="155" fill="#4ade80">4. ACK (Unicast)</text>
+                    <div className="w-full bg-slate-900 text-white p-5 rounded-xl border border-slate-700 shadow-xl overflow-x-auto">
+                        <div className="flex items-center justify-between mb-3">
+                            <h4 className="text-xs uppercase font-extrabold tracking-wider text-sky-400">Réseaux &amp; DHCP · Séquence D.O.R.A</h4>
+                            <span className="text-[10px] bg-sky-950 text-sky-300 px-2 py-0.5 rounded border border-sky-800">RFC 2131</span>
+                        </div>
+                        <p className="text-[11px] text-slate-300 mb-3 leading-relaxed"><strong className="text-amber-300">Lecture :</strong> le client diffuse un Discover, le serveur répond par un Offer, le client confirme par un Request, le serveur valide par un Acknowledge. Le client obtient son bail après le quatrième message.</p>
+                        <svg viewBox="0 0 640 220" role="img" aria-label="Échange DHCP en quatre messages : Discover, Offer, Request, Acknowledge (DORA)" className="w-full h-auto font-sans">
+                            <defs>
+                                <marker id="ar" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                                    <path d="M 0 1 L 10 5 L 0 9 z" fill="#38bdf8" />
+                                </marker>
+                            </defs>
+                            <line x1="120" y1="30" x2="120" y2="200" stroke="#475569" strokeWidth="2" />
+                            <line x1="520" y1="30" x2="520" y2="200" stroke="#475569" strokeWidth="2" />
+                            <text x="70" y="25" fill="#38bdf8" fontWeight="bold" fontSize="11">Client DHCP</text>
+                            <text x="480" y="25" fill="#4ade80" fontWeight="bold" fontSize="11">Serveur DHCP</text>
+
+                            <line x1="120" y1="50" x2="520" y2="70" stroke="#fbbf24" strokeWidth="2.5" markerEnd="url(#ar)" />
+                            <text x="220" y="55" fill="#fbbf24" fontSize="10" fontWeight="bold">1. DISCOVER (Broadcast)</text>
+
+                            <line x1="520" y1="90" x2="120" y2="110" stroke="#38bdf8" strokeWidth="2.5" markerEnd="url(#ar)" />
+                            <text x="220" y="95" fill="#38bdf8" fontSize="10" fontWeight="bold">2. OFFER (Unicast)</text>
+
+                            <line x1="120" y1="130" x2="520" y2="150" stroke="#fbbf24" strokeWidth="2.5" markerEnd="url(#ar)" />
+                            <text x="220" y="135" fill="#fbbf24" fontSize="10" fontWeight="bold">3. REQUEST (Broadcast)</text>
+
+                            <line x1="520" y1="170" x2="120" y2="190" stroke="#4ade80" strokeWidth="2.5" markerEnd="url(#ar)" />
+                            <text x="220" y="175" fill="#4ade80" fontSize="10" fontWeight="bold">4. ACK (Unicast) → bail attribué</text>
+
+                            {/* Note de bas */}
+                            <rect x="20" y="205" width="600" height="10" rx="4" fill="#1e293b" />
                         </svg>
+                        <p className="text-[11px] text-slate-300 mt-2"><strong className="text-amber-300">Contexte pro :</strong> si le serveur DHCP ne répond pas, le poste garde une adresse de repli 169.254.x.x (APIPA). Vérification : ipconfig /all, ipconfig /release, ipconfig /renew.</p>
                     </div>
                 );
             }
