@@ -924,19 +924,39 @@ export const DynamicSVGDiagram = ({ type }) => {
 
             if (type === 'etherchannel-lacp') {
                 return (
-                    <div className="w-full bg-slate-900 text-white p-4 rounded-lg overflow-x-auto">
-                        <h4 className="text-xs uppercase font-bold text-sky-400 mb-2">SVG : EtherChannel LACP — deux liens, un canal logique</h4>
-                        <p className="text-[11px] text-slate-300 mb-2"><strong className="text-amber-300">Lecture :</strong> Gi0/1 et Gi0/2 négocient via LACP (mode active des deux côtés) et forment l'interface logique Po1. STP ne voit qu'un seul lien de 2 Gbps : plus de port bloqué, la charge se répartit par flux.</p>
-                        <svg viewBox="0 0 520 180" role="img" aria-label="EtherChannel agrégant deux liens entre deux commutateurs" className="w-full h-auto text-xs">
-                            <rect x="30" y="50" width="120" height="80" rx="8" fill="#1e293b" stroke="#38bdf8" />
-                            <text x="60" y="95" fill="#38bdf8" fontWeight="bold">SW1</text>
-                            <rect x="370" y="50" width="120" height="80" rx="8" fill="#1e293b" stroke="#38bdf8" />
-                            <text x="400" y="95" fill="#38bdf8" fontWeight="bold">SW2</text>
-                            <line x1="150" y1="70" x2="370" y2="70" stroke="#22c55e" strokeWidth="3" />
-                            <line x1="150" y1="110" x2="370" y2="110" stroke="#22c55e" strokeWidth="3" />
-                            <rect x="210" y="40" width="100" height="100" rx="10" fill="none" stroke="#f59e0b" strokeWidth="2" strokeDasharray="6 4" />
-                            <text x="222" y="36" fill="#f59e0b" fontWeight="bold">Port-Channel Po1</text>
-                            <text x="205" y="160" fill="#94a3b8" fontSize="10">2 × 1 Gbps = 2 Gbps · LACP active ⇄ active · mûmes VLAN autorisés obligatoires</text>
+                    <div className="w-full bg-slate-900 text-white p-5 rounded-xl border border-slate-700 shadow-xl overflow-x-auto">
+                        <div className="flex items-center justify-between mb-3">
+                            <h4 className="text-xs uppercase font-extrabold tracking-wider text-sky-400">Réseaux &amp; Switching · EtherChannel / LACP</h4>
+                            <span className="text-[10px] bg-sky-950 text-sky-300 px-2 py-0.5 rounded border border-sky-800">IEEE 802.3ad</span>
+                        </div>
+                        <p className="text-[11px] text-slate-300 mb-3 leading-relaxed"><strong className="text-amber-300">Lecture :</strong> Gi0/1 et Gi0/2 négocient via LACP (mode active des deux côtés) et forment l'interface logique Po1. STP ne voit qu'un seul lien de 2 Gbps.</p>
+                        <svg viewBox="0 0 640 220" role="img" aria-label="EtherChannel agrégant deux liens entre deux commutateurs" className="w-full h-auto font-sans">
+                            <defs>
+                                <marker id="ar" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                                    <path d="M 0 1 L 10 5 L 0 9 z" fill="#38bdf8" />
+                                </marker>
+                            </defs>
+                            {/* SW1 */}
+                            <rect x="40" y="50" width="160" height="80" rx="8" fill="#1e293b" stroke="#38bdf8" strokeWidth="1.5" />
+                            <text x="90" y="95" fill="#38bdf8" fontWeight="bold" fontSize="12">SW1</text>
+
+                            {/* SW2 */}
+                            <rect x="440" y="50" width="160" height="80" rx="8" fill="#1e293b" stroke="#38bdf8" strokeWidth="1.5" />
+                            <text x="490" y="95" fill="#38bdf8" fontWeight="bold" fontSize="12">SW2</text>
+
+                            {/* Liens */}
+                            <line x1="200" y1="75" x2="440" y2="75" stroke="#22c55e" strokeWidth="3" />
+                            <line x1="200" y1="105" x2="440" y2="105" stroke="#22c55e" strokeWidth="3" />
+
+                            {/* Port-Channel */}
+                            <rect x="240" y="40" width="160" height="100" rx="10" fill="none" stroke="#f59e0b" strokeWidth="2" strokeDasharray="6 4" />
+                            <text x="252" y="36" fill="#f59e0b" fontWeight="bold" fontSize="11">Port-Channel Po1</text>
+
+                            <text x="205" y="160" fill="#94a3b8" fontSize="10">2 × 1 Gbps = 2 Gbps · LACP active ⇄ active · mêmes VLAN autorisés obligatoires</text>
+
+                            {/* Note de bas */}
+                            <rect x="20" y="180" width="600" height="30" rx="6" fill="#1e293b" stroke="#475569" />
+                            <text x="32" y="200" fill="#94a3b8" fontSize="10">Vérification : show etherchannel summary · show interfaces port-channel 1 · show lacp neighbor.</text>
                         </svg>
                     </div>
                 );
