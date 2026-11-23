@@ -843,27 +843,49 @@ export const DynamicSVGDiagram = ({ type }) => {
 
             if (type === 'arp-resolution') {
                 return (
-                    <div className="w-full bg-slate-900 text-white p-4 rounded-lg overflow-x-auto">
-                        <h4 className="text-xs uppercase font-bold text-sky-400 mb-2">SVG : ARP — de l'adresse IP à l'adresse MAC</h4>
-                        <p className="text-[11px] text-slate-300 mb-2"><strong className="text-amber-300">Lecture :</strong> la requûte ARP est une DIFFUSION : tout le segment la traite ; seul le propriétaire de l'IP répond (unicast) ; le demandeur met la réponse en cache. Le routeur ne transmet jamais l'ARP au-delà du segment.</p>
-                        <svg viewBox="0 0 560 200" role="img" aria-label="Résolution ARP : diffusion puis réponse" className="w-full h-auto text-xs">
-                            <rect x="20" y="40" width="110" height="44" rx="8" fill="#0284c7" />
-                            <text x="35" y="60" fill="white" fontWeight="bold">PC-A</text>
-                            <text x="30" y="76" fill="#bae6fd" fontSize="10">10.1.1.20</text>
-                            <rect x="180" y="40" width="110" height="44" rx="8" fill="#475569" />
-                            <text x="195" y="60" fill="white" fontWeight="bold">PC-B</text>
-                            <text x="190" y="76" fill="#cbd5e1" fontSize="10">10.1.1.21</text>
-                            <rect x="340" y="40" width="110" height="44" rx="8" fill="#dc2626" />
-                            <text x="355" y="60" fill="white" fontWeight="bold">PC-C</text>
-                            <text x="350" y="76" fill="#fecaca" fontSize="10">10.1.1.30 ← cible</text>
-                            <line x1="130" y1="55" x2="340" y2="55" stroke="#f59e0b" strokeWidth="2" markerEnd="url(#ar)" />
-                            <text x="155" y="45" fill="#f59e0b" fontSize="10">1. « Qui a 10.1.1.30 ? » — diffusion : TOUS écoutent</text>
-                            <line x1="340" y1="75" x2="135" y2="75" stroke="#22c55e" strokeWidth="2" markerEnd="url(#ar)" />
-                            <text x="170" y="95" fill="#22c55e" fontSize="10">2. réponse unicast : 10.1.1.30 = MAC 00-1C-…-C3</text>
-                            <rect x="130" y="115" width="290" height="40" rx="8" fill="#1e293b" stroke="#38bdf8" />
-                            <text x="145" y="135" fill="#93c5fd" fontSize="10">3. cache ARP de PC-A (arp -a) :</text>
-                            <text x="145" y="151" fill="#93c5fd" fontSize="10">10.1.1.30 → 00-1C-xx-xx-C3 (dynamique)</text>
-                            <text x="90" y="180" fill="#94a3b8" fontSize="10">Sans réponse : pas de MAC → pas de trame → « destination unreachable » au niveau local.</text>
+                    <div className="w-full bg-slate-900 text-white p-5 rounded-xl border border-slate-700 shadow-xl overflow-x-auto">
+                        <div className="flex items-center justify-between mb-3">
+                            <h4 className="text-xs uppercase font-extrabold tracking-wider text-sky-400">Réseaux &amp; Protocoles · Résolution ARP</h4>
+                            <span className="text-[10px] bg-sky-950 text-sky-300 px-2 py-0.5 rounded border border-sky-800">RFC 826</span>
+                        </div>
+                        <p className="text-[11px] text-slate-300 mb-3 leading-relaxed"><strong className="text-amber-300">Lecture :</strong> la requête ARP est une DIFFUSION : tout le segment la traite ; seul le propriétaire de l'IP répond (unicast) ; le demandeur met la réponse en cache. Le routeur ne transmet jamais l'ARP au-delà du segment.</p>
+                        <svg viewBox="0 0 640 260" role="img" aria-label="Résolution ARP : diffusion puis réponse" className="w-full h-auto font-sans">
+                            <defs>
+                                <marker id="ar" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                                    <path d="M 0 1 L 10 5 L 0 9 z" fill="#f59e0b" />
+                                </marker>
+                            </defs>
+                            {/* Postes */}
+                            <rect x="20" y="40" width="130" height="45" rx="6" fill="#0284c7" />
+                            <text x="35" y="60" fill="white" fontWeight="bold" fontSize="11">PC-A</text>
+                            <text x="30" y="78" fill="#bae6fd" fontSize="10">10.1.1.20</text>
+
+                            <rect x="180" y="40" width="130" height="45" rx="6" fill="#475569" />
+                            <text x="195" y="60" fill="white" fontWeight="bold" fontSize="11">PC-B</text>
+                            <text x="190" y="78" fill="#cbd5e1" fontSize="10">10.1.1.21</text>
+
+                            <rect x="340" y="40" width="130" height="45" rx="6" fill="#dc2626" />
+                            <text x="355" y="60" fill="white" fontWeight="bold" fontSize="11">PC-C (cible)</text>
+                            <text x="350" y="78" fill="#fecaca" fontSize="10">10.1.1.30</text>
+
+                            {/* Diffusion */}
+                            <line x1="150" y1="55" x2="340" y2="55" stroke="#f59e0b" strokeWidth="2.5" markerEnd="url(#ar)" />
+                            <text x="160" y="45" fill="#f59e0b" fontSize="10" fontWeight="bold">1. « Qui a 10.1.1.30 ? » — DIFFUSION (broadcast)</text>
+
+                            {/* Réponse unicast */}
+                            <line x1="340" y1="75" x2="155" y2="75" stroke="#22c55e" strokeWidth="2.5" markerEnd="url(#ar)" />
+                            <text x="170" y="95" fill="#22c55e" fontSize="10" fontWeight="bold">2. Réponse unicast : 10.1.1.30 = MAC 00-1C-…-C3</text>
+
+                            {/* Cache ARP */}
+                            <rect x="130" y="115" width="320" height="45" rx="8" fill="#1e293b" stroke="#38bdf8" strokeWidth="1.5" />
+                            <text x="145" y="137" fill="#93c5fd" fontSize="10" fontWeight="bold">3. Cache ARP de PC-A (arp -a) :</text>
+                            <text x="145" y="153" fill="#93c5fd" fontSize="10">10.1.1.30 → 00-1C-xx-xx-C3 (dynamique)</text>
+
+                            {/* Note de bas */}
+                            <rect x="20" y="185" width="600" height="55" rx="6" fill="#1e293b" stroke="#475569" />
+                            <text x="32" y="207" fill="#94a3b8" fontSize="10">Sans réponse : pas de MAC → pas de trame → « destination unreachable » au niveau local.</text>
+                            <text x="32" y="227" fill="#94a3b8" fontSize="10">Contexte pro : le routeur ne transmet jamais l'ARP au-delà du segment. Chaque VLAN a son propre domaine de diffusion.</text>
+                            <text x="32" y="247" fill="#94a3b8" fontSize="10">Commande : arp -a (Windows) / ip neigh (Linux) pour vider le cache : arp -d * (Windows) / ip neigh flush all (Linux).</text>
                         </svg>
                     </div>
                 );
