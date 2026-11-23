@@ -2572,19 +2572,10 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
                                         IT
                                     </div>
                                 )}
-                                <div className="flex items-center gap-2">
-                                    <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <defs>
-                                            <linearGradient id="logoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                                                <stop offset="0%" stopColor="#22d3ee" />
-                                                <stop offset="100%" stopColor="#3b82f6" />
-                                            </linearGradient>
-                                        </defs>
-                                        <path d="M6 4h4v24H6z" fill="url(#logoGrad)" />
-                                        <path d="M10 4h4l6 12-6 12h-4l6-12-6-12z" fill="url(#logoGrad)" opacity="0.7" />
-                                        <path d="M18 4h4v24h-4z" fill="url(#logoGrad)" opacity="0.5" />
-                                    </svg>
-                                    <span className="text-xl font-bold tracking-wider text-white">CoursIT</span>
+                                <div className="flex flex-col">
+                                    <span className="text-sm font-semibold text-cyan-600 dark:text-cyan-400 mt-1">
+                                        Plateforme de révisions pour tous
+                                    </span>
                                 </div>
                             </button>
 
@@ -2660,7 +2651,7 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
                                         key={tab.id}
                                         onClick={() => setCurrentTab(tab.id)}
                                         aria-current={currentTab === tab.id ? 'page' : undefined}
-                                        className={`px-3 py-2 rounded-lg whitespace-nowrap transition-colors ${
+                                        className={`px-6 py-2 rounded-lg whitespace-nowrap transition-colors min-h-[48px] flex items-center gap-3 text-base ${
                                             currentTab === tab.id
                                                 ? 'bg-brand-600 text-white font-bold'
                                                 : 'text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-800'
