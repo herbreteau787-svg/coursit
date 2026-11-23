@@ -1791,10 +1791,13 @@ export const DynamicSVGDiagram = ({ type }) => {
 
             if (type === 'mockup-gpmc') {
                 return (
-                    <div className="w-full bg-slate-900 text-white p-4 rounded-lg overflow-x-auto">
-                        <h4 className="text-xs uppercase font-bold text-sky-400 mb-1">Figure : Group Policy Management Console (GPMC)</h4>
-                        <p className="text-[11px] text-slate-300 mb-2"><strong className="text-amber-300">Ce que vous voyez :</strong> l'arborescence du domaine avec les UO, et les GPO liées à chaque niveau. Ouvrez-la via <code>gpmc.msc</code>. Pour éditer une GPO : clic droit → Edit, ce qui ouvre l'éditeur de stratégies.</p>
-                        <svg viewBox="0 0 640 300" role="img" aria-label="Maquette GPMC : arborescence du domaine, UO avec GPO liées, éditeur" className="w-full h-auto text-xs rounded border border-slate-700">
+                    <div className="w-full bg-slate-900 text-white p-5 rounded-xl border border-slate-700 shadow-xl overflow-x-auto">
+                        <div className="flex items-center justify-between mb-3">
+                            <h4 className="text-xs uppercase font-extrabold tracking-wider text-sky-400">Active Directory · GPMC (Group Policy Management)</h4>
+                            <span className="text-[10px] bg-sky-950 text-sky-300 px-2 py-0.5 rounded border border-sky-800">gpmc.msc</span>
+                        </div>
+                        <p className="text-[11px] text-slate-300 mb-3 leading-relaxed"><strong className="text-amber-300">Ce que vous voyez :</strong> l'arborescence du domaine avec les UO, et les GPO liées à chaque niveau. Ouvrez-la via gpmc.msc. Pour éditer une GPO : clic droit → Edit.</p>
+                        <svg viewBox="0 0 640 300" role="img" aria-label="Maquette GPMC : arborescence du domaine, UO avec GPO liées, éditeur" className="w-full h-auto font-sans rounded border border-slate-700">
                             <rect x="0" y="0" width="640" height="28" fill="#1e3a5f" />
                             <text x="8" y="18" fill="white" fontSize="11" fontWeight="bold">Group Policy Management</text>
                             <rect x="0" y="28" width="280" height="272" fill="#1a1a2e" stroke="#333" />
@@ -1817,7 +1820,7 @@ export const DynamicSVGDiagram = ({ type }) => {
                             <text x="300" y="150" fill="#b0d0b0" fontSize="10">- Clic droit sur une UO → "Create a GPO in this domain"</text>
                             <text x="300" y="164" fill="#b0d0b0" fontSize="10">- Clic droit sur la GPO → "Edit" ouvre l'éditeur de stratégies</text>
                             <rect x="290" y="180" width="340" height="80" fill="#1a1a3e" stroke="#333" rx="4" />
-                            <text x="300" y="198" fill="#8090e0" fontSize="10" fontWeight="bold">⚠️Å Ordre d'application (LSDOU) :</text>
+                            <text x="300" y="198" fill="#8090e0" fontSize="10" fontWeight="bold">Ordre d'application (LSDOU) :</text>
                             <text x="300" y="214" fill="#b0b0d0" fontSize="10">1. Local (poste)  2. Site  3. Domaine  4. OU</text>
                             <text x="300" y="230" fill="#b0b0d0" fontSize="10">La plus spécifique (OU) l'emporte en cas de conflit.</text>
                             <text x="300" y="246" fill="#b0b0d0" fontSize="10">gpupdate /force applique immédiatement.</text>
