@@ -818,24 +818,44 @@ export const DynamicSVGDiagram = ({ type }) => {
 
             if (type === 'ipv6-slaac') {
                 return (
-                    <div className="w-full bg-slate-900 text-white p-4 rounded-lg overflow-x-auto">
-                        <h4 className="text-xs uppercase font-bold text-sky-400 mb-2">SVG : SLAAC — l'hôte construit son adresse IPv6 seul</h4>
-                        <p className="text-[11px] text-slate-300 mb-2"><strong className="text-amber-300">Lecture :</strong> le routeur diffuse le préfixe (RA multicast ff02::1) ; l'hôte colle son identifiant EUI-64 (dérivé de la MAC) puis vérifie l'unicité (DAD) avant d'utiliser l'adresse. Sans Router Advertisement : aucune adresse globale.</p>
-                        <svg viewBox="0 0 560 190" role="img" aria-label="Séquence SLAAC : RA, EUI-64, DAD" className="w-full h-auto text-xs">
-                            <rect x="20" y="70" width="130" height="56" rx="10" fill="#059669" />
-                            <text x="40" y="92" fill="white" fontWeight="bold">Routeur</text>
-                            <text x="32" y="112" fill="#a7f3d0" fontSize="10">RA : 2001:db8:1::/64</text>
-                            <rect x="410" y="70" width="130" height="56" rx="10" fill="#0284c7" />
-                            <text x="430" y="92" fill="white" fontWeight="bold">Hôte</text>
-                            <text x="425" y="112" fill="#bae6fd" fontSize="10">MAC 00:1A:2B:3C:4D:5E</text>
-                            <line x1="150" y1="85" x2="410" y2="85" stroke="#22c55e" strokeWidth="3" markerEnd="url(#ar)" />
-                            <text x="200" y="78" fill="#22c55e" fontSize="10">1. RA (multicast ff02::1) — préfixe /64</text>
-                            <rect x="180" y="105" width="200" height="52" rx="8" fill="#1e293b" stroke="#f59e0b" />
-                            <text x="192" y="122" fill="#fbbf24" fontSize="10">2. EUI-64 : insère FFFE + bit inversé</text>
-                            <text x="192" y="140" fill="#fbbf24" fontSize="10">→ 2001:db8:1::021A:2BFF:FE3C:4D:5E</text>
-                            <rect x="180" y="165" width="200" height="22" rx="5" fill="#7c3aed" />
-                            <text x="192" y="181" fill="white" fontSize="10">3. DAD : Neighbor Solicitation → adresse unique ?</text>
-                            <line x1="410" y1="120" x2="382" y2="140" stroke="#94a3b8" strokeWidth="2" />
+                    <div className="w-full bg-slate-900 text-white p-5 rounded-xl border border-slate-700 shadow-xl overflow-x-auto">
+                        <div className="flex items-center justify-between mb-3">
+                            <h4 className="text-xs uppercase font-extrabold tracking-wider text-sky-400">Réseaux &amp; IPv6 · SLAAC (Autoconfiguration)</h4>
+                            <span className="text-[10px] bg-sky-950 text-sky-300 px-2 py-0.5 rounded border border-sky-800">RFC 4862</span>
+                        </div>
+                        <p className="text-[11px] text-slate-300 mb-3 leading-relaxed"><strong className="text-amber-300">Lecture :</strong> le routeur diffuse le préfixe (RA multicast ff02::1) ; l'hôte colle son identifiant EUI-64 (dérivé de la MAC) puis vérifie l'unicité (DAD) avant d'utiliser l'adresse. Sans Router Advertisement : aucune adresse globale.</p>
+                        <svg viewBox="0 0 640 260" role="img" aria-label="Séquence SLAAC : RA, EUI-64, DAD" className="w-full h-auto font-sans">
+                            <defs>
+                                <marker id="ar" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                                    <path d="M 0 1 L 10 5 L 0 9 z" fill="#22c55e" />
+                                </marker>
+                            </defs>
+                            {/* Routeur */}
+                            <rect x="20" y="70" width="150" height="60" rx="8" fill="#059669" />
+                            <text x="40" y="95" fill="white" fontWeight="bold" fontSize="11">Routeur</text>
+                            <text x="32" y="115" fill="#a7f3d0" fontSize="10">RA : 2001:db8:1::/64</text>
+
+                            {/* Hôte */}
+                            <rect x="470" y="70" width="150" height="60" rx="8" fill="#0284c7" />
+                            <text x="490" y="95" fill="white" fontWeight="bold" fontSize="11">Hôte</text>
+                            <text x="485" y="115" fill="#bae6fd" fontSize="10">MAC 00:1A:2B:3C:4D:5E</text>
+
+                            {/* Flux 1 : RA */}
+                            <line x1="170" y1="85" x2="470" y2="85" stroke="#22c55e" strokeWidth="2.5" markerEnd="url(#ar)" />
+                            <text x="220" y="78" fill="#22c55e" fontSize="10" fontWeight="bold">1. RA (multicast ff02::1) — préfixe /64</text>
+
+                            {/* Étape 2 : EUI-64 */}
+                            <rect x="180" y="105" width="280" height="55" rx="8" fill="#1e293b" stroke="#f59e0b" strokeWidth="1.5" />
+                            <text x="192" y="125" fill="#fbbf24" fontSize="10" fontWeight="bold">2. EUI-64 : insère FFFE + bit inversé</text>
+                            <text x="192" y="143" fill="#fbbf24" fontSize="10">→ 2001:db8:1::021A:2BFF:FE3C:4D5E</text>
+
+                            {/* Étape 3 : DAD */}
+                            <rect x="180" y="175" width="280" height="30" rx="5" fill="#7c3aed" />
+                            <text x="192" y="194" fill="white" fontSize="10" fontWeight="bold">3. DAD : Neighbor Solicitation → adresse unique ?</text>
+
+                            {/* Note de bas */}
+                            <rect x="20" y="225" width="600" height="25" rx="6" fill="#1e293b" stroke="#475569" />
+                            <text x="32" y="242" fill="#94a3b8" fontSize="10">Sans Router Advertisement : aucune adresse globale. Contexte pro : SLAAC est le mode par défaut d'Internet IPv6.</text>
                         </svg>
                     </div>
                 );
