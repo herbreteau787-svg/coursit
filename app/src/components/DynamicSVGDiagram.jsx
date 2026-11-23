@@ -781,18 +781,33 @@ export const DynamicSVGDiagram = ({ type }) => {
 
             if (type === 'troubleshooting-tree') {
                 return (
-                    <div className="w-full bg-slate-900 text-white p-4 rounded-lg overflow-x-auto">
-                        <h4 className="text-xs uppercase font-bold text-sky-400 mb-2">Génération SVG : Démarche de Diagnostic par Couches</h4>
-                        <p className="text-[11px] text-slate-300 mb-2"><strong className="text-amber-300">Description textuelle :</strong> une pyramide de couches, de la couche physique en bas à la couche application en haut, avec à chaque étage la question à se poser et le test associé ; la démarche consiste à remonter étage par étage jusqu'à trouver la couche en faute.</p>
-                        <svg viewBox="0 0 500 140" role="img" aria-label="Pyramide de diagnostic couche par couche : de la couche physique (bas) vers la couche application (haut)" className="w-full h-auto text-xs">
-                            <rect x="20" y="20" width="130" height="30" rx="4" fill="#334155" />
-                            <text x="30" y="40" fill="white">1. Tester C1 (Physique)</text>
-                            <line x1="150" y1="35" x2="180" y2="35" stroke="#38bdf8" strokeWidth="2" />
-                            <rect x="180" y="20" width="140" height="30" rx="4" fill="#334155" />
-                            <text x="190" y="40" fill="white">2. Tester C2 (Ping local/ARP)</text>
-                            <line x1="320" y1="35" x2="350" y2="35" stroke="#38bdf8" strokeWidth="2" />
-                            <rect x="350" y="20" width="130" height="30" rx="4" fill="#334155" />
-                            <text x="360" y="40" fill="white">3. Tester C3 (Passerelle)</text>
+                    <div className="w-full bg-slate-900 text-white p-5 rounded-xl border border-slate-700 shadow-xl overflow-x-auto">
+                        <div className="flex items-center justify-between mb-3">
+                            <h4 className="text-xs uppercase font-extrabold tracking-wider text-sky-400">Dépannage &amp; Diagnostic · Démarche par Couches</h4>
+                            <span className="text-[10px] bg-sky-950 text-sky-300 px-2 py-0.5 rounded border border-sky-800">Méthode TSSR</span>
+                        </div>
+                        <p className="text-[11px] text-slate-300 mb-3 leading-relaxed"><strong className="text-amber-300">Lecture :</strong> une pyramide de couches, de la couche physique en bas à la couche application en haut. La démarche consiste à remonter étage par étage jusqu'à trouver la couche en faute.</p>
+                        <svg viewBox="0 0 640 160" role="img" aria-label="Pyramide de diagnostic couche par couche : de la couche physique (bas) vers la couche application (haut)" className="w-full h-auto font-sans">
+                            <defs>
+                                <marker id="ar" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                                    <path d="M 0 1 L 10 5 L 0 9 z" fill="#38bdf8" />
+                                </marker>
+                            </defs>
+                            <rect x="20" y="30" width="180" height="40" rx="6" fill="#334155" />
+                            <text x="30" y="55" fill="white" fontSize="10" fontWeight="bold">1. Tester C1 (Physique)</text>
+
+                            <line x1="200" y1="50" x2="230" y2="50" stroke="#38bdf8" strokeWidth="2" markerEnd="url(#ar)" />
+                            <rect x="230" y="30" width="190" height="40" rx="6" fill="#334155" />
+                            <text x="240" y="55" fill="white" fontSize="10" fontWeight="bold">2. Tester C2 (Ping local/ARP)</text>
+
+                            <line x1="420" y1="50" x2="450" y2="50" stroke="#38bdf8" strokeWidth="2" markerEnd="url(#ar)" />
+                            <rect x="450" y="30" width="170" height="40" rx="6" fill="#334155" />
+                            <text x="460" y="55" fill="white" fontSize="10" fontWeight="bold">3. Tester C3 (Passerelle)</text>
+
+                            {/* Note de bas */}
+                            <rect x="20" y="90" width="600" height="55" rx="6" fill="#1e293b" stroke="#475569" />
+                            <text x="32" y="112" fill="#94a3b8" fontSize="10">Contexte pro : cette démarche couvre 90% des incidents. Toujours partir de la couche physique (couche 1) vers le haut.</text>
+                            <text x="32" y="132" fill="#94a3b8" fontSize="10">Vérification : ping, traceroute, nslookup, show interfaces, show ip route, show vlan.</text>
                         </svg>
                     </div>
                 );
