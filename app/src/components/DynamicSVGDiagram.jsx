@@ -350,40 +350,52 @@ export const DynamicSVGDiagram = ({ type }) => {
 
             if (type === 'comparaison-vm-conteneur') {
                 return (
-                    <div className="w-full bg-slate-900 text-white p-4 rounded-lg overflow-x-auto">
-                        <h4 className="text-xs uppercase font-bold text-sky-400 mb-2">Génération SVG : Machine Virtuelle vs Conteneur (Sujet 1.2)</h4>
-                        <p className="text-[11px] text-slate-300 mb-2"><strong className="text-amber-300">Description textuelle :</strong> à gauche, une pile « machines virtuelles » : chaque VM embarque ses applications, ses bibliothèques et un système invité complet, posé sur l'hyperviseur de type 1, lui-mûme posé sur le matériel. Ç droite, l'équivalent « conteneurs » : chaque conteneur ne porte que l'application et ses bibliothèques et partage le noyau de l'hôte.</p>
-                        <svg viewBox="0 0 550 180" role="img" aria-label="Comparaison machine virtuelle et conteneur : la VM embarque un système invité complet, le conteneur partage le noyau de l'hôte" className="w-full h-auto text-xs">
+                    <div className="w-full bg-slate-900 text-white p-5 rounded-xl border border-slate-700 shadow-xl overflow-x-auto">
+                        <div className="flex items-center justify-between mb-3">
+                            <h4 className="text-xs uppercase font-extrabold tracking-wider text-sky-400">Virtualisation · VM vs Conteneur</h4>
+                            <span className="text-[10px] bg-sky-950 text-sky-300 px-2 py-0.5 rounded border border-sky-800">Hyperviseur Type 1</span>
+                        </div>
+                        <p className="text-[11px] text-slate-300 mb-3 leading-relaxed"><strong className="text-amber-300">Lecture :</strong> la VM embarque un OS invité complet (lourd mais isolé) ; le conteneur partage le noyau de l'hôte (léger et rapide). VM = isolation forte ; conteneur = densité et démarrage instantané.</p>
+                        <svg viewBox="0 0 640 260" role="img" aria-label="Comparaison machine virtuelle et conteneur" className="w-full h-auto font-sans">
+                            <defs>
+                                <marker id="ar" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                                    <path d="M 0 1 L 10 5 L 0 9 z" fill="#38bdf8" />
+                                </marker>
+                            </defs>
                             {/* Pile VM */}
-                            <rect x="20" y="140" width="240" height="25" rx="3" fill="#334155" />
-                            <text x="100" y="157" fill="white">Matériel (Bare Metal)</text>
-                            <rect x="20" y="110" width="240" height="25" rx="3" fill="#0284c7" />
-                            <text x="80" y="127" fill="white">Hyperviseur (Type 1)</text>
-                            <rect x="25" y="40" width="65" height="65" rx="3" fill="#1e293b" stroke="#38bdf8" />
-                            <text x="35" y="60" fill="#38bdf8" fontSize="10">App / Libs</text>
-                            <text x="35" y="85" fill="#94a3b8" fontSize="10">OS Invité</text>
-                            <rect x="105" y="40" width="65" height="65" rx="3" fill="#1e293b" stroke="#38bdf8" />
-                            <text x="115" y="60" fill="#38bdf8" fontSize="10">App / Libs</text>
-                            <text x="115" y="85" fill="#94a3b8" fontSize="10">OS Invité</text>
-                            <rect x="185" y="40" width="65" height="65" rx="3" fill="#1e293b" stroke="#38bdf8" />
-                            <text x="195" y="60" fill="#38bdf8" fontSize="10">App / Libs</text>
-                            <text x="195" y="85" fill="#94a3b8" fontSize="10">OS Invité</text>
-                            <text x="80" y="25" fill="#38bdf8" fontWeight="bold">Machines Virtuelles</text>
+                            <rect x="20" y="160" width="280" height="30" rx="4" fill="#334155" />
+                            <text x="100" y="180" fill="white" fontSize="11" fontWeight="bold">Matériel (Bare Metal)</text>
+                            <rect x="20" y="125" width="280" height="30" rx="4" fill="#0284c7" />
+                            <text x="80" y="145" fill="white" fontSize="11" fontWeight="bold">Hyperviseur (Type 1)</text>
+                            <rect x="25" y="40" width="85" height="80" rx="4" fill="#1e293b" stroke="#38bdf8" strokeWidth="1.5" />
+                            <text x="35" y="65" fill="#38bdf8" fontSize="10" fontWeight="bold">App / Libs</text>
+                            <text x="35" y="90" fill="#94a3b8" fontSize="10">OS Invité</text>
+                            <rect x="120" y="40" width="85" height="80" rx="4" fill="#1e293b" stroke="#38bdf8" strokeWidth="1.5" />
+                            <text x="130" y="65" fill="#38bdf8" fontSize="10" fontWeight="bold">App / Libs</text>
+                            <text x="130" y="90" fill="#94a3b8" fontSize="10">OS Invité</text>
+                            <rect x="215" y="40" width="80" height="80" rx="4" fill="#1e293b" stroke="#38bdf8" strokeWidth="1.5" />
+                            <text x="225" y="65" fill="#38bdf8" fontSize="10" fontWeight="bold">App / Libs</text>
+                            <text x="225" y="90" fill="#94a3b8" fontSize="10">OS Invité</text>
+                            <text x="100" y="25" fill="#38bdf8" fontWeight="bold" fontSize="11">Machines Virtuelles</text>
 
                             {/* Pile Conteneurs */}
-                            <rect x="290" y="140" width="240" height="25" rx="3" fill="#334155" />
-                            <text x="370" y="157" fill="white">Matériel</text>
-                            <rect x="290" y="110" width="240" height="25" rx="3" fill="#475569" />
-                            <text x="350" y="127" fill="white">OS Hôte (Noyau partagé)</text>
-                            <rect x="290" y="80" width="240" height="25" rx="3" fill="#059669" />
-                            <text x="340" y="97" fill="white">Moteur de Conteneurs</text>
-                            <rect x="295" y="40" width="65" height="35" rx="3" fill="#064e3b" stroke="#34d399" />
-                            <text x="305" y="62" fill="#34d399" fontSize="10">App / Libs</text>
-                            <rect x="375" y="40" width="65" height="35" rx="3" fill="#064e3b" stroke="#34d399" />
-                            <text x="385" y="62" fill="#34d399" fontSize="10">App / Libs</text>
-                            <rect x="455" y="40" width="65" height="35" rx="3" fill="#064e3b" stroke="#34d399" />
-                            <text x="465" y="62" fill="#34d399" fontSize="10">App / Libs</text>
-                            <text x="360" y="25" fill="#34d399" fontWeight="bold">Conteneurs</text>
+                            <rect x="340" y="160" width="280" height="30" rx="4" fill="#334155" />
+                            <text x="420" y="180" fill="white" fontSize="11" fontWeight="bold">Matériel</text>
+                            <rect x="340" y="125" width="280" height="30" rx="4" fill="#475569" />
+                            <text x="400" y="145" fill="white" fontSize="11" fontWeight="bold">OS Hôte (Noyau partagé)</text>
+                            <rect x="340" y="90" width="280" height="30" rx="4" fill="#059669" />
+                            <text x="400" y="110" fill="white" fontSize="11" fontWeight="bold">Moteur de Conteneurs</text>
+                            <rect x="345" y="40" width="85" height="45" rx="4" fill="#064e3b" stroke="#34d399" strokeWidth="1.5" />
+                            <text x="355" y="67" fill="#34d399" fontSize="10" fontWeight="bold">App / Libs</text>
+                            <rect x="440" y="40" width="85" height="45" rx="4" fill="#064e3b" stroke="#34d399" strokeWidth="1.5" />
+                            <text x="450" y="67" fill="#34d399" fontSize="10" fontWeight="bold">App / Libs</text>
+                            <rect x="535" y="40" width="80" height="45" rx="4" fill="#064e3b" stroke="#34d399" strokeWidth="1.5" />
+                            <text x="545" y="67" fill="#34d399" fontSize="10" fontWeight="bold">App / Libs</text>
+                            <text x="420" y="25" fill="#34d399" fontWeight="bold" fontSize="11">Conteneurs</text>
+
+                            {/* Note de bas */}
+                            <rect x="20" y="210" width="600" height="35" rx="6" fill="#1e293b" stroke="#475569" />
+                            <text x="32" y="232" fill="#94a3b8" fontSize="10">Contexte pro : VM pour l'isolation forte (serveurs critiques), conteneurs pour la densité et le déploiement rapide (microservices, CI/CD).</text>
                         </svg>
                     </div>
                 );
