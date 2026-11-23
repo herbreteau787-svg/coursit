@@ -66,17 +66,17 @@ export const AIS_COURSES = [
                 ],
                 lessons: [
                     { title: "Leçon 1 — Segmenter pour maîtriser", parts: [
-                        { h: "Des zones par usage", t: "Un réseau maîtrisé se découpe en zones cohérentes : postes utilisateurs, serveurs, Wi-Fi invités, administration. Chaque zone a ses règles, son niveau de confiance, ses utilisateurs. Un réseau à plat (tout dans un seul bloc) rend impossible une politique ciblée." },
+                        { h: "Des zones par usage", t: "Un réseau maîtrisé se découpe en zones cohérentes : postes utilisateurs, serveurs, Wi-Fi invités, administration. Chaque zone a ses règles, son niveau de confiance, ses utilisateurs. Un réseau à plat (tout dans un seul bloc) rend impossible une politique ciblée." , schema: "topologies-fr-v2" },
                         { h: "Le VLAN comme outil", t: "Techniquement, la zone est souvent un VLAN : une découpe logique du switch, détaillée dans le TSSR CP4 et le labo CCNA. Ce qui compte ici : chaque zone a une raison d'être documentée, pas un découpage par réflexe." },
                         { h: "Les bénéfices attendus", t: "Trois gagnants : la diffusion reste locale (performance), les flux inter-zones deviennent contrôlables (sécurité), et un attaquant qui a percé la zone invités ne circule pas librement jusqu'aux serveurs (on limite le déplacement latéral)." }
                     ]},
                     { title: "Leçon 2 — Contrôler les flux entre zones", parts: [
-                        { h: "Qui parle à qui, explicitement", t: "Le passage d'une zone à une autre s'effectue via un routeur ou un pare-feu : c'est là qu'on écrit les règles. Chaque règle répond à un besoin documenté : « les postes joignent le serveur de fichiers », « les invités ne joignent que Internet »." },
+                        { h: "Qui parle à qui, explicitement", t: "Le passage d'une zone à une autre s'effectue via un routeur ou un pare-feu : c'est là qu'on écrit les règles. Chaque règle répond à un besoin documenté : « les postes joignent le serveur de fichiers », « les invités ne joignent que Internet ».", schema: "vlan-segmentation" },
                         { h: "Refusé par défaut", t: "Le principe sain : tout ce qui n'est pas explicitement autorisé est refusé. On part de presque rien (ou rien) et on ouvre au besoin, chaque ouverture restant justifiée (rappel AIS CP1 : moindre exposition et documentation). L'inverse (tout ouvert, puis on ferme après incident) vient toujours trop tard." },
                         { h: "Documenter les flux", t: "Schéma + tableau des flux : zone source, zone cible, service, justification. Sans cette base, aucune maintenance ne saura pourquoi une règle existe, et tout le monde finira par « tout ouvrir pour dépanner »." }
                     ]},
                     { title: "Leçon 3 — Rendre le réseau disponible", parts: [
-                        { h: "La redondance a un prix : les boucles", t: "Relier les switches deux fois apporte de la survabilité mais crée des boucles (les trames tournent indéfiniment). Le protocole STP (Spanning Tree, standard du secteur) désactive automatiquement un chemin pour couper la boucle, avec réactivation si le lien principal tombe." },
+                        { h: "La redondance a un prix : les boucles", t: "Relier les switches deux fois apporte de la survabilité mais crée des boucles (les trames tournent indéfiniment). Le protocole STP (Spanning Tree, standard du secteur) désactive automatiquement un chemin pour couper la boucle, avec réactivation si le lien principal tombe.", schema: "stp-election" },
                         { h: "Tester la bascule", t: "Une redondance jamais testée est un doute, pas une sécurité : couper le lien principal en fenêtre contrôlée et vérifier que le second prend le relais, avec une durée de coupure mesurée. On apprend aussi à quel point la bascule est rapide (ou non) quand on la voit tourner." },
                         { h: "Faire vivre le schéma", t: "Le réseau change : nouveau site, nouveau switch, remplacement. Le schéma et le tableau des flux sont révisés à chaque changement, pas à la fin du projet. Un schéma à jour est le premier outil du diagnostic ; un schéma périmé est un piège." }
                     ]}
@@ -201,7 +201,7 @@ export const AIS_COURSES = [
                 ],
                 lessons: [
                     { title: "Leçon 1 — Le cluster d'hyperviseurs", parts: [
-                        { h: "Plusieurs hôtes, un même parc de VM", t: "Un cluster regroupe plusieurs serveurs physiques (hôtes) qui hébergent collectivement les VM. Si un hôte tombe, les services re-démarrent sur les autres : c'est le mécanisme de haute disponibilité des solutions du marché (Hyper-V, VMware, Proxmox). Coût : plus d'équipement et un stockage partagé." },
+                        { h: "Plusieurs hôtes, un même parc de VM", t: "Un cluster regroupe plusieurs serveurs physiques (hôtes) qui hébergent collectivement les VM. Si un hôte tombe, les services re-démarrent sur les autres : c'est le mécanisme de haute disponibilité des solutions du marché (Hyper-V, VMware, Proxmox). Coût : plus d'équipement et un stockage partagé." , schema: 'hyper-v-architecture'},
                         { h: "Le stockage partagé", t: "Les VM résident sur un espace de stockage commun (baie dédiée ou solution de stockage distribué), accessible par tous les hôtes. Sans repère partagé, la migration et la bascule ne peuvent pas fonctionner. Ce stockage devient lui-même critique : redondance obligatoire." },
                         { h: "La limite logique", t: "La haute disponibilité protège de la panne matérielle, pas des erreurs : supprimer une VM n'épargne pas le cluster. Cela reste l'affaire des sauvegardes et des habitudes opératoires (jamais supprimer sans réfléchir : mettre à l'arrêt, renommer « à supprimer », attendre quelques jours)." }
                     ]},
@@ -312,7 +312,7 @@ export const AIS_COURSES = [
                 ],
                 lessons: [
                     { title: "Leçon 1 — Préparer la bascule", parts: [
-                        { h: "La recette, c'est-à-dire vérifier le besoin", t: "La recette vérifie que la solution répond réellement au cahier des charges (AIS CP5) : temps de réponse, volumes, sauvegardes, fonction précise que le métier attendait. Tester « ça marche » ne suffit pas : on teste que ça répond au contrat." , schema: 'deploiement-postes' },
+                        { h: "La recette, c'est-à-dire vérifier le besoin", t: "La recette vérifie que la solution répond réellement au cahier des charges (AIS CP5) : temps de réponse, volumes, sauvegardes, fonction précise que le métier attendait. Tester « ça marche » ne suffit pas : on teste que ça répond au contrat." , schema: 'deploiement-postes' , schema: 'deploiement-postes'},
                         { h: "Le plan de bascule écrit", t: "Un document daté : étapes numérotées avec horaire prévu et responsable, critères de succès de chaque étape, points de contrôle, et surtout le plan de retour arrière (rollback) : quand on le déclenche, qui le décide, combien de temps on accepte d'avancer avant de renoncer." },
                         { h: "La fenêtre et l'annonce", t: "Fenêtre creuse choisie de préférence (soirée, week-end...), utilisateurs prévenus avec les impacts réels (indisponibilité de quoi pendant combien de temps, qui appeler en cas de problème le lendemain). Le support (TSSR CP1) doit aussi connaître l'opération pour traiter les appels de la matinée suivante." }
                     ]},
