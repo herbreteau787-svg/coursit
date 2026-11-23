@@ -877,26 +877,46 @@ export const DynamicSVGDiagram = ({ type }) => {
 
             if (type === 'stp-election') {
                 return (
-                    <div className="w-full bg-slate-900 text-white p-4 rounded-lg overflow-x-auto">
-                        <h4 className="text-xs uppercase font-bold text-sky-400 mb-2">SVG : élection STP et rôles de ports</h4>
-                        <p className="text-[11px] text-slate-300 mb-2"><strong className="text-amber-300">Lecture :</strong> SW1 (priorité 24576) est pont racine ; ses ports sont tous designated. SW3 a deux chemins vers la racine : coût 4 direct (root port) et coût 8 via SW2 (port bloqué/alternatif). Le triangle reste sans boucle.</p>
-                        <svg viewBox="0 0 520 200" role="img" aria-label="Triangle STP avec pont racine et port bloqué" className="w-full h-auto text-xs">
-                            <rect x="200" y="20" width="120" height="46" rx="8" fill="#059669" />
-                            <text x="220" y="40" fill="white" fontWeight="bold">SW1 — RACINE</text>
-                            <text x="228" y="58" fill="#a7f3d0" fontSize="10">priorité 24576 · ports : FWD</text>
-                            <rect x="30" y="130" width="110" height="46" rx="8" fill="#1e293b" stroke="#38bdf8" />
-                            <text x="52" y="150" fill="white" fontWeight="bold">SW2</text>
-                            <text x="40" y="168" fill="#93c5fd" fontSize="10">root port → SW1</text>
-                            <rect x="380" y="130" width="110" height="46" rx="8" fill="#1e293b" stroke="#38bdf8" />
-                            <text x="402" y="150" fill="white" fontWeight="bold">SW3</text>
-                            <text x="390" y="168" fill="#93c5fd" fontSize="10">root port → SW1</text>
-                            <line x1="230" y1="66" x2="85" y2="130" stroke="#22c55e" strokeWidth="3" />
-                            <text x="100" y="95" fill="#22c55e" fontSize="10">coût 4 (1 Gbps)</text>
-                            <line x1="290" y1="66" x2="435" y2="130" stroke="#22c55e" strokeWidth="3" />
-                            <text x="360" y="95" fill="#22c55e" fontSize="10">coût 4 (1 Gbps)</text>
-                            <line x1="140" y1="153" x2="380" y2="153" stroke="#ef4444" strokeWidth="3" strokeDasharray="8 6" />
-                            <text x="185" y="141" fill="#ef4444" fontSize="10">secours : port blocking (ALTN) sur SW3</text>
-                            <text x="150" y="196" fill="#94a3b8" fontSize="10">Élection : priorité la plus BASSE gagne, puis MAC la plus basse · root port = meilleur coût vers la racine</text>
+                    <div className="w-full bg-slate-900 text-white p-5 rounded-xl border border-slate-700 shadow-xl overflow-x-auto">
+                        <div className="flex items-center justify-between mb-3">
+                            <h4 className="text-xs uppercase font-extrabold tracking-wider text-sky-400">Réseaux &amp; Switching · Élection STP</h4>
+                            <span className="text-[10px] bg-sky-950 text-sky-300 px-2 py-0.5 rounded border border-sky-800">IEEE 802.1D</span>
+                        </div>
+                        <p className="text-[11px] text-slate-300 mb-3 leading-relaxed"><strong className="text-amber-300">Lecture :</strong> SW1 (priorité 24576) est pont racine ; ses ports sont tous designated. SW3 a deux chemins vers la racine : coût 4 direct (root port) et coût 8 via SW2 (port bloqué/alternatif). Le triangle reste sans boucle.</p>
+                        <svg viewBox="0 0 640 240" role="img" aria-label="Triangle STP avec pont racine et port bloqué" className="w-full h-auto font-sans">
+                            <defs>
+                                <marker id="ar" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                                    <path d="M 0 1 L 10 5 L 0 9 z" fill="#22c55e" />
+                                </marker>
+                            </defs>
+                            {/* SW1 (Racine) */}
+                            <rect x="260" y="20" width="120" height="50" rx="8" fill="#059669" />
+                            <text x="280" y="42" fill="white" fontWeight="bold" fontSize="11">SW1 — RACINE</text>
+                            <text x="270" y="60" fill="#a7f3d0" fontSize="9">priorité 24576 · ports : FWD</text>
+
+                            {/* SW2 */}
+                            <rect x="40" y="140" width="130" height="50" rx="8" fill="#1e293b" stroke="#38bdf8" strokeWidth="1.5" />
+                            <text x="75" y="162" fill="white" fontWeight="bold" fontSize="11">SW2</text>
+                            <text x="50" y="180" fill="#93c5fd" fontSize="9">root port → SW1</text>
+
+                            {/* SW3 */}
+                            <rect x="470" y="140" width="130" height="50" rx="8" fill="#1e293b" stroke="#38bdf8" strokeWidth="1.5" />
+                            <text x="505" y="162" fill="white" fontWeight="bold" fontSize="11">SW3</text>
+                            <text x="480" y="180" fill="#93c5fd" fontSize="9">root port → SW1</text>
+
+                            {/* Liens */}
+                            <line x1="290" y1="70" x2="105" y2="140" stroke="#22c55e" strokeWidth="2.5" />
+                            <text x="150" y="95" fill="#22c55e" fontSize="10" fontWeight="bold">coût 4 (1 Gbps)</text>
+
+                            <line x1="350" y1="70" x2="535" y2="140" stroke="#22c55e" strokeWidth="2.5" />
+                            <text x="400" y="95" fill="#22c55e" fontSize="10" fontWeight="bold">coût 4 (1 Gbps)</text>
+
+                            <line x1="170" y1="165" x2="470" y2="165" stroke="#ef4444" strokeWidth="2.5" strokeDasharray="8 6" />
+                            <text x="250" y="155" fill="#ef4444" fontSize="10" fontWeight="bold">secours : port blocking (ALTN) sur SW3</text>
+
+                            {/* Note de bas */}
+                            <rect x="20" y="205" width="600" height="25" rx="6" fill="#1e293b" stroke="#475569" />
+                            <text x="32" y="222" fill="#94a3b8" fontSize="10">Élection : priorité la plus BASSE gagne, puis MAC la plus basse · root port = meilleur coût vers la racine.</text>
                         </svg>
                     </div>
                 );
