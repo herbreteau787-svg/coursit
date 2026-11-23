@@ -327,22 +327,38 @@ export const DynamicSVGDiagram = ({ type }) => {
 
             if (type === 'topologie-duplex-mismatch') {
                 return (
-                    <div className="w-full bg-slate-900 text-white p-4 rounded-lg overflow-x-auto">
-                        <h4 className="text-xs uppercase font-bold text-sky-400 mb-2">Génération SVG : Topologie Duplex Mismatch (Sujet 1.1)</h4>
-                        <p className="text-[11px] text-slate-300 mb-2"><strong className="text-amber-300">Description textuelle :</strong> un premier commutateur S1 (encadré bleu, réglé en full-duplex à 1 Gbit/s) est relié à un second commutateur S2 (encadré bleu, réglé en half-duplex à 1 Gbit/s). Le lien en faute est dessiné par un trait pointillé rouge ; la pastille rouge « CRC » marque les erreurs CRC et les collisions tardives générées sur ce lien.</p>
-                        <svg viewBox="0 0 550 140" role="img" aria-label="Topologie duplex mismatch : S1 en full-duplex relié à S2 en half-duplex, erreurs CRC et collisions tardives sur le lien" className="w-full h-auto text-xs">
-                            <rect x="40" y="40" width="120" height="40" rx="6" fill="#0284c7" />
-                            <text x="55" y="64" fill="white" fontWeight="bold">Switch S1</text>
-                            <text x="55" y="76" fill="#fbbf24" fontSize="10">Full-Duplex / 1Gbps</text>
+                    <div className="w-full bg-slate-900 text-white p-5 rounded-xl border border-slate-700 shadow-xl overflow-x-auto">
+                        <div className="flex items-center justify-between mb-3">
+                            <h4 className="text-xs uppercase font-extrabold tracking-wider text-sky-400">Réseaux &amp; Switching · Duplex Mismatch</h4>
+                            <span className="text-[10px] bg-sky-950 text-sky-300 px-2 py-0.5 rounded border border-sky-800">IEEE 802.3</span>
+                        </div>
+                        <p className="text-[11px] text-slate-300 mb-3 leading-relaxed"><strong className="text-amber-300">Lecture :</strong> S1 est réglé en full-duplex, S2 en half-duplex. Le lien en faute est dessiné par un trait pointillé rouge ; la pastille rouge « CRC » marque les erreurs CRC et les collisions tardives.</p>
+                        <svg viewBox="0 0 640 180" role="img" aria-label="Topologie duplex mismatch : S1 en full-duplex relié à S2 en half-duplex, erreurs CRC et collisions tardives sur le lien" className="w-full h-auto font-sans">
+                            <defs>
+                                <marker id="ar" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                                    <path d="M 0 1 L 10 5 L 0 9 z" fill="#f43f5e" />
+                                </marker>
+                            </defs>
+                            {/* S1 */}
+                            <rect x="40" y="50" width="160" height="50" rx="8" fill="#0284c7" />
+                            <text x="80" y="75" fill="white" fontWeight="bold" fontSize="12">Switch S1</text>
+                            <text x="60" y="92" fill="#fbbf24" fontSize="10" fontWeight="bold">Full-Duplex / 1Gbps</text>
 
-                            <line x1="160" y1="60" x2="380" y2="60" stroke="#f43f5e" strokeWidth="3" strokeDasharray="6,6" />
-                            <circle cx="270" cy="60" r="16" fill="#f43f5e" />
-                            <text x="260" y="64" fill="white" fontWeight="bold" fontSize="11">CRC</text>
-                            <text x="200" y="30" fill="#f43f5e" fontStyle="italic" fontSize="10">Mismatch : Erreurs CRC & Late Collisions</text>
+                            {/* Lien en faute */}
+                            <line x1="200" y1="75" x2="440" y2="75" stroke="#f43f5e" strokeWidth="3" strokeDasharray="8 6" />
+                            <circle cx="320" cy="75" r="20" fill="#f43f5e" />
+                            <text x="305" y="80" fill="white" fontWeight="bold" fontSize="11">CRC</text>
+                            <text x="220" y="45" fill="#f43f5e" fontStyle="italic" fontSize="10" fontWeight="bold">Mismatch : Erreurs CRC &amp; Late Collisions</text>
 
-                            <rect x="380" y="40" width="120" height="40" rx="6" fill="#0284c7" />
-                            <text x="395" y="64" fill="white" fontWeight="bold">Switch S2</text>
-                            <text x="395" y="76" fill="#fbbf24" fontSize="10">Half-Duplex / 1Gbps</text>
+                            {/* S2 */}
+                            <rect x="440" y="50" width="160" height="50" rx="8" fill="#0284c7" />
+                            <text x="480" y="75" fill="white" fontWeight="bold" fontSize="12">Switch S2</text>
+                            <text x="460" y="92" fill="#fbbf24" fontSize="10" fontWeight="bold">Half-Duplex / 1Gbps</text>
+
+                            {/* Note de bas */}
+                            <rect x="20" y="120" width="600" height="45" rx="6" fill="#1e293b" stroke="#475569" />
+                            <text x="32" y="140" fill="#94a3b8" fontSize="10">Contexte pro : un duplex mismatch génère des erreurs CRC et des collisions tardives. Vérification : show interfaces (errors, collisions).</text>
+                            <text x="32" y="158" fill="#94a3b8" fontSize="10">Solution : forcer le même duplex des deux côtés ou laisser en auto-négociation. Ne jamais mixer auto et manuel.</text>
                         </svg>
                     </div>
                 );
