@@ -3,7 +3,7 @@
 @tailwind utilities;
 
         body { font-family: 'Inter', sans-serif; }
-        code, pre { font-family: 'Fira Code', monospace; }
+        code, pre { font-family: 'JetBrains Mono', monospace; }
         
         /* Fond d'identité visuelle : photo datacenter/réseau, fixe et discrète (3-8 %) */
         body::before {

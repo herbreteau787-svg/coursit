@@ -987,16 +987,10 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
 
             // Signalement d'erreur (FONC-20) : copie un récapitulatif dans le presse-papiers
             const reportIssue = () => {
-                const page = selectedCourse ? ('cours ' + selectedCourse.parcours + ' ' + selectedCourse.code + ' — ' + selectedCourse.title) : ('onglet ' + currentTab);
-                const txt = 'Signalement d\'erreur — Plateforme TSSR/AIS/CCNA\nPage : ' + page + '\nFait le : ' + new Date().toLocaleDateString('fr-FR') + '\nErreur constatée : (décrivez ici)';
-                if (navigator.clipboard && navigator.clipboard.writeText) {
-                    navigator.clipboard.writeText(txt).then(
-                        () => window.alert('Le récapitulatif du signalement est copié. Collez-le dans un e-mail ou un bloc-notes pour l\'envoyer.'),
-                        () => window.alert('Copie impossible dans ce navigateur. Détails :\n' + txt)
-                    );
-                } else {
-                    window.alert('Copie impossible dans ce navigateur. Détails :\n' + txt);
-                }
+                const page = selectedCourse ? ('cours ' + selectedCourse.parcours + ' ' + selectedCourse.code + ' - ' + selectedCourse.title) : ('onglet ' + currentTab);
+                const subject = encodeURIComponent('Erreur CoursIT - ' + page);
+                const body = encodeURIComponent('Page: ' + window.location.href + '\nSection: ' + page + '\nDescription: ');
+                window.location.href = 'mailto:herbreteau787@gmail.com?subject=' + subject + '&body=' + body;
             };
 
             // Remonte en haut de page à chaque changement de cours
