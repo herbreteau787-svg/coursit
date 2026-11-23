@@ -1753,10 +1753,13 @@ export const DynamicSVGDiagram = ({ type }) => {
 
             if (type === 'mockup-servermanager') {
                 return (
-                    <div className="w-full bg-slate-900 text-white p-4 rounded-lg overflow-x-auto">
-                        <h4 className="text-xs uppercase font-bold text-sky-400 mb-1">Figure : Server Manager (Gestionnaire de serveur)</h4>
-                        <p className="text-[11px] text-slate-300 mb-2"><strong className="text-amber-300">Ce que vous voyez :</strong> le point d'entrée de Windows Server pour installer des rôles (AD DS, DHCP, DNS, Hyper-V...), gérer les services et voir l'état du serveur. Ouvrez-le via <em>Démarrer → Gestionnaire de serveur</em> (il s'ouvre automatiquement au démarrage).</p>
-                        <svg viewBox="0 0 640 300" role="img" aria-label="Maquette Server Manager : tableau de bord avec vignettes rôles et fonctionnalités" className="w-full h-auto text-xs rounded border border-slate-700">
+                    <div className="w-full bg-slate-900 text-white p-5 rounded-xl border border-slate-700 shadow-xl overflow-x-auto">
+                        <div className="flex items-center justify-between mb-3">
+                            <h4 className="text-xs uppercase font-extrabold tracking-wider text-sky-400">Windows Server · Server Manager</h4>
+                            <span className="text-[10px] bg-sky-950 text-sky-300 px-2 py-0.5 rounded border border-sky-800">Gestionnaire de serveur</span>
+                        </div>
+                        <p className="text-[11px] text-slate-300 mb-3 leading-relaxed"><strong className="text-amber-300">Ce que vous voyez :</strong> le point d'entrée de Windows Server pour installer des rôles (AD DS, DHCP, DNS, Hyper-V...), gérer les services et voir l'état du serveur. Ouvrez-le via Démarrer → Gestionnaire de serveur.</p>
+                        <svg viewBox="0 0 640 300" role="img" aria-label="Maquette Server Manager : tableau de bord avec vignettes rôles et fonctionnalités" className="w-full h-auto font-sans rounded border border-slate-700">
                             <rect x="0" y="0" width="640" height="28" fill="#1e3a5f" />
                             <text x="8" y="18" fill="white" fontSize="11" fontWeight="bold">Server Manager — Gestionnaire de serveur</text>
                             <rect x="0" y="28" width="180" height="272" fill="#1a1a2e" stroke="#333" />
@@ -1779,7 +1782,7 @@ export const DynamicSVGDiagram = ({ type }) => {
                             <text x="190" y="176" fill="#8090a0" fontSize="10">+ Add roles and features (pour installer DHCP, Hyper-V...)</text>
                             <rect x="180" y="198" width="460" height="60" fill="#1a2a1e" stroke="#2a5a3e" rx="4" />
                             <text x="190" y="216" fill="#60e080" fontSize="10" fontWeight="bold"> Ce qu'il faut observer :</text>
-                            <text x="190" y="232" fill="#b0d0b0" fontSize="10">- Le nom du serveur et le domaine en haut (vous confirmez que vous ûtes sur le bon serveur)</text>
+                            <text x="190" y="232" fill="#b0d0b0" fontSize="10">- Le nom du serveur et le domaine en haut (vous confirmez que vous êtes sur le bon serveur)</text>
                             <text x="190" y="248" fill="#b0d0b0" fontSize="10">- "Add roles and features" est l'assistant qui installe AD DS, DHCP, Hyper-V...</text>
                         </svg>
                     </div>
