@@ -3,6 +3,7 @@ import bannerImg from './assets/alexander.webp';
 import bgHint from './assets/robynne.webp';
 import logoUrl from './assets/logo.webp';
 import { DynamicSVGDiagram } from './components/DynamicSVGDiagram.jsx';
+import { NAV_ITEMS } from './data/navConfig.jsx';
 import { COURSES_DATA } from './data/courses-ccna.js';
 import { TSSR_COURSES } from './data/courses-tssr.js';
 import { AIS_COURSES } from './data/courses-ais.js';
@@ -2642,18 +2643,7 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
                         {/* Navigation principale finale */}
                         <nav aria-label="Navigation principale" className="bg-slate-50 dark:bg-slate-900/80 border-t border-slate-200 dark:border-slate-800">
                             <div className="max-w-7xl mx-auto px-4 flex space-x-1 overflow-x-auto text-xs font-medium py-2">
-                                {[
-                                    { id: 'dashboard', label: '🏠 Dashboard' },
-                                    { id: 'courses', label: '📚 Cours & Fiches' },
-                                    { id: 'essentiels', label: '🛠️ Les Indispensables' },
-                                    { id: 'qcm', label: '✍️ Banque QCM' },
-                                    { id: 'labs', label: '🧪 Labos Guidés' },
-                                    { id: 'commands', label: '⚙️ Commandes' },
-                                    { id: 'scripts', label: '💻 Scripts' },
-                                    { id: 'depannage', label: '\u{1F9F0} Dépannage' },
-                                    { id: 'glossary', label: '📖 Glossaire' },
-                                    { id: 'vocab', label: '🌐 Vocabulaire Anglais' }
-                                ].map(tab => (
+                                {NAV_ITEMS.map(tab => (
                                     <button
                                         key={tab.id}
                                         onClick={() => setCurrentTab(tab.id)}
