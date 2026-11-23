@@ -981,28 +981,54 @@ export const DynamicSVGDiagram = ({ type }) => {
 
             if (type === 'dns-resolution') {
                 return (
-                    <div className="w-full bg-slate-900 text-white p-4 rounded-lg overflow-x-auto">
-                        <h4 className="text-xs uppercase font-bold text-sky-400 mb-2">SVG : résolution DNS — la chaëne complète</h4>
-                        <p className="text-[11px] text-slate-300 mb-2"><strong className="text-amber-300">Lecture :</strong> le client interroge son résolveur ; si le nom n'est pas en cache, le résolveur descend la hiérarchie (racine → .fr → autoritaire) et met la réponse en cache. Ping IP OK + nom KO = problème dans CETTE chaëne.</p>
-                        <svg viewBox="0 0 560 190" role="img" aria-label="Chaëne de résolution DNS" className="w-full h-auto text-xs">
-                            <rect x="15" y="70" width="105" height="50" rx="8" fill="#0284c7" />
-                            <text x="30" y="92" fill="white" fontWeight="bold">Client</text>
-                            <text x="25" y="110" fill="#bae6fd" fontSize="10">www.entreprise.fr</text>
-                            <rect x="150" y="70" width="105" height="50" rx="8" fill="#059669" />
-                            <text x="162" y="92" fill="white" fontWeight="bold">Résolveur</text>
-                            <text x="158" y="110" fill="#a7f3d0" fontSize="10">cache ? → sinon</text>
-                            <rect x="285" y="25" width="120" height="36" rx="8" fill="#7c3aed" />
-                            <text x="305" y="47" fill="white" fontSize="10">Racine « . » → .fr ?</text>
-                            <rect x="285" y="77" width="120" height="36" rx="8" fill="#7c3aed" />
-                            <text x="303" y="99" fill="white" fontSize="10">TLD .fr → NS autoritaire ?</text>
-                            <rect x="440" y="77" width="105" height="36" rx="8" fill="#dc2626" />
-                            <text x="452" y="99" fill="white" fontSize="10">Autoritaire zone</text>
-                            <line x1="120" y1="95" x2="150" y2="95" stroke="#22c55e" strokeWidth="3" markerEnd="url(#ar)" />
-                            <line x1="255" y1="85" x2="285" y2="48" stroke="#94a3b8" strokeWidth="2" />
-                            <line x1="255" y1="95" x2="285" y2="95" stroke="#94a3b8" strokeWidth="2" />
-                            <line x1="405" y1="95" x2="440" y2="95" stroke="#94a3b8" strokeWidth="2" />
-                            <text x="200" y="145" fill="#fbbf24" fontSize="10">4. réponse : A 192.0.2.10 — mise en cache pour le TTL</text>
-                            <text x="120" y="172" fill="#94a3b8" fontSize="10">En interne, c'est le serveur DNS du domaine qui joue le résolveur : enregistrements A, AAAA, MX, NS, CNAME.</text>
+                    <div className="w-full bg-slate-900 text-white p-5 rounded-xl border border-slate-700 shadow-xl overflow-x-auto">
+                        <div className="flex items-center justify-between mb-3">
+                            <h4 className="text-xs uppercase font-extrabold tracking-wider text-sky-400">Réseaux &amp; DNS · Résolution DNS Complète</h4>
+                            <span className="text-[10px] bg-sky-950 text-sky-300 px-2 py-0.5 rounded border border-sky-800">RFC 1034/1035</span>
+                        </div>
+                        <p className="text-[11px] text-slate-300 mb-3 leading-relaxed"><strong className="text-amber-300">Lecture :</strong> le client interroge son résolveur ; si le nom n'est pas en cache, le résolveur descend la hiérarchie (racine → .fr → autoritaire) et met la réponse en cache. Ping IP OK + nom KO = problème dans CETTE chaîne.</p>
+                        <svg viewBox="0 0 640 260" role="img" aria-label="Chaîne de résolution DNS" className="w-full h-auto font-sans">
+                            <defs>
+                                <marker id="ar" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                                    <path d="M 0 1 L 10 5 L 0 9 z" fill="#22c55e" />
+                                </marker>
+                            </defs>
+                            {/* Client */}
+                            <rect x="20" y="70" width="120" height="50" rx="6" fill="#0284c7" />
+                            <text x="35" y="92" fill="white" fontWeight="bold" fontSize="11">Client</text>
+                            <text x="30" y="110" fill="#bae6fd" fontSize="10">www.entreprise.fr</text>
+
+                            {/* Résolveur */}
+                            <rect x="180" y="70" width="120" height="50" rx="6" fill="#059669" />
+                            <text x="192" y="92" fill="white" fontWeight="bold" fontSize="11">Résolveur</text>
+                            <text x="188" y="110" fill="#a7f3d0" fontSize="10">cache ? → sinon</text>
+
+                            {/* Racine */}
+                            <rect x="340" y="20" width="130" height="40" rx="6" fill="#7c3aed" />
+                            <text x="360" y="45" fill="white" fontSize="10" fontWeight="bold">Racine « . »</text>
+
+                            {/* TLD */}
+                            <rect x="340" y="75" width="130" height="40" rx="6" fill="#7c3aed" />
+                            <text x="358" y="100" fill="white" fontSize="10" fontWeight="bold">TLD .fr</text>
+
+                            {/* Autoritaire */}
+                            <rect x="500" y="75" width="120" height="40" rx="6" fill="#dc2626" />
+                            <text x="512" y="100" fill="white" fontSize="10" fontWeight="bold">Autoritaire</text>
+
+                            {/* Liens */}
+                            <line x1="140" y1="95" x2="180" y2="95" stroke="#22c55e" strokeWidth="2.5" markerEnd="url(#ar)" />
+                            <line x1="300" y1="85" x2="340" y2="40" stroke="#94a3b8" strokeWidth="2" />
+                            <line x1="300" y1="95" x2="340" y2="95" stroke="#94a3b8" strokeWidth="2" />
+                            <line x1="470" y1="95" x2="500" y2="95" stroke="#94a3b8" strokeWidth="2" />
+
+                            {/* Réponse */}
+                            <text x="200" y="145" fill="#fbbf24" fontSize="10" fontWeight="bold">4. réponse : A 192.0.2.10 — mise en cache pour le TTL</text>
+
+                            {/* Note de bas */}
+                            <rect x="20" y="180" width="600" height="60" rx="6" fill="#1e293b" stroke="#475569" />
+                            <text x="32" y="200" fill="#94a3b8" fontSize="10">En interne, c'est le serveur DNS du domaine qui joue le résolveur : enregistrements A, AAAA, MX, NS, CNAME.</text>
+                            <text x="32" y="218" fill="#94a3b8" fontSize="10">Contexte pro : chaque accès (intranet, AD, imprimante, Outlook, Internet) passe par le DNS. DNS mort = « plus rien ne marche ».</text>
+                            <text x="32" y="236" fill="#94a3b8" fontSize="10">Vérification : nslookup, dig, ipconfig /all, ipconfig /flushdns, ipconfig /displaydns.</text>
                         </svg>
                     </div>
                 );
