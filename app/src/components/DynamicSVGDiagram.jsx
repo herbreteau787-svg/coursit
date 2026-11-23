@@ -1944,6 +1944,34 @@ export const DynamicSVGDiagram = ({ type }) => {
                 );
             }
 
+            if (type === 'hyper-v-architecture') {
+                return (
+                    <div className="w-full bg-slate-900 text-white p-5 rounded-xl border border-slate-700 shadow-xl overflow-x-auto">
+                        <div className="flex items-center justify-between mb-3">
+                            <h4 className="text-xs uppercase font-extrabold tracking-wider text-sky-400">Hyper-V - Architecture</h4>
+                            <span className="text-[10px] bg-sky-950 text-sky-300 px-2 py-0.5 rounded border border-sky-800">HV Manager</span>
+                        </div>
+                        <p className="text-[11px] text-slate-300 mb-3 leading-relaxed"><strong className="text-amber-300">Lecture :</strong> l'hote Hyper-V heberge des VMs connectees a des vSwitch. Le stockage est sur disque local ou SAN.</p>
+                        <svg viewBox="0 0 640 200" role="img" aria-label="Architecture Hyper-V" className="w-full h-auto font-sans">
+                            <rect x="20" y="20" width="600" height="40" rx="6" fill="#1e3a5f" />
+                            <text x="250" y="45" fill="white" fontWeight="bold" fontSize="12">Hote Hyper-V (SRV-HV)</text>
+                            <rect x="20" y="70" width="180" height="60" rx="6" fill="#0284c7" />
+                            <text x="40" y="95" fill="white" fontSize="11" fontWeight="bold">VM-CLI01</text>
+                            <text x="40" y="112" fill="#bae6fd" fontSize="9">Running - 2 vCPU - 4 GB</text>
+                            <rect x="220" y="70" width="180" height="60" rx="6" fill="#059669" />
+                            <text x="240" y="95" fill="white" fontSize="11" fontWeight="bold">VM-SRV-DNS</text>
+                            <text x="240" y="112" fill="#a7f3d0" fontSize="9">Off - 1 vCPU - 2 GB</text>
+                            <rect x="420" y="70" width="200" height="60" rx="6" fill="#7c3aed" />
+                            <text x="440" y="95" fill="white" fontSize="11" fontWeight="bold">VM-TEST</text>
+                            <text x="440" y="112" fill="#ddd6fe" fontSize="9">Off - 1 vCPU - 1 GB</text>
+                            <rect x="20" y="145" width="600" height="40" rx="6" fill="#059669" />
+                            <text x="250" y="170" fill="white" fontWeight="bold" fontSize="12">vSwitch (LAN-EXT, External)</text>
+                        </svg>
+                        <p className="text-[11px] text-slate-300 mt-2"><strong className="text-amber-300">Contexte pro :</strong> verification : Get-VM, Get-VMSwitch, Get-VMNetworkAdapter, Get-VHD.</p>
+                    </div>
+                );
+            }
+
             return null;
         };
 
