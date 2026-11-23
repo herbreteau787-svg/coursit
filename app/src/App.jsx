@@ -196,7 +196,7 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
 
             if (!currentQcm) {
                 return (
-                    <div className="max-w-3xl mx-auto bg-white dark:bg-slate-800 rounded-xl p-10 border border-slate-200 dark:border-slate-700 shadow-sm text-center space-y-3">
+                    <div className="max-w-3xl mx-auto bg-white dark:bg-slate-800 rounded-xl p-10 border border-gray-200 dark:border-slate-700 shadow-md dark:shadow-sm text-center space-y-3">
                         <div className="w-14 h-14 mx-auto rounded-full bg-amber-500/10 text-amber-500 flex items-center justify-center text-2xl">✍️</div>
                         {mode === 'errors' ? (
                             <>
@@ -219,7 +219,7 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
                     aria-pressed={mode === value}
                     className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-colors ${
                         mode === value
-                            ? 'bg-brand-600 text-white'
+                            ? 'bg-cyan-600 text-white'
                             : 'bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-600'
                     }`}
                 >
@@ -237,8 +237,8 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
                 const correctCount = displayData.reduce((n, q, i) => (answers[i] !== undefined && q.options[answers[i]].correct ? n + 1 : n), 0);
                 const pct = answeredCount > 0 ? Math.round((correctCount / answeredCount) * 100) : 0;
                 return (
-                    <div className="max-w-3xl mx-auto bg-white dark:bg-slate-800 rounded-xl p-6 border border-slate-200 dark:border-slate-700 shadow-sm space-y-6">
-                        <div className="border-b border-slate-200 dark:border-slate-700 pb-4">
+                    <div className="max-w-3xl mx-auto bg-white dark:bg-slate-800 rounded-xl p-6 border border-gray-200 dark:border-slate-700 shadow-md dark:shadow-sm space-y-6">
+                        <div className="border-b border-gray-200 dark:border-slate-700 pb-4">
                             <h3 className="text-xl font-bold text-slate-900 dark:text-white">Résultats de la session</h3>
                             <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
                                 {correctCount} bonne{correctCount > 1 ? 's' : ''} réponse{correctCount > 1 ? 's' : ''} sur {answeredCount} répondue{answeredCount > 1 ? 's' : ''} — score : {pct} %.
@@ -271,7 +271,7 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
                         </div>
                         <div className="space-y-3">
                             {displayData.map((q, i) => (
-                                <div key={q.id} className="p-3 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900/50 space-y-2">
+                                <div key={q.id} className="p-3 rounded-lg border border-gray-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900/50 space-y-2">
                                     <p className="text-sm font-semibold text-slate-800 dark:text-slate-200">
                                         <span className="text-[10px] font-mono text-sky-500 mr-2">[{q.cp}]</span>{q.question}
                                     </p>
@@ -299,7 +299,7 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
                                 </div>
                             ))}
                         </div>
-                        <div className="flex justify-between items-center pt-4 border-t border-slate-200 dark:border-slate-700">
+                        <div className="flex justify-between items-center pt-4 border-t border-gray-200 dark:border-slate-700">
                             <button
                                 onClick={resetSession}
                                 className="px-4 py-2 bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-lg text-xs font-semibold hover:bg-slate-200 dark:hover:bg-slate-600"
@@ -317,8 +317,8 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
             const ss = secondsLeft === null ? '--' : String(secondsLeft % 60).padStart(2, '0');
 
             return (
-                <div className="max-w-3xl mx-auto bg-white dark:bg-slate-800 rounded-xl p-6 border border-slate-200 dark:border-slate-700 shadow-sm space-y-6">
-                    <div className="flex flex-wrap gap-3 justify-between items-center border-b border-slate-200 dark:border-slate-700 pb-4">
+                <div className="max-w-3xl mx-auto bg-white dark:bg-slate-800 rounded-xl p-6 border border-gray-200 dark:border-slate-700 shadow-md dark:shadow-sm space-y-6">
+                    <div className="flex flex-wrap gap-3 justify-between items-center border-b border-gray-200 dark:border-slate-700 pb-4">
                         <div>
                             <span className="text-xs font-bold text-sky-500">{currentQcm.certif} · {currentQcm.cp}</span>
                             <h3 className="text-xl font-bold text-slate-900 dark:text-white mt-1">{modeTitle}</h3>
@@ -329,7 +329,7 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
                                     value={filterLabel}
                                     onChange={(e) => onFilterChange(e.target.value)}
                                     aria-label="Filtrer les questions par sujet"
-                                    className="bg-slate-100 dark:bg-slate-900 text-xs text-slate-700 dark:text-slate-300 rounded border border-slate-200 dark:border-slate-700 px-2 py-1.5"
+                                    className="bg-slate-100 dark:bg-slate-900 text-xs text-slate-700 dark:text-slate-300 rounded border border-gray-200 dark:border-slate-700 px-2 py-1.5"
                                 >
                                     {filterOptions.map(opt => (
                                         <option key={opt.value} value={opt.value}>{opt.label}</option>
@@ -352,7 +352,7 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
                     )}
 
                     {chronoLaunch ? (
-                        <div className="p-6 bg-slate-50 dark:bg-slate-900/50 rounded-xl border border-slate-200 dark:border-slate-700 space-y-4 text-center">
+                        <div className="p-6 bg-slate-50 dark:bg-slate-900/50 rounded-xl border border-gray-200 dark:border-slate-700 space-y-4 text-center">
                             <p className="text-sm font-semibold text-slate-800 dark:text-slate-200">Test chronométré sur les questions filtrées ({displayData.length} question{displayData.length > 1 ? 's' : ''}).</p>
                             <p className="text-xs text-slate-500 dark:text-slate-400">Durée de l'examen blanc : {durationMin} minutes. La correction et les explications ne s'affichent qu'à la fin. Les questions sans réponse sont comptées comme ratées.</p>
                             <div className="flex flex-wrap justify-center items-center gap-3">
@@ -361,7 +361,7 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
                                     id="chrono-duration"
                                     value={durationMin}
                                     onChange={(e) => setDurationMin(parseInt(e.target.value, 10))}
-                                    className="bg-slate-100 dark:bg-slate-900 text-xs text-slate-700 dark:text-slate-300 rounded border border-slate-200 dark:border-slate-700 px-2 py-1.5"
+                                    className="bg-slate-100 dark:bg-slate-900 text-xs text-slate-700 dark:text-slate-300 rounded border border-gray-200 dark:border-slate-700 px-2 py-1.5"
                                 >
                                     <option value="20">20 minutes</option>
                                     <option value="30">30 minutes</option>
@@ -394,7 +394,7 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
                             <div className="space-y-3">
                                 {currentQcm.options.map((opt, idx) => {
                                     const isSelected = answeredHere === idx;
-                                    let btnStyle = "bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-200 hover:border-brand-500";
+                                    let btnStyle = "bg-slate-50 dark:bg-slate-900 border-gray-200 dark:border-slate-700 text-slate-800 dark:text-slate-200 hover:border-brand-500";
 
                                     if (answeredHere !== undefined && mode !== 'chrono') {
                                         if (opt.correct) {
@@ -428,7 +428,7 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
                                 })}
                             </div>
 
-                            <div className="flex flex-wrap justify-between items-center gap-3 pt-4 border-t border-slate-200 dark:border-slate-700">
+                            <div className="flex flex-wrap justify-between items-center gap-3 pt-4 border-t border-gray-200 dark:border-slate-700">
                                 <button
                                     disabled={safeIdx === 0}
                                     onClick={() => setActiveQcmIndex(prev => Math.max(0, prev - 1))}
@@ -447,7 +447,7 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
                                     <button
                                         disabled={safeIdx === displayData.length - 1}
                                         onClick={() => setActiveQcmIndex(prev => Math.min(displayData.length - 1, prev + 1))}
-                                        className="px-4 py-2 bg-brand-600 hover:bg-brand-700 disabled:opacity-50 text-white rounded-lg text-xs font-semibold"
+                                        className="px-4 py-2 bg-cyan-600 hover:bg-cyan-700 disabled:opacity-50 text-white rounded-lg text-xs font-semibold"
                                     >
                                         Question suivante
                                     </button>
@@ -464,13 +464,13 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
         const ExerciseItem = ({ ex, num }) => {
             const [open, setOpen] = useState(false);
             return (
-                <div className="p-4 bg-slate-50 dark:bg-slate-900/50 rounded-lg border border-slate-200 dark:border-slate-700 space-y-2">
+                <div className="p-4 bg-slate-50 dark:bg-slate-900/50 rounded-lg border border-gray-200 dark:border-slate-700 space-y-2">
                     <p className="text-sm font-semibold text-slate-800 dark:text-slate-200">
                         <span className="text-brand-500 font-bold">Exercice {num} — </span>{ex.enonce}
                     </p>
                     <button
                         onClick={() => setOpen(!open)}
-                        className="px-3 py-1.5 rounded-lg text-xs font-bold bg-brand-600 text-white hover:bg-brand-700 transition-colors"
+                        className="px-3 py-1.5 rounded-lg text-xs font-bold bg-cyan-600 text-white hover:bg-cyan-700 transition-colors"
                     >
                         {open ? 'Masquer la correction' : 'Voir la correction'}
                     </button>
@@ -485,9 +485,9 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
 
 
         const LessonCourseView = ({ course, isDone, onToggleDone, prev, next, onGoTo, onOpenTab }) => (
-            <div className="bg-white dark:bg-slate-800 rounded-xl p-6 border border-slate-200 dark:border-slate-700 shadow-sm space-y-6">
+            <div className="bg-white dark:bg-slate-800 rounded-xl p-6 border border-gray-200 dark:border-slate-700 shadow-md dark:shadow-sm space-y-6">
                 {/* En-tête du CP */}
-                <div className="border-b border-slate-200 dark:border-slate-700 pb-4 flex flex-wrap gap-3 justify-between items-start">
+                <div className="border-b border-gray-200 dark:border-slate-700 pb-4 flex flex-wrap gap-3 justify-between items-start">
                     <div>
                         <div className="flex items-center flex-wrap gap-2">
                             <span className="px-2.5 py-0.5 bg-brand-500/10 text-brand-500 text-xs font-mono font-bold rounded">
@@ -529,7 +529,7 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
                                 ))}
                             </ul>
                         </div>
-                        <div className="p-3 bg-slate-50 dark:bg-slate-900/50 rounded-lg border border-slate-200 dark:border-slate-800">
+                        <div className="p-3 bg-slate-50 dark:bg-slate-900/50 rounded-lg border border-gray-200 dark:border-slate-800">
                             <span className="text-[11px] font-bold uppercase text-slate-500 block mb-1.5">🧭 Prérequis</span>
                             <p className="text-xs text-slate-700 dark:text-slate-300 leading-relaxed">{course.prerequis}</p>
                         </div>
@@ -540,14 +540,14 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
                 <div className="space-y-4">
                     <h3 className="text-xs uppercase font-bold text-brand-500 tracking-wider">Leçons du CP — à lire dans l'ordre</h3>
                     {course.lessons.map((l, i) => (
-                        <div key={i} className="space-y-3 p-4 rounded-lg border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/30">
+                        <div key={i} className="space-y-3 p-4 rounded-lg border border-gray-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/30">
                             <h4 className="text-sm font-bold text-slate-900 dark:text-white">{l.title}</h4>
                             {l.parts.map((p, j) => (
                                 <div key={j} className="pl-3 border-l-2 border-brand-500/30">
                                     <h5 className="text-xs font-bold text-brand-600 dark:text-sky-300">{p.h}</h5>
                                     <p className="text-xs text-slate-700 dark:text-slate-300 leading-relaxed mt-1">{p.t}</p>
                                     {p.img && (
-                                        <figure className="mt-2 p-2 bg-white dark:bg-slate-100 rounded-lg border border-slate-200 shadow-sm">
+                                        <figure className="mt-2 p-2 bg-white dark:bg-slate-100 rounded-lg border border-gray-200 shadow-md dark:shadow-sm">
                                             <img src={`${import.meta.env.BASE_URL}${p.img}`} alt={p.imgCaption || p.h} loading="lazy" className="w-full h-auto rounded" />
                                             <figcaption className="text-[10px] text-slate-500 dark:text-slate-600 mt-1.5 px-1">{p.imgCaption}</figcaption>
                                         </figure>
@@ -557,7 +557,7 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
                             ))}
                             {l.schema && <DynamicSVGDiagram type={l.schema} />}
                             {l.table && l.table.length > 0 && (
-                                <div className="overflow-x-auto rounded-lg border border-slate-200 dark:border-slate-700">
+                                <div className="overflow-x-auto rounded-lg border border-gray-200 dark:border-slate-700">
                                     <table className="w-full text-xs">
                                         <tbody>
                                             {l.table.map((row, ri) => (
@@ -581,9 +581,9 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
                         <h3 className="text-xs uppercase font-bold text-brand-500 tracking-wider">Procédures pas à pas — suivez l'ordre, cliquez, observez</h3>
                         <p className="text-[11px] text-slate-500 dark:text-slate-400">Chaque étape indique <strong>où cliquer</strong>, <strong>ce que vous voyez</strong> et <strong>ce qu'il faut observer</strong>. Suivez dans l'ordre sur votre VM de labo.</p>
                         {course.guiSteps.map((step, si) => (
-                            <div key={si} className="space-y-2 p-4 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-900/30">
+                            <div key={si} className="space-y-2 p-4 rounded-lg border border-gray-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-900/30">
                                 <h4 className="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
-                                    <span className="w-6 h-6 rounded-full bg-brand-600 text-white text-xs flex items-center justify-center font-bold">{si + 1}</span>
+                                    <span className="w-6 h-6 rounded-full bg-cyan-600 text-white text-xs flex items-center justify-center font-bold">{si + 1}</span>
                                     {step.title}
                                 </h4>
                                 <p className="text-xs text-slate-700 dark:text-slate-300 leading-relaxed pl-8">{step.action}</p>
@@ -662,7 +662,7 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
 
 
                 {/* Navigation entre CP */}
-                <div className="pt-4 border-t border-slate-200 dark:border-slate-700 flex flex-wrap gap-3 justify-between items-center">
+                <div className="pt-4 border-t border-gray-200 dark:border-slate-700 flex flex-wrap gap-3 justify-between items-center">
                     <button
                         disabled={!prev}
                         onClick={() => prev && onGoTo(prev)}
@@ -675,7 +675,7 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
                         onClick={() => next && onGoTo(next)}
                         className={`px-4 py-2 rounded-lg text-xs font-bold transition-colors ${
                             next
-                                ? 'bg-brand-600 text-white hover:bg-brand-700'
+                                ? 'bg-cyan-600 text-white hover:bg-cyan-700'
                                 : 'bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-400 cursor-not-allowed'
                         } disabled:opacity-40`}
                     >
@@ -1055,16 +1055,16 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
                                 {parcoursStats.map(p => {
                                     const pct = p.total > 0 ? Math.round((p.done / p.total) * 100) : 0;
                                     return (
-                                        <div key={p.key} className="bg-white dark:bg-slate-800 rounded-xl p-5 border border-slate-200 dark:border-slate-700 shadow-sm space-y-3 hover:shadow-md hover:border-brand-500/40 transition-all">
+                                        <div key={p.key} className="bg-white dark:bg-slate-800 rounded-xl p-5 border border-gray-200 dark:border-slate-700 shadow-md dark:shadow-sm space-y-3 hover:shadow-md hover:border-brand-500/40 transition-all">
                                             <div className="flex justify-between items-start">
                                                 <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${p.badgeClass} bg-slate-100 dark:bg-slate-900/70`}>
                                                     <ParcoursIcon name={p.icon} />
                                                 </div>
-                                                <span className={`text-[10px] font-bold font-mono bg-slate-100 dark:bg-slate-900/70 px-2 py-0.5 rounded text-slate-300 ${p.badgeClass}`}>{p.badge}</span>
+                                                <span className={`text-[10px] font-bold font-mono bg-slate-100 dark:bg-slate-900/70 px-2 py-0.5 rounded text-gray-600 dark:text-slate-300 ${p.badgeClass}`}>{p.badge}</span>
                                             </div>
                                             <div>
-                                                <h3 className="font-bold text-lg text-white">{p.nom}</h3>
-                                                <p className="text-slate-200 text-sm leading-relaxed mt-0.5">{p.desc}</p>
+                                                <h3 className="font-bold text-lg text-gray-900 dark:text-white">{p.nom}</h3>
+                                                <p className="text-sm leading-relaxed text-gray-600 dark:text-slate-200 mt-0.5">{p.desc}</p>
                                             </div>
                                             <div>
                                                 <div className="flex justify-between text-[11px] font-semibold text-slate-600 dark:text-slate-400 mb-1">
@@ -1087,35 +1087,35 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
                         </div>
 
                         {/* ===== 2. BANNER CENTRAL ===== */}
-                        <div className="fade-up-2 relative rounded-2xl overflow-hidden shadow-lg border border-slate-200 dark:border-slate-700">
+                        <div className="fade-up-2 relative rounded-2xl overflow-hidden shadow-lg border border-gray-200 dark:border-slate-700">
                             <img src={bannerImg} alt="Infrastructure réseau et datacenter" className="w-full h-40 md:h-56 object-cover" />
                             <div className="absolute inset-0 bg-gradient-to-r from-slate-950/85 via-slate-900/60 to-slate-900/30 flex flex-col justify-center px-6 md:px-10">
-                                <h2 className="text-xl md:text-2xl font-bold text-white leading-tight max-w-xl">Plateforme de révision Systèmes, Réseaux, Cybersécurité et CCNA</h2>
+                                <h2 className="text-xl md:text-2xl font-bold text-gray-900 dark:text-white leading-tight max-w-xl">Plateforme de révision Systèmes, Réseaux, Cybersécurité et CCNA</h2>
                                 <p className="text-sky-300 text-sm md:text-base font-semibold mt-1.5">Révisez, pratiquez et réussissez vos certifications.</p>
                             </div>
                         </div>
 
                         {/* ===== 3. LES INDISPENSABLES DU JOUR ===== */}
-                        <div className="fade-up-3 bg-white dark:bg-slate-800 rounded-xl p-5 border border-slate-200 dark:border-slate-700 shadow-sm space-y-4">
+                        <div className="fade-up-3 bg-white dark:bg-slate-800 rounded-xl p-5 border border-gray-200 dark:border-slate-700 shadow-md dark:shadow-sm space-y-4">
                             <div className="flex flex-wrap justify-between items-center gap-2">
                                 <div>
-                                    <h3 className="text-lg font-bold text-white">Les indispensables du jour</h3>
+                                    <h3 className="text-lg font-bold text-gray-900 dark:text-white">Les indispensables du jour</h3>
                                     <p className="text-xs text-slate-500 dark:text-slate-400">{now.toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' })} — cinq pépites terrain renouvelées chaque jour.</p>
                                 </div>
                                 <button onClick={() => setDashSeed(s => s + 1)} className="px-3 py-1.5 text-xs font-bold rounded-lg bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors">🔄 Actualiser</button>
                             </div>
                             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-5 gap-3">
-                                <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 space-y-1.5 fade-up">
+                                <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-900/50 border border-gray-200 dark:border-slate-700 space-y-1.5 fade-up">
                                     <span className="text-[10px] uppercase font-bold text-sky-600 dark:text-sky-400 block">🪟 Commande Windows du jour</span>
                                     <code className="block text-[11px] font-mono text-emerald-700 dark:text-emerald-400 break-all bg-slate-950/90 text-emerald-400 p-2 rounded">{cmdWin.c}</code>
                                     <p className="text-[10px] text-slate-500 dark:text-slate-400">💡 {cmdWin.d}</p>
                                 </div>
-                                <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 space-y-1.5 fade-up-2">
+                                <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-900/50 border border-gray-200 dark:border-slate-700 space-y-1.5 fade-up-2">
                                     <span className="text-[10px] uppercase font-bold text-purple-600 dark:text-purple-400 block">🐧 Commande Linux du jour</span>
                                     <code className="block text-[11px] font-mono text-emerald-700 dark:text-emerald-400 break-all bg-slate-950/90 text-emerald-400 p-2 rounded">{cmdLin.c}</code>
                                     <p className="text-[10px] text-slate-500 dark:text-slate-400">💡 {cmdLin.d}</p>
                                 </div>
-                                <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 space-y-1.5 fade-up-2">
+                                <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-900/50 border border-gray-200 dark:border-slate-700 space-y-1.5 fade-up-2">
                                     <span className="text-[10px] uppercase font-bold text-amber-600 dark:text-amber-400 block">🔌 Port réseau du jour</span>
                                     <div className="flex items-baseline gap-2">
                                         <span className="text-xl font-black font-mono text-slate-900 dark:text-white">{portJour.port}</span>
@@ -1124,11 +1124,11 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
                                     <p className="text-xs font-bold text-slate-800 dark:text-slate-200">{portJour.service}</p>
                                     <p className="text-[10px] text-slate-500 dark:text-slate-400">💡 {portJour.desc}</p>
                                 </div>
-                                <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 space-y-1.5 fade-up-3">
+                                <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-900/50 border border-gray-200 dark:border-slate-700 space-y-1.5 fade-up-3">
                                     <span className="text-[10px] uppercase font-bold text-emerald-600 dark:text-emerald-400 block">⚡ Astuce PowerShell du jour</span>
                                     <code className="block text-[11px] font-mono text-slate-700 dark:text-slate-300 break-all bg-slate-950/90 text-emerald-400 p-2 rounded">{psTip}</code>
                                 </div>
-                                <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 space-y-1.5 md:col-span-2 xl:col-span-1 fade-up-3">
+                                <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-900/50 border border-gray-200 dark:border-slate-700 space-y-1.5 md:col-span-2 xl:col-span-1 fade-up-3">
                                     <span className="text-[10px] uppercase font-bold text-brand-600 dark:text-brand-400 block">🎯 Question réseau du jour</span>
                                     <p className="text-[11px] font-semibold text-slate-800 dark:text-slate-200">{qJour.question}</p>
                                     <details>
@@ -1145,13 +1145,13 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
                         </div>
 
                         {/* ===== 4. PARCOURS CONSEILLÉ ===== */}
-                        <div className="bg-white dark:bg-slate-800 rounded-xl p-5 border border-slate-200 dark:border-slate-700 shadow-sm">
+                        <div className="bg-white dark:bg-slate-800 rounded-xl p-5 border border-gray-200 dark:border-slate-700 shadow-md dark:shadow-sm">
                             <h3 className="text-sm font-bold text-slate-900 dark:text-white mb-1">PARCOURS CONSEILLÉ</h3>
                             <p className="text-xs text-slate-500 dark:text-slate-400 mb-3">Le chemin de montée en compétences d'un technicien, du support à l'administration réseau — chaque étape est cliquable.</p>
                             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
                                 {steps.map(s => (
-                                    <button key={s.n} onClick={s.go} className="group flex items-start gap-3 p-3 text-left bg-slate-50 dark:bg-slate-900/50 rounded-xl border border-slate-200 dark:border-slate-700 hover:border-brand-500/50 hover:bg-brand-500/5 transition-all">
-                                        <span className="w-9 h-9 rounded-lg bg-brand-600 text-white font-black text-sm flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">{s.n}</span>
+                                    <button key={s.n} onClick={s.go} className="group flex items-start gap-3 p-3 text-left bg-slate-50 dark:bg-slate-900/50 rounded-xl border border-gray-200 dark:border-slate-700 hover:border-brand-500/50 hover:bg-brand-500/5 transition-all">
+                                        <span className="w-9 h-9 rounded-lg bg-cyan-600 text-white font-black text-sm flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">{s.n}</span>
                                         <div>
                                             <span className="text-xs font-bold text-slate-900 dark:text-white block">{s.icon} {s.titre}</span>
                                             <span className="text-[11px] text-slate-500 dark:text-slate-400">{s.desc}</span>
@@ -1168,13 +1168,13 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
             const renderCourses = () => (
                 <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
                     {/* Barre latérale des cours */}
-                    <div className={`order-2 lg:order-1 lg:col-span-1 space-y-2 bg-white dark:bg-slate-800 p-4 rounded-xl border border-slate-200 dark:border-slate-700 lg:sticky lg:top-20 lg:max-h-[calc(100vh-6rem)] overflow-y-auto self-start ${modsOpen ? '' : 'hidden lg:block'}`}>
+                    <div className={`order-2 lg:order-1 lg:col-span-1 space-y-2 bg-white dark:bg-slate-800 p-4 rounded-xl border border-gray-200 dark:border-slate-700 lg:sticky lg:top-20 lg:max-h-[calc(100vh-6rem)] overflow-y-auto self-start ${modsOpen ? '' : 'hidden lg:block'}`}>
                         <div className="flex justify-between items-center mb-2">
                             <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider">Modules</h3>
                             <select
                                 value={courseFilter}
                                 onChange={(e) => setCourseFilter(e.target.value)}
-                                className="bg-slate-100 dark:bg-slate-900 text-xs text-slate-700 dark:text-slate-300 rounded border border-slate-200 dark:border-slate-700 px-1.5 py-0.5"
+                                className="bg-slate-100 dark:bg-slate-900 text-xs text-slate-700 dark:text-slate-300 rounded border border-gray-200 dark:border-slate-700 px-1.5 py-0.5"
                             >
                                 <option value="ALL">Tous les parcours</option>
                                 <option value="CCNA">CCNA 200-301</option>
@@ -1182,7 +1182,7 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
                                 <option value="AIS">AIS</option>
                             </select>
                         </div>
-                        <p className="text-[10px] text-slate-400 dark:text-slate-500 leading-relaxed mb-2 border-b border-slate-200 dark:border-slate-700 pb-2">
+                        <p className="text-[10px] text-slate-400 dark:text-slate-500 leading-relaxed mb-2 border-b border-gray-200 dark:border-slate-700 pb-2">
                             💡 Suivez l'ordre des fiches : 1.1 → 1.7 pour le CCNA, CP1 → CP9 pour le TSSR, CP1 → CP10 pour l'AIS. Chaque fiche s'appuie sur la précédente.
                         </p>
                         {filteredCourses.map(c => {
@@ -1194,7 +1194,7 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
                                     onClick={() => { setSelectedCourse(c); setModsOpen(false); }}
                                     className={`w-full text-left p-2.5 rounded-lg text-xs transition-all flex items-center justify-between ${
                                         isSelected
-                                            ? 'bg-brand-600 text-white font-semibold'
+                                            ? 'bg-cyan-600 text-white font-semibold'
                                             : 'hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300'
                                     }`}
                                 >
@@ -1213,7 +1213,7 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
                     </div>
 
                     {/* Bascule mobile : la liste des modules se replie sous le contenu sur téléphone */}
-                    <button onClick={() => setModsOpen(o => !o)} className="order-1 lg:hidden w-full flex items-center justify-between p-3 rounded-xl bg-brand-600 text-white text-xs font-bold shadow">
+                    <button onClick={() => setModsOpen(o => !o)} className="order-1 lg:hidden w-full flex items-center justify-between p-3 rounded-xl bg-cyan-600 text-white text-xs font-bold shadow">
                         <span>📚 {modsOpen ? 'Masquer' : 'Afficher'} les modules de cours</span>
                         <span className="font-mono text-[10px] opacity-80">{filteredCourses.length} fiches · en cours : {selectedCourse.parcours} {selectedCourse.code}</span>
                     </button>
@@ -1222,7 +1222,7 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
                     <div className="order-3 lg:order-2 lg:col-span-3 space-y-6">
                         {selectedCourse ? (
                             selectedCourse.isPlaceholder ? (
-                                <div className="bg-white dark:bg-slate-800 rounded-xl p-12 border border-slate-200 dark:border-slate-700 shadow-sm text-center space-y-4">
+                                <div className="bg-white dark:bg-slate-800 rounded-xl p-12 border border-gray-200 dark:border-slate-700 shadow-md dark:shadow-sm text-center space-y-4">
                                     <div className="w-16 h-16 mx-auto rounded-full bg-amber-500/10 text-amber-500 flex items-center justify-center text-2xl font-bold">
                                         ⏳
                                     </div>
@@ -1242,9 +1242,9 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
                                     onOpenTab={setCurrentTab}
                                 />
                             ) : (
-                                <div className="bg-white dark:bg-slate-800 rounded-xl p-6 border border-slate-200 dark:border-slate-700 shadow-sm space-y-6">
+                                <div className="bg-white dark:bg-slate-800 rounded-xl p-6 border border-gray-200 dark:border-slate-700 shadow-md dark:shadow-sm space-y-6">
                                     {/* 1. Compétence visée */}
-                                    <div className="border-b border-slate-200 dark:border-slate-700 pb-4 flex flex-wrap gap-3 justify-between items-start">
+                                    <div className="border-b border-gray-200 dark:border-slate-700 pb-4 flex flex-wrap gap-3 justify-between items-start">
                                         <div>
                                             <div className="flex items-center flex-wrap gap-2">
                                                 <span className="px-2.5 py-0.5 bg-brand-500/10 text-brand-500 text-xs font-mono font-bold rounded">
@@ -1289,7 +1289,7 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
                                                     ))}
                                                 </ul>
                                             </div>
-                                            <div className="p-3 bg-slate-50 dark:bg-slate-900/50 rounded-lg border border-slate-200 dark:border-slate-800">
+                                            <div className="p-3 bg-slate-50 dark:bg-slate-900/50 rounded-lg border border-gray-200 dark:border-slate-800">
                                                 <span className="text-[11px] font-bold uppercase text-slate-500 block mb-1.5">🧭 Prérequis</span>
                                                 <p className="text-xs text-slate-700 dark:text-slate-300 leading-relaxed">{selectedCourse.prerequis}</p>
                                             </div>
@@ -1326,7 +1326,7 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
                                     {/* 5. Manipulation graphique */}
                                     <div className="space-y-2">
                                         <h3 className="text-xs uppercase font-bold text-brand-500 tracking-wider">4. Procedure Interface Graphique (GUI)</h3>
-                                        <div className="p-3 bg-slate-50 dark:bg-slate-900 rounded-lg text-xs font-mono text-slate-800 dark:text-slate-200 border border-slate-200 dark:border-slate-700">
+                                        <div className="p-3 bg-slate-50 dark:bg-slate-900 rounded-lg text-xs font-mono text-slate-800 dark:text-slate-200 border border-gray-200 dark:border-slate-700">
                                             {selectedCourse.guiProcedure}
                                         </div>
                                     </div>
@@ -1368,7 +1368,7 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
                                         <h3 className="text-xs uppercase font-bold text-brand-500 tracking-wider">8. Vocabulaire Technique Anglais</h3>
                                         <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
                                             {selectedCourse.vocab.map((v, idx) => (
-                                                <div key={idx} className="p-2 bg-slate-50 dark:bg-slate-900 rounded border border-slate-200 dark:border-slate-700 text-xs">
+                                                <div key={idx} className="p-2 bg-slate-50 dark:bg-slate-900 rounded border border-gray-200 dark:border-slate-700 text-xs">
                                                     <div className="font-bold text-brand-500">{v.en}</div>
                                                     <div className="text-slate-500">{v.fr}</div>
                                                 </div>
@@ -1380,7 +1380,7 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
                                         restent disponibles depuis la barre de navigation principale. */}
 
                                     {/* Navigation précédent / suivant (FONC-25) */}
-                                    <div className="pt-4 border-t border-slate-200 dark:border-slate-700 flex flex-wrap gap-3 justify-between items-center">
+                                    <div className="pt-4 border-t border-gray-200 dark:border-slate-700 flex flex-wrap gap-3 justify-between items-center">
                                         <button
                                             disabled={!prevEntry}
                                             onClick={() => prevEntry && setSelectedCourse(prevEntry)}
@@ -1393,7 +1393,7 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
                                             onClick={() => nextEntryEntry && setSelectedCourse(nextEntryEntry)}
                                             className={`px-4 py-2 rounded-lg text-xs font-bold transition-colors ${
                                                 nextEntryEntry
-                                                    ? 'bg-brand-600 text-white hover:bg-brand-700'
+                                                    ? 'bg-cyan-600 text-white hover:bg-cyan-700'
                                                     : 'bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-400 cursor-not-allowed'
                                             } disabled:opacity-40`}
                                         >
@@ -1449,7 +1449,7 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
                     return (
                         <div className="space-y-6">
                             <button onClick={() => setSelectedLabId(null)} className="text-xs font-bold text-brand-600 dark:text-brand-400 hover:underline no-print">← Retour à la bibliothèque de labos</button>
-                            <div className="bg-white dark:bg-slate-800 rounded-xl p-4 md:p-6 border border-slate-200 dark:border-slate-700 shadow-sm space-y-4">
+                            <div className="bg-white dark:bg-slate-800 rounded-xl p-4 md:p-6 border border-gray-200 dark:border-slate-700 shadow-md dark:shadow-sm space-y-4">
                                 <div className="flex flex-wrap justify-between items-start gap-2">
                                     <div>
                                         <div className="flex flex-wrap items-center gap-2 mb-1">
@@ -1461,7 +1461,7 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
                                         <h2 className="text-xl font-bold text-slate-900 dark:text-white">{selLab.title}</h2>
                                     </div>
                                 </div>
-                                <div className={`rounded-lg overflow-hidden border border-slate-200 dark:border-slate-700 ${labDone.has(selLab.id) ? 'bg-emerald-500/10' : 'bg-slate-100 dark:bg-slate-900/50'}`}>
+                                <div className={`rounded-lg overflow-hidden border border-gray-200 dark:border-slate-700 ${labDone.has(selLab.id) ? 'bg-emerald-500/10' : 'bg-slate-100 dark:bg-slate-900/50'}`}>
                                     <div className="h-2 bg-slate-200 dark:bg-slate-700">
                                         <div className="h-2 bg-brand-500 transition-all" style={{ width: `${pct}%` }}></div>
                                     </div>
@@ -1474,7 +1474,7 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
                                 </div>
                                 <p className="text-sm text-slate-700 dark:text-slate-200"><span className="font-bold text-brand-600 dark:text-brand-400">Objectif : </span>{selLab.objective}</p>
                                 {selLab.context && <p className="text-xs text-slate-600 dark:text-slate-300 border-l-4 border-brand-500/50 pl-3"><span className="font-bold">Contexte métier : </span>{selLab.context}</p>}
-                                <p className="text-xs text-slate-700 dark:text-slate-300 bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 rounded p-2">
+                                <p className="text-xs text-slate-700 dark:text-slate-300 bg-slate-50 dark:bg-slate-900/50 border border-gray-200 dark:border-slate-700 rounded p-2">
                                     <span className="font-bold">Prérequis : </span>{selLab.prereqs}
                                 </p>
                                 {selLab.topology && <p className="text-xs font-mono bg-slate-100 dark:bg-slate-900 p-2 rounded text-slate-600 dark:text-slate-300 whitespace-pre-wrap break-words"><span className="font-bold font-sans">Topologie : </span>{selLab.topology}</p>}
@@ -1483,7 +1483,7 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
                                     {selLab.steps.map(step => {
                                         const isDone = stepsDone.has(step.num);
                                         return (
-                                            <div key={step.num} className={`p-4 rounded-lg border space-y-3 ${isDone ? 'bg-emerald-500/5 border-emerald-500/30' : 'bg-slate-50 dark:bg-slate-900/50 border-slate-200 dark:border-slate-700'}`}>
+                                            <div key={step.num} className={`p-4 rounded-lg border space-y-3 ${isDone ? 'bg-emerald-500/5 border-emerald-500/30' : 'bg-slate-50 dark:bg-slate-900/50 border-gray-200 dark:border-slate-700'}`}>
                                                 <h4 className="text-sm font-bold text-slate-800 dark:text-slate-200 flex items-center gap-2">
                                                     <input
                                                         type="checkbox"
@@ -1492,7 +1492,7 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
                                                         aria-label={`Étape ${step.num} terminée`}
                                                         className="w-4 h-4 accent-brand-600"
                                                     />
-                                                    <span className={`w-6 h-6 rounded-full text-white text-xs flex items-center justify-center font-bold ${isDone ? 'bg-emerald-500' : 'bg-brand-600'}`}>{step.num}</span>
+                                                    <span className={`w-6 h-6 rounded-full text-white text-xs flex items-center justify-center font-bold ${isDone ? 'bg-emerald-500' : 'bg-cyan-600'}`}>{step.num}</span>
                                                     {step.title}
                                                 </h4>
                                                 <p className="text-xs text-slate-600 dark:text-slate-400">{step.instructions}</p>
@@ -1538,8 +1538,8 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
                 const byParcours = (p) => LABS_DATA.filter(l => l.parcours === p).length;
                 return (
                     <div className="space-y-6">
-                        <div className="bg-white dark:bg-slate-800 rounded-xl p-4 md:p-6 border border-slate-200 dark:border-slate-700 space-y-4">
-                            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-3 border-b border-slate-200 dark:border-slate-700 pb-3">
+                        <div className="bg-white dark:bg-slate-800 rounded-xl p-4 md:p-6 border border-gray-200 dark:border-slate-700 space-y-4">
+                            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-3 border-b border-gray-200 dark:border-slate-700 pb-3">
                                 <div>
                                     <h2 className="text-xl font-bold text-slate-900 dark:text-white">🧪 Bibliothèque de Labos Guidés</h2>
                                     <p className="text-xs text-slate-500 dark:text-slate-400">{LABS_DATA.length} labos — TSSR {byParcours('TSSR')} · AIS {byParcours('AIS')} · CCNA {byParcours('CCNA')} — {doneLabs} terminé(s). Progression sauvegardée dans le navigateur.</p>
@@ -1558,13 +1558,13 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
                                 <div className="flex gap-2 flex-wrap items-center">
                                     <span className="text-[10px] font-bold uppercase text-slate-400">Parcours :</span>
                                     {parcoursF.map(p => (
-                                        <button key={p} onClick={() => setLabParcours(p)} className={`px-2.5 py-1 text-[11px] font-bold rounded-lg border ${labParcours === p ? 'bg-brand-600 text-white border-brand-600' : 'bg-slate-100 dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-200'}`}>{p === 'Tous' ? 'Tous' : p}</button>
+                                        <button key={p} onClick={() => setLabParcours(p)} className={`px-2.5 py-1 text-[11px] font-bold rounded-lg border ${labParcours === p ? 'bg-cyan-600 text-white border-cyan-600' : 'bg-slate-100 dark:bg-slate-800 border-gray-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-200'}`}>{p === 'Tous' ? 'Tous' : p}</button>
                                     ))}
                                 </div>
                                 <div className="flex gap-2 flex-wrap items-center">
                                     <span className="text-[10px] font-bold uppercase text-slate-400">Niveau :</span>
                                     {levels.map(lv => (
-                                        <button key={lv} onClick={() => setLabLevel(lv)} className={`px-2.5 py-1 text-[11px] font-bold rounded-lg border ${labLevel === lv ? 'bg-brand-600 text-white border-brand-600' : 'bg-slate-100 dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-200'}`}>{lv}</button>
+                                        <button key={lv} onClick={() => setLabLevel(lv)} className={`px-2.5 py-1 text-[11px] font-bold rounded-lg border ${labLevel === lv ? 'bg-cyan-600 text-white border-cyan-600' : 'bg-slate-100 dark:bg-slate-800 border-gray-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-200'}`}>{lv}</button>
                                     ))}
                                 </div>
                             </div>
@@ -1576,7 +1576,7 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
                                     const stepsDone = new Set(labChecklist[l.id] || []).size;
                                     const pct = Math.round((stepsDone / l.steps.length) * 100);
                                     return (
-                                        <div key={l.id || idx} className="p-4 bg-slate-50 dark:bg-slate-900/50 rounded-xl border border-slate-200 dark:border-slate-700 space-y-2 flex flex-col">
+                                        <div key={l.id || idx} className="p-4 bg-slate-50 dark:bg-slate-900/50 rounded-xl border border-gray-200 dark:border-slate-700 space-y-2 flex flex-col">
                                             <div className="flex flex-wrap items-center gap-2">
                                                 <span className={`px-2 py-0.5 text-[10px] font-bold rounded-full ${labParcoursBadge(l.parcours)}`}>{l.parcours}</span>
                                                 <span className={`px-2 py-0.5 text-[10px] font-bold rounded-full ${labLevelBadge(l.level)}`}>{l.level}</span>
@@ -1588,7 +1588,7 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
                                             <div className="h-1.5 bg-slate-200 dark:bg-slate-700 rounded overflow-hidden">
                                                 <div className="h-1.5 bg-brand-500" style={{ width: `${pct}%` }}></div>
                                             </div>
-                                            <button onClick={() => setSelectedLabId(l.id)} className="mt-1 px-3 py-1.5 bg-brand-600 w-full text-white text-xs font-bold rounded-lg hover:bg-brand-700">
+                                            <button onClick={() => setSelectedLabId(l.id)} className="mt-1 px-3 py-1.5 bg-cyan-600 w-full text-white text-xs font-bold rounded-lg hover:bg-cyan-700">
                                                 {stepsDone > 0 ? 'Continuer le labo' : 'Commencer le labo'} →
                                             </button>
                                         </div>
@@ -1611,8 +1611,8 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
 
                 return (
                     <div className="space-y-6">
-                        <div className="bg-white dark:bg-slate-800 p-4 md:p-6 rounded-xl border border-slate-200 dark:border-slate-700 space-y-4">
-                            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-3 border-b border-slate-200 dark:border-slate-700 pb-3">
+                        <div className="bg-white dark:bg-slate-800 p-4 md:p-6 rounded-xl border border-gray-200 dark:border-slate-700 space-y-4">
+                            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-3 border-b border-gray-200 dark:border-slate-700 pb-3">
                                 <div>
                                     <h2 className="text-xl font-bold text-slate-900 dark:text-white">🌐 Vocabulaire Anglais IT</h2>
                                     <p className="text-xs text-slate-500 dark:text-slate-400">{ENGLISH_VOCAB.length} termes — définition, traduction et exemple en contexte. Recherche insensible à la casse et aux accents.</p>
@@ -1622,7 +1622,7 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
                                         value={vocabCat}
                                         onChange={(e) => setVocabCat(e.target.value)}
                                         aria-label="Filtrer le vocabulaire par catégorie"
-                                        className="bg-slate-100 dark:bg-slate-900 text-xs text-slate-700 dark:text-slate-300 rounded border border-slate-200 dark:border-slate-700 px-2 py-1.5"
+                                        className="bg-slate-100 dark:bg-slate-900 text-xs text-slate-700 dark:text-slate-300 rounded border border-gray-200 dark:border-slate-700 px-2 py-1.5"
                                     >
                                         {['Tous', ...vocabTypes].map(opt => (
                                             <option key={opt} value={opt}>{opt === 'Tous' ? 'Toutes les catégories' : opt}</option>
@@ -1678,7 +1678,7 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
                             {/* Cartes (mobile) */}
                             <div className="md:hidden space-y-2">
                                 {filteredVocab.length > 0 ? filteredVocab.map((v, idx) => (
-                                    <div key={idx} className="p-3 border border-slate-200 dark:border-slate-700 rounded-lg bg-slate-50 dark:bg-slate-900/50 space-y-1">
+                                    <div key={idx} className="p-3 border border-gray-200 dark:border-slate-700 rounded-lg bg-slate-50 dark:bg-slate-900/50 space-y-1">
                                         <div className="font-mono font-bold text-sm text-slate-900 dark:text-white">{v.en}</div>
                                         <div className="text-xs text-slate-600 dark:text-slate-300">{v.fr}</div>
                                         {v.def && <div className="text-xs text-slate-600 dark:text-slate-400">{v.def}</div>}
@@ -1734,14 +1734,14 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
                     const isFav = cmdFavorites.has(fid);
                     const isCopied = copiedCmd === fid;
                     return (
-                        <div key={idx} className="text-xs bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 rounded-lg p-3 space-y-1.5 print-card">
+                        <div key={idx} className="text-xs bg-slate-50 dark:bg-slate-900/50 border border-gray-200 dark:border-slate-700 rounded-lg p-3 space-y-1.5 print-card">
                             <div className="flex items-start gap-2">
                                 <code className={`bg-slate-900 px-2 py-1 rounded font-mono flex-1 min-w-0 ${c.risk === 'destructif' ? 'text-red-300' : c.risk === 'modification' ? 'text-amber-200' : 'text-emerald-400'} block overflow-x-auto whitespace-pre-wrap break-words`}>{c.cmd}</code>
                                 <span className={`shrink-0 text-[9px] font-bold uppercase px-1.5 py-0.5 rounded ${cmdRiskStyle[c.risk] || cmdRiskStyle['consultation']}`}>{c.risk || 'consultation'}</span>
                                 <button onClick={() => toggleCmdFavorite(fid)} aria-label={isFav ? 'Retirer des favoris' : 'Ajouter aux favoris'} title={isFav ? 'Retirer des favoris' : 'Ajouter aux favoris'}
-                                    className={`shrink-0 px-1.5 py-0.5 rounded text-[11px] font-bold border ${isFav ? 'bg-yellow-400/20 text-yellow-500 border-yellow-400/40' : 'bg-white dark:bg-slate-800 text-slate-400 border-slate-200 dark:border-slate-700 hover:text-yellow-500'}`}>★</button>
+                                    className={`shrink-0 px-1.5 py-0.5 rounded text-[11px] font-bold border ${isFav ? 'bg-yellow-400/20 text-yellow-500 border-yellow-400/40' : 'bg-white dark:bg-slate-800 text-slate-400 border-gray-200 dark:border-slate-700 hover:text-yellow-500'}`}>★</button>
                                 <button onClick={() => copyCmd(c, fid)} aria-label="Copier la commande" title="Copier la commande"
-                                    className="shrink-0 px-1.5 py-0.5 rounded text-[11px] font-bold border bg-white dark:bg-slate-800 text-slate-500 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:text-brand-500">
+                                    className="shrink-0 px-1.5 py-0.5 rounded text-[11px] font-bold border bg-white dark:bg-slate-800 text-slate-500 dark:text-slate-300 border-gray-200 dark:border-slate-700 hover:text-brand-500">
                                     {isCopied ? '✓' : '⧉'}
                                 </button>
                             </div>
@@ -1758,14 +1758,14 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
                 };
                 return (
                     <div id="printable-area" className="space-y-6">
-                        <div className="flex justify-between items-center no-print border-b border-slate-200 dark:border-slate-700 pb-4">
+                        <div className="flex justify-between items-center no-print border-b border-gray-200 dark:border-slate-700 pb-4">
                             <div>
                                 <h2 className="text-xl font-bold text-slate-900 dark:text-white">⌨️ Commandes — classées par fréquence d'usage</h2>
                                 <p className="text-xs text-slate-500 dark:text-slate-400">
                                     {all.length} commandes — Cisco {countsAll.Cisco} · Windows/PS {countsAll.Windows} · Linux {countsAll.Linux} · Autres {countsAll.Autres} — favoris {favCount}.
                                 </p>
                             </div>
-                            <button onClick={() => window.print()} className="px-4 py-2 bg-brand-600 text-white text-xs font-bold rounded-lg hover:bg-brand-700">
+                            <button onClick={() => window.print()} className="px-4 py-2 bg-cyan-600 text-white text-xs font-bold rounded-lg hover:bg-cyan-700">
                                 🖨️ Imprimer (A4)
                             </button>
                         </div>
@@ -1773,7 +1773,7 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
                             <div className="flex gap-2 flex-wrap">
                                 {['Tous', 'Cisco', 'Windows', 'Linux', 'Autres'].map(s => (
                                     <button key={s} onClick={() => setCmdSys(s)}
-                                        className={`px-3 py-1.5 text-xs font-bold rounded-lg border transition-colors ${cmdSys === s ? 'bg-brand-600 text-white border-brand-600' : 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:bg-slate-200 dark:hover:bg-slate-700'}`}>
+                                        className={`px-3 py-1.5 text-xs font-bold rounded-lg border transition-colors ${cmdSys === s ? 'bg-cyan-600 text-white border-cyan-600' : 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-gray-200 dark:border-slate-700 hover:bg-slate-200 dark:hover:bg-slate-700'}`}>
                                         {s === 'Tous' ? 'Tous les systèmes' : cmdSysLabel[s]}
                                     </button>
                                 ))}
@@ -1796,7 +1796,7 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
                             if (items.length === 0) return null;
                             return (
                                 <div key={g.f} className="space-y-3">
-                                    <h3 className="text-sm font-bold text-brand-600 dark:text-brand-400 border-b border-slate-200 dark:border-slate-700 pb-1">
+                                    <h3 className="text-sm font-bold text-brand-600 dark:text-brand-400 border-b border-gray-200 dark:border-slate-700 pb-1">
                                         {g.f === 5 ? `${g.label} — ${g.stars}` : `${g.stars} ${g.label}`}
                                         <span className="text-slate-400 font-normal"> ({items.length} commandes{g.sub ? `, ${g.sub}` : ''})</span>
                                     </h3>
@@ -1827,8 +1827,8 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
 
                 return (
                     <div className="space-y-6">
-                        <div className="bg-white dark:bg-slate-800 p-6 rounded-xl border border-slate-200 dark:border-slate-700 space-y-4">
-                            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-3 border-b border-slate-200 dark:border-slate-700 pb-3">
+                        <div className="bg-white dark:bg-slate-800 p-6 rounded-xl border border-gray-200 dark:border-slate-700 space-y-4">
+                            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-3 border-b border-gray-200 dark:border-slate-700 pb-3">
                                 <div>
                                     <h2 className="text-xl font-bold text-slate-900 dark:text-white">📖 Glossaire IT</h2>
                                     <p className="text-xs text-slate-500 dark:text-slate-400">{GLOSSARY_DATA.length} definitions bilingues, recherche insensible a la casse et aux accents.</p>
@@ -1838,7 +1838,7 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
                                         value={glossCertif}
                                         onChange={(e) => setGlossCertif(e.target.value)}
                                         aria-label="Filtrer le glossaire par certification"
-                                        className="bg-slate-100 dark:bg-slate-900 text-xs text-slate-700 dark:text-slate-300 rounded border border-slate-200 dark:border-slate-700 px-2 py-1.5"
+                                        className="bg-slate-100 dark:bg-slate-900 text-xs text-slate-700 dark:text-slate-300 rounded border border-gray-200 dark:border-slate-700 px-2 py-1.5"
                                     >
                                         {glossCertifOptions.map(opt => (
                                             <option key={opt} value={opt}>{opt === 'Tous' ? 'Toutes les certifications' : opt}</option>
@@ -1862,7 +1862,7 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
                                 )}
                                 {filteredGlossary.length > 0 ? (
                                     filteredGlossary.map((g, idx) => (
-                                        <div key={idx} className="p-3 bg-slate-50 dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-700 text-xs">
+                                        <div key={idx} className="p-3 bg-slate-50 dark:bg-slate-900 rounded-lg border border-gray-200 dark:border-slate-700 text-xs">
                                             <div className="flex justify-between items-center mb-1">
                                                 <strong className="text-sm font-bold text-slate-900 dark:text-white">{g.term}</strong>
                                                 <span className="text-[10px] font-mono bg-sky-500/10 text-sky-500 px-2 py-0.5 rounded">{g.certif}</span>
@@ -1894,7 +1894,7 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
                 const winScripts = scripts.filter(s => s.os === 'Windows');
                 const linScripts = scripts.filter(s => s.os === 'Linux');
                 const scriptCard = (s) => (
-                    <div key={s.titre} className="p-4 bg-slate-50 dark:bg-slate-900/50 rounded-xl border border-slate-200 dark:border-slate-700 space-y-3">
+                    <div key={s.titre} className="p-4 bg-slate-50 dark:bg-slate-900/50 rounded-xl border border-gray-200 dark:border-slate-700 space-y-3">
                         <div className="flex flex-wrap justify-between items-start gap-2">
                             <h4 className="text-sm font-bold text-slate-900 dark:text-white">{s.titre}</h4>
                             <div className="flex items-center gap-2">
@@ -1914,14 +1914,14 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
                         </div>
                         <div>
                             <span className="text-[10px] font-bold uppercase text-brand-500 block mb-1">🖥️ Exemple de sortie</span>
-                            <pre className="bg-slate-100 dark:bg-slate-900/70 p-2.5 text-[10px] text-slate-600 dark:text-slate-400 font-mono whitespace-pre-wrap break-words rounded border border-slate-200 dark:border-slate-700">{s.sortie}</pre>
+                            <pre className="bg-slate-100 dark:bg-slate-900/70 p-2.5 text-[10px] text-slate-600 dark:text-slate-400 font-mono whitespace-pre-wrap break-words rounded border border-gray-200 dark:border-slate-700">{s.sortie}</pre>
                         </div>
                     </div>
                 );
                 return (
                     <div className="space-y-6">
-                        <div className="bg-white dark:bg-slate-800 rounded-xl p-4 md:p-6 border border-slate-200 dark:border-slate-700 space-y-4">
-                            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-3 border-b border-slate-200 dark:border-slate-700 pb-3">
+                        <div className="bg-white dark:bg-slate-800 rounded-xl p-4 md:p-6 border border-gray-200 dark:border-slate-700 space-y-4">
+                            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-3 border-b border-gray-200 dark:border-slate-700 pb-3">
                                 <div>
                                     <h2 className="text-xl font-bold text-slate-900 dark:text-white">💻 Bibliothèque de scripts opérationnels</h2>
                                     <p className="text-xs text-slate-500 dark:text-slate-400">{SCRIPTS_LIB.length} scripts du quotidien ({winScripts.length} Windows · {linScripts.length} Linux), classés du plus fréquent au moins fréquent : description, cas d'usage, script commenté, sortie réelle et niveau.</p>
@@ -1933,7 +1933,7 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
                             </div>
                             <div className="flex gap-2 flex-wrap">
                                 {['Windows', 'Linux'].map(os => (
-                                    <button key={os} onClick={() => setScriptsOs(os)} className={`px-3 py-1.5 text-xs font-bold rounded-lg border transition-colors ${scriptsOs === os ? 'bg-brand-600 text-white border-brand-600' : 'bg-slate-100 dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-200'}`}>{os === 'Windows' ? '🪟 Scripts Windows (PowerShell · Batch)' : '🐧 Scripts Linux (Bash)'}</button>
+                                    <button key={os} onClick={() => setScriptsOs(os)} className={`px-3 py-1.5 text-xs font-bold rounded-lg border transition-colors ${scriptsOs === os ? 'bg-cyan-600 text-white border-cyan-600' : 'bg-slate-100 dark:bg-slate-800 border-gray-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-200'}`}>{os === 'Windows' ? '🪟 Scripts Windows (PowerShell · Batch)' : '🐧 Scripts Linux (Bash)'}</button>
                                 ))}
                             </div>
                             {(scriptsOs === 'Windows' ? winScripts : linScripts).map((s, i) => (
@@ -1976,8 +1976,8 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
                 const freqLabel = (f) => ({ 5: 'Très fréquent', 4: 'Fréquent', 3: 'Régulier', 2: 'Occasionnel', 1: 'Rare' }[f] || 'Régulier');
                 return (
                     <div className="space-y-6">
-                        <div className="bg-white dark:bg-slate-800 rounded-xl p-4 md:p-6 border border-slate-200 dark:border-slate-700 space-y-4">
-                            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-3 border-b border-slate-200 dark:border-slate-700 pb-3">
+                        <div className="bg-white dark:bg-slate-800 rounded-xl p-4 md:p-6 border border-gray-200 dark:border-slate-700 space-y-4">
+                            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-3 border-b border-gray-200 dark:border-slate-700 pb-3">
                                 <div>
                                     <h2 className="text-xl font-bold text-slate-900 dark:text-white">🛠️ Centre de dépannage</h2>
                                     <p className="text-xs text-slate-500 dark:text-slate-400">{DEPANNAGE_DATA.length} problèmes réels du technicien — du plus fréquent au plus rare. Choisir un problème pour afficher la fiche complète. TSSR {byParcours('TSSR')} · AIS {byParcours('AIS')} · CCNA {byParcours('CCNA')}</p>
@@ -2017,7 +2017,7 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
                             </div>
                             <div className="flex gap-2 flex-wrap">
                                 {['Tous', 'TSSR', 'AIS', 'CCNA'].map(p => (
-                                    <button key={p} onClick={() => setLabParcours(p)} className={`px-2.5 py-1 text-[11px] font-bold rounded-lg border ${labParcours === p ? 'bg-brand-600 text-white border-brand-600' : 'bg-slate-100 dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-200'}`}>{p === 'Tous' ? 'Tous' : p}</button>
+                                    <button key={p} onClick={() => setLabParcours(p)} className={`px-2.5 py-1 text-[11px] font-bold rounded-lg border ${labParcours === p ? 'bg-cyan-600 text-white border-cyan-600' : 'bg-slate-100 dark:bg-slate-800 border-gray-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-200'}`}>{p === 'Tous' ? 'Tous' : p}</button>
                                 ))}
                             </div>
 
@@ -2090,13 +2090,13 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
                                 if (items.length === 0) return null;
                                 return (
                                     <div key={g.f} className="space-y-3">
-                                        <h3 className="text-sm font-bold text-brand-600 dark:text-brand-400 border-b border-slate-200 dark:border-slate-700 pb-1">
+                                        <h3 className="text-sm font-bold text-brand-600 dark:text-brand-400 border-b border-gray-200 dark:border-slate-700 pb-1">
                                             {g.label} <span className="text-slate-400 font-normal">({items.length})</span>
                                         </h3>
                                         <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
                                             {items.map((d, idx) => (
                                                 <button key={idx} onClick={() => { setSelectedDepId(d.id); window.scrollTo({ top: 0 }); }}
-                                                    className="text-left p-3.5 bg-slate-50 dark:bg-slate-900/50 rounded-xl border border-slate-200 dark:border-slate-700 space-y-2 hover:border-brand-500/50 hover:shadow-sm transition-all">
+                                                    className="text-left p-3.5 bg-slate-50 dark:bg-slate-900/50 rounded-xl border border-gray-200 dark:border-slate-700 space-y-2 hover:border-brand-500/50 hover:shadow-md dark:shadow-sm transition-all">
                                                     <div className="flex flex-wrap items-center gap-2">
                                                         <span className={`px-2 py-0.5 text-[10px] font-bold rounded-full ${parcoursBadge(d.parcours)}`}>{d.parcours}</span>
                                                         <span className="px-2 py-0.5 text-[10px] font-bold rounded-full bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300">{d.cat}</span>
@@ -2160,14 +2160,14 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
                 const essCats = ['Toutes', ...Array.from(new Set(ESSENTIALS_COMMANDS.filter(x => x.os === essOs).map(x => x.cat)))];
                 return (
                     <div className="space-y-5">
-                        <div className="bg-white dark:bg-slate-800 rounded-xl p-4 md:p-6 border border-slate-200 dark:border-slate-700 space-y-4">
+                        <div className="bg-white dark:bg-slate-800 rounded-xl p-4 md:p-6 border border-gray-200 dark:border-slate-700 space-y-4">
                             <div>
                                 <h2 className="text-xl font-bold text-slate-900 dark:text-white">🛠️ Les Indispensables</h2>
                                 <p className="text-xs text-slate-500 dark:text-slate-400">La référence quotidienne du technicien support, de l'admin systèmes et de l'admin réseau : ports, commandes, adresses, masques, codes HTTP et outils. Orienté terrain.</p>
                             </div>
                             <div className="flex gap-2 flex-wrap">
                                 {essTabs.map(t => (
-                                    <button key={t.id} onClick={() => setEssTab(t.id)} className={`px-3 py-1.5 text-xs font-bold rounded-lg border transition-colors ${essTab === t.id ? 'bg-brand-600 text-white border-brand-600' : 'bg-slate-100 dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-200'}`}>{t.label}</button>
+                                    <button key={t.id} onClick={() => setEssTab(t.id)} className={`px-3 py-1.5 text-xs font-bold rounded-lg border transition-colors ${essTab === t.id ? 'bg-cyan-600 text-white border-cyan-600' : 'bg-slate-100 dark:bg-slate-800 border-gray-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-200'}`}>{t.label}</button>
                                 ))}
                             </div>
 
@@ -2179,11 +2179,11 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
                                             className="flex-1 bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-xs text-slate-900 dark:text-slate-100 focus:outline-none focus:border-brand-500" />
                                         <div className="flex gap-2">
                                             {['Tous', 'TCP', 'UDP'].map(pr => (
-                                                <button key={pr} onClick={() => setEssPortProto(pr)} className={`px-2.5 py-1 text-[11px] font-bold rounded-lg border ${essPortProto === pr ? 'bg-brand-600 text-white border-brand-600' : 'bg-slate-100 dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300'}`}>{pr}</button>
+                                                <button key={pr} onClick={() => setEssPortProto(pr)} className={`px-2.5 py-1 text-[11px] font-bold rounded-lg border ${essPortProto === pr ? 'bg-cyan-600 text-white border-cyan-600' : 'bg-slate-100 dark:bg-slate-800 border-gray-200 dark:border-slate-700 text-slate-600 dark:text-slate-300'}`}>{pr}</button>
                                             ))}
                                         </div>
                                     </div>
-                                    <div className="overflow-x-auto rounded-lg border border-slate-200 dark:border-slate-700">
+                                    <div className="overflow-x-auto rounded-lg border border-gray-200 dark:border-slate-700">
                                         <table className="w-full text-xs">
                                             <thead className="bg-slate-100 dark:bg-slate-900/70">
                                                 <tr>
@@ -2220,7 +2220,7 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
                                                 <p className="text-xs font-bold text-slate-900 dark:text-white">Quel service écoute sur le port {portQuiz.q.port} ({portQuiz.q.proto}) ?</p>
                                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                                                     {portQuiz.opts.map((o, i) => (
-                                                        <button key={i} onClick={() => setPortQuiz(pz => ({ ...pz, done: true, chosen: i }))} className="p-2 text-xs font-bold rounded-lg border border-slate-200 dark:border-slate-700 hover:border-brand-500 text-slate-700 dark:text-slate-300 text-left">{o.service}</button>
+                                                        <button key={i} onClick={() => setPortQuiz(pz => ({ ...pz, done: true, chosen: i }))} className="p-2 text-xs font-bold rounded-lg border border-gray-200 dark:border-slate-700 hover:border-brand-500 text-slate-700 dark:text-slate-300 text-left">{o.service}</button>
                                                     ))}
                                                 </div>
                                             </div>
@@ -2230,7 +2230,7 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
                                                     {portQuiz.chosen !== null && portQuiz.opts[portQuiz.chosen] === portQuiz.q ? `✔ Exact ! ${portQuiz.q.port} = ${portQuiz.q.service}` : `✕ Port ${portQuiz.q.port} = ${portQuiz.q.service} (${portQuiz.q.proto}) — vous aviez choisi ${portQuiz.opts[portQuiz.chosen] !== undefined ? portQuiz.opts[portQuiz.chosen].service : '—'}.`}
                                                 </p>
                                                 <p className="text-[11px] text-slate-500 dark:text-slate-400">{portQuiz.q.desc}</p>
-                                                <button onClick={portQuizNext} className="px-3 py-1.5 text-xs font-bold rounded-lg bg-brand-600 text-white">Question suivante →</button>
+                                                <button onClick={portQuizNext} className="px-3 py-1.5 text-xs font-bold rounded-lg bg-cyan-600 text-white">Question suivante →</button>
                                             </div>
                                         )}
                                     </div>
@@ -2242,16 +2242,16 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
                                 <div className="space-y-4">
                                     <div className="flex gap-2 flex-wrap">
                                         {['Windows', 'Linux', 'Cisco'].map(os => (
-                                            <button key={os} onClick={() => { setEssOs(os); setEssCat('Toutes'); }} className={`px-3 py-1.5 text-xs font-bold rounded-lg border ${essOs === os ? 'bg-brand-600 text-white border-brand-600' : 'bg-slate-100 dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300'}`}>{os}</button>
+                                            <button key={os} onClick={() => { setEssOs(os); setEssCat('Toutes'); }} className={`px-3 py-1.5 text-xs font-bold rounded-lg border ${essOs === os ? 'bg-cyan-600 text-white border-cyan-600' : 'bg-slate-100 dark:bg-slate-800 border-gray-200 dark:border-slate-700 text-slate-600 dark:text-slate-300'}`}>{os}</button>
                                         ))}
                                     </div>
                                     <div className="flex gap-2 flex-wrap">
                                         {essCats.map(cat => (
-                                            <button key={cat} onClick={() => setEssCat(cat)} className={`px-2.5 py-1 text-[11px] font-bold rounded-lg border ${essCat === cat ? 'bg-amber-500 text-white border-amber-500' : 'bg-slate-100 dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300'}`}>{cat}</button>
+                                            <button key={cat} onClick={() => setEssCat(cat)} className={`px-2.5 py-1 text-[11px] font-bold rounded-lg border ${essCat === cat ? 'bg-amber-500 text-white border-amber-500' : 'bg-slate-100 dark:bg-slate-800 border-gray-200 dark:border-slate-700 text-slate-600 dark:text-slate-300'}`}>{cat}</button>
                                         ))}
                                     </div>
                                     {ESSENTIALS_COMMANDS.filter(x => x.os === essOs && (essCat === 'Toutes' || x.cat === essCat)).map((grp, gi) => (
-                                        <div key={gi} className="p-4 bg-slate-50 dark:bg-slate-900/50 rounded-xl border border-slate-200 dark:border-slate-700">
+                                        <div key={gi} className="p-4 bg-slate-50 dark:bg-slate-900/50 rounded-xl border border-gray-200 dark:border-slate-700">
                                             <h4 className="text-xs font-bold text-brand-600 dark:text-brand-400 mb-2">{grp.os} · {grp.cat}</h4>
                                             <div className="space-y-1.5">
                                                 {grp.items.map((it, ii) => (
@@ -2271,7 +2271,7 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
                                 <div className="space-y-4">
                                     <p className="text-xs text-slate-500">Les trois plages privées RFC 1918 : non routables sur Internet, traduites par NAT à la sortie.</p>
                                     {PRIVATE_RANGES.map((r, i) => (
-                                        <div key={i} className="p-4 bg-slate-50 dark:bg-slate-900/50 rounded-xl border border-slate-200 dark:border-slate-700 space-y-1">
+                                        <div key={i} className="p-4 bg-slate-50 dark:bg-slate-900/50 rounded-xl border border-gray-200 dark:border-slate-700 space-y-1">
                                             <div className="flex flex-wrap items-baseline gap-3">
                                                 <span className="text-sm font-black font-mono text-brand-600 dark:text-brand-400">{r.cidr}</span>
                                                 <span className="text-[11px] font-mono text-slate-500">{r.plages}</span>
@@ -2291,7 +2291,7 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
                             {essTab === 'cidr' && (
                                 <div className="space-y-3">
                                     <p className="text-xs text-slate-500">Table complète /8 → /32 : masque, taille, hôtes utilisables et wildcard (nécessaire pour les ACL).</p>
-                                    <div className="overflow-x-auto rounded-lg border border-slate-200 dark:border-slate-700">
+                                    <div className="overflow-x-auto rounded-lg border border-gray-200 dark:border-slate-700">
                                         <table className="w-full text-xs">
                                             <thead className="bg-slate-100 dark:bg-slate-900/70">
                                                 <tr>
@@ -2320,7 +2320,7 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
                                         <p className="text-xs font-bold text-slate-700 dark:text-slate-300 mb-2">Équivalence hexadécimal ↔ binaire (1 chiffre hex = 4 bits)</p>
                                         <div className="grid grid-cols-4 md:grid-cols-8 gap-1.5 text-[11px]">
                                             {Array.from({ length: 16 }, (_, i) => (
-                                                <div key={i} className="p-1.5 bg-white dark:bg-slate-800 rounded border border-slate-200 dark:border-slate-700 text-center">
+                                                <div key={i} className="p-1.5 bg-white dark:bg-slate-800 rounded border border-gray-200 dark:border-slate-700 text-center">
                                                     <span className="font-mono font-bold text-brand-600 dark:text-brand-400">{i.toString(16).toUpperCase()}</span>
                                                     <span className="text-slate-400 mx-1">=</span>
                                                     <span className="font-mono text-slate-700 dark:text-slate-300">{i.toString(2).padStart(4, '0')}</span>
@@ -2337,7 +2337,7 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
                                 <div className="space-y-3">
                                     <p className="text-xs text-slate-500">Ce que le navigateur (ou curl) vous dit vraiment. 1xx information, 2xx succès, 3xx redirection, 4xx faute du client, 5xx faute du serveur.</p>
                                     {HTTP_CODES.map(c => (
-                                        <div key={c.code} className="flex items-start gap-3 p-2.5 bg-slate-50 dark:bg-slate-900/50 rounded-lg border border-slate-200 dark:border-slate-700">
+                                        <div key={c.code} className="flex items-start gap-3 p-2.5 bg-slate-50 dark:bg-slate-900/50 rounded-lg border border-gray-200 dark:border-slate-700">
                                             <span className={`px-2 py-0.5 rounded font-mono font-bold text-xs ${c.code.startsWith('2') ? 'bg-emerald-500/10 text-emerald-600' : c.code.startsWith('3') ? 'bg-sky-500/10 text-sky-600' : c.code.startsWith('4') ? 'bg-amber-500/10 text-amber-600' : c.code.startsWith('5') ? 'bg-red-500/10 text-red-500' : 'bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300'}`}>{c.code}</span>
                                             <div>
                                                 <span className="text-xs font-bold text-slate-900 dark:text-white">{c.nom} — </span>
@@ -2353,7 +2353,7 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
                                 <div className="space-y-3">
                                     <p className="text-xs text-slate-500">La trousse du technicien : chaque outil avec son rôle, un cas d'usage terrain et un exemple concret.</p>
                                     {TOOLS_DATA.map((t, i) => (
-                                        <div key={i} className="p-4 bg-slate-50 dark:bg-slate-900/50 rounded-xl border border-slate-200 dark:border-slate-700 space-y-1.5">
+                                        <div key={i} className="p-4 bg-slate-50 dark:bg-slate-900/50 rounded-xl border border-gray-200 dark:border-slate-700 space-y-1.5">
                                             <h4 className="text-sm font-bold text-slate-900 dark:text-white">{t.nom}</h4>
                                             <p className="text-xs text-slate-700 dark:text-slate-300"><span className="font-bold text-brand-500">Rôle : </span>{t.role}</p>
                                             <p className="text-xs text-slate-700 dark:text-slate-300"><span className="font-bold text-purple-500">Cas d'usage : </span>{t.usage}</p>
@@ -2433,7 +2433,7 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
                                     <div className="space-y-6">
                                         <p className="text-xs text-slate-500">Trois calculateurs pour vérifier vos calculs d'examen instantanément. Tout est calculé dans votre navigateur, rien n'est envoyé.</p>
                                         {/* CIDR */}
-                                        <div className="p-4 bg-slate-50 dark:bg-slate-900/50 rounded-xl border border-slate-200 dark:border-slate-700 space-y-3">
+                                        <div className="p-4 bg-slate-50 dark:bg-slate-900/50 rounded-xl border border-gray-200 dark:border-slate-700 space-y-3">
                                             <h4 className="text-sm font-bold text-slate-900 dark:text-white">🧮 Simulateur CIDR / IPv4</h4>
                                             <div className="flex flex-col md:flex-row gap-2">
                                                 <input value={subCidr.ip} onChange={(e) => setSubCidr(s => ({ ...s, ip: e.target.value }))} placeholder="192.168.10.70" className="flex-1 bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-1.5 text-xs font-mono text-slate-900 dark:text-slate-100 focus:outline-none focus:border-brand-500" />
@@ -2442,7 +2442,7 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
                                             {cidrRes && (
                                                 <div className="grid grid-cols-2 md:grid-cols-4 gap-2 text-[11px]">
                                                     {[['Réseau', cidrRes.network], ['Diffusion', cidrRes.broadcast], ['Masque', cidrRes.mask], ['Wildcard', cidrRes.wildcard], ['1re utilisable', cidrRes.first], ['Dernière utilisable', cidrRes.last], ['Hôtes utilisables', cidrRes.usable.toLocaleString('fr-FR')], ['Taille du bloc', cidrRes.size.toLocaleString('fr-FR')], ['Classe historique', cidrRes.cls], ['Type', cidrRes.priv]].map((kv, i) => (
-                                                        <div key={i} className="p-2 bg-white dark:bg-slate-800 rounded border border-slate-200 dark:border-slate-700">
+                                                        <div key={i} className="p-2 bg-white dark:bg-slate-800 rounded border border-gray-200 dark:border-slate-700">
                                                             <span className="text-[9px] uppercase font-bold text-slate-500 block">{kv[0]}</span>
                                                             <span className="font-mono text-slate-900 dark:text-white break-all">{kv[1]}</span>
                                                         </div>
@@ -2452,7 +2452,7 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
                                             {!cidrRes && subCidr.ip.trim() && <p className="text-[11px] text-red-500">Adresse IPv4 invalide.</p>}
                                         </div>
                                         {/* VLSM */}
-                                        <div className="p-4 bg-slate-50 dark:bg-slate-900/50 rounded-xl border border-slate-200 dark:border-slate-700 space-y-3">
+                                        <div className="p-4 bg-slate-50 dark:bg-slate-900/50 rounded-xl border border-gray-200 dark:border-slate-700 space-y-3">
                                             <h4 className="text-sm font-bold text-slate-900 dark:text-white">📐 Simulateur VLSM — allocation du plus grand au plus petit</h4>
                                             <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                                                 <input value={subVlsm.base} onChange={(e) => setSubVlsm(s => ({ ...s, base: e.target.value }))} placeholder="Base : 192.168.20.0/24" className="bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-1.5 text-xs font-mono text-slate-900 dark:text-slate-100 focus:outline-none focus:border-brand-500" />
@@ -2462,7 +2462,7 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
                                                 ? <p className="text-[11px] text-red-500">{subVlsmResult.error}</p>
                                                 : (
                                                     <div className="space-y-2">
-                                                        <div className="overflow-x-auto rounded-lg border border-slate-200 dark:border-slate-700">
+                                                        <div className="overflow-x-auto rounded-lg border border-gray-200 dark:border-slate-700">
                                                             <table className="w-full text-[11px]">
                                                                 <thead className="bg-slate-100 dark:bg-slate-900/70">
                                                                     <tr><th className="p-2 text-left font-bold text-slate-600 dark:text-slate-300">Hôtes</th><th className="p-2 text-left font-bold text-slate-600 dark:text-slate-300">Préfixe</th><th className="p-2 text-left font-bold text-slate-600 dark:text-slate-300">Réseau</th><th className="p-2 text-left font-bold text-slate-600 dark:text-slate-300">Utilisables</th><th className="p-2 text-left font-bold text-slate-600 dark:text-slate-300">Diffusion</th></tr>
@@ -2485,7 +2485,7 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
                                                 ))}
                                         </div>
                                         {/* IPv6 */}
-                                        <div className="p-4 bg-slate-50 dark:bg-slate-900/50 rounded-xl border border-slate-200 dark:border-slate-700 space-y-3">
+                                        <div className="p-4 bg-slate-50 dark:bg-slate-900/50 rounded-xl border border-gray-200 dark:border-slate-700 space-y-3">
                                             <h4 className="text-sm font-bold text-slate-900 dark:text-white">🌐 Simulateur IPv6 — analyse complète et EUI-64</h4>
                                             <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                                                 <input value={subV6.addr} onChange={(e) => setSubV6(s => ({ ...s, addr: e.target.value }))} placeholder="Adresse : 2001:db8:1::a1:0:0:1" className="bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-1.5 text-xs font-mono text-slate-900 dark:text-slate-100 focus:outline-none focus:border-brand-500" />
@@ -2495,15 +2495,15 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
                                                 ? <p className="text-[11px] text-red-500">{v6Res.error}</p>
                                                 : (
                                                     <div className="grid grid-cols-1 md:grid-cols-3 gap-2 text-[11px]">
-                                                        <div className="p-2 bg-white dark:bg-slate-800 rounded border border-slate-200 dark:border-slate-700 md:col-span-2">
+                                                        <div className="p-2 bg-white dark:bg-slate-800 rounded border border-gray-200 dark:border-slate-700 md:col-span-2">
                                                             <span className="text-[9px] uppercase font-bold text-slate-500 block">Forme développée</span>
                                                             <span className="font-mono text-slate-900 dark:text-white break-all">{v6Res.full}</span>
                                                         </div>
-                                                        <div className="p-2 bg-white dark:bg-slate-800 rounded border border-slate-200 dark:border-slate-700">
+                                                        <div className="p-2 bg-white dark:bg-slate-800 rounded border border-gray-200 dark:border-slate-700">
                                                             <span className="text-[9px] uppercase font-bold text-slate-500 block">Abrégée</span>
                                                             <span className="font-mono text-brand-600 dark:text-brand-400 break-all">{v6Res.abbr}</span>
                                                         </div>
-                                                        <div className="p-2 bg-white dark:bg-slate-800 rounded border border-slate-200 dark:border-slate-700 md:col-span-3">
+                                                        <div className="p-2 bg-white dark:bg-slate-800 rounded border border-gray-200 dark:border-slate-700 md:col-span-3">
                                                             <span className="text-[9px] uppercase font-bold text-slate-500 block">Type d'adresse</span>
                                                             <span className="font-mono text-slate-900 dark:text-white">{v6Res.type}</span>
                                                         </div>
@@ -2518,7 +2518,7 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
                                             )}
                                         </div>
                                         {/* Hexadécimal */}
-                                        <div className="p-4 bg-slate-50 dark:bg-slate-900/50 rounded-xl border border-slate-200 dark:border-slate-700 space-y-3">
+                                        <div className="p-4 bg-slate-50 dark:bg-slate-900/50 rounded-xl border border-gray-200 dark:border-slate-700 space-y-3">
                                             <h4 className="text-sm font-bold text-slate-900 dark:text-white">🔢 Conversions décimal / hexadécimal / binaire</h4>
                                             <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                                                 <input value={subHex.dec} onChange={(e) => { const v = e.target.value; const n = Number(v); setSubHex({ dec: v, hex: isNaN(n) ? '' : n.toString(16).toUpperCase() }); }} placeholder="Décimal : 255" className="bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-1.5 text-xs font-mono text-slate-900 dark:text-slate-100 focus:outline-none focus:border-brand-500" />
@@ -2530,7 +2530,7 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
                                                 return (
                                                     <div className="grid grid-cols-2 md:grid-cols-4 gap-2 text-[11px]">
                                                         {[['Décimal', n], ['Hexadécimal', '0x' + n.toString(16).toUpperCase()], ['Binaire', n.toString(2)], ['Octet (8 bits)', n.toString(2).padStart(8, '0')]].map((kv, i) => (
-                                                            <div key={i} className="p-2 bg-white dark:bg-slate-800 rounded border border-slate-200 dark:border-slate-700">
+                                                            <div key={i} className="p-2 bg-white dark:bg-slate-800 rounded border border-gray-200 dark:border-slate-700">
                                                                 <span className="text-[9px] uppercase font-bold text-slate-500 block">{kv[0]}</span>
                                                                 <span className="font-mono text-slate-900 dark:text-white break-all">{kv[1]}</span>
                                                             </div>
@@ -2550,8 +2550,8 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
 
             // Rendu Onglet Examen Blanc
             return (
-                <div className="min-h-screen flex flex-col">
-                    <header className="bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 sticky top-0 z-50">
+                <div className="min-h-screen flex flex-col bg-gray-50 dark:bg-transparent">
+                    <header className="bg-white dark:bg-slate-800 border-b border-gray-200 dark:border-slate-700 sticky top-0 z-50">
                         <div className="w-full px-4 md:px-6 py-3 flex flex-col md:flex-row justify-between items-center gap-4">
                             {/* Logo + titre cliquables : retour au Dashboard depuis n'importe quelle page */}
                             <button
@@ -2560,19 +2560,19 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
                                 title="Retour au Dashboard"
                                 className="flex items-center gap-4 text-left rounded-lg px-2 py-1 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors focus:outline-none focus:ring-2 focus:ring-brand-500"
                             >
-                                {!logoError ? (
-                                    <img
-                                        src={logoUrl}
-                                        alt="Logo Cours IT"
-                                        onError={() => setLogoError(true)}
-                                        className="h-9 w-auto object-contain transition-opacity duration-200 rounded"
-                                    />
-                                ) : (
-                                    <div className="w-9 h-9 rounded-lg bg-gradient-to-tr from-brand-700 to-sky-500 text-white flex items-center justify-center font-bold text-base shadow-md">
-                                        IT
-                                    </div>
-                                )}
                                 <div className="flex flex-col">
+                                    {!logoError ? (
+                                        <img
+                                            src={logoUrl}
+                                            alt="Logo Cours IT"
+                                            onError={() => setLogoError(true)}
+                                            className="h-10 w-auto object-contain transition-opacity duration-200 rounded"
+                                        />
+                                    ) : (
+                                        <div className="w-10 h-10 rounded-lg bg-gradient-to-tr from-brand-700 to-sky-500 text-white flex items-center justify-center font-bold text-base shadow-md">
+                                            IT
+                                        </div>
+                                    )}
                                     <span className="text-sm font-semibold text-cyan-600 dark:text-cyan-400 mt-1">
                                         Plateforme de révisions pour tous
                                     </span>
@@ -2589,7 +2589,7 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
                                         placeholder="Rechercher un cours, un code, un mot-clé…"
                                         value={searchQuery}
                                         onChange={(e) => { setSearchQuery(e.target.value); if (currentTab !== 'courses') setCurrentTab('courses'); }}
-                                        className="w-full bg-slate-100/70 dark:bg-slate-900/70 backdrop-blur border border-slate-300 dark:border-slate-700 rounded-full pl-10 pr-4 py-2 text-sm text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-sky-500/40 focus:border-sky-500 transition-all shadow-sm hover:shadow-md"
+                                        className="w-full bg-slate-100/70 dark:bg-slate-900/70 backdrop-blur border border-slate-300 dark:border-slate-700 rounded-full pl-10 pr-4 py-2 text-sm text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-sky-500/40 focus:border-sky-500 transition-all shadow-md dark:shadow-sm hover:shadow-md"
                                     />
                                 </div>
                             </div>
@@ -2644,17 +2644,17 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
                         </div>
 
                         {/* Navigation principale finale */}
-                        <nav aria-label="Navigation principale" className="bg-slate-50 dark:bg-slate-900/80 border-t border-slate-200 dark:border-slate-800">
+                        <nav aria-label="Navigation principale" className="bg-white dark:bg-slate-900/80 border-b border-gray-200 dark:border-slate-800">
                             <div className="max-w-7xl mx-auto px-4 flex space-x-1 overflow-x-auto text-xs font-medium py-2">
                                 {NAV_ITEMS.map(tab => (
                                     <button
                                         key={tab.id}
                                         onClick={() => setCurrentTab(tab.id)}
                                         aria-current={currentTab === tab.id ? 'page' : undefined}
-                                        className={`px-6 py-2 rounded-lg whitespace-nowrap transition-colors min-h-[48px] flex items-center gap-3 text-base ${
+                                        className={`px-6 py-2 rounded-lg whitespace-nowrap transition-colors min-h-[48px] flex items-center text-base [&_svg]:w-5 [&_svg]:h-5 [&_svg]:mr-3 ${
                                             currentTab === tab.id
-                                                ? 'bg-brand-600 text-white font-bold'
-                                                : 'text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-800'
+                                                ? 'bg-cyan-600 text-white font-bold [&_svg]:text-white'
+                                                : 'text-gray-900 dark:text-slate-200 font-medium [&_svg]:text-cyan-600 dark:[&_svg]:text-cyan-400 hover:bg-slate-200 dark:hover:bg-slate-700/90'
                                         }`}
                                     >
                                         {tab.label}
@@ -2678,7 +2678,7 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
                     </main>
 
                     {/* Navigation rapide fixe — mobile uniquement */}
-                    <nav aria-label="Navigation rapide mobile" className="md:hidden fixed bottom-0 inset-x-0 z-50 bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-700 shadow-[0_-2px_10px_rgba(0,0,0,0.08)]">
+                    <nav aria-label="Navigation rapide mobile" className="md:hidden fixed bottom-0 inset-x-0 z-50 bg-white dark:bg-slate-900 border-t border-gray-200 dark:border-slate-700 shadow-[0_-2px_10px_rgba(0,0,0,0.08)]">
                         <div className="grid grid-cols-5 text-[10px] font-semibold">
                             {[
                                 { id: 'dashboard', icon: 'house', label: 'Accueil' },
@@ -2704,7 +2704,7 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
                         </div>
                     </nav>
 
-                    <footer className="bg-white dark:bg-slate-800 border-t border-slate-200 dark:border-slate-700 py-4 text-xs text-slate-500 dark:text-slate-400 space-y-3">
+                    <footer className="bg-white dark:bg-slate-800 border-t border-gray-200 dark:border-slate-700 py-4 text-xs text-slate-500 dark:text-slate-400 space-y-3">
                         <div className="w-full px-4 md:px-6 flex flex-wrap gap-3 justify-between items-center">
                             <span>Plateforme de révision autonome TSSR, AIS et CCNA 200-301 · Contenu vérifié le {CONTENT_LAST_CHECK}</span>
                             <div className="flex gap-3">
