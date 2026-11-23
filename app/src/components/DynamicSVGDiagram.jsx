@@ -3,41 +3,69 @@ export const DynamicSVGDiagram = ({ type }) => {
             // ===== Schémas "v2" : illustrations professionnelles en français, harmonisées au thème =====
             if (type === 'osi-fr-v2') {
                 return (
-                    <div className="w-full bg-slate-900 text-white p-4 rounded-lg overflow-x-auto">
-                        <h4 className="text-xs uppercase font-bold text-sky-400 mb-2">SVG : le modèle OSI — à quoi ça sert, où on le croise</h4>
-                        <p className="text-[11px] text-slate-300 mb-2"><strong className="text-amber-300">Lecture :</strong> chaque couche a UN métier. En bas, le transport des bits ; en haut, ce que voit l'utilisateur. Le diagnostic réseau consiste à retrouver LA couche fautive — chaque outil listé à droite teste une couche précise.</p>
-                        <svg viewBox="0 0 620 290" role="img" aria-label="Modèle OSI : couches, exemples réels et outils de diagnostic" className="w-full h-auto">
-                            <rect x="10" y="14" width="330" height="26" rx="5" fill="#d97706" />
-                            <text x="20" y="32" fill="white" fontWeight="bold" fontSize="12">7 · Application — ce que voit l'utilisateur</text>
-                            <rect x="10" y="46" width="330" height="26" rx="5" fill="#ea580c" />
-                            <text x="20" y="64" fill="white" fontWeight="bold" fontSize="12">6 · Présentation — format, chiffrement (TLS)</text>
-                            <rect x="10" y="78" width="330" height="26" rx="5" fill="#0284c7" />
-                            <text x="20" y="96" fill="white" fontWeight="bold" fontSize="12">5 · Session — ouvrir/fermer les échanges</text>
-                            <rect x="10" y="110" width="330" height="26" rx="5" fill="#059669" />
-                            <text x="20" y="128" fill="white" fontWeight="bold" fontSize="12">4 · Transport — ports, fiabilité (TCP/UDP)</text>
-                            <rect x="10" y="142" width="330" height="26" rx="5" fill="#6366f1" />
-                            <text x="20" y="160" fill="white" fontWeight="bold" fontSize="12">3 · Réseau — adresse IP, routage inter-réseaux</text>
-                            <rect x="10" y="174" width="330" height="26" rx="5" fill="#7c3aed" />
-                            <text x="20" y="192" fill="white" fontWeight="bold" fontSize="12">2 · Liaison — trames, MAC, VLAN, switch</text>
-                            <rect x="10" y="206" width="330" height="26" rx="5" fill="#475569" />
-                            <text x="20" y="224" fill="white" fontWeight="bold" fontSize="12">1 · Physique — câbles, signaux, 100 m max</text>
-                            <line x1="345" y1="219" x2="345" y2="27" stroke="#f59e0b" strokeWidth="2.5" markerEnd="url(#ar)" />
-                            <text x="352" y="24" fill="#fbbf24" fontSize="11">Ordre de diagnostic : 1 → 7</text>
-                            <rect x="352" y="46" width="255" height="186" rx="8" fill="#0f172a" stroke="#334155" />
-                            <text x="362" y="66" fill="#93c5fd" fontWeight="bold" fontSize="11">Exemples réels · Outil de test</text>
-                            <text x="362" y="88" fill="#e2e8f0" fontSize="10">HTTP · DNS · SSH · Outlook</text>
-                            <text x="362" y="103" fill="#94a3b8" fontSize="9">→ nslookup, ping d'un nom</text>
-                            <text x="362" y="122" fill="#e2e8f0" fontSize="10">TCP (fiable) · UDP (rapide)</text>
-                            <text x="362" y="137" fill="#94a3b8" fontSize="9">→ Test-NetConnection -Port</text>
-                            <text x="362" y="156" fill="#e2e8f0" fontSize="10">IP · ICMP · routeur</text>
-                            <text x="362" y="171" fill="#94a3b8" fontSize="9">→ ping passerelle, traceroute</text>
-                            <text x="362" y="190" fill="#e2e8f0" fontSize="10">MAC · switch · VLAN</text>
-                            <text x="362" y="205" fill="#94a3b8" fontSize="9">→ show interfaces, show vlan</text>
-                            <text x="362" y="224" fill="#e2e8f0" fontSize="10">Câble · fibre · connecteur</text>
-                            <text x="362" y="239" fill="#94a3b8" fontSize="9">→ voyants, show interfaces status</text>
-                            <text x="10" y="258" fill="#fbbf24" fontSize="11">Pourquoi c'est important :</text>
-                            <text x="130" y="258" fill="#e2e8f0" fontSize="10">chaque couche élimine la moitié des hypothèses restantes.</text>
-                            <text x="10" y="278" fill="#94a3b8" fontSize="10">Où on le croise : câble (1), switch (2), passerelle (3), pare-feu applicatif (7).</text>
+                    <div className="w-full bg-slate-900 text-white p-5 rounded-xl border border-slate-700 shadow-xl overflow-x-auto">
+                        <div className="flex items-center justify-between mb-3">
+                            <h4 className="text-xs uppercase font-extrabold tracking-wider text-sky-400">Architecture Réseau & Diagnostic · Modèle OSI</h4>
+                            <span className="text-[10px] bg-sky-950 text-sky-300 px-2 py-0.5 rounded border border-sky-800">Standard ISO 7498</span>
+                        </div>
+                        <p className="text-[11px] text-slate-300 mb-3 leading-relaxed"><strong className="text-amber-300">Lecture :</strong> chaque couche résout un problème précis. Le diagnostic s'effectue systématiquement de bas en haut (de la couche physique 1 vers l'application 7) en éliminant les hypothèses une par une.</p>
+                        <svg viewBox="0 0 640 310" role="img" aria-label="Modele OSI : couches, exemples réels et outils de diagnostic" className="w-full h-auto font-sans">
+                            <defs>
+                                <marker id="ar" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                                    <path d="M 0 1 L 10 5 L 0 9 z" fill="#f59e0b" />
+                                </marker>
+                            </defs>
+                            {/* Couches OSI */}
+                            <g transform="translate(10, 10)">
+                                <rect x="0" y="0" width="340" height="30" rx="6" fill="#b45309" />
+                                <text x="12" y="20" fill="white" fontWeight="bold" fontSize="11">7 · Application — ce que voit l'utilisateur</text>
+
+                                <rect x="0" y="34" width="340" height="30" rx="6" fill="#c2410c" />
+                                <text x="12" y="54" fill="white" fontWeight="bold" fontSize="11">6 · Présentation — format, chiffrement (TLS)</text>
+
+                                <rect x="0" y="68" width="340" height="30" rx="6" fill="#0369a1" />
+                                <text x="12" y="88" fill="white" fontWeight="bold" fontSize="11">5 · Session — ouvrir/fermer les échanges</text>
+
+                                <rect x="0" y="102" width="340" height="30" rx="6" fill="#047857" />
+                                <text x="12" y="122" fill="white" fontWeight="bold" fontSize="11">4 · Transport — ports, fiabilité (TCP/UDP)</text>
+
+                                <rect x="0" y="136" width="340" height="30" rx="6" fill="#4338ca" />
+                                <text x="12" y="156" fill="white" fontWeight="bold" fontSize="11">3 · Réseau — IP, routage inter-réseaux</text>
+
+                                <rect x="0" y="170" width="340" height="30" rx="6" fill="#6d28d9" />
+                                <text x="12" y="190" fill="white" fontWeight="bold" fontSize="11">2 · Liaison — trames, MAC, switch, VLAN</text>
+
+                                <rect x="0" y="204" width="340" height="30" rx="6" fill="#334155" />
+                                <text x="12" y="224" fill="white" fontWeight="bold" fontSize="11">1 · Physique — câbles, signaux, 100m max</text>
+                            </g>
+
+                            {/* Flèche de diagnostic */}
+                            <line x1="365" y1="225" x2="365" y2="20" stroke="#f59e0b" strokeWidth="3" markerEnd="url(#ar)" />
+                            <text x="375" y="125" fill="#fbbf24" fontSize="11" fontWeight="bold" transform="rotate(270, 375, 125)">Diagnostic 1 → 7</text>
+
+                            {/* Panneau de droite : Exemples et Outils */}
+                            <rect x="395" y="10" width="235" height="224" rx="8" fill="#0f172a" stroke="#334155" strokeWidth="1.5" />
+                            <text x="408" y="32" fill="#93c5fd" fontWeight="bold" fontSize="11">Exemples &amp; Outils de test</text>
+                            <text x="408" y="55" fill="#f8fafc" fontSize="10">HTTP · DNS · SSH · Outlook</text>
+                            <text x="408" y="70" fill="#94a3b8" fontSize="9">→ nslookup, test port distant</text>
+
+                            <text x="408" y="92" fill="#f8fafc" fontSize="10">TCP (fiable) · UDP (rapide)</text>
+                            <text x="408" y="107" fill="#94a3b8" fontSize="9">→ Test-NetConnection -Port</text>
+
+                            <text x="408" y="129" fill="#f8fafc" fontSize="10">IP · ICMP · Routeur</text>
+                            <text x="408" y="144" fill="#94a3b8" fontSize="9">→ ping passerelle, traceroute</text>
+
+                            <text x="408" y="166" fill="#f8fafc" fontSize="10">MAC · Switch · VLAN</text>
+                            <text x="408" y="181" fill="#94a3b8" fontSize="9">→ show interface status</text>
+
+                            <text x="408" y="203" fill="#f8fafc" fontSize="10">Câble cuivre / fibre</text>
+                            <text x="408" y="218" fill="#94a3b8" fontSize="9">→ voyants RJ45, testeur</text>
+
+                            {/* Notes de bas de page */}
+                            <rect x="10" y="246" width="620" height="52" rx="6" fill="#1e293b" stroke="#475569" />
+                            <text x="22" y="266" fill="#fbbf24" fontWeight="bold" fontSize="10">Méthode TSSR / CCNA :</text>
+                            <text x="145" y="266" fill="#e2e8f0" fontSize="10">Chaque couche isolée élimine 50% des causes de panne potentielles.</text>
+                            <text x="22" y="286" fill="#94a3b8" fontSize="10">Contexte pro : du câblage physique (bureau) au pare-feu applicatif (DMZ), la maîtrise de l'OSI est indispensable.</text>
                         </svg>
                     </div>
                 );
@@ -45,47 +73,61 @@ export const DynamicSVGDiagram = ({ type }) => {
 
             if (type === 'dns-fr-v2') {
                 return (
-                    <div className="w-full bg-slate-900 text-white p-4 rounded-lg overflow-x-auto">
-                        <h4 className="text-xs uppercase font-bold text-sky-400 mb-2">SVG : le DNS en entreprise — la chaîne complète avec ses caches</h4>
-                        <p className="text-[11px] text-slate-300 mb-2"><strong className="text-amber-300">Lecture :</strong> l'étudiant tape intranet.exemple.fr : quatre caches sont consultés avant d'aller chercher la réponse loin. Si un seul maillon casse, « le site ne s'ouvre pas » — alors que le serveur web tourne parfaitement.</p>
-                        <svg viewBox="0 0 620 280" role="img" aria-label="Chaîne de résolution DNS avec caches et contexte entreprise" className="w-full h-auto">
-                            <rect x="15" y="20" width="140" height="60" rx="10" fill="#0284c7" />
-                            <text x="30" y="42" fill="white" fontWeight="bold" fontSize="11">Poste de l'étudiant</text>
-                            <text x="28" y="60" fill="#bae6fd" fontSize="9">1. cache du navigateur,</text>
-                            <text x="28" y="73" fill="#bae6fd" fontSize="9">puis cache de l'OS</text>
-                            <rect x="195" y="20" width="150" height="60" rx="10" fill="#059669" />
-                            <text x="215" y="42" fill="white" fontWeight="bold" fontSize="11">DNS du domaine</text>
-                            <text x="205" y="60" fill="#a7f3d0" fontSize="9">2. SRV-DC01 connaît</text>
-                            <text x="205" y="73" fill="#a7f3d0" fontSize="9">tous les noms internes</text>
-                            <rect x="385" y="20" width="150" height="60" rx="10" fill="#7c3aed" />
-                            <text x="405" y="42" fill="white" fontWeight="bold" fontSize="11">Résolveur du FAI</text>
-                            <text x="400" y="60" fill="#ddd6fe" fontSize="9">3. cache partagé de</text>
-                            <text x="400" y="73" fill="#ddd6fe" fontSize="9">millions de clients</text>
-                            <rect x="215" y="130" width="150" height="55" rx="10" fill="#dc2626" />
-                            <text x="238" y="152" fill="white" fontWeight="bold" fontSize="11">Racine « . »</text>
-                            <text x="230" y="170" fill="#fecaca" fontSize="9">« adresse-toi au .fr »</text>
-                            <rect x="420" y="130" width="150" height="55" rx="10" fill="#b45309" />
-                            <text x="445" y="152" fill="white" fontWeight="bold" fontSize="11">TLD « .fr »</text>
-                            <text x="432" y="170" fill="#fde68a" fontSize="9">« adresse-toi au serveur</text>
-                            <text x="432" y="183" fill="#fde68a" fontSize="9">de exemple.fr »</text>
-                            <rect x="420" y="205" width="150" height="50" rx="10" fill="#1e293b" stroke="#f59e0b" />
-                            <text x="437" y="226" fill="white" fontWeight="bold" fontSize="11">Serveur autoritaire</text>
-                            <text x="430" y="244" fill="#fde68a" fontSize="9">4. détient l'enregistrement</text>
-                            <line x1="155" y1="50" x2="195" y2="50" stroke="#22c55e" strokeWidth="3" markerEnd="url(#ar)" />
-                            <line x1="345" y1="50" x2="385" y2="50" stroke="#22c55e" strokeWidth="3" markerEnd="url(#ar)" />
-                            <line x1="460" y1="80" x2="290" y2="130" stroke="#94a3b8" strokeWidth="2" />
-                            <line x1="365" y1="130" x2="420" y2="130" stroke="#94a3b8" strokeWidth="2" />
-                            <line x1="495" y1="205" x2="545" y2="180" stroke="#22c55e" strokeWidth="3" markerEnd="url(#ar)" />
-                            <text x="360" y="205" fill="#22c55e" fontSize="10">5. réponse : 192.0.2.10 —</text>
-                            <text x="360" y="219" fill="#22c55e" fontSize="10">mise en cache selon TTL</text>
-                            <rect x="15" y="130" width="160" height="60" rx="10" fill="#1e293b" stroke="#38bdf8" />
-                            <text x="30" y="152" fill="#93c5fd" fontWeight="bold" fontSize="11">Où c'est utilisé :</text>
-                            <text x="27" y="170" fill="#cbd5e1" fontSize="9">chaque accès : intranet, AD,</text>
-                            <text x="27" y="183" fill="#cbd5e1" fontSize="9">imprimante, outlook, Internet</text>
-                            <rect x="15" y="205" width="160" height="50" rx="10" fill="#450a0a" stroke="#ef4444" />
-                            <text x="27" y="227" fill="#fca5a5" fontWeight="bold" fontSize="11">Pourquoi c'est vital :</text>
-                            <text x="24" y="244" fill="#fecaca" fontSize="9">DNS mort = « plus rien ne marche »</text>
-                            <text x="15" y="272" fill="#94a3b8" fontSize="10">Vérif express : ping IP réussi + nom KO = DNS. ipconfig /all : serveur DNS du poste ? nslookup : qui répond ?</text>
+                    <div className="w-full bg-slate-900 text-white p-5 rounded-xl border border-slate-700 shadow-xl overflow-x-auto">
+                        <div className="flex items-center justify-between mb-3">
+                            <h4 className="text-xs uppercase font-extrabold tracking-wider text-sky-400">Architecture Réseau &amp; Entreprise · Résolution DNS &amp; Caches</h4>
+                            <span className="text-[10px] bg-sky-950 text-sky-300 px-2 py-0.5 rounded border border-sky-800">RFC 1034 / 1035</span>
+                        </div>
+                        <p className="text-[11px] text-slate-300 mb-3 leading-relaxed"><strong className="text-amber-300">Lecture :</strong> l'utilisateur tape un nom de domaine. Quatre niveaux de cache sont interrogés avant d'initier une requête récursive complète. Un incident DNS se traduit immédiatement par un « site inaccessible » alors que les serveurs web fonctionnent.</p>
+                        <svg viewBox="0 0 640 300" role="img" aria-label="Chaîne de résolution DNS avec caches et contexte entreprise" className="w-full h-auto font-sans">
+                            <defs>
+                                <marker id="ar" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                                    <path d="M 0 1 L 10 5 L 0 9 z" fill="#22c55e" />
+                                </marker>
+                            </defs>
+                            {/* Blocs de la chaîne */}
+                            <rect x="20" y="25" width="160" height="65" rx="8" fill="#0284c7" />
+                            <text x="35" y="48" fill="white" fontWeight="bold" fontSize="11">Poste Client</text>
+                            <text x="33" y="65" fill="#bae6fd" fontSize="10">1. Cache navigateur</text>
+                            <text x="33" y="80" fill="#bae6fd" fontSize="10">puis cache OS (ipconfig /displaydns)</text>
+
+                            <rect x="215" y="25" width="160" height="65" rx="8" fill="#059669" />
+                            <text x="230" y="48" fill="white" fontWeight="bold" fontSize="11">DNS Entreprise (DC)</text>
+                            <text x="228" y="65" fill="#a7f3d0" fontSize="10">2. SRV-DC01</text>
+                            <text x="228" y="80" fill="#a7f3d0" fontSize="10">Zone interne (.lan / .local)</text>
+
+                            <rect x="410" y="25" width="210" height="65" rx="8" fill="#7c3aed" />
+                            <text x="425" y="48" fill="white" fontWeight="bold" fontSize="11">Résolveur FAI / Public</text>
+                            <text x="423" y="65" fill="#ddd6fe" fontSize="10">3. Cache partagé (ex: 1.1.1.1)</text>
+                            <text x="423" y="80" fill="#ddd6fe" fontSize="10">Transmet la requête récursive si miss</text>
+
+                            {/* Étage hiérarchie Internet */}
+                            <rect x="215" y="125" width="180" height="55" rx="8" fill="#b91c1c" />
+                            <text x="230" y="148" fill="white" fontWeight="bold" fontSize="11">Racine « . »</text>
+                            <text x="228" y="165" fill="#fecaca" fontSize="9">Oriente vers le serveur TLD (.fr, .com)</text>
+
+                            <rect x="430" y="125" width="190" height="55" rx="8" fill="#d97706" />
+                            <text x="445" y="148" fill="white" fontWeight="bold" fontSize="11">Serveur TLD (« .fr »)</text>
+                            <text x="443" y="165" fill="#fde68a" fontSize="9">Oriente vers le serveur autoritaire du domaine</text>
+
+                            <rect x="430" y="200" width="190" height="55" rx="8" fill="#1e293b" stroke="#f59e0b" strokeWidth="1.5" />
+                            <text x="445" y="222" fill="white" fontWeight="bold" fontSize="11">Serveur Autoritaire</text>
+                            <text x="443" y="240" fill="#fde68a" fontSize="9">4. Détient l'enregistrement (A / CNAME)</text>
+
+                            {/* Lignes de flux */}
+                            <line x1="180" y1="57" x2="215" y2="57" stroke="#22c55e" strokeWidth="2.5" markerEnd="url(#ar)" />
+                            <line x1="375" y1="57" x2="410" y2="57" stroke="#22c55e" strokeWidth="2.5" markerEnd="url(#ar)" />
+
+                            {/* Boîte d'aide / diagnostic */}
+                            <rect x="20" y="125" width="175" height="130" rx="8" fill="#1e293b" stroke="#38bdf8" strokeWidth="1.5" />
+                            <text x="32" y="148" fill="#93c5fd" fontWeight="bold" fontSize="11">Méthode de Diagnostic :</text>
+                            <text x="30" y="168" fill="#cbd5e1" fontSize="10">1. ipconfig /all (quel DNS ?)</text>
+                            <text x="30" y="186" fill="#cbd5e1" fontSize="10">2. nslookup (qui répond ?)</text>
+                            <text x="30" y="204" fill="#cbd5e1" fontSize="10">3. ipconfig /flushdns</text>
+                            <text x="30" y="224" fill="#fbbf24" fontSize="10">Ping IP OK + Nom KO</text>
+                            <text x="30" y="240" fill="#f87171" fontSize="10">= Panne DNS avérée.</text>
+
+                            <text x="215" y="278" fill="#94a3b8" fontSize="10">Où on le croise : intégration Active Directory, accès Internet, résolution des partages réseau et messagerie Exchange/Office 365.</text>
                         </svg>
                     </div>
                 );
@@ -93,42 +135,61 @@ export const DynamicSVGDiagram = ({ type }) => {
 
             if (type === 'kerberos-fr-v2') {
                 return (
-                    <div className="w-full bg-slate-900 text-white p-4 rounded-lg overflow-x-auto">
-                        <h4 className="text-xs uppercase font-bold text-sky-400 mb-2">SVG : Kerberos dans Active Directory — le guichet à tickets</h4>
-                        <p className="text-[11px] text-slate-300 mb-2"><strong className="text-amber-300">Lecture :</strong> le DC fait office de guichet (KDC). À l'ouverture de session, l'utilisateur reçoit un TGT « billet d'entrée » valable ~10 h ; chaque service exige ensuite son propre ticket (TGS). Le mot de passe ne circule JAMAIS vers les services.</p>
-                        <svg viewBox="0 0 620 260" role="img" aria-label="Kerberos dans Active Directory : TGT, TGS et contexte entreprise" className="w-full h-auto">
-                            <rect x="20" y="80" width="150" height="70" rx="10" fill="#0284c7" />
-                            <text x="45" y="105" fill="white" fontWeight="bold" fontSize="12">Utilisateur</text>
-                            <text x="32" y="125" fill="#bae6fd" fontSize="10">claire.martin (RH)</text>
-                            <text x="32" y="140" fill="#bae6fd" fontSize="10">PC-RH-01 joint au domaine</text>
-                            <rect x="235" y="60" width="150" height="90" rx="10" fill="#059669" />
-                            <text x="262" y="85" fill="white" fontWeight="bold" fontSize="12">DC — KDC</text>
-                            <text x="248" y="105" fill="#a7f3d0" fontSize="10">1. AS : vérifie le mdp,</text>
-                            <text x="248" y="120" fill="#a7f3d0" fontSize="10">délivre le TGT (10 h)</text>
-                            <text x="248" y="138" fill="#a7f3d0" fontSize="10">2. TGS : ticket service</text>
-                            <rect x="460" y="20" width="140" height="55" rx="10" fill="#7c3aed" />
-                            <text x="482" y="42" fill="white" fontWeight="bold" fontSize="11">SRV-FILE01</text>
-                            <text x="477" y="60" fill="#ddd6fe" fontSize="9">partage \\RH\Documents</text>
-                            <rect x="460" y="105" width="140" height="55" rx="10" fill="#7c3aed" />
-                            <text x="480" y="127" fill="white" fontWeight="bold" fontSize="11">SRV-MAIL01</text>
-                            <text x="484" y="145" fill="#ddd6fe" fontSize="9">Outlook / Exchange</text>
-                            <line x1="170" y1="95" x2="235" y2="95" stroke="#22c55e" strokeWidth="3" markerEnd="url(#ar)" />
-                            <text x="172" y="87" fill="#22c55e" fontSize="10">1. ouverture de session</text>
-                            <line x1="235" y1="130" x2="170" y2="130" stroke="#fbbf24" strokeWidth="3" markerEnd="url(#ar)" />
-                            <text x="176" y="150" fill="#fbbf24" fontSize="10">← TGT (badge du site)</text>
-                            <line x1="385" y1="95" x2="460" y2="48" stroke="#fbbf24" strokeWidth="3" markerEnd="url(#ar)" />
-                            <text x="388" y="75" fill="#fbbf24" fontSize="10">TGS →</text>
-                            <line x1="385" y1="130" x2="460" y2="130" stroke="#fbbf24" strokeWidth="3" markerEnd="url(#ar)" />
-                            <text x="388" y="125" fill="#fbbf24" fontSize="10">TGS →</text>
-                            <rect x="20" y="170" width="290" height="60" rx="10" fill="#1e293b" stroke="#ef4444" />
-                            <text x="35" y="192" fill="#fca5a5" fontWeight="bold" fontSize="11">Pourquoi c'est vital + où ça casse :</text>
-                            <text x="30" y="210" fill="#fecaca" fontSize="10">horloge décalée &gt; 5 min = rejet Kerberos</text>
-                            <text x="30" y="225" fill="#fecaca" fontSize="10">« Le nom principal cible est incorrect » : SPN/DNS</text>
-                            <rect x="330" y="170" width="270" height="60" rx="10" fill="#1e293b" stroke="#38bdf8" />
-                            <text x="345" y="192" fill="#93c5fd" fontWeight="bold" fontSize="11">Vérifier côté poste :</text>
-                            <text x="345" y="210" fill="#93c5fd" fontSize="10">klist → voir les tickets · klist purge → purger</text>
-                            <text x="345" y="225" fill="#93c5fd" fontSize="10">w32tm /resync → réaligner l'horloge</text>
-                            <text x="20" y="252" fill="#94a3b8" fontSize="10">Où on le croise : chaque ouverture de session, chaque partage, chaque Outlook — et chaque ticket « expiré » du matin où l'heure du DC a dérivé.</text>
+                    <div className="w-full bg-slate-900 text-white p-5 rounded-xl border border-slate-700 shadow-xl overflow-x-auto">
+                        <div className="flex items-center justify-between mb-3">
+                            <h4 className="text-xs uppercase font-extrabold tracking-wider text-sky-400">Authentification Windows · Protocole Kerberos &amp; Active Directory</h4>
+                            <span className="text-[10px] bg-sky-950 text-sky-300 px-2 py-0.5 rounded border border-sky-800">RFC 4120 / KDC</span>
+                        </div>
+                        <p className="text-[11px] text-slate-300 mb-3 leading-relaxed"><strong className="text-amber-300">Lecture :</strong> le DC fait office de guichet (KDC). À l'ouverture de session, le poste obtient un TGT (badge d'accès valable 10 h), puis demande un TGS (ticket de service) pour chaque ressource (partage, messagerie). Le mot de passe ne transite jamais.</p>
+                        <svg viewBox="0 0 640 290" role="img" aria-label="Kerberos dans Active Directory : flux TGT et TGS" className="w-full h-auto font-sans">
+                            <defs>
+                                <marker id="ar" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                                    <path d="M 0 1 L 10 5 L 0 9 z" fill="#38bdf8" />
+                                </marker>
+                            </defs>
+                            {/* Acteurs */}
+                            <rect x="20" y="80" width="150" height="75" rx="8" fill="#0284c7" />
+                            <text x="35" y="105" fill="white" fontWeight="bold" fontSize="11">Poste Client (Utilisateur)</text>
+                            <text x="33" y="125" fill="#bae6fd" fontSize="10">claire.martin (RH)</text>
+                            <text x="33" y="142" fill="#bae6fd" fontSize="10">PC joint au domaine</text>
+
+                            <rect x="245" y="60" width="160" height="110" rx="8" fill="#059669" />
+                            <text x="265" y="85" fill="white" fontWeight="bold" fontSize="11">Contrôleur de Domaine</text>
+                            <text x="258" y="105" fill="#a7f3d0" fontSize="10">1. AS : valide le mot de passe,</text>
+                            <text x="258" y="122" fill="#a7f3d0" fontSize="10">délivre le TGT (valide 10h)</text>
+                            <text x="258" y="145" fill="#a7f3d0" fontSize="10">2. TGS : délivre le ticket service</text>
+
+                            <rect x="460" y="25" width="160" height="60" rx="8" fill="#7c3aed" />
+                            <text x="475" y="48" fill="white" fontWeight="bold" fontSize="11">SRV-FILE01 (Partage)</text>
+                            <text x="473" y="66" fill="#ddd6fe" fontSize="9">Accès \\RH\Documents</text>
+
+                            <rect x="460" y="110" width="160" height="60" rx="8" fill="#7c3aed" />
+                            <text x="475" y="133" fill="white" fontWeight="bold" fontSize="11">SRV-MAIL01 (Exchange)</text>
+                            <text x="473" y="151" fill="#ddd6fe" fontSize="9">Accès Outlook</text>
+
+                            {/* Lignes de flux */}
+                            <line x1="170" y1="100" x2="245" y2="100" stroke="#22c55e" strokeWidth="2.5" markerEnd="url(#ar)" />
+                            <text x="175" y="90" fill="#22c55e" fontSize="9">1. Demande TGT</text>
+
+                            <line x1="245" y1="130" x2="170" y2="130" stroke="#fbbf24" strokeWidth="2.5" markerEnd="url(#ar)" />
+                            <text x="175" y="150" fill="#fbbf24" fontSize="9">← Taus TGT</text>
+
+                            <line x1="405" y1="90" x2="460" y2="55" stroke="#fbbf24" strokeWidth="2.5" markerEnd="url(#ar)" />
+                            <text x="410" y="80" fill="#fbbf24" fontSize="9">TGS →</text>
+
+                            <line x1="405" y1="130" x2="460" y2="135" stroke="#fbbf24" strokeWidth="2.5" markerEnd="url(#ar)" />
+                            <text x="410" y="148" fill="#fbbf24" fontSize="9">TGS →</text>
+
+                            {/* Boîtes de dépannage / pièges */}
+                            <rect x="20" y="180" width="290" height="85" rx="8" fill="#1e293b" stroke="#ef4444" strokeWidth="1.5" />
+                            <text x="32" y="202" fill="#fca5a5" fontWeight="bold" fontSize="11">Pièges &amp; Incidents courants :</text>
+                            <text x="30" y="222" fill="#fecaca" fontSize="10">• Horloge décalée &gt; 5 min = rejet Kerberos</text>
+                            <text x="30" y="240" fill="#fecaca" fontSize="10">• « Nom principal cible incorrect » (SPN / DNS)</text>
+
+                            <rect x="330" y="180" width="290" height="85" rx="8" fill="#1e293b" stroke="#38bdf8" strokeWidth="1.5" />
+                            <text x="342" y="202" fill="#93c5fd" fontWeight="bold" fontSize="11">Commandes de diagnostic :</text>
+                            <text x="340" y="222" fill="#93c5fd" fontSize="10">• klist (voir les tickets actifs en cache)</text>
+                            <text x="340" y="240" fill="#93c5fd" fontSize="10">• w32tm /resync (réaligner l'heure du poste)</text>
                         </svg>
                     </div>
                 );
@@ -136,36 +197,56 @@ export const DynamicSVGDiagram = ({ type }) => {
 
             if (type === 'nat-fr-v2') {
                 return (
-                    <div className="w-full bg-slate-900 text-white p-4 rounded-lg overflow-x-auto">
-                        <h4 className="text-xs uppercase font-bold text-sky-400 mb-2">SVG : NAT en entreprise — un FAI, des dizaines de postes</h4>
-                        <p className="text-[11px] text-slate-300 mb-2"><strong className="text-amber-300">Lecture :</strong> le FAI ne fournit qu'UNE adresse publique. Le NAT réécrit les ports pour partager cette adresse entre tous les postes — et bloque naturellement les connexions entrantes non publiées.</p>
-                        <svg viewBox="0 0 620 260" role="img" aria-label="NAT en contexte entreprise" className="w-full h-auto">
-                            <rect x="15" y="30" width="130" height="45" rx="8" fill="#0284c7" />
-                            <text x="30" y="50" fill="white" fontWeight="bold" fontSize="11">PC direction</text>
-                            <text x="25" y="67" fill="#bae6fd" fontSize="10">10.1.1.10:1025</text>
-                            <rect x="15" y="95" width="130" height="45" rx="8" fill="#0284c7" />
-                            <text x="30" y="115" fill="white" fontWeight="bold" fontSize="11">PC compta</text>
-                            <text x="25" y="132" fill="#bae6fd" fontSize="10">10.1.1.11:1044</text>
-                            <rect x="15" y="160" width="130" height="45" rx="8" fill="#0284c7" />
-                            <text x="30" y="180" fill="white" fontWeight="bold" fontSize="11">PC RH</text>
-                            <text x="25" y="197" fill="#bae6fd" fontSize="10">10.1.1.12:1080</text>
-                            <rect x="215" y="60" width="150" height="110" rx="10" fill="#059669" />
-                            <text x="238" y="84" fill="white" fontWeight="bold" fontSize="12">Routeur NAT</text>
-                            <text x="230" y="104" fill="#a7f3d0" fontSize="10">table de traduction :</text>
-                            <text x="230" y="120" fill="#a7f3d0" fontSize="10">:1025 → 49152</text>
-                            <text x="230" y="136" fill="#a7f3d0" fontSize="10">:1044 → 49153</text>
-                            <text x="230" y="152" fill="#a7f3d0" fontSize="10">:1080 → 49154</text>
-                            <rect x="430" y="60" width="130" height="45" rx="8" fill="#7c3aed" />
-                            <text x="447" y="80" fill="white" fontWeight="bold" fontSize="11">Internet / FAI</text>
-                            <text x="442" y="97" fill="#ddd6fe" fontSize="10">203.0.113.5 (1 seule !)</text>
-                            <line x1="145" y1="52" x2="215" y2="85" stroke="#22c55e" strokeWidth="3" markerEnd="url(#ar)" />
-                            <line x1="145" y1="117" x2="215" y2="110" stroke="#22c55e" strokeWidth="3" markerEnd="url(#ar)" />
-                            <line x1="145" y1="182" x2="215" y2="135" stroke="#22c55e" strokeWidth="3" markerEnd="url(#ar)" />
-                            <line x1="365" y1="95" x2="430" y2="85" stroke="#22c55e" strokeWidth="3" markerEnd="url(#ar)" />
-                            <text x="368" y="75" fill="#22c55e" fontSize="10">203.0.113.5:4915x →</text>
-                            <rect x="15" y="225" width="590" height="28" rx="6" fill="#450a0a" stroke="#ef4444" />
-                            <text x="27" y="244" fill="#fecaca" fontSize="10">Pourquoi c'est important : un paquet ENTRANT sans entrée dans la table est détruit — les serveurs internes ne sont joignables que si on les publie (NAT statique).</text>
-                            <text x="15" y="20" fill="#94a3b8" fontSize="10">Où on le croise : chaque box, chaque routeur d'agence. Le même mécanisme rend « inaccessible » un serveur interne depuis Internet.</text>
+                    <div className="w-full bg-slate-900 text-white p-5 rounded-xl border border-slate-700 shadow-xl overflow-x-auto">
+                        <div className="flex items-center justify-between mb-3">
+                            <h4 className="text-xs uppercase font-extrabold tracking-wider text-sky-400">Réseaux &amp; Internet · NAT (Network Address Translation)</h4>
+                            <span className="text-[10px] bg-sky-950 text-sky-300 px-2 py-0.5 rounded border border-sky-800">RFC 3022</span>
+                        </div>
+                        <p className="text-[11px] text-slate-300 mb-3 leading-relaxed"><strong className="text-amber-300">Lecture :</strong> le FAI ne fournit qu'une seule adresse publique. Le routeur NAT réécrit les ports pour partager cette adresse entre tous les postes de l'entreprise, tout en bloquant naturellement les connexions entrantes non sollicitées.</p>
+                        <svg viewBox="0 0 640 280" role="img" aria-label="Fonctionnement du NAT : plusieurs postes internes partagent une IP publique unique" className="w-full h-auto font-sans">
+                            <defs>
+                                <marker id="ar" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                                    <path d="M 0 1 L 10 5 L 0 9 z" fill="#22c55e" />
+                                </marker>
+                            </defs>
+                            {/* Postes internes */}
+                            <rect x="20" y="30" width="135" height="45" rx="6" fill="#0284c7" />
+                            <text x="32" y="50" fill="white" fontWeight="bold" fontSize="11">PC Direction</text>
+                            <text x="30" y="68" fill="#bae6fd" fontSize="10">10.1.1.10:1025</text>
+
+                            <rect x="20" y="95" width="135" height="45" rx="6" fill="#0284c7" />
+                            <text x="32" y="115" fill="white" fontWeight="bold" fontSize="11">PC Compta</text>
+                            <text x="30" y="133" fill="#bae6fd" fontSize="10">10.1.1.11:1044</text>
+
+                            <rect x="20" y="160" width="135" height="45" rx="6" fill="#0284c7" />
+                            <text x="32" y="180" fill="white" fontWeight="bold" fontSize="11">PC RH</text>
+                            <text x="30" y="198" fill="#bae6fd" fontSize="10">10.1.1.12:1080</text>
+
+                            {/* Routeur NAT */}
+                            <rect x="210" y="60" width="180" height="115" rx="8" fill="#059669" />
+                            <text x="232" y="85" fill="white" fontWeight="bold" fontSize="12">Routeur NAT (PAT)</text>
+                            <text x="225" y="108" fill="#a7f3d0" fontSize="10">Table de traduction :</text>
+                            <text x="225" y="126" fill="#a7f3d0" fontSize="10">:1025 → 49152</text>
+                            <text x="225" y="144" fill="#a7f3d0" fontSize="10">:1044 → 49153</text>
+                            <text x="225" y="162" fill="#a7f3d0" fontSize="10">:1080 → 49154</text>
+
+                            {/* Internet */}
+                            <rect x="445" y="60" width="175" height="45" rx="6" fill="#7c3aed" />
+                            <text x="460" y="80" fill="white" fontWeight="bold" fontSize="11">Internet / FAI</text>
+                            <text x="458" y="98" fill="#ddd6fe" fontSize="10">203.0.113.5 (1 seule IP !)</text>
+
+                            {/* Flux */}
+                            <line x1="155" y1="52" x2="210" y2="85" stroke="#22c55e" strokeWidth="2.5" markerEnd="url(#ar)" />
+                            <line x1="155" y1="117" x2="210" y2="110" stroke="#22c55e" strokeWidth="2.5" markerEnd="url(#ar)" />
+                            <line x1="155" y1="182" x2="210" y2="135" stroke="#22c55e" strokeWidth="2.5" markerEnd="url(#ar)" />
+                            <line x1="390" y1="95" x2="445" y2="85" stroke="#22c55e" strokeWidth="2.5" markerEnd="url(#ar)" />
+                            <text x="395" y="75" fill="#22c55e" fontSize="10">203.0.113.5:4915x →</text>
+
+                            {/* Note de bas */}
+                            <rect x="20" y="230" width="600" height="38" rx="6" fill="#450a0a" stroke="#ef4444" strokeWidth="1.5" />
+                            <text x="32" y="250" fill="#fecaca" fontWeight="bold" fontSize="10">Règle de sécurité :</text>
+                            <text x="150" y="250" fill="#fecaca" fontSize="10">Un paquet entrant sans entrée dans la table est détruit. Les serveurs internes ne sont accessibles que si on les publie (NAT statique / port forwarding).</text>
+                            <text x="20" y="215" fill="#94a3b8" fontSize="10">Contexte pro : chaque box, chaque routeur d'agence. Le même mécanisme rend « inaccessible » un serveur interne depuis Internet.</text>
                         </svg>
                     </div>
                 );
@@ -173,12 +254,21 @@ export const DynamicSVGDiagram = ({ type }) => {
 
             if (type === 'topologies-fr-v2') {
                 return (
-                    <div className="w-full bg-slate-900 text-white p-4 rounded-lg overflow-x-auto">
-                        <h4 className="text-xs uppercase font-bold text-sky-400 mb-2">SVG : topologies réseau — la bonne pour le bon usage</h4>
-                        <p className="text-[11px] text-slate-300 mb-2"><strong className="text-amber-300">Lecture :</strong> la topologie conditionne la résilience (que se passe-t-il si un câble casse ?) et le coût. L'étoile autour d'un switch central est le standard des bureaux ; le maillé est réservé aux liaisons critiques.</p>
-                        <svg viewBox="0 0 620 270" role="img" aria-label="Topologies réseau avec avantages et limites" className="w-full h-auto">
-                            <rect x="10" y="10" width="285" height="120" rx="10" fill="#1e293b" stroke="#22c55e" />
-                            <text x="80" y="32" fill="#86efac" fontWeight="bold" fontSize="12">Étoile — standard bureautique</text>
+                    <div className="w-full bg-slate-900 text-white p-5 rounded-xl border border-slate-700 shadow-xl overflow-x-auto">
+                        <div className="flex items-center justify-between mb-3">
+                            <h4 className="text-xs uppercase font-extrabold tracking-wider text-sky-400">Réseaux &amp; Architecture · Topologies Réseau</h4>
+                            <span className="text-[10px] bg-sky-950 text-sky-300 px-2 py-0.5 rounded border border-sky-800">IEEE 802 / Cisco</span>
+                        </div>
+                        <p className="text-[11px] text-slate-300 mb-3 leading-relaxed"><strong className="text-amber-300">Lecture :</strong> la topologie conditionne la résilience (que se passe-t-il si un câble casse ?) et le coût. L'étoile autour d'un switch central est le standard des bureaux ; le maillé est réservé aux liaisons critiques.</p>
+                        <svg viewBox="0 0 640 290" role="img" aria-label="Topologies réseau avec avantages et limites" className="w-full h-auto font-sans">
+                            <defs>
+                                <marker id="ar" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                                    <path d="M 0 1 L 10 5 L 0 9 z" fill="#38bdf8" />
+                                </marker>
+                            </defs>
+                            {/* Étoile */}
+                            <rect x="15" y="15" width="300" height="120" rx="8" fill="#0f172a" stroke="#22c55e" strokeWidth="1.5" />
+                            <text x="85" y="35" fill="#86efac" fontWeight="bold" fontSize="11">Étoile — standard bureautique</text>
                             <circle cx="70" cy="85" r="14" fill="#0284c7" />
                             <text x="60" y="89" fill="white" fontSize="9">SW</text>
                             <line x1="70" y1="85" x2="25" y2="45" stroke="#94a3b8" strokeWidth="2" /><rect x="18" y="38" width="14" height="14" rx="2" fill="#475569" />
@@ -189,40 +279,47 @@ export const DynamicSVGDiagram = ({ type }) => {
                             <text x="135" y="70" fill="#e2e8f0" fontSize="10">✔ une panne de câble = un seul poste</text>
                             <text x="135" y="88" fill="#e2e8f0" fontSize="10">✔ facile à câbler et dépanner</text>
                             <text x="135" y="106" fill="#fca5a5" fontSize="10">✕ le switch central est un point unique</text>
-                            <text x="135" y="121" fill="#94a3b8" fontSize="9">→ d'où les switches empilés en production</text>
-                            <rect x="315" y="10" width="285" height="120" rx="10" fill="#1e293b" stroke="#38bdf8" />
-                            <text x="395" y="32" fill="#7dd3fc" fontWeight="bold" fontSize="12">Maillé — liaisons critiques</text>
-                            <circle cx="370" cy="60" r="9" fill="#059669" /><circle cx="450" cy="60" r="9" fill="#059669" />
-                            <circle cx="370" cy="115" r="9" fill="#059669" /><circle cx="450" cy="115" r="9" fill="#059669" />
-                            <line x1="370" y1="60" x2="450" y2="60" stroke="#94a3b8" strokeWidth="2" />
-                            <line x1="370" y1="60" x2="370" y2="115" stroke="#94a3b8" strokeWidth="2" />
-                            <line x1="450" y1="60" x2="450" y2="115" stroke="#94a3b8" strokeWidth="2" />
-                            <line x1="370" y1="115" x2="450" y2="115" stroke="#94a3b8" strokeWidth="2" />
-                            <line x1="370" y1="60" x2="450" y2="115" stroke="#94a3b8" strokeWidth="2" />
-                            <line x1="450" y1="60" x2="370" y2="115" stroke="#94a3b8" strokeWidth="2" />
-                            <text x="478" y="70" fill="#e2e8f0" fontSize="10">✔ plusieurs chemins</text>
-                            <text x="478" y="88" fill="#e2e8f0" fontSize="10">✔ sites cœur / datacenter</text>
-                            <text x="478" y="106" fill="#fca5a5" fontSize="10">✕ coût × n, complexité</text>
-                            <text x="478" y="121" fill="#94a3b8" fontSize="9">→ exige STP ou routage dynamique</text>
-                            <rect x="10" y="145" width="285" height="115" rx="10" fill="#1e293b" stroke="#f59e0b" />
-                            <text x="60" y="167" fill="#fcd34d" fontWeight="bold" fontSize="12">Bus et anneau — héritage</text>
-                            <line x1="35" y1="200" x2="250" y2="200" stroke="#94a3b8" strokeWidth="2" />
-                            <rect x="45" y="193" width="16" height="14" rx="2" fill="#475569" /><rect x="93" y="193" width="16" height="14" rx="2" fill="#475569" />
-                            <rect x="141" y="193" width="16" height="14" rx="2" fill="#475569" /><rect x="189" y="193" width="16" height="14" rx="2" fill="#475569" />
-                            <rect x="237" y="193" width="16" height="14" rx="2" fill="#475569" />
-                            <text x="35" y="228" fill="#fca5a5" fontSize="10">✕ une coupure = tout le segment</text>
-                            <text x="35" y="246" fill="#94a3b8" fontSize="9">→ legacy industriel (RS-485, automates)</text>
-                            <rect x="315" y="145" width="285" height="115" rx="10" fill="#1e293b" stroke="#a855f7" />
-                            <text x="345" y="167" fill="#d8b4fe" fontWeight="bold" fontSize="12">Arbre — multi-étages</text>
-                            <rect x="430" y="180" width="50" height="18" rx="3" fill="#7c3aed" /><text x="436" y="193" fill="white" fontSize="9">cœur</text>
-                            <rect x="340" y="225" width="50" height="18" rx="3" fill="#0284c7" /><rect x="420" y="225" width="50" height="18" rx="3" fill="#0284c7" /><rect x="500" y="225" width="50" height="18" rx="3" fill="#0284c7" />
-                            <line x1="455" y1="198" x2="365" y2="225" stroke="#94a3b8" strokeWidth="2" />
-                            <line x1="455" y1="198" x2="445" y2="225" stroke="#94a3b8" strokeWidth="2" />
-                            <line x1="455" y1="198" x2="525" y2="225" stroke="#94a3b8" strokeWidth="2" />
-                            <text x="560" y="200" fill="#e2e8f0" fontSize="10">✔ étages par bâtiment</text>
-                            <text x="560" y="218" fill="#e2e8f0" fontSize="10">✔ hiérarchie cœur/distribution</text>
-                            <text x="560" y="236" fill="#94a3b8" fontSize="9">→ le design réel de toute PME</text>
-                            <text x="10" y="266" fill="#94a3b8" fontSize="10">Où on le croise : bureau = étoile · entre bâtiments = arbre sur fibre · entre sites = maillé partiel (2 liens redondants).</text>
+                            <text x="135" y="121" fill="#94a3b8" fontSize="9">→ d'où les switches empilés en prod</text>
+
+                            {/* Maillé */}
+                            <rect x="330" y="15" width="295" height="120" rx="8" fill="#0f172a" stroke="#38bdf8" strokeWidth="1.5" />
+                            <text x="410" y="35" fill="#7dd3fc" fontWeight="bold" fontSize="11">Maillé — liaisons critiques</text>
+                            <circle cx="385" cy="60" r="9" fill="#059669" /><circle cx="465" cy="60" r="9" fill="#059669" />
+                            <circle cx="385" cy="115" r="9" fill="#059669" /><circle cx="465" cy="115" r="9" fill="#059669" />
+                            <line x1="385" y1="60" x2="465" y2="60" stroke="#94a3b8" strokeWidth="2" />
+                            <line x1="385" y1="60" x2="385" y2="115" stroke="#94a3b8" strokeWidth="2" />
+                            <line x1="465" y1="60" x2="465" y2="115" stroke="#94a3b8" strokeWidth="2" />
+                            <line x1="385" y1="115" x2="465" y2="115" stroke="#94a3b8" strokeWidth="2" />
+                            <line x1="385" y1="60" x2="465" y2="115" stroke="#94a3b8" strokeWidth="2" />
+                            <line x1="465" y1="60" x2="385" y2="115" stroke="#94a3b8" strokeWidth="2" />
+                            <text x="488" y="70" fill="#e2e8f0" fontSize="10">✔ plusieurs chemins</text>
+                            <text x="488" y="88" fill="#e2e8f0" fontSize="10">✔ sites cœur / datacenter</text>
+                            <text x="488" y="106" fill="#fca5a5" fontSize="10">✕ coût × n, complexité</text>
+                            <text x="488" y="121" fill="#94a3b8" fontSize="9">→ exige STP / routage dynamique</text>
+
+                            {/* Bus & Anneau */}
+                            <rect x="15" y="150" width="300" height="120" rx="8" fill="#0f172a" stroke="#f59e0b" strokeWidth="1.5" />
+                            <text x="60" y="172" fill="#fcd34d" fontWeight="bold" fontSize="11">Bus et anneau — héritage</text>
+                            <line x1="35" y1="205" x2="250" y2="205" stroke="#94a3b8" strokeWidth="2" />
+                            <rect x="45" y="198" width="16" height="14" rx="2" fill="#475569" /><rect x="93" y="198" width="16" height="14" rx="2" fill="#475569" />
+                            <rect x="141" y="198" width="16" height="14" rx="2" fill="#475569" /><rect x="189" y="198" width="16" height="14" rx="2" fill="#475569" />
+                            <rect x="237" y="198" width="16" height="14" rx="2" fill="#475569" />
+                            <text x="35" y="233" fill="#fca5a5" fontSize="10">✕ une coupure = tout le segment</text>
+                            <text x="35" y="251" fill="#94a3b8" fontSize="9">→ legacy industriel (RS-485, automates)</text>
+
+                            {/* Arbre */}
+                            <rect x="330" y="150" width="295" height="120" rx="8" fill="#0f172a" stroke="#a855f7" strokeWidth="1.5" />
+                            <text x="360" y="172" fill="#d8b4fe" fontWeight="bold" fontSize="11">Arbre — multi-étages</text>
+                            <rect x="440" y="185" width="50" height="18" rx="3" fill="#7c3aed" /><text x="446" y="198" fill="white" fontSize="9">cœur</text>
+                            <rect x="350" y="230" width="50" height="18" rx="3" fill="#0284c7" /><rect x="430" y="230" width="50" height="18" rx="3" fill="#0284c7" /><rect x="510" y="230" width="50" height="18" rx="3" fill="#0284c7" />
+                            <line x1="465" y1="203" x2="375" y2="230" stroke="#94a3b8" strokeWidth="2" />
+                            <line x1="465" y1="203" x2="455" y2="230" stroke="#94a3b8" strokeWidth="2" />
+                            <line x1="465" y1="203" x2="535" y2="230" stroke="#94a3b8" strokeWidth="2" />
+                            <text x="570" y="205" fill="#e2e8f0" fontSize="10">✔ étages par bâtiment</text>
+                            <text x="570" y="223" fill="#e2e8f0" fontSize="10">✔ hiérarchie cœur/distri</text>
+                            <text x="570" y="241" fill="#94a3b8" fontSize="9">→ design réel de toute PME</text>
+
+                            <text x="15" y="285" fill="#94a3b8" fontSize="10">Contexte pro : bureau = étoile · entre bâtiments = arbre sur fibre · entre sites = maillé partiel (2 liens redondants).</text>
                         </svg>
                     </div>
                 );
@@ -803,27 +900,46 @@ export const DynamicSVGDiagram = ({ type }) => {
 
             if (type === 'gpo-lsdou') {
                 return (
-                    <div className="w-full bg-slate-900 text-white p-4 rounded-lg overflow-x-auto">
-                        <h4 className="text-xs uppercase font-bold text-sky-400 mb-2">SVG : ordre d'application des GPO (LSDOU) — la dernière gagne</h4>
-                        <p className="text-[11px] text-slate-300 mb-2"><strong className="text-amber-300">Lecture :</strong> les stratégies s'appliquent du général au spécifique ; en cas de conflit, la plus proche de l'utilisateur (l'OU) écrase les précédentes. gpupdate /force applique, gpresult /R vérifie.</p>
-                        <svg viewBox="0 0 560 200" role="img" aria-label="Ordre LSDOU des GPO" className="w-full h-auto text-xs">
-                            <rect x="40" y="15" width="250" height="30" rx="6" fill="#475569" />
-                            <text x="55" y="35" fill="white">L — Local (stratégie de la machine)</text>
-                            <rect x="40" y="60" width="250" height="30" rx="6" fill="#7c3aed" />
-                            <text x="55" y="80" fill="white">S — Site (AD Sites and Services)</text>
-                            <rect x="40" y="105" width="250" height="30" rx="6" fill="#0284c7" />
-                            <text x="55" y="125" fill="white">D — Domaine (entreprise.local)</text>
-                            <rect x="40" y="150" width="250" height="30" rx="6" fill="#059669" />
-                            <text x="55" y="170" fill="white">OU — ex : OU=RH → la plus spécifique</text>
-                            <line x1="290" y1="30" x2="290" y2="165" stroke="#f59e0b" strokeWidth="3" markerEnd="url(#ar)" />
-                            <text x="305" y="80" fill="#fbbf24" fontSize="10">ordre d'application ↓</text>
-                            <text x="305" y="130" fill="#fbbf24" fontSize="10">conflit : l'OU gagne</text>
-                            <rect x="360" y="55" width="200" height="100" rx="10" fill="#1e293b" stroke="#38bdf8" />
-                            <text x="375" y="80" fill="#93c5fd" fontSize="10">Vérifier côté poste :</text>
-                            <text x="375" y="100" fill="#93c5fd" fontSize="10">gpupdate /force → applique</text>
-                            <text x="375" y="120" fill="#93c5fd" fontSize="10">gpresult /R → liste les GPO</text>
-                            <text x="375" y="140" fill="#93c5fd" fontSize="10">appliquées ET filtrées</text>
-                            <text x="100" y="196" fill="#94a3b8" fontSize="10">Héritage bloqué / Enforced / filtrage WMI modifient ce flux — gpresult montre la raison.</text>
+                    <div className="w-full bg-slate-900 text-white p-5 rounded-xl border border-slate-700 shadow-xl overflow-x-auto">
+                        <div className="flex items-center justify-between mb-3">
+                            <h4 className="text-xs uppercase font-extrabold tracking-wider text-sky-400">Active Directory · GPO &amp; Stratégies d'Application</h4>
+                            <span className="text-[10px] bg-sky-950 text-sky-300 px-2 py-0.5 rounded border border-sky-800">LSDOU</span>
+                        </div>
+                        <p className="text-[11px] text-slate-300 mb-3 leading-relaxed"><strong className="text-amber-300">Lecture :</strong> les stratégies s'appliquent du général au spécifique. En cas de conflit, la plus proche de l'utilisateur (l'OU) écrase les précédentes. La dernière appliquée gagne toujours.</p>
+                        <svg viewBox="0 0 640 280" role="img" aria-label="Ordre LSDOU des GPO" className="w-full h-auto font-sans">
+                            <defs>
+                                <marker id="ar" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                                    <path d="M 0 1 L 10 5 L 0 9 z" fill="#f59e0b" />
+                                </marker>
+                            </defs>
+                            {/* Étages LSDOU */}
+                            <rect x="20" y="20" width="280" height="38" rx="6" fill="#475569" />
+                            <text x="35" y="44" fill="white" fontWeight="bold" fontSize="11">L — Local (stratégie de la machine)</text>
+
+                            <rect x="20" y="65" width="280" height="38" rx="6" fill="#7c3aed" />
+                            <text x="35" y="89" fill="white" fontWeight="bold" fontSize="11">S — Site (AD Sites and Services)</text>
+
+                            <rect x="20" y="110" width="280" height="38" rx="6" fill="#0284c7" />
+                            <text x="35" y="134" fill="white" fontWeight="bold" fontSize="11">D — Domaine (entreprise.local)</text>
+
+                            <rect x="20" y="155" width="280" height="38" rx="6" fill="#059669" />
+                            <text x="35" y="179" fill="white" fontWeight="bold" fontSize="11">OU — ex : OU=RH (la plus spécifique)</text>
+
+                            <line x1="300" y1="39" x2="300" y2="174" stroke="#f59e0b" strokeWidth="3" markerEnd="url(#ar)" />
+                            <text x="312" y="80" fill="#fbbf24" fontSize="10" fontWeight="bold">Ordre d'application ↓</text>
+                            <text x="312" y="130" fill="#fbbf24" fontSize="10" fontWeight="bold">Conflit : l'OU gagne</text>
+
+                            {/* Panneau de droite : commandes */}
+                            <rect x="360" y="40" width="260" height="110" rx="8" fill="#0f172a" stroke="#38bdf8" strokeWidth="1.5" />
+                            <text x="375" y="65" fill="#93c5fd" fontWeight="bold" fontSize="11">Vérifier côté poste :</text>
+                            <text x="375" y="88" fill="#93c5fd" fontSize="10">gpupdate /force → applique</text>
+                            <text x="375" y="108" fill="#93c5fd" fontSize="10">gpresult /R → liste les GPO</text>
+                            <text x="375" y="128" fill="#93c5fd" fontSize="10">appliquées ET filtrées</text>
+
+                            {/* Note de bas */}
+                            <rect x="20" y="210" width="600" height="55" rx="6" fill="#1e293b" stroke="#475569" />
+                            <text x="32" y="232" fill="#94a3b8" fontSize="10">Exceptions : héritage bloqué, Enforced, filtrage WMI modifient ce flux — gpresult montre la raison exacte.</text>
+                            <text x="32" y="252" fill="#94a3b8" fontSize="10">Contexte pro : chaque paramètre de sécurité (pare-feu, mot de passe, cartes réseau) passe par GPO. LSDOU = la règle d'or.</text>
                         </svg>
                     </div>
                 );
@@ -956,30 +1072,52 @@ export const DynamicSVGDiagram = ({ type }) => {
 
             if (type === 'supervision-architecture') {
                 return (
-                    <div className="w-full bg-slate-900 text-white p-4 rounded-lg overflow-x-auto">
-                        <h4 className="text-xs uppercase font-bold text-sky-400 mb-2">SVG : architecture de supervision (Zabbix/PRTG)</h4>
-                        <p className="text-[11px] text-slate-300 mb-2"><strong className="text-amber-300">Lecture :</strong> le serveur de supervision collecte (SNMP, agents, ICMP) depuis toute l'infrastructure, stocke les métriques, déclenche des seuils → alertes (mail, SMS, ticket GLPI). SNMP trap = alerte spontanée, SNMP poll = interrogation régulière.</p>
-                        <svg viewBox="0 0 560 190" role="img" aria-label="Architecture de supervision" className="w-full h-auto text-xs">
-                            <rect x="215" y="55" width="140" height="70" rx="10" fill="#059669" />
-                            <text x="245" y="80" fill="white" fontWeight="bold">Serveur de</text>
-                            <text x="245" y="98" fill="white" fontWeight="bold">supervision</text>
-                            <text x="228" y="116" fill="#a7f3d0" fontSize="10">seuils → alertes → tickets</text>
-                            <rect x="20" y="20" width="130" height="40" rx="8" fill="#1e293b" stroke="#38bdf8" />
-                            <text x="35" y="45" fill="#93c5fd" fontSize="10">Switchs / routeurs (SNMP)</text>
-                            <rect x="20" y="80" width="130" height="40" rx="8" fill="#1e293b" stroke="#38bdf8" />
-                            <text x="40" y="100" fill="#93c5fd" fontSize="10">Serveurs (agents)</text>
-                            <rect x="20" y="140" width="130" height="40" rx="8" fill="#1e293b" stroke="#38bdf8" />
-                            <text x="42" y="160" fill="#93c5fd" fontSize="10">Postes (ping/service)</text>
-                            <rect x="410" y="20" width="130" height="40" rx="8" fill="#1e293b" stroke="#fbbf24" />
-                            <text x="428" y="45" fill="#fcd34d" fontSize="10">Email / SMS / GLPI</text>
-                            <rect x="410" y="140" width="130" height="40" rx="8" fill="#1e293b" stroke="#fbbf24" />
-                            <text x="425" y="160" fill="#fcd34d" fontSize="10">Tableaux de bord / NOC</text>
-                            <line x1="150" y1="40" x2="215" y2="70" stroke="#38bdf8" strokeWidth="2" markerEnd="url(#ar)" />
-                            <line x1="150" y1="100" x2="215" y2="90" stroke="#38bdf8" strokeWidth="2" markerEnd="url(#ar)" />
-                            <line x1="150" y1="160" x2="215" y2="110" stroke="#38bdf8" strokeWidth="2" markerEnd="url(#ar)" />
-                            <line x1="355" y1="70" x2="410" y2="40" stroke="#fbbf24" strokeWidth="2" markerEnd="url(#ar)" />
-                            <line x1="355" y1="110" x2="410" y2="160" stroke="#fbbf24" strokeWidth="2" markerEnd="url(#ar)" />
-                            <text x="160" y="185" fill="#94a3b8" fontSize="10">collecte : SNMP poll (161) · trap (162) · agents · ICMP ping · WMI/WinRM</text>
+                    <div className="w-full bg-slate-900 text-white p-5 rounded-xl border border-slate-700 shadow-xl overflow-x-auto">
+                        <div className="flex items-center justify-between mb-3">
+                            <h4 className="text-xs uppercase font-extrabold tracking-wider text-sky-400">Infrastructure &amp; Supervision · Architecture de Monitoring</h4>
+                            <span className="text-[10px] bg-sky-950 text-sky-300 px-2 py-0.5 rounded border border-sky-800">Zabbix / PRTG / Nagios</span>
+                        </div>
+                        <p className="text-[11px] text-slate-300 mb-3 leading-relaxed"><strong className="text-amber-300">Lecture :</strong> le serveur de supervision collecte (SNMP, agents, ICMP) depuis toute l'infrastructure, stocke les métriques, déclenche des seuils → alertes (mail, SMS, ticket GLPI). SNMP trap = alerte spontanée, SNMP poll = interrogation régulière.</p>
+                        <svg viewBox="0 0 640 280" role="img" aria-label="Architecture de supervision" className="w-full h-auto font-sans">
+                            <defs>
+                                <marker id="ar" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                                    <path d="M 0 1 L 10 5 L 0 9 z" fill="#38bdf8" />
+                                </marker>
+                            </defs>
+                            {/* Serveur de supervision (centre) */}
+                            <rect x="230" y="90" width="180" height="80" rx="8" fill="#059669" />
+                            <text x="255" y="118" fill="white" fontWeight="bold" fontSize="12">Serveur de Supervision</text>
+                            <text x="245" y="138" fill="#a7f3d0" fontSize="10">Zabbix / PRTG / Nagios</text>
+                            <text x="245" y="155" fill="#a7f3d0" fontSize="10">Seuils → alertes → tickets</text>
+
+                            {/* Sources de données (gauche) */}
+                            <rect x="20" y="30" width="160" height="40" rx="6" fill="#0f172a" stroke="#38bdf8" strokeWidth="1.5" />
+                            <text x="35" y="55" fill="#93c5fd" fontSize="10">Switchs / Routeurs (SNMP)</text>
+
+                            <rect x="20" y="90" width="160" height="40" rx="6" fill="#0f172a" stroke="#38bdf8" strokeWidth="1.5" />
+                            <text x="45" y="115" fill="#93c5fd" fontSize="10">Serveurs (Agents)</text>
+
+                            <rect x="20" y="150" width="160" height="40" rx="6" fill="#0f172a" stroke="#38bdf8" strokeWidth="1.5" />
+                            <text x="45" y="175" fill="#93c5fd" fontSize="10">Postes (Ping/Service)</text>
+
+                            {/* Destinations (droite) */}
+                            <rect x="460" y="30" width="160" height="40" rx="6" fill="#0f172a" stroke="#fbbf24" strokeWidth="1.5" />
+                            <text x="478" y="55" fill="#fcd34d" fontSize="10">Email / SMS / GLPI</text>
+
+                            <rect x="460" y="150" width="160" height="40" rx="6" fill="#0f172a" stroke="#fbbf24" strokeWidth="1.5" />
+                            <text x="475" y="175" fill="#fcd34d" fontSize="10">Tableaux de bord / NOC</text>
+
+                            {/* Lignes de flux */}
+                            <line x1="180" y1="50" x2="230" y2="105" stroke="#38bdf8" strokeWidth="2" markerEnd="url(#ar)" />
+                            <line x1="180" y1="110" x2="230" y2="120" stroke="#38bdf8" strokeWidth="2" markerEnd="url(#ar)" />
+                            <line x1="180" y1="170" x2="230" y2="145" stroke="#38bdf8" strokeWidth="2" markerEnd="url(#ar)" />
+                            <line x1="410" y1="105" x2="460" y2="50" stroke="#fbbf24" strokeWidth="2" markerEnd="url(#ar)" />
+                            <line x1="410" y1="145" x2="460" y2="170" stroke="#fbbf24" strokeWidth="2" markerEnd="url(#ar)" />
+
+                            {/* Méthodes de collecte */}
+                            <rect x="20" y="215" width="600" height="45" rx="6" fill="#1e293b" stroke="#475569" />
+                            <text x="32" y="235" fill="#94a3b8" fontSize="10">Collecte : SNMP poll (port 161) · SNMP trap (port 162) · Agents logiciels · ICMP ping · WMI / WinRM.</text>
+                            <text x="32" y="252" fill="#94a3b8" fontSize="10">Contexte pro : supervision = détection proactive des pannes avant que les utilisateurs ne s'en plaignent.</text>
                         </svg>
                     </div>
                 );
@@ -989,23 +1127,74 @@ export const DynamicSVGDiagram = ({ type }) => {
             // ===== Schémas phase 2 : support/cybersécurité =====
             if (type === 'support-cycle-v2') {
                 return (
-                    <div className="w-full bg-slate-900 text-white p-4 rounded-lg overflow-x-auto">
-                        <h4 className="text-xs uppercase font-bold text-sky-400 mb-2">SVG : le cycle de vie d'un ticket — qui fait quoi</h4>
-                        <p className="text-[11px] text-slate-300 mb-2"><strong className="text-amber-300">Lecture :</strong> le ticket suit un chemin précis de la gauche vers la droite. En cas de blocage, on escalade d'un niveau.</p>
-                        <svg viewBox="0 0 620 240" role="img" aria-label="Cycle de vie d'un ticket avec acteurs et délais" className="w-full h-auto">
-                            <rect x="15" y="60" width="115" height="50" rx="8" fill="#0284c7" /><text x="30" y="80" fill="white" fontWeight="bold" fontSize="10">Ouverture</text><text x="25" y="97" fill="#bae6fd" fontSize="9">utilisateur appelle</text>
-                            <rect x="155" y="60" width="115" height="50" rx="8" fill="#059669" /><text x="172" y="80" fill="white" fontWeight="bold" fontSize="10">Qualification</text><text x="162" y="97" fill="#a7f3d0" fontSize="9">catégorie + criticité</text>
-                            <rect x="295" y="60" width="115" height="50" rx="8" fill="#d97706" /><text x="315" y="80" fill="white" fontWeight="bold" fontSize="10">Priorisation</text><text x="300" y="97" fill="#fde68a" fontSize="9">P1→P4 · SLA</text>
-                            <rect x="435" y="30" width="115" height="50" rx="8" fill="#6366f1" /><text x="452" y="50" fill="white" fontWeight="bold" fontSize="10">Diagnostic</text><text x="440" y="67" fill="#c7d2fe" fontSize="9">reproduire + logs</text>
-                            <rect x="435" y="110" width="115" height="50" rx="8" fill="#059669" /><text x="450" y="130" fill="white" fontWeight="bold" fontSize="10">Résolution</text><text x="440" y="147" fill="#a7f3d0" fontSize="9">appliquer + tester</text>
-                            <rect x="435" y="190" width="115" height="50" rx="8" fill="#16a34a" /><text x="455" y="210" fill="white" fontWeight="bold" fontSize="10">Clôture</text><text x="440" y="227" fill="#bbf7d0" fontSize="9">validation utilisateur</text>
-                            <line x1="130" y1="85" x2="155" y2="85" stroke="#94a3b8" strokeWidth="3" markerEnd="url(#ar)" /><line x1="270" y1="85" x2="295" y2="85" stroke="#94a3b8" strokeWidth="3" markerEnd="url(#ar)" /><line x1="410" y1="85" x2="435" y2="55" stroke="#94a3b8" strokeWidth="3" markerEnd="url(#ar)" /><line x1="490" y1="80" x2="490" y2="110" stroke="#94a3b8" strokeWidth="3" markerEnd="url(#ar)" /><line x1="490" y1="160" x2="490" y2="190" stroke="#94a3b8" strokeWidth="3" markerEnd="url(#ar)" />
-                            <rect x="15" y="140" width="230" height="90" rx="10" fill="#1e293b" stroke="#ef4444" />
-                            <text x="30" y="162" fill="#fca5a5" fontWeight="bold" fontSize="11">Escalade si échec :</text><text x="30" y="180" fill="#fecaca" fontSize="10">N1 (support) → N2 (technicien IT)</text><text x="30" y="197" fill="#fecaca" fontSize="10">→ N3 (expert / fournisseur)</text><text x="30" y="214" fill="#fecaca" fontSize="10">chaque escalade : nouveau délai SLA</text>
-                            <rect x="255" y="140" width="150" height="90" rx="10" fill="#1e293b" stroke="#38bdf8" />
-                            <text x="270" y="162" fill="#93c5fd" fontWeight="bold" fontSize="11">Priorités :</text><text x="270" y="180" fill="#93c5fd" fontSize="10">P1 : 4h · 50+ users</text><text x="270" y="197" fill="#93c5fd" fontSize="10">P2 : 8h · fonction KO</text><text x="270" y="214" fill="#93c5fd" fontSize="10">P3 : 24h · gêne partielle</text><text x="270" y="226" fill="#93c5fd" fontSize="10">P4 : 72h · confort</text>
-                            <text x="15" y="185" fill="#94a3b8" fontSize="10">Où on le croise : chaque appel, chaque GLPI, chaque ServiceNow.</text>
-                            <text x="15" y="205" fill="#94a3b8" fontSize="10">Pourquoi : sans cycle, les demandes se perdent, les SLA explosent.</text>
+                    <div className="w-full bg-slate-900 text-white p-5 rounded-xl border border-slate-700 shadow-xl overflow-x-auto">
+                        <div className="flex items-center justify-between mb-3">
+                            <h4 className="text-xs uppercase font-extrabold tracking-wider text-sky-400">Support IT &amp; ITIL · Cycle de Vie d'un Ticket</h4>
+                            <span className="text-[10px] bg-sky-950 text-sky-300 px-2 py-0.5 rounded border border-sky-800">ITIL v4</span>
+                        </div>
+                        <p className="text-[11px] text-slate-300 mb-3 leading-relaxed"><strong className="text-amber-300">Lecture :</strong> le ticket suit un chemin précis de la gauche vers la droite. En cas de blocage, on escalade d'un niveau. Chaque étape a son acteur et son délai SLA.</p>
+                        <svg viewBox="0 0 640 280" role="img" aria-label="Cycle de vie d'un ticket avec acteurs et délais" className="w-full h-auto font-sans">
+                            <defs>
+                                <marker id="ar" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                                    <path d="M 0 1 L 10 5 L 0 9 z" fill="#38bdf8" />
+                                </marker>
+                            </defs>
+                            {/* Étapes du cycle */}
+                            <rect x="20" y="60" width="100" height="50" rx="6" fill="#0284c7" />
+                            <text x="35" y="82" fill="white" fontWeight="bold" fontSize="10">Ouverture</text>
+                            <text x="28" y="98" fill="#bae6fd" fontSize="9">utilisateur appelle</text>
+
+                            <rect x="140" y="60" width="100" height="50" rx="6" fill="#059669" />
+                            <text x="155" y="82" fill="white" fontWeight="bold" fontSize="10">Qualification</text>
+                            <text x="148" y="98" fill="#a7f3d0" fontSize="9">catégorie + criticité</text>
+
+                            <rect x="260" y="60" width="100" height="50" rx="6" fill="#d97706" />
+                            <text x="275" y="82" fill="white" fontWeight="bold" fontSize="10">Priorisation</text>
+                            <text x="268" y="98" fill="#fde68a" fontSize="9">P1→P4 · SLA</text>
+
+                            <rect x="380" y="30" width="100" height="50" rx="6" fill="#6366f1" />
+                            <text x="398" y="52" fill="white" fontWeight="bold" fontSize="10">Diagnostic</text>
+                            <text x="388" y="68" fill="#c7d2fe" fontSize="9">reproduire + logs</text>
+
+                            <rect x="380" y="110" width="100" height="50" rx="6" fill="#059669" />
+                            <text x="395" y="132" fill="white" fontWeight="bold" fontSize="10">Résolution</text>
+                            <text x="388" y="148" fill="#a7f3d0" fontSize="9">appliquer + tester</text>
+
+                            <rect x="380" y="190" width="100" height="50" rx="6" fill="#16a34a" />
+                            <text x="400" y="212" fill="white" fontWeight="bold" fontSize="10">Clôture</text>
+                            <text x="388" y="228" fill="#bbf7d0" fontSize="9">validation utilisateur</text>
+
+                            {/* Flèches */}
+                            <line x1="120" y1="85" x2="140" y2="85" stroke="#94a3b8" strokeWidth="2.5" markerEnd="url(#ar)" />
+                            <line x1="240" y1="85" x2="260" y2="85" stroke="#94a3b8" strokeWidth="2.5" markerEnd="url(#ar)" />
+                            <line x1="360" y1="85" x2="380" y2="55" stroke="#94a3b8" strokeWidth="2.5" markerEnd="url(#ar)" />
+                            <line x1="430" y1="80" x2="430" y2="110" stroke="#94a3b8" strokeWidth="2.5" markerEnd="url(#ar)" />
+                            <line x1="430" y1="160" x2="430" y2="190" stroke="#94a3b8" strokeWidth="2.5" markerEnd="url(#ar)" />
+
+                            {/* Escalade */}
+                            <rect x="20" y="140" width="240" height="100" rx="8" fill="#1e293b" stroke="#ef4444" strokeWidth="1.5" />
+                            <text x="32" y="162" fill="#fca5a5" fontWeight="bold" fontSize="11">Escalade si échec :</text>
+                            <text x="30" y="182" fill="#fecaca" fontSize="10">N1 (support) → N2 (technicien IT)</text>
+                            <text x="30" y="200" fill="#fecaca" fontSize="10">→ N3 (expert / fournisseur)</text>
+                            <text x="30" y="218" fill="#fecaca" fontSize="10">chaque escalade = nouveau délai SLA</text>
+
+                            {/* Priorités */}
+                            <rect x="280" y="140" width="160" height="100" rx="8" fill="#1e293b" stroke="#38bdf8" strokeWidth="1.5" />
+                            <text x="295" y="162" fill="#93c5fd" fontWeight="bold" fontSize="11">Priorités :</text>
+                            <text x="295" y="182" fill="#93c5fd" fontSize="10">P1 : 4h · 50+ users</text>
+                            <text x="295" y="200" fill="#93c5fd" fontSize="10">P2 : 8h · fonction KO</text>
+                            <text x="295" y="218" fill="#93c5fd" fontSize="10">P3 : 24h · gêne partielle</text>
+                            <text x="295" y="232" fill="#93c5fd" fontSize="10">P4 : 72h · confort</text>
+
+                            {/* Note de bas */}
+                            <rect x="460" y="60" width="160" height="180" rx="6" fill="#1e293b" stroke="#475569" />
+                            <text x="472" y="82" fill="#94a3b8" fontSize="9">Où on le croise :</text>
+                            <text x="472" y="100" fill="#94a3b8" fontSize="9">chaque appel, GLPI,</text>
+                            <text x="472" y="116" fill="#94a3b8" fontSize="9">ServiceNow.</text>
+                            <text x="472" y="140" fill="#94a3b8" fontSize="9">Pourquoi :</text>
+                            <text x="472" y="158" fill="#94a3b8" fontSize="9">sans cycle, les demandes</text>
+                            <text x="472" y="174" fill="#94a3b8" fontSize="9">se perdent, les SLA</text>
+                            <text x="472" y="190" fill="#94a3b8" fontSize="9">explosent.</text>
                         </svg>
                     </div>
                 );
@@ -1013,30 +1202,41 @@ export const DynamicSVGDiagram = ({ type }) => {
 
             if (type === 'cyber-defense-v2') {
                 return (
-                    <div className="w-full bg-slate-900 text-white p-4 rounded-lg overflow-x-auto">
-                        <h4 className="text-xs uppercase font-bold text-sky-400 mb-2">SVG : défense en profondeur — chaque couche ralentit l'attaquant</h4>
-                        <p className="text-[11px] text-slate-300 mb-2"><strong className="text-amber-300">Lecture :</strong> l'attaquant vient de l'extérieur. Chaque anneau le ralentit et le détecte plus tôt. Un seul anneau ne suffit jamais — la sécurité est un empilement de barrières indépendantes.</p>
-                        <svg viewBox="0 0 620 260" role="img" aria-label="Défense en profondeur : anneaux de sécurité" className="w-full h-auto">
-                            <circle cx="155" cy="130" r="110" fill="#dc2626" opacity="0.25" stroke="#dc2626" strokeWidth="1.5" />
-                            <circle cx="155" cy="130" r="92" fill="#ea580c" opacity="0.25" stroke="#ea580c" strokeWidth="1.5" />
-                            <circle cx="155" cy="130" r="74" fill="#d97706" opacity="0.25" stroke="#d97706" strokeWidth="1.5" />
-                            <circle cx="155" cy="130" r="56" fill="#059669" opacity="0.25" stroke="#059669" strokeWidth="1.5" />
-                            <circle cx="155" cy="130" r="38" fill="#0284c7" opacity="0.25" stroke="#0284c7" strokeWidth="1.5" />
-                            <circle cx="155" cy="130" r="20" fill="#6366f1" opacity="0.25" stroke="#6366f1" strokeWidth="1.5" />
-                            <text x="125" y="130" fill="white" fontWeight="bold" fontSize="11">Données</text>
-                            <text x="115" y="145" fill="#94a3b8" fontSize="9">à protéger</text>
-                            <rect x="290" y="20" width="200" height="200" rx="8" fill="#0f172a" stroke="#334155" />
-                            <text x="305" y="42" fill="#fbbf24" fontWeight="bold" fontSize="11">Anneau → Outil → Exemple</text>
-                            <text x="305" y="64" fill="#e2e8f0" fontSize="10">6 · Comptes → MFA, AD durci</text>
-                            <text x="305" y="82" fill="#e2e8f0" fontSize="10">5 · Postes → Antivirus, WDAC</text>
-                            <text x="305" y="100" fill="#e2e8f0" fontSize="10">4 · App → ACL, zone DMZ</text>
-                            <text x="305" y="118" fill="#e2e8f0" fontSize="10">3 · Réseau → VLAN, firewall</text>
-                            <text x="305" y="136" fill="#e2e8f0" fontSize="10">2 · Périmètre → FireWall, IPS</text>
-                            <text x="305" y="154" fill="#e2e8f0" fontSize="10">1 · Physique → badge, salle</text>
-                            <text x="305" y="176" fill="#22c55e" fontSize="10">Détection : SIEM, Zabbix, syslog</text>
-                            <text x="305" y="194" fill="#22c55e" fontSize="10">Réponse : plan de crise, PRA</text>
-                            <rect x="15" y="245" width="590" height="12" rx="3" fill="#0f172a" />
-                            <text x="25" y="255" fill="#94a3b8" fontSize="9">Où on le croise : chaque serveur, chaque poste, chaque pare-feu — et chaque ticket « j'ai cliqué sur un mail louche »</text>
+                    <div className="w-full bg-slate-900 text-white p-5 rounded-xl border border-slate-700 shadow-xl overflow-x-auto">
+                        <div className="flex items-center justify-between mb-3">
+                            <h4 className="text-xs uppercase font-extrabold tracking-wider text-sky-400">Cybersécurité · Modèle de Défense en Profondeur</h4>
+                            <span className="text-[10px] bg-sky-950 text-sky-300 px-2 py-0.5 rounded border border-sky-800">ISO 27001 / ANSSI</span>
+                        </div>
+                        <p className="text-[11px] text-slate-300 mb-3 leading-relaxed"><strong className="text-amber-300">Lecture :</strong> la sécurité périmétrique seule ne suffit plus. Chaque anneau (du physique aux données) ralentit, détecte et isole l'attaquant. Si une barrière cède, les suivantes prennent le relais.</p>
+                        <svg viewBox="0 0 640 280" role="img" aria-label="Défense en profondeur : anneaux de sécurité concentriques et correspondance technique" className="w-full h-auto font-sans">
+                            {/* Cercles concentriques de défense */}
+                            <g transform="translate(140, 130)">
+                                <circle cx="0" cy="0" r="115" fill="#dc2626" opacity="0.2" stroke="#dc2626" strokeWidth="1.5" />
+                                <circle cx="0" cy="0" r="95" fill="#ea580c" opacity="0.2" stroke="#ea580c" strokeWidth="1.5" />
+                                <circle cx="0" cy="0" r="75" fill="#d97706" opacity="0.2" stroke="#d97706" strokeWidth="1.5" />
+                                <circle cx="0" cy="0" r="55" fill="#059669" opacity="0.2" stroke="#059669" strokeWidth="1.5" />
+                                <circle cx="0" cy="0" r="35" fill="#0284c7" opacity="0.2" stroke="#0284c7" strokeWidth="1.5" />
+                                <circle cx="0" cy="0" r="18" fill="#6366f1" opacity="0.4" stroke="#6366f1" strokeWidth="1.5" />
+                                <text x="-24" y="4" fill="white" fontWeight="bold" fontSize="10">Données</text>
+                            </g>
+
+                            {/* Tableau explicatif à droite */}
+                            <rect x="280" y="15" width="345" height="210" rx="8" fill="#0f172a" stroke="#334155" strokeWidth="1.5" />
+                            <text x="295" y="38" fill="#fbbf24" fontWeight="bold" fontSize="11">Anneau de défense &amp; Outils associés :</text>
+                            
+                            <text x="295" y="62" fill="#f8fafc" fontSize="10"><tspan fontWeight="bold" fill="#93c5fd">6 · Comptes / Identité :</tspan> MFA, stratégie de mots de passe, AD durci</text>
+                            <text x="295" y="85" fill="#f8fafc" fontSize="10"><tspan fontWeight="bold" fill="#93c5fd">5 · Postes &amp; Terminaux :</tspan> EDR / Antivirus, durcissement OS (GPO)</text>
+                            <text x="295" y="108" fill="#f8fafc" fontSize="10"><tspan fontWeight="bold" fill="#93c5fd">4 · Applications :</tspan> Pare-feu applicatif (WAF), cloisonnement</text>
+                            <text x="295" y="131" fill="#f8fafc" fontSize="10"><tspan fontWeight="bold" fill="#93c5fd">3 · Réseau interne :</tspan> Segmentation VLAN, ACL, Zero Trust</text>
+                            <text x="295" y="154" fill="#f8fafc" fontSize="10"><tspan fontWeight="bold" fill="#93c5fd">2 · Périmètre externe :</tspan> Firewall NG, IPS, VPN chiffré</text>
+                            <text x="295" y="177" fill="#f8fafc" fontSize="10"><tspan fontWeight="bold" fill="#93c5fd">1 · Physique :</tspan> Badges, vidéosurveillance, salle serveurs</text>
+
+                            <rect x="295" y="190" width="315" height="25" rx="4" fill="#1e293b" />
+                            <text x="305" y="206" fill="#34d399" fontWeight="bold" fontSize="10">Surveillance continue : SIEM, Syslog, Zabbix</text>
+
+                            {/* Bas de page */}
+                            <rect x="15" y="240" width="610" height="28" rx="6" fill="#1e293b" stroke="#475569" />
+                            <text x="25" y="258" fill="#94a3b8" fontSize="10">Règle d'or TSSR : « Aucune mesure de sécurité n'est infaillible seule ; c'est le cumul des barrières qui protège l'entreprise. »</text>
                         </svg>
                     </div>
                 );
