@@ -3,6 +3,7 @@ import bannerImg from './assets/alexander.webp';
 import bgHint from './assets/robynne.webp';
 import logoUrl from './assets/logo.webp';
 import { DynamicSVGDiagram } from './components/DynamicSVGDiagram.jsx';
+import { Icon } from './components/Icon.jsx';
 import { NAV_ITEMS } from './data/navConfig.jsx';
 import { COURSES_DATA } from './data/courses-ccna.js';
 import { TSSR_COURSES } from './data/courses-tssr.js';
@@ -2689,11 +2690,11 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
                     <nav aria-label="Navigation rapide mobile" className="md:hidden fixed bottom-0 inset-x-0 z-50 bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-700 shadow-[0_-2px_10px_rgba(0,0,0,0.08)]">
                         <div className="grid grid-cols-5 text-[10px] font-semibold">
                             {[
-                                { id: 'dashboard', icon: '🏠', label: 'Accueil' },
-                                { id: 'courses', icon: '📚', label: 'Cours' },
+                                { id: 'dashboard', icon: 'house', label: 'Accueil' },
+                                { id: 'courses', icon: 'book-open', label: 'Cours' },
                                 { id: 'qcm', icon: '✍️', label: 'QCM' },
-                                { id: 'labs', icon: '🧪', label: 'Labos' },
-                                { id: 'glossary', icon: '📖', label: 'Glossaire' }
+                                { id: 'labs', icon: 'flask', label: 'Labos' },
+                                { id: 'glossary', icon: 'book', label: 'Glossaire' }
                             ].map(tab => (
                                 <button
                                     key={tab.id}
@@ -2705,7 +2706,7 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
                                             : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800'
                                     }`}
                                 >
-                                    <span className="text-base" aria-hidden="true">{tab.icon}</span>
+                                    <Icon name={tab.icon} className="w-4 h-4" />
                                     {tab.label}
                                 </button>
                             ))}
