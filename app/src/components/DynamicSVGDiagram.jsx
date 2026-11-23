@@ -519,29 +519,43 @@ export const DynamicSVGDiagram = ({ type }) => {
 
             if (type === 'diagramme-decision-client') {
                 return (
-                    <div className="w-full bg-slate-900 text-white p-4 rounded-lg overflow-x-auto">
-                        <h4 className="text-xs uppercase font-bold text-sky-400 mb-2">Génération SVG : Arbre de Dépannage Client (Sujet 1.6)</h4>
-                        <p className="text-[11px] text-slate-300 mb-2"><strong className="text-amber-300">Description textuelle :</strong> quatre boëtes enchaënées de gauche à droite : 1. Lien physique OK ?, 2. IP valide (pas 169.x.x.x) ?, 3. Ping passerelle ?, 4. Ping DNS ?. Sous chaque étape, une annotation rouge indique le chemin en cas d'échec : rebrancher ou associer le Wi-Fi ; échec DHCP (vérifier le relais) ; problème de routage ou de VLAN ; serveur DNS hors service.</p>
-                        <svg viewBox="0 0 550 150" role="img" aria-label="Arbre de dépannage d'un client : côble et interface, puis adressage, puis service applicatif" className="w-full h-auto text-xs">
-                            <rect x="20" y="20" width="110" height="35" rx="4" fill="#334155" />
-                            <text x="30" y="42" fill="white">1. Lien Physique OK ?</text>
+                    <div className="w-full bg-slate-900 text-white p-5 rounded-xl border border-slate-700 shadow-xl overflow-x-auto">
+                        <div className="flex items-center justify-between mb-3">
+                            <h4 className="text-xs uppercase font-extrabold tracking-wider text-sky-400">Dépannage &amp; Diagnostic · Arbre de Décision Client</h4>
+                            <span className="text-[10px] bg-sky-950 text-sky-300 px-2 py-0.5 rounded border border-sky-800">Méthode TSSR</span>
+                        </div>
+                        <p className="text-[11px] text-slate-300 mb-3 leading-relaxed"><strong className="text-amber-300">Lecture :</strong> quatre boîtes enchaînées de gauche à droite : 1. Lien physique OK ?, 2. IP valide (pas 169.x.x.x) ?, 3. Ping passerelle ?, 4. Ping DNS ?. Sous chaque étape, une annotation rouge indique le chemin en cas d'échec.</p>
+                        <svg viewBox="0 0 640 180" role="img" aria-label="Arbre de dépannage d'un client : câble et interface, puis adressage, puis service applicatif" className="w-full h-auto font-sans">
+                            <defs>
+                                <marker id="ar" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                                    <path d="M 0 1 L 10 5 L 0 9 z" fill="#38bdf8" />
+                                </marker>
+                            </defs>
+                            {/* Étapes */}
+                            <rect x="20" y="30" width="130" height="40" rx="6" fill="#334155" />
+                            <text x="30" y="55" fill="white" fontSize="10" fontWeight="bold">1. Lien Physique OK ?</text>
 
-                            <line x1="130" y1="37" x2="160" y2="37" stroke="#38bdf8" strokeWidth="2" />
-                            <rect x="160" y="20" width="110" height="35" rx="4" fill="#334155" />
-                            <text x="170" y="42" fill="white">2. IP Valide (Pas 169..) ?</text>
+                            <line x1="150" y1="50" x2="180" y2="50" stroke="#38bdf8" strokeWidth="2" markerEnd="url(#ar)" />
+                            <rect x="180" y="30" width="130" height="40" rx="6" fill="#334155" />
+                            <text x="190" y="55" fill="white" fontSize="10" fontWeight="bold">2. IP Valide (Pas 169..) ?</text>
 
-                            <line x1="270" y1="37" x2="300" y2="37" stroke="#38bdf8" strokeWidth="2" />
-                            <rect x="300" y="20" width="110" height="35" rx="4" fill="#334155" />
-                            <text x="310" y="42" fill="white">3. Ping Passerelle ?</text>
+                            <line x1="310" y1="50" x2="340" y2="50" stroke="#38bdf8" strokeWidth="2" markerEnd="url(#ar)" />
+                            <rect x="340" y="30" width="130" height="40" rx="6" fill="#334155" />
+                            <text x="350" y="55" fill="white" fontSize="10" fontWeight="bold">3. Ping Passerelle ?</text>
 
-                            <line x1="410" y1="37" x2="440" y2="37" stroke="#38bdf8" strokeWidth="2" />
-                            <rect x="440" y="20" width="90" height="35" rx="4" fill="#334155" />
-                            <text x="450" y="42" fill="white">4. Ping DNS ?</text>
+                            <line x1="470" y1="50" x2="500" y2="50" stroke="#38bdf8" strokeWidth="2" markerEnd="url(#ar)" />
+                            <rect x="500" y="30" width="120" height="40" rx="6" fill="#334155" />
+                            <text x="510" y="55" fill="white" fontSize="10" fontWeight="bold">4. Ping DNS ?</text>
 
-                            <text x="20" y="85" fill="#f43f5e" fontSize="10">Non → Rebrancher / Associer Wi-Fi</text>
-                            <text x="160" y="85" fill="#f43f5e" fontSize="10">Non → Échec DHCP (Vérifier relais)</text>
-                            <text x="300" y="85" fill="#f43f5e" fontSize="10">Non → Problème Routage / VLAN</text>
-                            <text x="440" y="85" fill="#f43f5e" fontSize="10">Non → Serveur DNS hors service</text>
+                            {/* Annotations d'échec */}
+                            <text x="20" y="100" fill="#f43f5e" fontSize="10" fontWeight="bold">Non → Rebrancher / Associer Wi-Fi</text>
+                            <text x="180" y="100" fill="#f43f5e" fontSize="10" fontWeight="bold">Non → Échec DHCP (Vérifier relais)</text>
+                            <text x="340" y="100" fill="#f43f5e" fontSize="10" fontWeight="bold">Non → Problème Routage / VLAN</text>
+                            <text x="500" y="100" fill="#f43f5e" fontSize="10" fontWeight="bold">Non → Serveur DNS hors service</text>
+
+                            {/* Note de bas */}
+                            <rect x="20" y="130" width="600" height="35" rx="6" fill="#1e293b" stroke="#475569" />
+                            <text x="32" y="152" fill="#94a3b8" fontSize="10">Contexte pro : cette démarche couvre 90% des incidents client. Toujours partir de la couche physique (couche 1) vers le haut.</text>
                         </svg>
                     </div>
                 );
