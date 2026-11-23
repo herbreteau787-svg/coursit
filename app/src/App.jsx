@@ -4,6 +4,7 @@ import bgHint from './assets/robynne.webp';
 import logoUrl from './assets/logo.webp';
 import { DynamicSVGDiagram } from './components/DynamicSVGDiagram.jsx';
 import { Icon } from './components/Icon.jsx';
+import GtaText from './components/GtaText.jsx';
 import { NAV_ITEMS } from './data/navConfig.jsx';
 import { COURSES_DATA } from './data/courses-ccna.js';
 import { TSSR_COURSES } from './data/courses-tssr.js';
@@ -2573,9 +2574,9 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
                                             IT
                                         </div>
                                     )}
-                                    <span className="mt-1 bg-gradient-to-r from-pink-500 via-fuchsia-500 to-orange-500 bg-clip-text text-2xl font-black tracking-wider text-transparent whitespace-nowrap">
+                                    <GtaText className="mt-1 text-2xl whitespace-nowrap">
                                         Plateforme de révisions pour tous
-                                    </span>
+                                    </GtaText>
                                 </div>
                             </button>
 
@@ -2668,7 +2669,7 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
                                     >
                                         <Icon
                                             name={tab.icon}
-                                            className={`w-5 h-5 shrink-0 ${
+                                            className={`gta-icon w-5 h-5 shrink-0 ${
                                                 currentTab === tab.id
                                                     ? 'text-cyan-600 bg-white rounded-full'
                                                     : 'text-gray-500 dark:text-cyan-400'
