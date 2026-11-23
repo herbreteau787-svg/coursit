@@ -816,34 +816,60 @@ export const DynamicSVGDiagram = ({ type }) => {
             // --- MAQUETTES D'INTERFACES PROFESSIONNELLES (réorientation pédagogique : GUI d'abord) ---
             if (type === 'vlan-segmentation') {
                 return (
-                    <div className="w-full bg-slate-900 text-white p-4 rounded-lg overflow-x-auto">
-                        <h4 className="text-xs uppercase font-bold text-sky-400 mb-2">SVG : VLAN = domaines de diffusion séparés</h4>
-                        <p className="text-[11px] text-slate-300 mb-2"><strong className="text-amber-300">Lecture :</strong> SW1 porte deux VLAN ; un broadcast du VLAN 10 (flèches rouges) atteint uniquement les ports du VLAN 10. Le trunk 802.1Q transporte les deux VLAN tagués ; les trames du VLAN 20 (flèches bleues) n'atteignent jamais les PC du VLAN 10 sans passer par le routeur.</p>
-                        <svg viewBox="0 0 560 220" role="img" aria-label="Deux VLAN isolés sur un switch avec trunk" className="w-full h-auto text-xs">
-                            <rect x="40" y="60" width="120" height="110" rx="8" fill="#1e293b" stroke="#38bdf8" />
-                            <text x="70" y="80" fill="#38bdf8" fontWeight="bold">SW1</text>
-                            <rect x="60" y="95" width="80" height="22" rx="3" fill="#dc2626" />
+                    <div className="w-full bg-slate-900 text-white p-5 rounded-xl border border-slate-700 shadow-xl overflow-x-auto">
+                        <div className="flex items-center justify-between mb-3">
+                            <h4 className="text-xs uppercase font-extrabold tracking-wider text-sky-400">Réseaux &amp; Switching · Segmentation VLAN</h4>
+                            <span className="text-[10px] bg-sky-950 text-sky-300 px-2 py-0.5 rounded border border-sky-800">IEEE 802.1Q</span>
+                        </div>
+                        <p className="text-[11px] text-slate-300 mb-3 leading-relaxed"><strong className="text-amber-300">Lecture :</strong> SW1 porte deux VLAN ; un broadcast du VLAN 10 (flèches rouges) atteint uniquement les ports du VLAN 10. Le trunk 802.1Q transporte les deux VLAN tagués.</p>
+                        <svg viewBox="0 0 640 260" role="img" aria-label="Deux VLAN isolés sur un switch avec trunk" className="w-full h-auto font-sans">
+                            <defs>
+                                <marker id="ar" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                                    <path d="M 0 1 L 10 5 L 0 9 z" fill="#dc2626" />
+                                </marker>
+                            </defs>
+                            {/* SW1 */}
+                            <rect x="40" y="60" width="140" height="110" rx="8" fill="#1e293b" stroke="#38bdf8" strokeWidth="1.5" />
+                            <text x="80" y="82" fill="#38bdf8" fontWeight="bold" fontSize="11">SW1</text>
+                            <rect x="60" y="95" width="100" height="22" rx="3" fill="#dc2626" />
                             <text x="66" y="110" fill="white" fontSize="10">Fa0/1 · VLAN 10</text>
-                            <rect x="60" y="125" width="80" height="22" rx="3" fill="#2563eb" />
+                            <rect x="60" y="125" width="100" height="22" rx="3" fill="#2563eb" />
                             <text x="66" y="140" fill="white" fontSize="10">Fa0/2 · VLAN 20</text>
-                            <rect x="52" y="160" width="96" height="4" fill="#f59e0b" />
+                            <rect x="52" y="160" width="116" height="4" fill="#f59e0b" />
                             <text x="62" y="180" fill="#f59e0b" fontSize="9">trunk Gi0/1</text>
-                            <rect x="260" y="60" width="120" height="110" rx="8" fill="#1e293b" stroke="#38bdf8" />
-                            <text x="290" y="80" fill="#38bdf8" fontWeight="bold">SW2</text>
-                            <rect x="280" y="95" width="80" height="22" rx="3" fill="#dc2626" />
-                            <text x="286" y="110" fill="white" fontSize="10">Fa0/1 · VLAN 10</text>
-                            <rect x="380" y="95" width="90" height="22" rx="3" fill="#64748b" />
-                            <text x="386" y="110" fill="white" fontSize="10">Gi0/1 · trunk</text>
-                            <line x1="148" y1="162" x2="380" y2="106" stroke="#f59e0b" strokeWidth="3" />
+
+                            {/* SW2 */}
+                            <rect x="280" y="60" width="140" height="110" rx="8" fill="#1e293b" stroke="#38bdf8" strokeWidth="1.5" />
+                            <text x="320" y="82" fill="#38bdf8" fontWeight="bold" fontSize="11">SW2</text>
+                            <rect x="300" y="95" width="100" height="22" rx="3" fill="#dc2626" />
+                            <text x="306" y="110" fill="white" fontSize="10">Fa0/1 · VLAN 10</text>
+                            <rect x="300" y="125" width="100" height="22" rx="3" fill="#64748b" />
+                            <text x="306" y="140" fill="white" fontSize="10">Gi0/1 · trunk</text>
+
+                            {/* Trunk */}
+                            <line x1="168" y1="162" x2="300" y2="136" stroke="#f59e0b" strokeWidth="3" />
                             <text x="205" y="150" fill="#f59e0b" fontSize="9">tag 802.1Q</text>
+
+                            {/* PC */}
                             <rect x="30" y="200" width="20" height="14" rx="2" fill="#dc2626" />
                             <text x="55" y="212" fill="white" fontSize="10">PC-RH (VLAN 10)</text>
                             <rect x="170" y="200" width="20" height="14" rx="2" fill="#2563eb" />
                             <text x="195" y="212" fill="white" fontSize="10">PC-IT (VLAN 20)</text>
-                            <path d="M65 105 Q100 40 70 95" stroke="#dc2626" strokeWidth="2" fill="none" markerEnd="url(#ar)" />
-                            <text x="120" y="45" fill="#dc2626" fontSize="10">broadcast VLAN 10 : reste dans VLAN 10</text>
-                            <path d="M100 135 Q140 185 105 140" stroke="#2563eb" strokeWidth="2" fill="none" />
+
+                            {/* Broadcast VLAN 10 */}
+                            <text x="120" y="45" fill="#dc2626" fontSize="10" fontWeight="bold">broadcast VLAN 10 : reste dans VLAN 10</text>
                             <text x="150" y="185" fill="#93c5fd" fontSize="10">broadcast VLAN 20 : jamais vu du VLAN 10</text>
+
+                            {/* Note de bas */}
+                            <rect x="440" y="60" width="180" height="180" rx="6" fill="#1e293b" stroke="#475569" />
+                            <text x="452" y="82" fill="#94a3b8" fontSize="9" fontWeight="bold">Règles :</text>
+                            <text x="452" y="102" fill="#94a3b8" fontSize="9">• un VLAN = un domaine</text>
+                            <text x="452" y="116" fill="#94a3b8" fontSize="9">  de diffusion</text>
+                            <text x="452" y="136" fill="#94a3b8" fontSize="9">• le trunk transporte</text>
+                            <text x="452" y="150" fill="#94a3b8" fontSize="9">  plusieurs VLAN</text>
+                            <text x="452" y="170" fill="#94a3b8" fontSize="9">• le routage inter-VLAN</text>
+                            <text x="452" y="184" fill="#94a3b8" fontSize="9">  passe par un routeur</text>
+                            <text x="452" y="204" fill="#94a3b8" fontSize="9">  (router-on-a-stick)</text>
                         </svg>
                     </div>
                 );
