@@ -1597,72 +1597,60 @@ export const DynamicSVGDiagram = ({ type }) => {
                 return (
                     <div className="w-full bg-slate-900 text-white p-5 rounded-xl border border-slate-700 shadow-xl overflow-x-auto">
                         <div className="flex items-center justify-between mb-3">
-                            <h4 className="text-xs uppercase font-extrabold tracking-wider text-sky-400">Support IT &amp; ITIL · Cycle de Vie d'un Ticket</h4>
+                            <h4 className="text-xs uppercase font-extrabold tracking-wider text-sky-400">Support IT & ITIL - Cycle de Vie d'un Ticket</h4>
                             <span className="text-[10px] bg-sky-950 text-sky-300 px-2 py-0.5 rounded border border-sky-800">ITIL v4</span>
                         </div>
-                        <p className="text-[11px] text-slate-300 mb-3 leading-relaxed"><strong className="text-amber-300">Lecture :</strong> le ticket suit un chemin précis de la gauche vers la droite. En cas de blocage, on escalade d'un niveau. Chaque étape a son acteur et son délai SLA.</p>
-                        <svg viewBox="0 0 640 280" role="img" aria-label="Cycle de vie d'un ticket avec acteurs et délais" className="w-full h-auto font-sans">
+                        <p className="text-[11px] text-slate-300 mb-3 leading-relaxed"><strong className="text-amber-300">Lecture :</strong> le ticket suit un chemin precis de la gauche vers la droite. En cas de blocage, on escalade d'un niveau. Chaque etape a son acteur et son delai SLA.</p>
+                        <svg viewBox="0 0 660 270" role="img" aria-label="Cycle de vie d'un ticket avec acteurs et delais" className="w-full h-auto font-sans">
                             <defs>
                                 <marker id="ar" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
                                     <path d="M 0 1 L 10 5 L 0 9 z" fill="#38bdf8" />
                                 </marker>
                             </defs>
-                            {/* Étapes du cycle */}
-                            <rect x="20" y="60" width="100" height="50" rx="6" fill="#0284c7" />
-                            <text x="35" y="82" fill="white" fontWeight="bold" fontSize="10">Ouverture</text>
-                            <text x="28" y="98" fill="#bae6fd" fontSize="9">utilisateur appelle</text>
-
-                            <rect x="140" y="60" width="100" height="50" rx="6" fill="#059669" />
-                            <text x="155" y="82" fill="white" fontWeight="bold" fontSize="10">Qualification</text>
-                            <text x="148" y="98" fill="#a7f3d0" fontSize="9">catégorie + criticité</text>
-
-                            <rect x="260" y="60" width="100" height="50" rx="6" fill="#d97706" />
-                            <text x="275" y="82" fill="white" fontWeight="bold" fontSize="10">Priorisation</text>
-                            <text x="268" y="98" fill="#fde68a" fontSize="9">P1→P4 · SLA</text>
-
-                            <rect x="380" y="30" width="100" height="50" rx="6" fill="#6366f1" />
-                            <text x="398" y="52" fill="white" fontWeight="bold" fontSize="10">Diagnostic</text>
-                            <text x="388" y="68" fill="#c7d2fe" fontSize="9">reproduire + logs</text>
-
-                            <rect x="380" y="110" width="100" height="50" rx="6" fill="#059669" />
-                            <text x="395" y="132" fill="white" fontWeight="bold" fontSize="10">Résolution</text>
-                            <text x="388" y="148" fill="#a7f3d0" fontSize="9">appliquer + tester</text>
-
-                            <rect x="380" y="190" width="100" height="50" rx="6" fill="#16a34a" />
-                            <text x="400" y="212" fill="white" fontWeight="bold" fontSize="10">Clôture</text>
-                            <text x="388" y="228" fill="#bbf7d0" fontSize="9">validation utilisateur</text>
-
-                            {/* Flèches */}
-                            <line x1="120" y1="85" x2="140" y2="85" stroke="#94a3b8" strokeWidth="2.5" markerEnd="url(#ar)" />
-                            <line x1="240" y1="85" x2="260" y2="85" stroke="#94a3b8" strokeWidth="2.5" markerEnd="url(#ar)" />
-                            <line x1="360" y1="85" x2="380" y2="55" stroke="#94a3b8" strokeWidth="2.5" markerEnd="url(#ar)" />
-                            <line x1="430" y1="80" x2="430" y2="110" stroke="#94a3b8" strokeWidth="2.5" markerEnd="url(#ar)" />
-                            <line x1="430" y1="160" x2="430" y2="190" stroke="#94a3b8" strokeWidth="2.5" markerEnd="url(#ar)" />
-
-                            {/* Escalade */}
-                            <rect x="20" y="140" width="240" height="100" rx="8" fill="#1e293b" stroke="#ef4444" strokeWidth="1.5" />
-                            <text x="32" y="162" fill="#fca5a5" fontWeight="bold" fontSize="11">Escalade si échec :</text>
-                            <text x="30" y="182" fill="#fecaca" fontSize="10">N1 (support) → N2 (technicien IT)</text>
-                            <text x="30" y="200" fill="#fecaca" fontSize="10">→ N3 (expert / fournisseur)</text>
-                            <text x="30" y="218" fill="#fecaca" fontSize="10">chaque escalade = nouveau délai SLA</text>
-
-                            {/* Priorités */}
-                            <rect x="280" y="140" width="160" height="100" rx="8" fill="#1e293b" stroke="#38bdf8" strokeWidth="1.5" />
-                            <text x="295" y="162" fill="#93c5fd" fontWeight="bold" fontSize="11">Priorités :</text>
-                            <text x="295" y="182" fill="#93c5fd" fontSize="10">P1 : 4h · 50+ users</text>
-                            <text x="295" y="200" fill="#93c5fd" fontSize="10">P2 : 8h · fonction KO</text>
-                            <text x="295" y="218" fill="#93c5fd" fontSize="10">P3 : 24h · gêne partielle</text>
-                            <text x="295" y="232" fill="#93c5fd" fontSize="10">P4 : 72h · confort</text>
-
-                            {/* Note de bas */}
-                            <rect x="460" y="60" width="160" height="180" rx="6" fill="#1e293b" stroke="#475569" />
-                            <text x="472" y="82" fill="#94a3b8" fontSize="9">Où on le croise :</text>
-                            <text x="472" y="100" fill="#94a3b8" fontSize="9">chaque appel, GLPI,</text>
-                            <text x="472" y="116" fill="#94a3b8" fontSize="9">ServiceNow.</text>
-                            <text x="472" y="140" fill="#94a3b8" fontSize="9">Pourquoi :</text>
-                            <text x="472" y="158" fill="#94a3b8" fontSize="9">sans cycle, les demandes</text>
-                            <text x="472" y="174" fill="#94a3b8" fontSize="9">se perdent, les SLA</text>
-                            <text x="472" y="190" fill="#94a3b8" fontSize="9">explosent.</text>
+                            <rect x="20" y="60" width="90" height="50" rx="6" fill="#0284c7" />
+                            <text x="32" y="82" fill="white" fontWeight="bold" fontSize="10">Ouverture</text>
+                            <text x="25" y="98" fill="#bae6fd" fontSize="9">utilisateur appelle</text>
+                            <line x1="110" y1="85" x2="120" y2="85" stroke="#94a3b8" strokeWidth="2.5" markerEnd="url(#ar)" />
+                            <rect x="120" y="60" width="90" height="50" rx="6" fill="#059669" />
+                            <text x="132" y="82" fill="white" fontWeight="bold" fontSize="10">Qualification</text>
+                            <text x="125" y="98" fill="#a7f3d0" fontSize="9">categorie + criticite</text>
+                            <line x1="210" y1="85" x2="220" y2="85" stroke="#94a3b8" strokeWidth="2.5" markerEnd="url(#ar)" />
+                            <rect x="220" y="60" width="90" height="50" rx="6" fill="#d97706" />
+                            <text x="232" y="82" fill="white" fontWeight="bold" fontSize="10">Priorisation</text>
+                            <text x="225" y="98" fill="#fde68a" fontSize="9">P1-P4 - SLA</text>
+                            <line x1="310" y1="85" x2="320" y2="85" stroke="#94a3b8" strokeWidth="2.5" markerEnd="url(#ar)" />
+                            <rect x="320" y="60" width="90" height="50" rx="6" fill="#6366f1" />
+                            <text x="332" y="82" fill="white" fontWeight="bold" fontSize="10">Diagnostic</text>
+                            <text x="325" y="98" fill="#c7d2fe" fontSize="9">reproduire + logs</text>
+                            <line x1="410" y1="85" x2="420" y2="85" stroke="#94a3b8" strokeWidth="2.5" markerEnd="url(#ar)" />
+                            <rect x="420" y="60" width="90" height="50" rx="6" fill="#059669" />
+                            <text x="432" y="82" fill="white" fontWeight="bold" fontSize="10">Resolution</text>
+                            <text x="425" y="98" fill="#a7f3d0" fontSize="9">appliquer + tester</text>
+                            <line x1="510" y1="85" x2="520" y2="85" stroke="#94a3b8" strokeWidth="2.5" markerEnd="url(#ar)" />
+                            <rect x="520" y="60" width="90" height="50" rx="6" fill="#16a34a" />
+                            <text x="532" y="82" fill="white" fontWeight="bold" fontSize="10">Cloture</text>
+                            <text x="525" y="98" fill="#bbf7d0" fontSize="9">validation utilisateur</text>
+                            <rect x="20" y="130" width="200" height="100" rx="8" fill="#1e293b" stroke="#ef4444" strokeWidth="1.5" />
+                            <text x="32" y="152" fill="#fca5a5" fontWeight="bold" fontSize="11">Escalade si echec :</text>
+                            <text x="30" y="172" fill="#fecaca" fontSize="10">N1 (support) -&gt; N2 (technicien IT)</text>
+                            <text x="30" y="190" fill="#fecaca" fontSize="10">-&gt; N3 (expert / fournisseur)</text>
+                            <text x="30" y="208" fill="#fecaca" fontSize="10">chaque escalade = nouveau delai SLA</text>
+                            <rect x="230" y="130" width="200" height="100" rx="8" fill="#1e293b" stroke="#38bdf8" strokeWidth="1.5" />
+                            <text x="245" y="152" fill="#93c5fd" fontWeight="bold" fontSize="11">Priorites :</text>
+                            <text x="245" y="172" fill="#93c5fd" fontSize="10">P1 : 4h - 50+ users</text>
+                            <text x="245" y="190" fill="#93c5fd" fontSize="10">P2 : 8h - fonction KO</text>
+                            <text x="245" y="208" fill="#93c5fd" fontSize="10">P3 : 24h - gene partielle</text>
+                            <text x="245" y="222" fill="#93c5fd" fontSize="10">P4 : 72h - confort</text>
+                            <rect x="440" y="130" width="200" height="100" rx="8" fill="#1e293b" stroke="#475569" strokeWidth="1.5" />
+                            <text x="452" y="152" fill="#94a3b8" fontWeight="bold" fontSize="11">Ou on le croise :</text>
+                            <text x="452" y="172" fill="#94a3b8" fontSize="9">chaque appel, GLPI,</text>
+                            <text x="452" y="186" fill="#94a3b8" fontSize="9">ServiceNow.</text>
+                            <text x="452" y="206" fill="#94a3b8" fontSize="9">Pourquoi :</text>
+                            <text x="452" y="220" fill="#94a3b8" fontSize="9">sans cycle, les demandes</text>
+                            <text x="452" y="234" fill="#94a3b8" fontSize="9">se perdent, les SLA</text>
+                            <text x="452" y="248" fill="#94a3b8" fontSize="9">explosent.</text>
+                            <rect x="20" y="245" width="620" height="20" rx="4" fill="#1e293b" stroke="#475569" />
+                            <text x="32" y="259" fill="#94a3b8" fontSize="10">Contexte pro : chaque appel, chaque GLPI, chaque ServiceNow. Sans cycle, les demandes se perdent, les SLA explosent.</text>
                         </svg>
                     </div>
                 );
