@@ -730,26 +730,47 @@ export const DynamicSVGDiagram = ({ type }) => {
 
             if (type === 'ospf-zones') {
                 return (
-                    <div className="w-full bg-slate-900 text-white p-4 rounded-lg overflow-x-auto">
-                        <h4 className="text-xs uppercase font-bold text-sky-400 mb-2">SVG : OSPF multi-zones — le backbone 0 est obligatoire</h4>
-                        <p className="text-[11px] text-slate-300 mb-2"><strong className="text-amber-300">Lecture :</strong> chaque zone a sa LSDB (carte locale) ; les zones se raccordent à la zone 0 via un ABR. Sur un segment Ethernet, un DR et un BDR sont élus : les autres routeurs restent en 2-Way avec eux.</p>
-                        <svg viewBox="0 0 560 200" role="img" aria-label="Domaine OSPF multi-zones avec ABR et DR" className="w-full h-auto text-xs">
-                            <rect x="180" y="30" width="200" height="60" rx="10" fill="#059669" opacity="0.9" />
-                            <text x="230" y="55" fill="white" fontWeight="bold">Zone 0 (backbone)</text>
+                    <div className="w-full bg-slate-900 text-white p-5 rounded-xl border border-slate-700 shadow-xl overflow-x-auto">
+                        <div className="flex items-center justify-between mb-3">
+                            <h4 className="text-xs uppercase font-extrabold tracking-wider text-sky-400">Réseaux &amp; Routage · OSPF Multi-zones</h4>
+                            <span className="text-[10px] bg-sky-950 text-sky-300 px-2 py-0.5 rounded border border-sky-800">RFC 2328</span>
+                        </div>
+                        <p className="text-[11px] text-slate-300 mb-3 leading-relaxed"><strong className="text-amber-300">Lecture :</strong> chaque zone a sa LSDB (carte locale) ; les zones se raccordent à la zone 0 via un ABR. Sur un segment Ethernet, un DR et un BDR sont élus : les autres routeurs restent en 2-Way avec eux.</p>
+                        <svg viewBox="0 0 640 260" role="img" aria-label="Domaine OSPF multi-zones avec ABR et DR" className="w-full h-auto font-sans">
+                            <defs>
+                                <marker id="ar" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                                    <path d="M 0 1 L 10 5 L 0 9 z" fill="#38bdf8" />
+                                </marker>
+                            </defs>
+                            {/* Zone 0 (backbone) */}
+                            <rect x="180" y="30" width="280" height="60" rx="8" fill="#059669" opacity="0.9" />
+                            <text x="230" y="55" fill="white" fontWeight="bold" fontSize="12">Zone 0 (backbone)</text>
                             <text x="225" y="75" fill="#a7f3d0" fontSize="10">R1 ⇄ R2 · DR élu sur le segment</text>
-                            <rect x="40" y="120" width="170" height="50" rx="10" fill="#0284c7" />
-                            <text x="80" y="142" fill="white" fontWeight="bold">Zone 1 (site Lyon)</text>
-                            <text x="60" y="160" fill="#bae6fd" fontSize="10">LSDB locale de la zone 1</text>
-                            <rect x="350" y="120" width="170" height="50" rx="10" fill="#7c3aed" />
-                            <text x="385" y="142" fill="white" fontWeight="bold">Zone 2 (site Lille)</text>
-                            <text x="370" y="160" fill="#ddd6fe" fontSize="10">LSDB locale de la zone 2</text>
-                            <line x1="230" y1="90" x2="125" y2="120" stroke="#94a3b8" strokeWidth="3" />
-                            <line x1="330" y1="90" x2="435" y2="120" stroke="#94a3b8" strokeWidth="3" />
-                            <rect x="108" y="92" width="34" height="22" rx="4" fill="#f59e0b" />
-                            <text x="112" y="107" fill="white" fontSize="9">ABR</text>
-                            <rect x="418" y="92" width="34" height="22" rx="4" fill="#f59e0b" />
-                            <text x="422" y="107" fill="white" fontSize="9">ABR</text>
-                            <text x="120" y="195" fill="#94a3b8" fontSize="10">Les LSA ne franchissent pas les zones : une panne locale ne recalcule pas tout le domaine (SPF par zone).</text>
+
+                            {/* Zone 1 */}
+                            <rect x="40" y="120" width="190" height="55" rx="8" fill="#0284c7" />
+                            <text x="80" y="145" fill="white" fontWeight="bold" fontSize="11">Zone 1 (site Lyon)</text>
+                            <text x="60" y="165" fill="#bae6fd" fontSize="10">LSDB locale de la zone 1</text>
+
+                            {/* Zone 2 */}
+                            <rect x="410" y="120" width="190" height="55" rx="8" fill="#7c3aed" />
+                            <text x="445" y="145" fill="white" fontWeight="bold" fontSize="11">Zone 2 (site Lille)</text>
+                            <text x="430" y="165" fill="#ddd6fe" fontSize="10">LSDB locale de la zone 2</text>
+
+                            {/* Liens */}
+                            <line x1="250" y1="90" x2="135" y2="120" stroke="#94a3b8" strokeWidth="2.5" />
+                            <line x1="390" y1="90" x2="505" y2="120" stroke="#94a3b8" strokeWidth="2.5" />
+
+                            {/* ABR */}
+                            <rect x="120" y="92" width="40" height="25" rx="4" fill="#f59e0b" />
+                            <text x="125" y="109" fill="white" fontSize="10" fontWeight="bold">ABR</text>
+                            <rect x="480" y="92" width="40" height="25" rx="4" fill="#f59e0b" />
+                            <text x="485" y="109" fill="white" fontSize="10" fontWeight="bold">ABR</text>
+
+                            {/* Note de bas */}
+                            <rect x="20" y="200" width="600" height="45" rx="6" fill="#1e293b" stroke="#475569" />
+                            <text x="32" y="220" fill="#94a3b8" fontSize="10">Les LSA ne franchissent pas les zones : une panne locale ne recalcule pas tout le domaine (SPF par zone).</text>
+                            <text x="32" y="238" fill="#94a3b8" fontSize="10">Contexte pro : OSPF est le protocole de routage interne standard. La zone 0 est obligatoire dans tout design OSPF.</text>
                         </svg>
                     </div>
                 );
