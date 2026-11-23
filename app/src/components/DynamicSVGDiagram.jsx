@@ -1712,10 +1712,13 @@ export const DynamicSVGDiagram = ({ type }) => {
 
             if (type === 'mockup-aduc') {
                 return (
-                    <div className="w-full bg-slate-900 text-white p-4 rounded-lg overflow-x-auto">
-                        <h4 className="text-xs uppercase font-bold text-sky-400 mb-1">Figure : Active Directory Users and Computers (ADUC)</h4>
-                        <p className="text-[11px] text-slate-300 mb-2"><strong className="text-amber-300">Ce que vous voyez :</strong> à gauche l'arborescence du domaine (dossiers = unités d'organisation), à droite les objets contenus dans l'élément sélectionné. Ouvrez-la via <em>Démarrer → Outils d'administration → Active Directory Users and Computers</em> ou <code>dsa.msc</code>.</p>
-                        <svg viewBox="0 0 640 320" role="img" aria-label="Maquette ADUC : arborescence à gauche avec Domaine, UO, Users ; détails à droite" className="w-full h-auto text-xs rounded border border-slate-700">
+                    <div className="w-full bg-slate-900 text-white p-5 rounded-xl border border-slate-700 shadow-xl overflow-x-auto">
+                        <div className="flex items-center justify-between mb-3">
+                            <h4 className="text-xs uppercase font-extrabold tracking-wider text-sky-400">Active Directory · ADUC (Users and Computers)</h4>
+                            <span className="text-[10px] bg-sky-950 text-sky-300 px-2 py-0.5 rounded border border-sky-800">dsa.msc</span>
+                        </div>
+                        <p className="text-[11px] text-slate-300 mb-3 leading-relaxed"><strong className="text-amber-300">Ce que vous voyez :</strong> à gauche l'arborescence du domaine (dossiers = unités d'organisation), à droite les objets contenus dans l'élément sélectionné. Ouvrez-la via Démarrer → Outils d'administration → Active Directory Users and Computers ou dsa.msc.</p>
+                        <svg viewBox="0 0 640 320" role="img" aria-label="Maquette ADUC : arborescence à gauche avec Domaine, UO, Users ; détails à droite" className="w-full h-auto font-sans rounded border border-slate-700">
                             <rect x="0" y="0" width="640" height="28" fill="#1e3a5f" />
                             <text x="8" y="18" fill="white" fontSize="11" fontWeight="bold">Active Directory Users and Computers</text>
                             <rect x="0" y="28" width="640" height="24" fill="#2d4a6f" />
@@ -1727,7 +1730,7 @@ export const DynamicSVGDiagram = ({ type }) => {
                             <rect x="18" y="106" width="210" height="16" fill="#2a4a6e" rx="2" />
                             <text x="24" y="118" fill="#60c060" fontSize="10"> Domain Controllers</text>
                             <text x="24" y="136" fill="#60c060" fontSize="10"> Users</text>
-                            <text x="24" y="152" fill="#60c060" fontSize="10"> Compta ◄ UO créée par vous</text>
+                            <text x="24" y="152" fill="#60c060" fontSize="10"> Compta (UO créée par vous)</text>
                             <text x="24" y="168" fill="#60c060" fontSize="10"> Direction</text>
                             <text x="24" y="184" fill="#60c060" fontSize="10"> Informatique</text>
                             <rect x="240" y="52" width="400" height="268" fill="#0d0d1a" stroke="#333" />
@@ -1741,7 +1744,7 @@ export const DynamicSVGDiagram = ({ type }) => {
                             <rect x="250" y="220" width="380" height="80" fill="#1a2a1e" stroke="#2a5a3e" rx="4" />
                             <text x="260" y="238" fill="#60e080" fontSize="10" fontWeight="bold"> Ce qu'il faut observer :</text>
                             <text x="260" y="254" fill="#b0d0b0" fontSize="10">- L'arborescence reflète votre organisation (par service)</text>
-                            <text x="260" y="268" fill="#b0d0b0" fontSize="10">- Les icônes :  utilisateur,  groupe,  UO, Å ordinateur</text>
+                            <text x="260" y="268" fill="#b0d0b0" fontSize="10">- Les icônes : utilisateur, groupe, UO, ordinateur</text>
                             <text x="260" y="282" fill="#b0d0b0" fontSize="10">- Clic droit sur une UO → New → User pour créer un compte</text>
                         </svg>
                     </div>
