@@ -485,20 +485,33 @@ export const DynamicSVGDiagram = ({ type }) => {
 
             if (type === 'plan-canaux-wifi') {
                 return (
-                    <div className="w-full bg-slate-900 text-white p-4 rounded-lg overflow-x-auto">
-                        <h4 className="text-xs uppercase font-bold text-sky-400 mb-2">Génération SVG : Plan de Canaux Wi-Fi 2,4 GHz (Sujet 1.5)</h4>
-                        <p className="text-[11px] text-slate-300 mb-2"><strong className="text-amber-300">Description textuelle :</strong> trois cercles colorés et voisins représentent trois bornes : AP 1 sur le canal 1 (bleu), AP 2 sur le canal 6 (vert) et AP 3 sur le canal 11 (violet). La légende en bas précise que ce sont trois canaux sans superposition en 2,4 GHz.</p>
-                        <svg viewBox="0 0 550 140" role="img" aria-label="Plan de canaux Wi-Fi 2,4 GHz : canaux 1, 6 et 11 non superposés" className="w-full h-auto text-xs">
-                            <circle cx="100" cy="70" r="50" fill="#0284c7" fillOpacity="0.4" stroke="#0284c7" strokeWidth="2" />
-                            <text x="80" y="70" fill="white" fontWeight="bold">AP 1 (Canal 1)</text>
+                    <div className="w-full bg-slate-900 text-white p-5 rounded-xl border border-slate-700 shadow-xl overflow-x-auto">
+                        <div className="flex items-center justify-between mb-3">
+                            <h4 className="text-xs uppercase font-extrabold tracking-wider text-sky-400">Réseaux &amp; Wi-Fi · Plan de Canaux 2,4 GHz</h4>
+                            <span className="text-[10px] bg-sky-950 text-sky-300 px-2 py-0.5 rounded border border-sky-800">IEEE 802.11</span>
+                        </div>
+                        <p className="text-[11px] text-slate-300 mb-3 leading-relaxed"><strong className="text-amber-300">Lecture :</strong> trois cercles colorés et voisins représentent trois bornes : AP 1 sur le canal 1 (bleu), AP 2 sur le canal 6 (vert) et AP 3 sur le canal 11 (violet). Ce sont les trois canaux sans superposition en 2,4 GHz.</p>
+                        <svg viewBox="0 0 640 220" role="img" aria-label="Plan de canaux Wi-Fi 2,4 GHz : canaux 1, 6 et 11 non superposés" className="w-full h-auto font-sans">
+                            <defs>
+                                <marker id="ar" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                                    <path d="M 0 1 L 10 5 L 0 9 z" fill="#38bdf8" />
+                                </marker>
+                            </defs>
+                            <circle cx="120" cy="90" r="60" fill="#0284c7" opacity="0.4" stroke="#0284c7" strokeWidth="2" />
+                            <text x="95" y="95" fill="white" fontWeight="bold" fontSize="12">AP 1</text>
+                            <text x="95" y="112" fill="#bae6fd" fontSize="10">Canal 1</text>
 
-                            <circle cx="270" cy="70" r="50" fill="#059669" fillOpacity="0.4" stroke="#059669" strokeWidth="2" />
-                            <text x="250" y="70" fill="white" fontWeight="bold">AP 2 (Canal 6)</text>
+                            <circle cx="320" cy="90" r="60" fill="#059669" opacity="0.4" stroke="#059669" strokeWidth="2" />
+                            <text x="295" y="95" fill="white" fontWeight="bold" fontSize="12">AP 2</text>
+                            <text x="295" y="112" fill="#a7f3d0" fontSize="10">Canal 6</text>
 
-                            <circle cx="440" cy="70" r="50" fill="#7c3aed" fillOpacity="0.4" stroke="#7c3aed" strokeWidth="2" />
-                            <text x="415" y="70" fill="white" fontWeight="bold">AP 3 (Canal 11)</text>
+                            <circle cx="520" cy="90" r="60" fill="#7c3aed" opacity="0.4" stroke="#7c3aed" strokeWidth="2" />
+                            <text x="495" y="95" fill="white" fontWeight="bold" fontSize="12">AP 3</text>
+                            <text x="495" y="112" fill="#ddd6fe" fontSize="10">Canal 11</text>
 
-                            <text x="130" y="130" fill="#f59e0b" fontSize="10">Trois canaux sans superposition en 2,4 GHz</text>
+                            <rect x="20" y="170" width="600" height="40" rx="6" fill="#1e293b" stroke="#475569" />
+                            <text x="32" y="190" fill="#94a3b8" fontSize="10">Contexte pro : en 2,4 GHz, seuls les canaux 1, 6 et 11 ne se superposent pas. En 5 GHz, plus de canaux disponibles (DFS).</text>
+                            <text x="32" y="207" fill="#94a3b8" fontSize="10">Vérification : site survey (Ekahau, NetSpot) pour détecter les interférences et optimiser le placement des AP.</text>
                         </svg>
                     </div>
                 );
