@@ -2573,28 +2573,36 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
                                             IT
                                         </div>
                                     )}
-                                    <span className="text-sm font-semibold text-cyan-600 dark:text-cyan-400 mt-1">
+                                    <span className="mt-1 bg-gradient-to-r from-pink-500 via-fuchsia-500 to-orange-500 bg-clip-text text-2xl font-black tracking-wider text-transparent whitespace-nowrap">
                                         Plateforme de révisions pour tous
                                     </span>
                                 </div>
                             </button>
 
                             {/* Barre de Recherche Plein Texte Dynamic */}
-                            <div className="w-full md:w-96 lg:w-[26rem]">
-                                <div className="relative">
-                                    <svg className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
-                                    <input
-                                        type="text"
-                                        aria-label="Rechercher un cours, un mot-clé"
-                                        placeholder="Rechercher un cours, un code, un mot-clé…"
-                                        value={searchQuery}
-                                        onChange={(e) => { setSearchQuery(e.target.value); if (currentTab !== 'courses') setCurrentTab('courses'); }}
-                                        className="w-full bg-slate-100/70 dark:bg-slate-900/70 backdrop-blur border border-slate-300 dark:border-slate-700 rounded-full pl-10 pr-4 py-2 text-sm text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-sky-500/40 focus:border-sky-500 transition-all shadow-md dark:shadow-sm hover:shadow-md"
-                                    />
+                            <div className="flex-1 flex flex-col items-center gap-1">
+                                <div className="w-full md:w-2/3 mx-auto flex items-center gap-3">
+                                    <div className="relative flex-1">
+                                        <svg className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 dark:text-slate-500" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
+                                        <input
+                                            type="text"
+                                            aria-label="Rechercher un cours, un mot-clé"
+                                            placeholder="Rechercher un cours, un code, un mot-clé…"
+                                            value={searchQuery}
+                                            onChange={(e) => { setSearchQuery(e.target.value); if (currentTab !== 'courses') setCurrentTab('courses'); }}
+                                            className="w-full h-12 px-6 pl-12 rounded-xl border border-slate-600 bg-slate-100/70 dark:bg-slate-900/70 backdrop-blur text-sm text-gray-900 dark:text-slate-100 placeholder-gray-500 dark:placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-sky-500/40 focus:border-sky-500 transition-all"
+                                        />
+                                    </div>
+                                    <button
+                                        type="button"
+                                        title="Espace personnel"
+                                        className="shrink-0 px-6 py-3 rounded-lg bg-gradient-to-r from-cyan-500 to-blue-600 text-white text-sm font-bold shadow-lg shadow-cyan-500/20 transition-all hover:brightness-110 hover:shadow-xl"
+                                    >
+                                        Se connecter
+                                    </button>
                                 </div>
-                            </div>
                                 {searchQuery && (
-                                    <p className="text-[10px] mt-1 text-slate-500 dark:text-slate-400" role="status">
+                                    <p className="mt-1 w-full md:w-2/3 text-[10px] text-gray-600 dark:text-slate-400" role="status">
                                         🔎 « {searchQuery} » : {filteredCourses.length} cours correspondant(s) dans l'onglet « Cours » (titres, codes, descriptions et sommaires).
                                         {filteredCourses.length === 0 && searchHints && (searchHints.inGloss + searchHints.inCmds + searchHints.inVocab) > 0 && (
                                             <span className="text-brand-500 font-semibold"> · Le terme existe par ailleurs : Glossaire ({searchHints.inGloss}), Commandes ({searchHints.inCmds}), Vocabulaire ({searchHints.inVocab}).</span>
@@ -2604,6 +2612,7 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
                                         )}
                                     </p>
                                 )}
+                            </div>
                             <div className="flex items-center gap-3">
                                 {/* Réglage de la taille de police (FONC-22) */}
                                 <div className="flex items-center gap-1" role="group" aria-label="Taille de la police">
@@ -2644,17 +2653,17 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
                         </div>
 
                         {/* Navigation principale finale */}
-                        <nav aria-label="Navigation principale" className="bg-white dark:bg-slate-900/80 border-b border-gray-200 dark:border-slate-800">
-                            <div className="max-w-7xl mx-auto px-4 flex space-x-1 overflow-x-auto text-xs font-medium py-2">
+                        <nav aria-label="Navigation principale" className="w-full bg-white dark:bg-slate-900/80 border-b border-gray-200 dark:border-slate-800">
+                            <div className="w-full px-2 md:px-4 grid grid-cols-10 gap-1 py-2">
                                 {NAV_ITEMS.map(tab => (
                                     <button
                                         key={tab.id}
                                         onClick={() => setCurrentTab(tab.id)}
                                         aria-current={currentTab === tab.id ? 'page' : undefined}
-                                        className={`px-6 py-2 rounded-lg whitespace-nowrap transition-colors min-h-[48px] flex items-center text-base [&_svg]:w-5 [&_svg]:h-5 [&_svg]:mr-3 ${
+                                        className={`min-w-0 min-h-[52px] px-0.5 py-1.5 rounded-lg transition-colors flex flex-col items-center justify-center gap-1 leading-tight tracking-tight text-[9px] sm:text-[10px] lg:text-[11px] [&_svg]:w-5 [&_svg]:h-5 [&_svg]:shrink-0 ${
                                             currentTab === tab.id
                                                 ? 'bg-cyan-600 text-white font-bold [&_svg]:text-white'
-                                                : 'text-gray-900 dark:text-slate-200 font-medium [&_svg]:text-cyan-600 dark:[&_svg]:text-cyan-400 hover:bg-slate-200 dark:hover:bg-slate-700/90'
+                                                : 'bg-transparent text-gray-700 dark:text-white font-medium [&_svg]:text-cyan-600 dark:[&_svg]:text-cyan-400 hover:bg-gray-100 dark:hover:bg-slate-700/90'
                                         }`}
                                     >
                                         {tab.label}
