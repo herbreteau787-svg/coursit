@@ -1083,27 +1083,49 @@ export const DynamicSVGDiagram = ({ type }) => {
 
             if (type === 'kerberos-flow') {
                 return (
-                    <div className="w-full bg-slate-900 text-white p-4 rounded-lg overflow-x-auto">
-                        <h4 className="text-xs uppercase font-bold text-sky-400 mb-2">SVG : Kerberos — des tickets, pas des mots de passe</h4>
-                        <p className="text-[11px] text-slate-300 mb-2"><strong className="text-amber-300">Lecture :</strong> à l'ouverture de session, le KDC (DC) délivre un TGT ; ensuite chaque service reçoit un ticket de service (TGS) du TGT. Le mot de passe ne circule JAMAIS vers les services — une horloge décalée casse tout (tolérance 5 min).</p>
-                        <svg viewBox="0 0 560 190" role="img" aria-label="Flux Kerberos : TGT puis TGS" className="w-full h-auto text-xs">
-                            <rect x="20" y="70" width="120" height="50" rx="10" fill="#0284c7" />
-                            <text x="40" y="92" fill="white" fontWeight="bold">Client</text>
+                    <div className="w-full bg-slate-900 text-white p-5 rounded-xl border border-slate-700 shadow-xl overflow-x-auto">
+                        <div className="flex items-center justify-between mb-3">
+                            <h4 className="text-xs uppercase font-extrabold tracking-wider text-sky-400">Active Directory · Flux Kerberos (TGT / TGS)</h4>
+                            <span className="text-[10px] bg-sky-950 text-sky-300 px-2 py-0.5 rounded border border-sky-800">RFC 4120</span>
+                        </div>
+                        <p className="text-[11px] text-slate-300 mb-3 leading-relaxed"><strong className="text-amber-300">Lecture :</strong> à l'ouverture de session, le KDC (DC) délivre un TGT ; ensuite chaque service reçoit un ticket de service (TGS) du TGT. Le mot de passe ne circule JAMAIS vers les services.</p>
+                        <svg viewBox="0 0 640 260" role="img" aria-label="Flux Kerberos : TGT puis TGS" className="w-full h-auto font-sans">
+                            <defs>
+                                <marker id="ar" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                                    <path d="M 0 1 L 10 5 L 0 9 z" fill="#38bdf8" />
+                                </marker>
+                            </defs>
+                            {/* Client */}
+                            <rect x="20" y="70" width="140" height="55" rx="6" fill="#0284c7" />
+                            <text x="40" y="92" fill="white" fontWeight="bold" fontSize="11">Client</text>
                             <text x="35" y="112" fill="#bae6fd" fontSize="10">claire.martin</text>
-                            <rect x="230" y="60" width="130" height="70" rx="10" fill="#059669" />
-                            <text x="250" y="85" fill="white" fontWeight="bold">KDC (DC)</text>
-                            <text x="243" y="105" fill="#a7f3d0" fontSize="10">1. AS : délivre TGT</text>
-                            <text x="243" y="122" fill="#a7f3d0" fontSize="10">2. TGS : ticket service</text>
-                            <rect x="430" y="70" width="110" height="50" rx="10" fill="#7c3aed" />
-                            <text x="445" y="92" fill="white" fontWeight="bold">Service</text>
-                            <text x="442" y="112" fill="#ddd6fe" fontSize="10">SRV-FILE01</text>
-                            <line x1="140" y1="85" x2="230" y2="85" stroke="#22c55e" strokeWidth="3" markerEnd="url(#ar)" />
-                            <text x="150" y="78" fill="#22c55e" fontSize="10">1. ouverture de session</text>
-                            <line x1="230" y1="115" x2="140" y2="115" stroke="#fbbf24" strokeWidth="3" markerEnd="url(#ar)" />
-                            <text x="140" y="135" fill="#fbbf24" fontSize="10">← TGT (valable ~10 h)</text>
-                            <line x1="360" y1="95" x2="430" y2="95" stroke="#fbbf24" strokeWidth="3" markerEnd="url(#ar)" />
-                            <text x="360" y="85" fill="#fbbf24" fontSize="10">TGS →</text>
-                            <text x="130" y="170" fill="#94a3b8" fontSize="10">klist : voir les tickets · klist purge : les effacer · erreur « horloge » = écart &gt; 5 min client/DC.</text>
+
+                            {/* KDC */}
+                            <rect x="240" y="60" width="160" height="75" rx="8" fill="#059669" />
+                            <text x="260" y="85" fill="white" fontWeight="bold" fontSize="11">KDC (DC)</text>
+                            <text x="253" y="105" fill="#a7f3d0" fontSize="10">1. AS : délivre TGT</text>
+                            <text x="253" y="122" fill="#a7f3d0" fontSize="10">2. TGS : ticket service</text>
+
+                            {/* Service */}
+                            <rect x="480" y="70" width="140" height="55" rx="6" fill="#7c3aed" />
+                            <text x="500" y="92" fill="white" fontWeight="bold" fontSize="11">Service</text>
+                            <text x="497" y="112" fill="#ddd6fe" fontSize="10">SRV-FILE01</text>
+
+                            {/* Flux */}
+                            <line x1="160" y1="85" x2="240" y2="85" stroke="#22c55e" strokeWidth="2.5" markerEnd="url(#ar)" />
+                            <text x="170" y="78" fill="#22c55e" fontSize="10" fontWeight="bold">1. ouverture de session</text>
+
+                            <line x1="240" y1="115" x2="160" y2="115" stroke="#fbbf24" strokeWidth="2.5" markerEnd="url(#ar)" />
+                            <text x="150" y="135" fill="#fbbf24" fontSize="10" fontWeight="bold">← TGT (valable ~10 h)</text>
+
+                            <line x1="400" y1="95" x2="480" y2="95" stroke="#fbbf24" strokeWidth="2.5" markerEnd="url(#ar)" />
+                            <text x="405" y="85" fill="#fbbf24" fontSize="10" fontWeight="bold">TGS →</text>
+
+                            {/* Note de bas */}
+                            <rect x="20" y="180" width="600" height="60" rx="6" fill="#1e293b" stroke="#475569" />
+                            <text x="32" y="200" fill="#94a3b8" fontSize="10">klist : voir les tickets · klist purge : les effacer · erreur « horloge » = écart &gt; 5 min client/DC.</text>
+                            <text x="32" y="218" fill="#94a3b8" fontSize="10">Contexte pro : chaque ouverture de session, chaque partage, chaque Outlook passe par Kerberos. Un ticket expiré = rejet.</text>
+                            <text x="32" y="236" fill="#94a3b8" fontSize="10">Vérification : klist, w32tm /resync (réaligner l'heure), gpresult /R (voir les GPO appliquées).</text>
                         </svg>
                     </div>
                 );
