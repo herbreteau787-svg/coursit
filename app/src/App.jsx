@@ -1075,7 +1075,7 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
                                             </div>
                                             <button
                                                 onClick={() => { const c = ALL_MODULE_ENTRIES.find(x => x.id === p.premierId); if (c) setSelectedCourse(c); setCourseFilter(p.key); setCurrentTab('courses'); }}
-                                                className="w-full py-2 rounded-lg bg-gradient-to-r from-cyan-500 to-cyan-600 shadow-lg shadow-cyan-500/30 text-white text-xs font-bold transition-all hover:brightness-110 hover:translate-y-[-2px]"
+                                                className="w-full h-10 py-2 rounded-lg bg-gradient-to-r from-cyan-500 to-cyan-600 shadow-lg shadow-cyan-500/30 text-white text-xs font-bold transition-all hover:brightness-110 hover:translate-y-[-2px] flex items-center justify-center"
                                             >
                                 Accéder →
                                             </button>
@@ -2557,7 +2557,7 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
                                 onClick={() => { setCurrentTab('dashboard'); window.scrollTo({ top: 0 }); }}
                                 aria-label="Retour à l'accueil (Dashboard)"
                                 title="Retour au Dashboard"
-                                className="flex items-center gap-3 text-left rounded-lg px-2 py-1 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors focus:outline-none focus:ring-2 focus:ring-brand-500"
+                                className="flex items-center gap-4 text-left rounded-lg px-2 py-1 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors focus:outline-none focus:ring-2 focus:ring-brand-500"
                             >
                                 {!logoError ? (
                                     <img
