@@ -1904,10 +1904,13 @@ export const DynamicSVGDiagram = ({ type }) => {
 
             if (type === 'mockup-hyperv') {
                 return (
-                    <div className="w-full bg-slate-900 text-white p-4 rounded-lg overflow-x-auto">
-                        <h4 className="text-xs uppercase font-bold text-sky-400 mb-1">Figure : Hyper-V Manager — interface de gestion des VM</h4>
-                        <p className="text-[11px] text-slate-300 mb-2"><strong className="text-amber-300">Ce que vous voyez :</strong> à gauche les serveurs Hyper-V, au centre les VM (avec leur état Running/Off), à droite le panneau d'actions (Start, Connect, Checkpoint...). Ouvrez-le via <code>HV Manager</code> ou <em>Outils d'administration → Hyper-V Manager</em>.</p>
-                        <svg viewBox="0 0 640 300" role="img" aria-label="Maquette Hyper-V Manager : serveurs, VM, actions" className="w-full h-auto text-xs rounded border border-slate-700">
+                    <div className="w-full bg-slate-900 text-white p-5 rounded-xl border border-slate-700 shadow-xl overflow-x-auto">
+                        <div className="flex items-center justify-between mb-3">
+                            <h4 className="text-xs uppercase font-extrabold tracking-wider text-sky-400">Virtualisation · Hyper-V Manager</h4>
+                            <span className="text-[10px] bg-sky-950 text-sky-300 px-2 py-0.5 rounded border border-sky-800">HV Manager</span>
+                        </div>
+                        <p className="text-[11px] text-slate-300 mb-3 leading-relaxed"><strong className="text-amber-300">Ce que vous voyez :</strong> à gauche les serveurs Hyper-V, au centre les VM (avec leur état Running/Off), à droite le panneau d'actions (Start, Connect, Checkpoint...). Ouvrez-le via HV Manager ou Outils d'administration → Hyper-V Manager.</p>
+                        <svg viewBox="0 0 640 300" role="img" aria-label="Maquette Hyper-V Manager : serveurs, VM, actions" className="w-full h-auto font-sans rounded border border-slate-700">
                             <rect x="0" y="0" width="640" height="28" fill="#1e3a5f" />
                             <text x="8" y="18" fill="white" fontSize="11" fontWeight="bold">Hyper-V Manager</text>
                             <rect x="0" y="28" width="160" height="272" fill="#1a1a2e" stroke="#333" />
@@ -1929,8 +1932,8 @@ export const DynamicSVGDiagram = ({ type }) => {
                             <text x="450" y="68" fill="#80c0e0" fontSize="10">New → Virtual Machine...</text>
                             <text x="450" y="86" fill="#80c0e0" fontSize="10">■ Start</text>
                             <text x="450" y="104" fill="#80c0e0" fontSize="10">⏹ Turn Off</text>
-                            <text x="450" y="122" fill="#80c0e0" fontSize="10">­öù Connect...</text>
-                            <text x="450" y="140" fill="#80c0e0" fontSize="10">­ô© Checkpoint</text>
+                            <text x="450" y="122" fill="#80c0e0" fontSize="10">🔗 Connect...</text>
+                            <text x="450" y="140" fill="#80c0e0" fontSize="10">📸 Checkpoint</text>
                             <rect x="160" y="200" width="280" height="80" fill="#1a2a1e" stroke="#2a5a3e" rx="4" />
                             <text x="170" y="218" fill="#60e080" fontSize="10" fontWeight="bold"> Ce qu'il faut observer :</text>
                             <text x="170" y="234" fill="#b0d0b0" fontSize="10">- L'état Running = la VM est démarrée et utilisable</text>
