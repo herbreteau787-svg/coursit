@@ -2,22 +2,22 @@ import { useId } from 'react';
 
 /* Icônes 3D style emoji : dégradés saturés, ombres portées et reflets. */
 const PALETTE = {
-    house: ['#67e8f9', '#0891b2', '#f472b6', '#be185d'],
-    'book-open': ['#fcd34d', '#d97706', '#fb923c', '#c2410c'],
-    star: ['#fde047', '#f59e0b', '#fbbf24', '#b45309'],
-    'help-circle': ['#22d3ee', '#0891b2', '#67e8f9', '#0e7490'],
-    flask: ['#34d399', '#059669', '#a7f3d0', '#047857'],
-    settings: ['#c4b5fd', '#7c3aed', '#a78bfa', '#5b21b6'],
-    'file-text': ['#93c5fd', '#2563eb', '#60a5fa', '#1d4ed8'],
-    wrench: ['#f9a8d4', '#db2777', '#f472b6', '#9d174d'],
-    book: ['#fdba74', '#ea580c', '#fb923c', '#c2410c'],
-    globe: ['#67e8f9', '#2563eb', '#22d3ee', '#1e40af'],
-    'alert-triangle': ['#fde68a', '#f59e0b', '#fbbf24', '#b45309'],
-    pencil: ['#f9a8d4', '#ec4899', '#f472b6', '#be185d'],
-    search: ['#7dd3fc', '#0284c7', '#38bdf8', '#0369a1'],
-    servers: ['#a5b4fc', '#4f46e5', '#818cf8', '#3730a3'],
-    shield: ['#6ee7b7', '#059669', '#34d399', '#047857'],
-    network: ['#d8b4fe', '#9333ea', '#c084fc', '#6b21a8'],
+    house: ['#3b82f6', '#8b5cf6', '#60a5fa', '#a78bfa'],
+    'book-open': ['#f59e0b', '#f97316', '#fbbf24', '#fb923c'],
+    star: ['#eab308', '#f59e0b', '#fde047', '#fbbf24'],
+    'help-circle': ['#06b6d4', '#3b82f6', '#22d3ee', '#60a5fa'],
+    flask: ['#10b981', '#059669', '#34d399', '#6ee7b7'],
+    settings: ['#8b5cf6', '#6d28d9', '#a78bfa', '#7c3aed'],
+    'file-text': ['#0ea5e9', '#2563eb', '#38bdf8', '#60a5fa'],
+    wrench: ['#ec4899', '#be185d', '#f472b6', '#db2777'],
+    book: ['#f97316', '#ea580c', '#fb923c', '#fdba74'],
+    globe: ['#06b6d4', '#4f46e5', '#22d3ee', '#6366f1'],
+    'alert-triangle': ['#f59e0b', '#ea580c', '#fbbf24', '#f97316'],
+    pencil: ['#a855f7', '#7e22ce', '#c084fc', '#9333ea'],
+    search: ['#0ea5e9', '#0369a1', '#38bdf8', '#0284c7'],
+    servers: ['#6366f1', '#4338ca', '#818cf8', '#4f46e5'],
+    shield: ['#10b981', '#047857', '#34d399', '#059669'],
+    network: ['#a855f7', '#6b21a8', '#c084fc', '#9333ea'],
 };
 
 const ALIASES = { '✍️': 'pencil', '📚': 'book-open', '🛠️': 'wrench', '🧪': 'flask', '🎓': 'book', '🔎': 'search' };
@@ -184,7 +184,7 @@ export const Icon = ({ name, className = '', strokeWidth = 1.5, ...props }) => {
                     <stop offset="100%" stopColor={c4} />
                 </linearGradient>
                 <filter id={shadow} x="-30%" y="-30%" width="160%" height="160%">
-                    <feDropShadow dx="0" dy="1" stdDeviation="1" floodColor="#0f172a" floodOpacity="0.3" />
+                    <feDropShadow dx="0" dy="2" stdDeviation="1" floodColor="#0f172a" floodOpacity="0.3" />
                 </filter>
             </defs>
             {glyph(grad, accent, shadow)}
