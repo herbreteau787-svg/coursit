@@ -2567,7 +2567,7 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
                                         alt=""
                                         aria-hidden="true"
                                         draggable="false"
-                                        className="pointer-events-none select-none w-[72px] h-auto object-contain shrink-0 bg-transparent border-0 shadow-none align-middle -translate-y-[21px]"
+                                        className="pointer-events-none select-none w-[62px] h-auto object-contain shrink-0 bg-transparent border-0 shadow-none align-middle -translate-y-[21px]"
                                     />
                                 </div>
                             </button>
