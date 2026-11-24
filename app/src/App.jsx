@@ -2569,15 +2569,15 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
 <linearGradient id="taglineGrowthGrad" x1="0%" y1="100%" x2="100%" y2="0%"><stop offset="0%" stopColor="#06b6d4" /><stop offset="100%" stopColor="#2563eb" /></linearGradient>
 <filter id="taglineGrowthShadow" x="-30%" y="-30%" width="160%" height="160%"><feDropShadow dx="1" dy="1" stdDeviation="1" floodColor="#0f172a" floodOpacity="0.25" /></filter>
 </defs>
-<g transform="translate(0 3)" filter="url(#taglineGrowthShadow)">
-<rect x="4" y="29" width="9" height="11" rx="1.5" fill="url(#taglineGrowthGrad)" />
-<rect x="19" y="25" width="9" height="15" rx="1.5" fill="url(#taglineGrowthGrad)" />
-<rect x="34" y="20" width="9" height="20" rx="1.5" fill="url(#taglineGrowthGrad)" />
-<rect x="49" y="15" width="9" height="25" rx="1.5" fill="url(#taglineGrowthGrad)" />
-<rect x="64" y="10" width="9" height="30" rx="1.5" fill="url(#taglineGrowthGrad)" />
-<rect x="79" y="5" width="9" height="35" rx="1.5" fill="url(#taglineGrowthGrad)" />
-<path d="M8 29C23 28 31 24 39 20S55 15 69 10S80 6 86 4" stroke="url(#taglineGrowthGrad)" strokeWidth="2.5" strokeLinecap="round" fill="none" />
-<polygon points="105,4 97,0.5 97,7.5" fill="#2563eb" />
+<g filter="url(#taglineGrowthShadow)">
+<rect x="4" y="26" width="9" height="11" rx="1.5" fill="url(#taglineGrowthGrad)" />
+<rect x="19" y="22" width="9" height="15" rx="1.5" fill="url(#taglineGrowthGrad)" />
+<rect x="34" y="17" width="9" height="20" rx="1.5" fill="url(#taglineGrowthGrad)" />
+<rect x="49" y="12" width="9" height="25" rx="1.5" fill="url(#taglineGrowthGrad)" />
+<rect x="64" y="7" width="9" height="30" rx="1.5" fill="url(#taglineGrowthGrad)" />
+<rect x="79" y="2" width="9" height="35" rx="1.5" fill="url(#taglineGrowthGrad)" />
+<path d="M8 26C23 25 31 21 39 17S55 12 69 7S80 3 86 1" stroke="url(#taglineGrowthGrad)" strokeWidth="2.5" strokeLinecap="round" fill="none" />
+<polygon points="108,1 100,-2.5 100,4.5" fill="#2563eb" />
 </g>
 </svg>
 </div>
