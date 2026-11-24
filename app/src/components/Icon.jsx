@@ -2,7 +2,7 @@ import { useId } from 'react';
 
 /* Icônes 3D style emoji : dégradés saturés, ombres portées et reflets. */
 const PALETTE = {
-    house: ['#3b82f6', '#8b5cf6', '#60a5fa', '#a78bfa'],
+    house: ['#06b6d4', '#3b82f6', '#67e8f9', '#60a5fa'],
     'book-open': ['#f59e0b', '#f97316', '#fbbf24', '#fb923c'],
     star: ['#eab308', '#f59e0b', '#fde047', '#fbbf24'],
     'help-circle': ['#06b6d4', '#3b82f6', '#22d3ee', '#60a5fa'],
@@ -25,12 +25,14 @@ const ALIASES = { '✍️': 'pencil', '📚': 'book-open', '🛠️': 'wrench', 
 const GLYPHS = {
     house: (g, a, s) => (
         <>
-            <path d="M2.8 10.7 12 3.1l9.2 7.6" fill={`url(#${a})`} filter={`url(#${s})`} />
-            <path d="M5.4 9.2V19a1.8 1.8 0 0 0 1.8 1.8h9.6a1.8 1.8 0 0 0 1.8-1.8V9.2Z" fill={`url(#${g})`} filter={`url(#${s})`} />
-            <path d="M9.8 20.8v-5.3a2.2 2.2 0 0 1 4.4 0v5.3Z" fill={`url(#${a})`} />
-            <rect x="7.4" y="12" width="2.3" height="2.5" rx=".6" fill="#fff" fillOpacity=".8" />
-            <rect x="14.3" y="12" width="2.3" height="2.5" rx=".6" fill="#fff" fillOpacity=".8" />
-            <path d="M5.2 7.4 12 2.1l6.8 5.3" fill="none" stroke="#fff" strokeOpacity=".6" strokeWidth=".9" strokeLinecap="round" />
+            <rect x="2.6" y="2.6" width="18.8" height="18.8" rx="3.4" fill={`url(#${g})`} filter={`url(#${s})`} />
+            <rect x="5" y="5" width="6.2" height="6.2" rx="1.3" fill="#fff" fillOpacity=".92" />
+            <rect x="12.8" y="5" width="6.2" height="6.2" rx="1.3" fill="#fff" fillOpacity=".7" />
+            <rect x="5" y="12.8" width="6.2" height="6.2" rx="1.3" fill="#fff" fillOpacity=".7" />
+            <rect x="12.8" y="12.8" width="6.2" height="6.2" rx="1.3" fill="#fff" fillOpacity=".92" />
+            <path d="M6.6 9.2h3M6.6 17h3" stroke={`url(#${g})`} strokeOpacity=".5" strokeWidth=".9" strokeLinecap="round" />
+            <path d="m14.2 16.8 1.5-1.8 1.4 1 .9-1.4" fill="none" stroke={`url(#${g})`} strokeOpacity=".65" strokeWidth=".9" strokeLinecap="round" strokeLinejoin="round" />
+            <path d="M3.6 6.2a3 3 0 0 1 3-3" fill="none" stroke="#fff" strokeOpacity=".5" strokeWidth=".9" strokeLinecap="round" />
         </>
     ),
     'book-open': (g, a, s) => (
