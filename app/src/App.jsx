@@ -2573,7 +2573,7 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
                                             IT
                                         </div>
                                     )}
-                                    <span className="mt-1 text-3xl font-bold text-cyan-400 whitespace-nowrap">Plateforme de révisions pour tous</span>
+                                    <span className="mt-1 text-3xl font-bold text-cyan-300 whitespace-nowrap">Plateforme de révisions pour tous</span>
                                 </div>
                             </button>
 
@@ -2584,7 +2584,7 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
                                     <input
                                         type="text"
                                         aria-label="Rechercher un cours, un mot-clé"
-                                        placeholder="Rechercher un cours, un code, un mot-clé…"
+                                        placeholder="Rechercher un cours, une commande, un concept..."
                                         value={searchQuery}
                                         onChange={(e) => { setSearchQuery(e.target.value); if (currentTab !== 'courses') setCurrentTab('courses'); }}
                                         className="w-full h-12 px-6 pl-12 rounded-xl border border-slate-600 bg-slate-100/70 dark:bg-slate-900/70 text-sm text-gray-900 dark:text-slate-100 placeholder-gray-500 dark:placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-cyan-500/40 focus:border-cyan-500 transition-all"
@@ -2608,7 +2608,7 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
                                 <button
                                     type="button"
                                     title="Espace personnel"
-                                    className="px-6 py-3 rounded-lg bg-gradient-to-r from-cyan-500 to-blue-600 text-white text-sm font-bold tracking-wide shadow-lg shadow-cyan-500/20 transition-all hover:brightness-110"
+                                    className="px-6 py-3 rounded-lg bg-gradient-to-r from-cyan-500 to-blue-600 text-white text-sm font-bold tracking-wide shadow-xl shadow-cyan-500/20 transition-all hover:brightness-110"
                                 >
                                     Se connecter
                                 </button>
@@ -2630,7 +2630,7 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
 
                         {/* Navigation principale — ligne unique */}
                         <nav aria-label="Navigation principale" className="w-full bg-white dark:bg-slate-900/80 border-b border-gray-200 dark:border-slate-800">
-                            <div className="w-full px-2 md:px-4 grid grid-cols-10 gap-3 py-2">
+                            <div className="w-full px-2 md:px-4 grid grid-cols-10 gap-4 py-2">
                                 {NAV_ITEMS.map(tab => (
                                     <button
                                         key={tab.id}
@@ -2639,7 +2639,7 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
                                         className={`min-w-0 min-h-[64px] px-0.5 py-1.5 rounded-lg transition-colors flex flex-col items-center justify-center gap-1 leading-tight tracking-tight text-xs ${
                                             currentTab === tab.id
                                                 ? 'bg-cyan-600 text-white font-bold'
-                                                : 'bg-transparent text-slate-300 hover:text-cyan-400 hover:bg-slate-800/50 font-medium'
+                                                : 'bg-transparent text-slate-400 hover:text-cyan-300 hover:bg-slate-800/50 font-medium'
                                         }`}
                                     >
                                         <Icon
