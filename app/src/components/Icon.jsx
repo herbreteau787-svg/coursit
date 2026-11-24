@@ -1,4 +1,6 @@
-/* Icônes « interface pro » : traits fins et détails, couleur héritée du texte. */
+import { useId } from 'react';
+
+/* Icônes « interface pro » : traits fins, détails et ombre portée légère. */
 const ALIASES = {
     '✍️': 'pencil',
     '📚': 'book-open',
@@ -140,6 +142,8 @@ const GLYPHS = {
 };
 
 export const Icon = ({ name, className = '', strokeWidth = 1.5, ...props }) => {
+    const uid = useId().replace(/[^a-zA-Z0-9-]/g, '');
+    const shadowId = `icon-shadow-${uid}`;
     const glyph = GLYPHS[ALIASES[name] || name];
     if (!glyph) return null;
 
@@ -153,11 +157,17 @@ export const Icon = ({ name, className = '', strokeWidth = 1.5, ...props }) => {
             aria-hidden="true"
             {...props}
         >
+            <defs>
+                <filter id={shadowId} x="-25%" y="-25%" width="150%" height="150%">
+                    <feDropShadow dx="0" dy="0.6" stdDeviation="0.45" floodColor="#0f172a" floodOpacity="0.22" />
+                </filter>
+            </defs>
             <g
                 stroke="currentColor"
                 strokeWidth={strokeWidth}
                 strokeLinecap="round"
                 strokeLinejoin="round"
+                filter={`url(#${shadowId})`}
             >
                 {glyph}
             </g>
