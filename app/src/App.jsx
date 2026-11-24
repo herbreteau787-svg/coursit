@@ -2576,7 +2576,7 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
 <rect x="49" y="50" width="9" height="22" rx="1.5" fill="url(#taglineGrowthGrad)" />
 <rect x="64" y="46" width="9" height="26" rx="1.5" fill="url(#taglineGrowthGrad)" />
 <rect x="79" y="42" width="9" height="30" rx="1.5" fill="url(#taglineGrowthGrad)" />
-<path d="M5.7 58C13.4 57.4 20.7 56.7 28.4 55.5C36 54.3 43.1 52.8 50.7 50.2C58.4 47.6 65 44.6 72.7 39.2C80.3 33.7 87 27.4 94.7 15.8L105.7 6.3C93.7 31.8 85 40.2 77.3 45.7C69.7 51.2 60.9 55.2 53.3 57.8C45.6 60.3 37.3 62.2 29.6 63.4C22 64.6 14 65.4 6.3 66Z" fill="url(#taglineGrowthGrad)" />
+<path d="M6 39C13.7 39 21.3 39 28.9 38.9C36.6 38.8 44 38.5 51.7 37.9C59.3 37.2 66.4 36.2 74.1 34.4C81.7 32.5 88.6 30.2 96.2 26.4L107 25.6C92.1 37.4 83.6 40.3 75.9 42.1C68.3 44 60 45.2 52.3 45.8C44.7 46.5 36.7 46.8 29.1 46.9C21.4 47 13.7 47 6 47Z" fill="url(#taglineGrowthGrad)" />
 </g>
 </svg>
 </div>
