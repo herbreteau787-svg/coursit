@@ -2562,7 +2562,7 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
                             >
                                 <div className="flex flex-col">
                                                                         <img src={logoUrl} alt="Logo Cours IT" className="h-12 w-auto object-contain" />
-                                    <span className="mt-1 text-3xl font-bold text-cyan-300 font-['Inter'] whitespace-nowrap">Plateforme de révisions pour tous !</span>
+                                    <span className="mt-1 text-3xl font-bold font-['Inter'] whitespace-nowrap bg-gradient-to-r from-cyan-500 to-blue-600 bg-clip-text text-transparent" style={{ WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>Plateforme de révisions pour tous !</span>
                                 </div>
                             </button>
 
