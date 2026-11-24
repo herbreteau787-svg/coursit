@@ -2561,8 +2561,8 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
                                 className="shrink-0 flex items-center gap-4 text-left rounded-lg px-2 py-1 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors focus:outline-none focus:ring-2 focus:ring-brand-500"
                             >
                                 <div className="flex flex-col">
-                                                                        <img src={logoUrl} alt="Logo Cours IT" className="h-10 w-auto object-contain rounded" />
-                                    <span className="mt-1 text-3xl font-bold text-cyan-300 whitespace-nowrap">Plateforme de révisions pour tous&nbsp;!</span>
+                                                                        <img src={logoUrl} alt="Logo Cours IT" className="h-12 w-auto object-contain" />
+                                    <span className="mt-1 text-3xl font-bold text-cyan-300 font-['Inter'] whitespace-nowrap">Plateforme de révisions pour tous !</span>
                                 </div>
                             </button>
 

@@ -1,181 +1,193 @@
 import { useId } from 'react';
 
-/* Icônes « interface pro » : traits fins, détails et ombre portée légère. */
-const ALIASES = {
-    '✍️': 'pencil',
-    '📚': 'book-open',
-    '🛠️': 'wrench',
-    '🧪': 'flask',
-    '🎓': 'book',
-    '🔎': 'search',
+/* Icônes 3D style emoji : dégradés saturés, ombres portées et reflets. */
+const PALETTE = {
+    house: ['#67e8f9', '#0891b2', '#f472b6', '#be185d'],
+    'book-open': ['#fcd34d', '#d97706', '#fb923c', '#c2410c'],
+    star: ['#fde047', '#f59e0b', '#fbbf24', '#b45309'],
+    'help-circle': ['#22d3ee', '#0891b2', '#67e8f9', '#0e7490'],
+    flask: ['#34d399', '#059669', '#a7f3d0', '#047857'],
+    settings: ['#c4b5fd', '#7c3aed', '#a78bfa', '#5b21b6'],
+    'file-text': ['#93c5fd', '#2563eb', '#60a5fa', '#1d4ed8'],
+    wrench: ['#f9a8d4', '#db2777', '#f472b6', '#9d174d'],
+    book: ['#fdba74', '#ea580c', '#fb923c', '#c2410c'],
+    globe: ['#67e8f9', '#2563eb', '#22d3ee', '#1e40af'],
+    'alert-triangle': ['#fde68a', '#f59e0b', '#fbbf24', '#b45309'],
+    pencil: ['#f9a8d4', '#ec4899', '#f472b6', '#be185d'],
+    search: ['#7dd3fc', '#0284c7', '#38bdf8', '#0369a1'],
+    servers: ['#a5b4fc', '#4f46e5', '#818cf8', '#3730a3'],
+    shield: ['#6ee7b7', '#059669', '#34d399', '#047857'],
+    network: ['#d8b4fe', '#9333ea', '#c084fc', '#6b21a8'],
 };
 
+const ALIASES = { '✍️': 'pencil', '📚': 'book-open', '🛠️': 'wrench', '🧪': 'flask', '🎓': 'book', '🔎': 'search' };
+
 const GLYPHS = {
-    house: (
+    house: (g, a, s) => (
         <>
-            <path d="M3.2 10.5 12 3.4l8.8 7.1" />
-            <path d="M5.3 9.2V18.7a1.9 1.9 0 0 0 1.9 1.9h9.6a1.9 1.9 0 0 0 1.9-1.9V9.2" />
-            <path d="M9.7 20.6v-5.2a2.3 2.3 0 0 1 4.6 0v5.2" />
-            <path d="M7.5 12.1h2.2v2.3H7.5zM14.3 12.1h2.2v2.3h-2.2z" fill="currentColor" fillOpacity="0.18" strokeWidth="1.1" />
-            <path d="M17.4 6.1V3.4h2.1v4.3" />
-            <path d="M2.7 20.6h18.6" strokeOpacity="0.4" />
+            <path d="M2.8 10.7 12 3.1l9.2 7.6" fill={`url(#${a})`} filter={`url(#${s})`} />
+            <path d="M5.4 9.2V19a1.8 1.8 0 0 0 1.8 1.8h9.6a1.8 1.8 0 0 0 1.8-1.8V9.2Z" fill={`url(#${g})`} filter={`url(#${s})`} />
+            <path d="M9.8 20.8v-5.3a2.2 2.2 0 0 1 4.4 0v5.3Z" fill={`url(#${a})`} />
+            <rect x="7.4" y="12" width="2.3" height="2.5" rx=".6" fill="#fff" fillOpacity=".8" />
+            <rect x="14.3" y="12" width="2.3" height="2.5" rx=".6" fill="#fff" fillOpacity=".8" />
+            <path d="M5.2 7.4 12 2.1l6.8 5.3" fill="none" stroke="#fff" strokeOpacity=".6" strokeWidth=".9" strokeLinecap="round" />
         </>
     ),
-    'book-open': (
+    'book-open': (g, a, s) => (
         <>
-            <path d="M12 6.3c-2.3-1.7-5-2.3-8.3-1.9v12.9c3.3-.4 6 .2 8.3 1.9 2.3-1.7 5-2.3 8.3-1.9V4.4c-3.3-.4-6 .2-8.3 1.9Z" />
-            <path d="M12 6.3v12.9" />
-            <path d="M5.9 9.3c1.6-.1 3 .1 4.2.7M5.9 12.2c1.6-.1 3 .1 4.2.7M13.9 10c1.2-.6 2.6-.8 4.2-.7M13.9 12.9c1.2-.6 2.6-.8 4.2-.7" strokeOpacity="0.55" strokeWidth="1.1" />
-            <path d="M3.7 4.5v12.8" strokeOpacity="0.45" />
+            <path d="M12 6.4C9.8 4.7 6.9 4.1 3.5 4.5v12.8c3.4-.4 6.3.2 8.5 1.9 2.2-1.7 5.1-2.3 8.5-1.9V4.5c-3.4-.4-6.3.2-8.5 1.9Z" fill={`url(#${g})`} filter={`url(#${s})`} />
+            <path d="M12 6.4v12.8" stroke="#fff" strokeOpacity=".65" strokeWidth="1" />
+            <path d="M6 8.8h4.4M6 11.6h4.4M13.6 8.8H18M13.6 11.6H18" stroke="#fff" strokeOpacity=".55" strokeWidth="1" strokeLinecap="round" />
+            <path d="M4.2 5.4c2.9-.2 5.2.4 7 1.7" fill="none" stroke="#fff" strokeOpacity=".7" strokeWidth=".8" strokeLinecap="round" />
+            <path d="M3.5 17.3c3.4-.4 6.3.2 8.5 1.9Z" fill={`url(#${a})`} />
         </>
     ),
-    star: (
+    star: (g, a, s) => (
         <>
-            <path d="m12 3.3 2.66 5.39 5.95.87-4.31 4.2 1.02 5.93L12 16.68l-5.32 2.81 1.02-5.93-4.31-4.2 5.95-.87L12 3.3Z" />
-            <path d="M12 3.3v13.38M6.67 9.56 12 12.05l5.33-2.49" strokeOpacity="0.5" strokeWidth="1.1" />
-            <circle cx="12" cy="12.05" r="0.8" fill="currentColor" stroke="none" fillOpacity="0.75" />
+            <path d="m12 2.8 2.8 5.7 6.3.9-4.6 4.4 1.1 6.2L12 17.2l-5.6 2.8 1.1-6.2-4.6-4.4 6.3-.9L12 2.8Z" fill={`url(#${g})`} filter={`url(#${s})`} />
+            <path d="m12 2.8 2.8 5.7-2.8 2.4-2.8-2.4L12 2.8Z" fill="#fff" fillOpacity=".45" />
+            <path d="m6.4 9.4 5.6 4.8 5.6-4.8" fill="none" stroke="#fff" strokeOpacity=".5" strokeWidth=".9" />
+            <circle cx="12" cy="11.6" r="1.4" fill={`url(#${a})`} />
         </>
     ),
-    'help-circle': (
+    'help-circle': (g, a, s) => (
         <>
-            <circle cx="12" cy="12" r="8.6" />
-            <circle cx="12" cy="12" r="6.9" strokeOpacity="0.3" strokeWidth="1" />
-            <path d="M9.6 9.4a2.5 2.5 0 0 1 4.9.7c0 1.7-2.5 2.1-2.5 4" />
-            <circle cx="12" cy="17" r="0.95" fill="currentColor" stroke="none" />
-            <path d="M6.8 7a7.4 7.4 0 0 1 3-1.8" strokeOpacity="0.5" strokeWidth="1.1" />
+            <circle cx="12" cy="12" r="9" fill={`url(#${g})`} filter={`url(#${s})`} />
+            <circle cx="12" cy="12" r="7" fill="none" stroke="#fff" strokeOpacity=".45" strokeWidth="1" />
+            <path d="M9.5 9.3a2.6 2.6 0 0 1 5.1.8c0 1.8-2.6 2.2-2.6 4.1" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round" />
+            <circle cx="12" cy="17.4" r="1.1" fill="#fff" />
+            <path d="M6.6 7.2a7.6 7.6 0 0 1 3.2-2" fill="none" stroke="#fff" strokeOpacity=".55" strokeWidth="1.2" strokeLinecap="round" />
         </>
     ),
-    flask: (
+    flask: (g, a, s) => (
         <>
-            <path d="M9.2 3.3h5.6M10 3.3v6.1L4.9 18a2 2 0 0 0 1.7 3h10.8a2 2 0 0 0 1.7-3L14 9.4V3.3" />
-            <path d="M7.2 15.7h9.6l1.1 2.2a1.6 1.6 0 0 1-1.4 2.4H7.5a1.6 1.6 0 0 1-1.4-2.4l1.1-2.2Z" fill="currentColor" fillOpacity="0.16" strokeOpacity="0.7" strokeWidth="1.1" />
-            <circle cx="10" cy="18.1" r="0.7" fill="currentColor" stroke="none" />
-            <circle cx="13.3" cy="17.3" r="0.5" fill="currentColor" stroke="none" fillOpacity="0.7" />
-            <path d="M9.2 3.3h5.6" strokeWidth="2.1" />
+            <path d="M9.2 3h5.6M10 3v6.2L4.8 18a2 2 0 0 0 1.8 3h10.8a2 2 0 0 0 1.8-3L14 9.2V3Z" fill={`url(#${g})`} filter={`url(#${s})`} />
+            <path d="M7.1 15.5h9.8l1 2.2a1.7 1.7 0 0 1-1.5 2.5H7.6a1.7 1.7 0 0 1-1.5-2.5l1-2.2Z" fill={`url(#${a})`} />
+            <circle cx="10" cy="18.2" r=".8" fill="#fff" fillOpacity=".8" />
+            <circle cx="13.4" cy="17.4" r=".6" fill="#fff" fillOpacity=".6" />
+            <path d="M9.2 3h5.6" stroke="#fff" strokeOpacity=".6" strokeWidth="1.2" strokeLinecap="round" />
         </>
     ),
-    settings: (
+    settings: (g, a, s) => (
         <>
-            <path d="m12 2.7 1.32 2.2 2.52-.5.5 2.52 2.2 1.32-1.1 2.3 1.7 1.9-1.7 1.9 1.1 2.3-2.2 1.32-.5 2.52-2.52-.5L12 21.3l-1.32-2.2-2.52.5-.5-2.52-2.2-1.32 1.1-2.3-1.7-1.9 1.7-1.9-1.1-2.3 2.2-1.32.5-2.52 2.52.5L12 2.7Z" />
-            <circle cx="12" cy="12" r="3.3" />
-            <circle cx="12" cy="12" r="1.15" fill="currentColor" stroke="none" fillOpacity="0.8" />
+            <path d="m12 2.4 1.4 2.4 2.7-.6.6 2.7 2.4 1.4-1.2 2.5 1.8 2-1.8 2 1.2 2.5-2.4 1.4-.6 2.7-2.7-.6L12 21.6l-1.4-2.4-2.7.6-.6-2.7-2.4-1.4 1.2-2.5-1.8-2 1.8-2L5.9 8.3 8.3 6.9l.6-2.7 2.7.6L12 2.4Z" fill={`url(#${g})`} filter={`url(#${s})`} />
+            <circle cx="12" cy="12" r="4" fill={`url(#${a})`} />
+            <circle cx="12" cy="12" r="1.7" fill="#fff" fillOpacity=".85" />
+            <path d="M12 4.4v2.2M19.6 12h-2.2M12 19.6v-2.2M4.4 12h2.2" stroke="#fff" strokeOpacity=".45" strokeWidth=".9" strokeLinecap="round" />
         </>
     ),
-    'file-text': (
+    'file-text': (g, a, s) => (
         <>
-            <path d="M13.6 3.3H6.8a1.8 1.8 0 0 0-1.8 1.8v13.8a1.8 1.8 0 0 0 1.8 1.8h10.4a1.8 1.8 0 0 0 1.8-1.8V8.7L13.6 3.3Z" />
-            <path d="M13.6 3.3v5.4h5.4" />
-            <path d="M8.5 12h7M8.5 15h7M8.5 18h4.5" strokeOpacity="0.6" strokeWidth="1.1" />
-            <path d="M8.5 9h2.2" />
+            <path d="M13.5 3H6.8a1.8 1.8 0 0 0-1.8 1.8v14.4A1.8 1.8 0 0 0 6.8 21h10.4a1.8 1.8 0 0 0 1.8-1.8V8.5L13.5 3Z" fill={`url(#${g})`} filter={`url(#${s})`} />
+            <path d="M13.5 3v5.5H19" fill={`url(#${a})`} />
+            <path d="M8.4 12h7.2M8.4 15h7.2M8.4 18h4.8" stroke="#fff" strokeOpacity=".75" strokeWidth="1.2" strokeLinecap="round" />
+            <path d="M6.8 5.2h5" stroke="#fff" strokeOpacity=".5" strokeWidth=".9" strokeLinecap="round" />
         </>
     ),
-    wrench: (
+    wrench: (g, a, s) => (
         <>
-            <path d="M20.1 5.2a5.2 5.2 0 0 1-6.7 6.7l-6.2 6.2a2 2 0 0 1-2.8-2.8l6.2-6.2a5.2 5.2 0 0 1 6.7-6.7l-2.9 2.9.6 2.2 2.2.6 2.9-2.9Z" />
-            <circle cx="7.2" cy="16.8" r="0.8" fill="currentColor" stroke="none" />
-            <path d="M15.6 5.6a2.6 2.6 0 0 0-1.1 1.4" strokeOpacity="0.5" strokeWidth="1.1" />
+            <path d="M20.4 4.8a5.4 5.4 0 0 1-7 6.9l-6.4 6.4a2.1 2.1 0 0 1-3-3l6.4-6.4a5.4 5.4 0 0 1 6.9-7l-3 3 .7 2.3 2.3.7 3-2.9Z" fill={`url(#${g})`} filter={`url(#${s})`} />
+            <circle cx="7.1" cy="16.9" r="1.6" fill={`url(#${a})`} />
+            <path d="M15.7 5.6a3 3 0 0 0-1.2 1.6" fill="none" stroke="#fff" strokeOpacity=".65" strokeWidth="1" strokeLinecap="round" />
+            <path d="m16.8 7.5 2.2.7" fill="none" stroke="#fff" strokeOpacity=".45" strokeWidth=".9" strokeLinecap="round" />
         </>
     ),
-    book: (
+    book: (g, a, s) => (
         <>
-            <path d="M5.3 4.3A1.9 1.9 0 0 1 7.2 2.4h11.4v18.2H7.2a1.9 1.9 0 0 1-1.9-1.9V4.3Z" />
-            <path d="M7.2 2.4v18.2" />
-            <path d="M9.9 7.2h6.1M9.9 10.4h6.1" strokeOpacity="0.5" strokeWidth="1.1" />
-            <path d="M14.3 2.4v6.2l2-1.6 2 1.6V2.4" />
+            <path d="M5.2 4.4A2 2 0 0 1 7.2 2.4h11.4v18.2H7.2a2 2 0 0 1-2-2V4.4Z" fill={`url(#${g})`} filter={`url(#${s})`} />
+            <path d="M14.2 2.4v6.4l2.1-1.7 2.1 1.7V2.4Z" fill={`url(#${a})`} />
+            <path d="M9.8 7.4h5.8M9.8 10.6h5.8" stroke="#fff" strokeOpacity=".7" strokeWidth="1.2" strokeLinecap="round" />
+            <path d="M7.2 3.4h9.8" stroke="#fff" strokeOpacity=".45" strokeWidth=".9" strokeLinecap="round" />
         </>
     ),
-    globe: (
+    globe: (g, a, s) => (
         <>
-            <circle cx="12" cy="12" r="8.7" />
-            <path d="M3.5 12h17" />
-            <ellipse cx="12" cy="12" rx="4" ry="8.7" />
-            <path d="M5.4 7.3c1.8.9 4.1 1.4 6.6 1.4s4.8-.5 6.6-1.4M5.4 16.7c1.8-.9 4.1-1.4 6.6-1.4s4.8.5 6.6 1.4" strokeOpacity="0.55" strokeWidth="1.1" />
+            <circle cx="12" cy="12" r="9" fill={`url(#${g})`} filter={`url(#${s})`} />
+            <path d="M3.2 12h17.6" stroke="#fff" strokeOpacity=".6" strokeWidth="1.1" />
+            <ellipse cx="12" cy="12" rx="4.2" ry="9" fill="none" stroke="#fff" strokeOpacity=".65" strokeWidth="1.1" />
+            <path d="M5.2 7.4c1.9 1 4.2 1.5 6.8 1.5s4.9-.5 6.8-1.5M5.2 16.6c1.9-1 4.2-1.5 6.8-1.5s4.9.5 6.8 1.5" fill="none" stroke="#fff" strokeOpacity=".5" strokeWidth="1" />
+            <circle cx="12" cy="12" r="7.5" fill={`url(#${a})`} fillOpacity=".25" />
         </>
     ),
-    'alert-triangle': (
+    'alert-triangle': (g, a, s) => (
         <>
-            <path d="M12 3.7 2.9 19a1.6 1.6 0 0 0 1.4 2.4h15.4a1.6 1.6 0 0 0 1.4-2.4L12 3.7Z" />
-            <path d="M12 9.2v5" strokeWidth="2" />
-            <circle cx="12" cy="17.6" r="0.9" fill="currentColor" stroke="none" />
-            <path d="M8.4 15.6h7.2" strokeOpacity="0.35" strokeWidth="1" />
+            <path d="M12 3.2 2.7 19.2a1.7 1.7 0 0 0 1.5 2.5h15.6a1.7 1.7 0 0 0 1.5-2.5L12 3.2Z" fill={`url(#${g})`} filter={`url(#${s})`} />
+            <path d="M12 3.2 5.2 15h13.6L12 3.2Z" fill="#fff" fillOpacity=".3" />
+            <rect x="11" y="9" width="2" height="5.4" rx="1" fill="#fff" />
+            <circle cx="12" cy="17.6" r="1.1" fill="#fff" />
         </>
     ),
-    pencil: (
+    pencil: (g, a, s) => (
         <>
-            <path d="m4.6 19.4 1-4.2L16 4.8a1.6 1.6 0 0 1 2.3 0l1 1a1.6 1.6 0 0 1 0 2.3L8.9 18.5l-4.3.9Z" />
-            <path d="m14.8 6.1 3.3 3.3M5.6 15.2l3.3 3.3" />
+            <path d="m4.4 19.6 1-4.4L16 4.6a1.7 1.7 0 0 1 2.4 0l1 1a1.7 1.7 0 0 1 0 2.4L8.8 18.6l-4.4 1Z" fill={`url(#${g})`} filter={`url(#${s})`} />
+            <path d="m16 4.6 3.4 3.4-2.3 2.3-3.4-3.4L16 4.6Z" fill={`url(#${a})`} />
+            <path d="m5.4 15.2 3.4 3.4" stroke="#fff" strokeOpacity=".6" strokeWidth="1" strokeLinecap="round" />
         </>
     ),
-    search: (
+    search: (g, a, s) => (
         <>
-            <circle cx="10.8" cy="10.8" r="6.4" />
-            <path d="m15.6 15.6 4.6 4.6" strokeWidth="2" />
-            <circle cx="10.8" cy="10.8" r="3.8" strokeOpacity="0.4" strokeWidth="1" />
+            <circle cx="10.7" cy="10.7" r="6.6" fill={`url(#${g})`} filter={`url(#${s})`} />
+            <path d="m15.7 15.7 4.7 4.7" stroke={`url(#${a})`} strokeWidth="3.4" strokeLinecap="round" />
+            <path d="M7.2 7.2a5 5 0 0 1 3-1.4" fill="none" stroke="#fff" strokeOpacity=".75" strokeWidth="1.3" strokeLinecap="round" />
+            <circle cx="10.7" cy="10.7" r="3.4" fill="none" stroke="#fff" strokeOpacity=".4" strokeWidth="1" />
         </>
     ),
-    servers: (
+    servers: (g, a, s) => (
         <>
-            <rect x="3.2" y="3.4" width="17.6" height="7" rx="1.6" />
-            <rect x="3.2" y="13.6" width="17.6" height="7" rx="1.6" />
-            <circle cx="6.8" cy="6.9" r="0.9" fill="currentColor" stroke="none" />
-            <circle cx="6.8" cy="17.1" r="0.9" fill="currentColor" stroke="none" />
-            <path d="M10.4 6.9h6.2M10.4 17.1h6.2" strokeOpacity="0.6" strokeWidth="1.1" />
+            <rect x="3" y="3" width="18" height="7.4" rx="1.8" fill={`url(#${g})`} filter={`url(#${s})`} />
+            <rect x="3" y="13.6" width="18" height="7.4" rx="1.8" fill={`url(#${g})`} filter={`url(#${s})`} />
+            <circle cx="6.8" cy="6.7" r="1" fill="#fff" fillOpacity=".85" />
+            <circle cx="6.8" cy="17.3" r="1" fill="#fff" fillOpacity=".85" />
+            <path d="M10.4 6.7h6M10.4 17.3h6" stroke="#fff" strokeOpacity=".7" strokeWidth="1.2" strokeLinecap="round" />
         </>
     ),
-    shield: (
+    shield: (g, a, s) => (
         <>
-            <path d="M12 3.2 19 6.1v5.4c0 4.5-3 7.9-7 9.3-4-1.4-7-4.8-7-9.3V6.1l7-2.9Z" />
-            <path d="m9 12 2.2 2.2L15.4 10" />
-            <path d="M12 3.2v16.6" strokeOpacity="0.3" strokeWidth="1" />
+            <path d="M12 2.8 19 6v5.5c0 4.6-3 8-7 9.4-4-1.4-7-4.8-7-9.4V6l7-3.2Z" fill={`url(#${g})`} filter={`url(#${s})`} />
+            <path d="M12 2.8 5.4 5.8h13.2L12 2.8Z" fill="#fff" fillOpacity=".3" />
+            <path d="m8.8 12 2.4 2.4 4.2-4.5" fill="none" stroke="#fff" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
         </>
     ),
-    network: (
+    network: (g, a, s) => (
         <>
-            <circle cx="5.6" cy="6.2" r="2.4" />
-            <circle cx="18.4" cy="6.2" r="2.4" />
-            <circle cx="12" cy="18.2" r="2.4" />
-            <path d="m7.7 7.5 3 8.5M16.3 7.5l-3 8.5M8 6.2h8" />
-            <circle cx="5.6" cy="6.2" r="0.7" fill="currentColor" stroke="none" />
-            <circle cx="18.4" cy="6.2" r="0.7" fill="currentColor" stroke="none" />
+            <path d="M7.7 7.3 10.6 16M16.3 7.3 13.4 16M8 6.1h8" stroke={`url(#${a})`} strokeWidth="2.6" strokeLinecap="round" />
+            <circle cx="5.6" cy="6.1" r="2.7" fill={`url(#${g})`} filter={`url(#${s})`} />
+            <circle cx="18.4" cy="6.1" r="2.7" fill={`url(#${g})`} filter={`url(#${s})`} />
+            <circle cx="12" cy="18.2" r="2.7" fill={`url(#${g})`} filter={`url(#${s})`} />
+            <circle cx="4.9" cy="5.3" r=".7" fill="#fff" fillOpacity=".8" />
+            <circle cx="17.7" cy="5.3" r=".7" fill="#fff" fillOpacity=".8" />
+            <circle cx="11.3" cy="17.4" r=".7" fill="#fff" fillOpacity=".8" />
         </>
     ),
 };
 
 export const Icon = ({ name, className = '', strokeWidth = 1.5, ...props }) => {
     const uid = useId().replace(/[^a-zA-Z0-9-]/g, '');
-    const shadowId = `icon-shadow-${uid}`;
-    const gradientId = `icon-grad-${uid}`;
-    const glyph = GLYPHS[ALIASES[name] || name];
+    const key = ALIASES[name] || name;
+    const glyph = GLYPHS[key];
     if (!glyph) return null;
 
+    const [c1, c2, c3, c4] = PALETTE[key];
+    const grad = `icon-g-${uid}`;
+    const accent = `icon-a-${uid}`;
+    const shadow = `icon-s-${uid}`;
+
     return (
-        <svg
-            width="1em"
-            height="1em"
-            viewBox="0 0 24 24"
-            fill="none"
-            className={className}
-            aria-hidden="true"
-            {...props}
-        >
+        <svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" className={className} aria-hidden="true" {...props}>
             <defs>
-                <linearGradient id={gradientId} x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stopColor="currentColor" stopOpacity="1" />
-                    <stop offset="100%" stopColor="currentColor" stopOpacity="0.55" />
+                <linearGradient id={grad} x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stopColor={c1} />
+                    <stop offset="100%" stopColor={c2} />
                 </linearGradient>
-                <filter id={shadowId} x="-25%" y="-25%" width="150%" height="150%">
-                    <feDropShadow dx="0" dy="0.6" stdDeviation="0.45" floodColor="#0f172a" floodOpacity="0.22" />
+                <linearGradient id={accent} x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stopColor={c3} />
+                    <stop offset="100%" stopColor={c4} />
+                </linearGradient>
+                <filter id={shadow} x="-30%" y="-30%" width="160%" height="160%">
+                    <feDropShadow dx="0" dy="1" stdDeviation="1" floodColor="#0f172a" floodOpacity="0.3" />
                 </filter>
             </defs>
-            <g
-                stroke={`url(#${gradientId})`}
-                strokeWidth={strokeWidth}
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                filter={`url(#${shadowId})`}
-            >
-                {glyph}
-            </g>
+            {glyph(grad, accent, shadow)}
         </svg>
     );
 };
