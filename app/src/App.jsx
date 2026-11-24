@@ -2573,26 +2573,21 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
                                             IT
                                         </div>
                                     )}
-                                    <span
-                                        className="mt-1 text-3xl font-black tracking-widest uppercase whitespace-nowrap"
-                                        style={{ background: 'linear-gradient(90deg, #ff0080 0%, #ff8c00 50%, #ffd700 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', textShadow: '0 0 20px rgba(255,0,128,0.6), 0 0 40px rgba(255,140,0,0.4)' }}
-                                    >
-                                        Plateforme de révisions pour tous
-                                    </span>
+                                    <span className="mt-1 text-3xl font-bold text-cyan-400 whitespace-nowrap">Plateforme de révisions pour tous</span>
                                 </div>
                             </button>
 
                             {/* Recherche centrée */}
                             <div className="w-full lg:flex-1 flex flex-col items-center gap-1">
-                                <div className="w-full md:w-2/3 mx-auto relative rounded-xl p-[2px] bg-gradient-to-r from-[#ff0080] via-[#ff8c00] to-[#ffd700] shadow-[0_0_18px_rgba(255,0,128,0.3)] transition-all focus-within:shadow-[0_0_30px_rgba(255,0,128,0.6),0_0_30px_rgba(34,211,238,0.45)]">
-                                    <svg className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 z-10 w-5 h-5 text-[#ff8c00]" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
+                                <div className="w-full md:w-2/3 mx-auto relative">
+                                    <svg className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 dark:text-slate-500" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
                                     <input
                                         type="text"
                                         aria-label="Rechercher un cours, un mot-clé"
                                         placeholder="Rechercher un cours, un code, un mot-clé…"
                                         value={searchQuery}
                                         onChange={(e) => { setSearchQuery(e.target.value); if (currentTab !== 'courses') setCurrentTab('courses'); }}
-                                        className="w-full h-12 px-6 pl-12 rounded-[10px] border-0 bg-slate-100 dark:bg-slate-900 text-sm text-gray-900 dark:text-slate-100 placeholder-gray-500 dark:placeholder-slate-400 focus:outline-none focus:ring-0 transition-all"
+                                        className="w-full h-12 px-6 pl-12 rounded-xl border border-slate-600 bg-slate-100/70 dark:bg-slate-900/70 text-sm text-gray-900 dark:text-slate-100 placeholder-gray-500 dark:placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-cyan-500/40 focus:border-cyan-500 transition-all"
                                     />
                                 </div>
                                 {searchQuery && (
@@ -2613,15 +2608,14 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
                                 <button
                                     type="button"
                                     title="Espace personnel"
-                                    style={{ background: 'linear-gradient(90deg, #ff0080 0%, #ff8c00 50%, #ffd700 100%)' }}
-                                    className="px-6 py-3 rounded-lg text-white text-sm font-bold tracking-wide shadow-[0_0_20px_rgba(255,0,128,0.6)] transition-all duration-200 hover:brightness-[1.2] hover:shadow-[0_0_35px_rgba(255,0,128,0.9),0_0_60px_rgba(255,140,0,0.55)]"
+                                    className="px-6 py-3 rounded-lg bg-gradient-to-r from-cyan-500 to-blue-600 text-white text-sm font-bold tracking-wide shadow-lg shadow-cyan-500/20 transition-all hover:brightness-110"
                                 >
                                     Se connecter
                                 </button>
                                 <div className="flex items-center gap-1" role="group" aria-label="Taille de la police">
-                                    <button onClick={() => setFontScale('93')} aria-label="Police plus petite" title="Réduire la taille du texte" style={{ background: 'linear-gradient(90deg, #ff0080 0%, #ff8c00 100%)' }} className="px-2 py-1.5 rounded-lg text-white text-xs font-bold shadow-[0_0_8px_rgba(255,0,128,0.25)] hover:brightness-110 transition-all">A−</button>
-                                    <button onClick={() => setFontScale('110')} aria-label="Police plus grande" title="Augmenter la taille du texte" style={{ background: 'linear-gradient(90deg, #ff0080 0%, #ff8c00 100%)' }} className="px-2 py-1.5 rounded-lg text-white text-xs font-bold shadow-[0_0_8px_rgba(255,0,128,0.25)] hover:brightness-110 transition-all">A+</button>
-                                    <button onClick={() => setFontScale('100')} aria-label="Taille de police normale" title="Taille normale" style={{ background: 'linear-gradient(90deg, #ff0080 0%, #ff8c00 100%)' }} className="px-2 py-1.5 rounded-lg text-white text-xs font-bold shadow-[0_0_8px_rgba(255,0,128,0.25)] hover:brightness-110 transition-all">A</button>
+                                    <button onClick={() => setFontScale('93')} aria-label="Police plus petite" title="Réduire la taille du texte" className="px-2 py-1.5 rounded-lg bg-slate-700 text-slate-200 text-xs font-bold hover:bg-slate-600 transition-colors">A−</button>
+                                    <button onClick={() => setFontScale('110')} aria-label="Police plus grande" title="Augmenter la taille du texte" className="px-2 py-1.5 rounded-lg bg-slate-700 text-slate-200 text-xs font-bold hover:bg-slate-600 transition-colors">A+</button>
+                                    <button onClick={() => setFontScale('100')} aria-label="Taille de police normale" title="Taille normale" className="px-2 py-1.5 rounded-lg bg-slate-700 text-slate-200 text-xs font-bold hover:bg-slate-600 transition-colors">A</button>
                                 </div>
                                 <button
                                     onClick={() => setDarkMode(!darkMode)}
@@ -2636,22 +2630,20 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
 
                         {/* Navigation principale — ligne unique */}
                         <nav aria-label="Navigation principale" className="w-full bg-white dark:bg-slate-900/80 border-b border-gray-200 dark:border-slate-800">
-                            <div className="w-full px-2 md:px-4 grid grid-cols-10 gap-2 py-2">
+                            <div className="w-full px-2 md:px-4 grid grid-cols-10 gap-3 py-2">
                                 {NAV_ITEMS.map(tab => (
                                     <button
                                         key={tab.id}
                                         onClick={() => setCurrentTab(tab.id)}
                                         aria-current={currentTab === tab.id ? 'page' : undefined}
-                                        style={currentTab === tab.id ? { background: 'linear-gradient(90deg, #ff0080 0%, #ff8c00 50%, #ffd700 100%)' } : undefined}
-                                        className={`min-w-0 min-h-[64px] px-0.5 py-1.5 rounded-lg transition-all flex flex-col items-center justify-center gap-1 leading-tight tracking-tight text-xs ${
+                                        className={`min-w-0 min-h-[64px] px-0.5 py-1.5 rounded-lg transition-colors flex flex-col items-center justify-center gap-1 leading-tight tracking-tight text-xs ${
                                             currentTab === tab.id
-                                                ? 'text-white font-bold shadow-[0_0_18px_rgba(255,0,128,0.55)]'
-                                                : 'bg-transparent text-gray-900 dark:text-white font-medium hover:bg-gray-100 dark:hover:bg-slate-700/90 hover:shadow-[0_0_16px_rgba(255,0,128,0.35)]'
+                                                ? 'bg-cyan-600 text-white font-bold'
+                                                : 'bg-transparent text-slate-300 hover:text-cyan-400 hover:bg-slate-800/50 font-medium'
                                         }`}
                                     >
                                         <Icon
                                             name={tab.icon}
-                                            active={currentTab === tab.id}
                                             strokeWidth={1.5}
                                             className="w-8 h-8 p-0.5 shrink-0"
                                         />

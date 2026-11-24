@@ -1,6 +1,4 @@
-import { useId } from 'react';
-
-/* Icônes « interface pro » : traits fins, détails, dégradé + ombre portée douce. */
+/* Icônes « interface pro » : traits fins et détails, couleur héritée du texte. */
 const ALIASES = {
     '✍️': 'pencil',
     '📚': 'book-open',
@@ -141,19 +139,9 @@ const GLYPHS = {
     ),
 };
 
-export const Icon = ({ name, active = false, className = '', strokeWidth = 1.5, ...props }) => {
-    const uid = useId().replace(/[^a-zA-Z0-9-]/g, '');
+export const Icon = ({ name, className = '', strokeWidth = 1.5, ...props }) => {
     const glyph = GLYPHS[ALIASES[name] || name];
     if (!glyph) return null;
-
-    const gradientClass = active
-        ? 'text-[#ff0080] [filter:drop-shadow(0_0_10px_rgba(255,0,128,0.85))_drop-shadow(0_0_18px_rgba(255,140,0,0.5))]'
-        : 'text-[#ff8c00] opacity-60 [filter:drop-shadow(0_0_3px_rgba(255,0,128,0.25))] hover:!opacity-100 hover:[filter:drop-shadow(0_0_8px_rgba(255,0,128,0.5))]';
-
-    const gradientId = `icon-grad-${uid}`;
-    const from = '#ff0080';
-    const via = '#ff8c00';
-    const to = '#ffd700';
 
     return (
         <svg
@@ -161,19 +149,12 @@ export const Icon = ({ name, active = false, className = '', strokeWidth = 1.5, 
             height="1em"
             viewBox="0 0 24 24"
             fill="none"
-            className={`${gradientClass} ${className}`.trim()}
+            className={className}
             aria-hidden="true"
             {...props}
         >
-            <defs>
-                <linearGradient id={gradientId} x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stopColor={from} stopOpacity="0.95" />
-                    <stop offset="50%" stopColor={via} stopOpacity="0.85" />
-                    <stop offset="100%" stopColor={to} stopOpacity="0.65" />
-                </linearGradient>
-            </defs>
             <g
-                stroke={`url(#${gradientId})`}
+                stroke="currentColor"
                 strokeWidth={strokeWidth}
                 strokeLinecap="round"
                 strokeLinejoin="round"
