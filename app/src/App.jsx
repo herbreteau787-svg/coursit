@@ -2564,19 +2564,18 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
                                                                         <img src={logoUrl} alt="Logo Cours IT" className="h-12 w-auto object-contain" />
 <div className="mt-1 flex items-center gap-1.5">
 <span className="text-3xl font-bold leading-none font-['Inter'] whitespace-nowrap bg-gradient-to-r from-cyan-500 to-blue-600 bg-clip-text text-transparent" style={{ WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>Plateforme de révisions pour tous</span>
-<svg viewBox="0 0 112 80" className="h-12 w-[68px] shrink-0" fill="none" aria-hidden="true">
+<svg viewBox="0 0 64 40" className="h-10 w-16 shrink-0" fill="none" aria-hidden="true">
 <defs>
 <linearGradient id="taglineGrowthGrad" x1="0%" y1="100%" x2="100%" y2="0%"><stop offset="0%" stopColor="#06b6d4" /><stop offset="100%" stopColor="#2563eb" /></linearGradient>
 <filter id="taglineGrowthShadow" x="-30%" y="-30%" width="160%" height="160%"><feDropShadow dx="1" dy="1" stdDeviation="1" floodColor="#0f172a" floodOpacity="0.25" /></filter>
 </defs>
 <g filter="url(#taglineGrowthShadow)">
-<rect x="4" y="64" width="9" height="8" rx="1.5" fill="url(#taglineGrowthGrad)" />
-<rect x="19" y="60" width="9" height="12" rx="1.5" fill="url(#taglineGrowthGrad)" />
-<rect x="34" y="55" width="9" height="17" rx="1.5" fill="url(#taglineGrowthGrad)" />
-<rect x="49" y="50" width="9" height="22" rx="1.5" fill="url(#taglineGrowthGrad)" />
-<rect x="64" y="46" width="9" height="26" rx="1.5" fill="url(#taglineGrowthGrad)" />
-<rect x="79" y="42" width="9" height="30" rx="1.5" fill="url(#taglineGrowthGrad)" />
-<path d="M6 39C13.7 39 21.3 39 28.9 38.9C36.6 38.8 44 38.5 51.7 37.9C59.3 37.2 66.4 36.2 74.1 34.4C81.7 32.5 88.6 30.2 96.2 26.4L107 25.6C92.1 37.4 83.6 40.3 75.9 42.1C68.3 44 60 45.2 52.3 45.8C44.7 46.5 36.7 46.8 29.1 46.9C21.4 47 13.7 47 6 47Z" fill="url(#taglineGrowthGrad)" />
+<rect x="3" y="31" width="7" height="5" rx="1.4" fill="url(#taglineGrowthGrad)" />
+<rect x="14" y="27" width="7" height="9" rx="1.4" fill="url(#taglineGrowthGrad)" />
+<rect x="25" y="23" width="7" height="13" rx="1.4" fill="url(#taglineGrowthGrad)" />
+<rect x="36" y="18" width="7" height="18" rx="1.4" fill="url(#taglineGrowthGrad)" />
+<rect x="47" y="12" width="7" height="24" rx="1.4" fill="url(#taglineGrowthGrad)" />
+<path d="M4 25C14 24 24 21 32 16C40 11 46 6 52 2L61 1L53 10C46 14 40 19 32 23C24 27 14 30 4 31Z" fill="url(#taglineGrowthGrad)" />
 </g>
 </svg>
 </div>
