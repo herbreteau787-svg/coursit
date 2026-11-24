@@ -2561,7 +2561,7 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
                                 className="shrink-0 flex items-center gap-4 text-left rounded-lg px-2 py-1 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors focus:outline-none focus:ring-2 focus:ring-brand-500"
                             >
                                 <div className="flex flex-col">
-                                                                        <svg viewBox="0 0 48 48" className="h-10 w-10 shrink-0" role="img" aria-label="Logo Cours IT">
+                                    <svg viewBox="0 0 48 48" className="h-10 w-10 shrink-0" role="img" aria-label="Logo Cours IT">
                                     <defs><linearGradient id="coursit-logo-grad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stopColor="#22d3ee" /><stop offset="100%" stopColor="#2563eb" /></linearGradient></defs>
                                     <rect x="1.5" y="1.5" width="45" height="45" rx="12" fill="url(#coursit-logo-grad)" />
                                     <path d="M6 13a7 7 0 0 1 7-7" fill="none" stroke="#fff" strokeOpacity="0.35" strokeWidth="2" strokeLinecap="round" />
