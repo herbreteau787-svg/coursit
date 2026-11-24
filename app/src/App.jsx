@@ -2576,8 +2576,8 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
 <rect x="49" y="12" width="9" height="25" rx="1.5" fill="url(#taglineGrowthGrad)" />
 <rect x="64" y="7" width="9" height="30" rx="1.5" fill="url(#taglineGrowthGrad)" />
 <rect x="79" y="2" width="9" height="35" rx="1.5" fill="url(#taglineGrowthGrad)" />
-<path d="M8 26C23 25 31 21 39 17S55 12 69 7S80 3 86 1" stroke="url(#taglineGrowthGrad)" strokeWidth="2.5" strokeLinecap="round" fill="none" />
-<polygon points="108,1 100,-2.5 100,4.5" fill="#2563eb" />
+<path d="M8 26C23 25 31 21 39 17S55 12 69 7S80 3 86 1" stroke="url(#taglineGrowthGrad)" strokeWidth="4" strokeLinecap="round" fill="none" />
+<polygon points="108,2 96,-3 96,7" fill="#2563eb" />
 </g>
 </svg>
 </div>
