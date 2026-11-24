@@ -2561,7 +2561,7 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
                                 >
                                     <img src={logoUrl} alt="Logo Cours IT" className="h-12 w-auto object-contain" />
                                 </button>
-                                <div className="mt-1 inline-flex items-center justify-center gap-[14px]">
+                                <div className="mt-1 inline-flex items-baseline justify-center gap-[14px]">
                                     <button
                                         onClick={() => { setCurrentTab('dashboard'); window.scrollTo({ top: 0 }); }}
                                         className="text-left rounded focus:outline-none focus:ring-2 focus:ring-brand-500"
@@ -2573,7 +2573,7 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
                                         alt=""
                                         aria-hidden="true"
                                         draggable="false"
-                                        className="pointer-events-none select-none w-[90px] h-auto object-contain shrink-0 bg-transparent border-0 shadow-none align-middle -translate-y-0.5"
+                                        className="pointer-events-none select-none w-[72px] h-auto object-contain shrink-0 bg-transparent border-0 shadow-none align-middle translate-y-[5px]"
                                     />
                                 </div>
                             </div>
