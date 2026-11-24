@@ -2562,23 +2562,23 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
                             >
                                 <div className="flex flex-col">
                                                                         <img src={logoUrl} alt="Logo Cours IT" className="h-12 w-auto object-contain" />
-                                    <div className="mt-1 flex items-center gap-2">
-<span className="text-3xl font-bold font-['Inter'] whitespace-nowrap bg-gradient-to-r from-cyan-500 to-blue-600 bg-clip-text text-transparent" style={{ WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>Plateforme de révisions pour tous</span>
-<svg viewBox="0 0 100 40" className="h-10 w-28 shrink-0" fill="none" aria-hidden="true">
+<div className="mt-1 flex items-baseline gap-1.5">
+<span className="text-3xl font-bold leading-none font-['Inter'] whitespace-nowrap bg-gradient-to-r from-cyan-500 to-blue-600 bg-clip-text text-transparent" style={{ WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>Plateforme de révisions pour tous</span>
+<svg viewBox="0 0 100 40" className="h-6 w-16 shrink-0" fill="none" aria-hidden="true">
 <defs>
-<linearGradient id="growthBarGrad" x1="0%" y1="100%" x2="0%" y2="0%"><stop offset="0%" stopColor="#06b6d4" /><stop offset="100%" stopColor="#3b82f6" /></linearGradient>
-<filter id="growthBarShadow" x="-30%" y="-30%" width="160%" height="160%"><feDropShadow dx="1" dy="1" stdDeviation="1" floodColor="#000" floodOpacity="0.3" /></filter>
+<linearGradient id="taglineGrowthGrad" x1="0%" y1="100%" x2="100%" y2="0%"><stop offset="0%" stopColor="#06b6d4" /><stop offset="100%" stopColor="#2563eb" /></linearGradient>
+<filter id="taglineGrowthShadow" x="-30%" y="-30%" width="160%" height="160%"><feDropShadow dx="1" dy="1" stdDeviation="1" floodColor="#0f172a" floodOpacity="0.25" /></filter>
 </defs>
-<g filter="url(#growthBarShadow)">
-<rect x="4" y="29" width="9" height="11" rx="1.5" fill="url(#growthBarGrad)" />
-<rect x="19" y="25" width="9" height="15" rx="1.5" fill="url(#growthBarGrad)" />
-<rect x="34" y="20" width="9" height="20" rx="1.5" fill="url(#growthBarGrad)" />
-<rect x="49" y="15" width="9" height="25" rx="1.5" fill="url(#growthBarGrad)" />
-<rect x="64" y="10" width="9" height="30" rx="1.5" fill="url(#growthBarGrad)" />
-<rect x="79" y="5" width="9" height="35" rx="1.5" fill="url(#growthBarGrad)" />
+<g filter="url(#taglineGrowthShadow)">
+<rect x="4" y="29" width="9" height="11" rx="1.5" fill="url(#taglineGrowthGrad)" />
+<rect x="19" y="25" width="9" height="15" rx="1.5" fill="url(#taglineGrowthGrad)" />
+<rect x="34" y="20" width="9" height="20" rx="1.5" fill="url(#taglineGrowthGrad)" />
+<rect x="49" y="15" width="9" height="25" rx="1.5" fill="url(#taglineGrowthGrad)" />
+<rect x="64" y="10" width="9" height="30" rx="1.5" fill="url(#taglineGrowthGrad)" />
+<rect x="79" y="5" width="9" height="35" rx="1.5" fill="url(#taglineGrowthGrad)" />
+<path d="M8 29C23 28 31 24 39 20S55 15 69 10S81 6 88 4" stroke="url(#taglineGrowthGrad)" strokeWidth="2.5" strokeLinecap="round" fill="none" />
+<polygon points="88,4 79,2 83,10" fill="#2563eb" />
 </g>
-<path d="M8 29C23 28 31 24 39 20S55 15 69 10S81 6 88 4" stroke="#3b82f6" strokeWidth="2.5" strokeLinecap="round" fill="none" filter="url(#growthBarShadow)" />
-<polygon points="88,4 79,2 83,10" fill="#3b82f6" filter="url(#growthBarShadow)" />
 </svg>
 </div>
                                 </div>
