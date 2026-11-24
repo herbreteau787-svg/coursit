@@ -2553,30 +2553,24 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
                 <div className="min-h-screen flex flex-col bg-gray-50 dark:bg-transparent">
                     <header className="bg-white dark:bg-slate-800 border-b border-gray-200 dark:border-slate-700 sticky top-0 z-50">
                         <div className="w-full px-4 md:px-6 py-3 flex flex-col lg:flex-row items-center justify-between gap-4">
-                            {/* Logo + tagline — gauche */}
-                            <div className="shrink-0 flex flex-col items-center">
-                                <button
-                                    onClick={() => { setCurrentTab('dashboard'); window.scrollTo({ top: 0 }); }}
-                                    className="rounded-lg px-2 py-1 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors focus:outline-none focus:ring-2 focus:ring-brand-500"
-                                >
-                                    <img src={logoUrl} alt="Logo Cours IT" className="h-12 w-auto object-contain" />
-                                </button>
-                                <div className="mt-1 inline-flex items-baseline justify-center gap-[14px]">
-                                    <button
-                                        onClick={() => { setCurrentTab('dashboard'); window.scrollTo({ top: 0 }); }}
-                                        className="text-left rounded focus:outline-none focus:ring-2 focus:ring-brand-500"
-                                    >
-                                        <span className="text-3xl font-bold leading-none font-['Inter'] whitespace-nowrap bg-gradient-to-r from-cyan-500 to-blue-600 bg-clip-text text-transparent" style={{ WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>Plateforme de révisions pour tous</span>
-                                    </button>
+                            {/* Bloc de marque complet — cliquable */}
+                            <button
+                                type="button"
+                                onClick={() => { setCurrentTab('dashboard'); window.scrollTo({ top: 0 }); }}
+                                className="shrink-0 flex flex-col items-center gap-2 rounded-lg text-left focus:outline-none focus:ring-2 focus:ring-brand-500"
+                            >
+                                <img src={logoUrl} alt="Logo Cours IT" className="h-12 w-auto object-contain" />
+                                <div className="inline-flex items-baseline justify-center gap-3">
+                                    <span className="-translate-y-[26px] text-3xl font-bold leading-none font-['Inter'] whitespace-nowrap bg-gradient-to-r from-cyan-500 to-blue-600 bg-clip-text text-transparent" style={{ WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>Plateforme de révisions pour tous</span>
                                     <img
                                         src={`${import.meta.env.BASE_URL}images/growth-chart.png`}
                                         alt=""
                                         aria-hidden="true"
                                         draggable="false"
-                                        className="pointer-events-none select-none w-[72px] h-auto object-contain shrink-0 bg-transparent border-0 shadow-none align-middle translate-y-[5px]"
+                                        className="pointer-events-none select-none w-[72px] h-auto object-contain shrink-0 bg-transparent border-0 shadow-none align-middle -translate-y-[21px]"
                                     />
                                 </div>
-                            </div>
+                            </button>
 
                             {/* Recherche centrée */}
                             <div className="w-full lg:flex-1 flex flex-col items-center gap-1">
