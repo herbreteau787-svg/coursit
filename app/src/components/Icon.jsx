@@ -144,6 +144,7 @@ const GLYPHS = {
 export const Icon = ({ name, className = '', strokeWidth = 1.5, ...props }) => {
     const uid = useId().replace(/[^a-zA-Z0-9-]/g, '');
     const shadowId = `icon-shadow-${uid}`;
+    const gradientId = `icon-grad-${uid}`;
     const glyph = GLYPHS[ALIASES[name] || name];
     if (!glyph) return null;
 
@@ -158,12 +159,16 @@ export const Icon = ({ name, className = '', strokeWidth = 1.5, ...props }) => {
             {...props}
         >
             <defs>
+                <linearGradient id={gradientId} x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stopColor="currentColor" stopOpacity="1" />
+                    <stop offset="100%" stopColor="currentColor" stopOpacity="0.55" />
+                </linearGradient>
                 <filter id={shadowId} x="-25%" y="-25%" width="150%" height="150%">
                     <feDropShadow dx="0" dy="0.6" stdDeviation="0.45" floodColor="#0f172a" floodOpacity="0.22" />
                 </filter>
             </defs>
             <g
-                stroke="currentColor"
+                stroke={`url(#${gradientId})`}
                 strokeWidth={strokeWidth}
                 strokeLinecap="round"
                 strokeLinejoin="round"
