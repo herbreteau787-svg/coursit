@@ -2562,9 +2562,9 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
                             >
                                 <div className="flex flex-col">
                                                                         <img src={logoUrl} alt="Logo Cours IT" className="h-12 w-auto object-contain" />
-<div className="mt-1 flex items-baseline gap-1.5">
+<div className="mt-1 flex items-center gap-1.5">
 <span className="text-3xl font-bold leading-none font-['Inter'] whitespace-nowrap bg-gradient-to-r from-cyan-500 to-blue-600 bg-clip-text text-transparent" style={{ WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>Plateforme de révisions pour tous</span>
-<svg viewBox="0 0 100 40" className="h-6 w-16 shrink-0" fill="none" aria-hidden="true">
+<svg viewBox="0 0 112 40" className="h-6 w-[72px] shrink-0" fill="none" aria-hidden="true">
 <defs>
 <linearGradient id="taglineGrowthGrad" x1="0%" y1="100%" x2="100%" y2="0%"><stop offset="0%" stopColor="#06b6d4" /><stop offset="100%" stopColor="#2563eb" /></linearGradient>
 <filter id="taglineGrowthShadow" x="-30%" y="-30%" width="160%" height="160%"><feDropShadow dx="1" dy="1" stdDeviation="1" floodColor="#0f172a" floodOpacity="0.25" /></filter>
@@ -2576,8 +2576,8 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
 <rect x="49" y="15" width="9" height="25" rx="1.5" fill="url(#taglineGrowthGrad)" />
 <rect x="64" y="10" width="9" height="30" rx="1.5" fill="url(#taglineGrowthGrad)" />
 <rect x="79" y="5" width="9" height="35" rx="1.5" fill="url(#taglineGrowthGrad)" />
-<path d="M8 29C23 28 31 24 39 20S55 15 69 10S81 6 88 4" stroke="url(#taglineGrowthGrad)" strokeWidth="2.5" strokeLinecap="round" fill="none" />
-<polygon points="88,4 79,2 83,10" fill="#2563eb" />
+<path d="M8 29C23 28 31 24 39 20S55 15 69 10S80 6 86 4" stroke="url(#taglineGrowthGrad)" strokeWidth="2.5" strokeLinecap="round" fill="none" />
+<polygon points="100,4 92,0.5 92,7.5" fill="#2563eb" />
 </g>
 </svg>
 </div>
