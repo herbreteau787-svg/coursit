@@ -2564,10 +2564,13 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
                                                                         <img src={logoUrl} alt="Logo Cours IT" className="h-12 w-auto object-contain" />
                                     <div className="mt-1 flex items-center gap-2">
 <span className="text-3xl font-bold font-['Inter'] whitespace-nowrap bg-gradient-to-r from-cyan-500 to-blue-600 bg-clip-text text-transparent" style={{ WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>Plateforme de révisions pour tous</span>
-<svg viewBox="0 0 80 30" className="h-7 w-24 shrink-0" fill="none" aria-hidden="true">
-<defs><linearGradient id="growthGrad" x1="0%" y1="100%" x2="100%" y2="0%"><stop offset="0%" stopColor="#06b6d4" /><stop offset="50%" stopColor="#10b981" /><stop offset="100%" stopColor="#22c55e" /></linearGradient></defs>
-<path d="M4 26C22 25 36 20 50 12S68 3 78 2" stroke="url(#growthGrad)" strokeWidth="3" strokeLinecap="round" fill="none" />
-<polygon points="78,2 70,4 74,10" fill="#22c55e" />
+<svg viewBox="0 0 100 40" className="h-12 w-40 shrink-0" fill="none" aria-hidden="true">
+<defs>
+<linearGradient id="expGrowth" x1="0%" y1="100%" x2="100%" y2="0%"><stop offset="0%" stopColor="#06b6d4" /><stop offset="70%" stopColor="#10b981" /><stop offset="100%" stopColor="#22c55e" /></linearGradient>
+<filter id="growthGlow" x="-30%" y="-30%" width="160%" height="160%"><feDropShadow dx="0" dy="0" stdDeviation="2" floodColor="#06b6d4" floodOpacity="0.8" /></filter>
+</defs>
+<path d="M4 36C30 35 52 28 70 16C82 8 90 4 98 3" stroke="url(#expGrowth)" strokeWidth="4" strokeLinecap="round" fill="none" filter="url(#growthGlow)" />
+<polygon points="98,3 89,5 94,12" fill="#22c55e" filter="url(#growthGlow)" />
 </svg>
 </div>
                                 </div>
