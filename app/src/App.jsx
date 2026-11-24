@@ -2564,20 +2564,11 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
                                                                         <img src={logoUrl} alt="Logo Cours IT" className="h-12 w-auto object-contain" />
 <div className="mt-1 flex items-center gap-1.5">
 <span className="text-3xl font-bold leading-none font-['Inter'] whitespace-nowrap bg-gradient-to-r from-cyan-500 to-blue-600 bg-clip-text text-transparent" style={{ WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>Plateforme de révisions pour tous</span>
-<svg viewBox="0 0 64 40" className="h-10 w-16 shrink-0" fill="none" aria-hidden="true">
-<defs>
-<linearGradient id="taglineGrowthGrad" x1="0%" y1="100%" x2="100%" y2="0%"><stop offset="0%" stopColor="#06b6d4" /><stop offset="100%" stopColor="#2563eb" /></linearGradient>
-<filter id="taglineGrowthShadow" x="-30%" y="-30%" width="160%" height="160%"><feDropShadow dx="1" dy="1" stdDeviation="1" floodColor="#0f172a" floodOpacity="0.25" /></filter>
-</defs>
-<g filter="url(#taglineGrowthShadow)">
-<rect x="3" y="31" width="7" height="5" rx="1.4" fill="url(#taglineGrowthGrad)" />
-<rect x="14" y="27" width="7" height="9" rx="1.4" fill="url(#taglineGrowthGrad)" />
-<rect x="25" y="23" width="7" height="13" rx="1.4" fill="url(#taglineGrowthGrad)" />
-<rect x="36" y="18" width="7" height="18" rx="1.4" fill="url(#taglineGrowthGrad)" />
-<rect x="47" y="12" width="7" height="24" rx="1.4" fill="url(#taglineGrowthGrad)" />
-<path d="M4 29C14 28.5 24 27 33 23C41 17 47 6 53 1L61 0L53 11C46 18 40 25 32 29C24 33 14 35 4 35Z" fill="url(#taglineGrowthGrad)" />
-</g>
-</svg>
+<img
+src="/images/growth-chart.webp"
+alt="Graphique de progression CoursIT"
+className="h-8 w-auto object-contain shrink-0"
+/>
 </div>
                                 </div>
                             </button>
