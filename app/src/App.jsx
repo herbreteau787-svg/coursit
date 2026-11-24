@@ -2565,7 +2565,7 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
 <div className="mt-1 flex items-center gap-1.5">
 <span className="text-3xl font-bold leading-none font-['Inter'] whitespace-nowrap bg-gradient-to-r from-cyan-500 to-blue-600 bg-clip-text text-transparent" style={{ WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>Plateforme de révisions pour tous</span>
 <img
-src="/images/growth-chart.webp"
+src={`${import.meta.env.BASE_URL}images/growth-chart.webp`}
 alt="Graphique de progression CoursIT"
 className="h-8 w-auto object-contain shrink-0"
 />
