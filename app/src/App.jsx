@@ -2554,14 +2554,14 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
                     <header className="bg-white dark:bg-slate-800 border-b border-gray-200 dark:border-slate-700 sticky top-0 z-50">
                         <div className="w-full px-4 md:px-6 py-3 flex flex-col lg:flex-row items-center justify-between gap-4">
                             {/* Logo + tagline — gauche */}
-                            <div className="shrink-0 flex flex-col items-start">
+                            <div className="shrink-0 flex flex-col items-center">
                                 <button
                                     onClick={() => { setCurrentTab('dashboard'); window.scrollTo({ top: 0 }); }}
                                     className="rounded-lg px-2 py-1 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors focus:outline-none focus:ring-2 focus:ring-brand-500"
                                 >
                                     <img src={logoUrl} alt="Logo Cours IT" className="h-12 w-auto object-contain" />
                                 </button>
-                                <div className="mt-1 flex items-center gap-1.5 px-2">
+                                <div className="mt-1 inline-flex items-center justify-center gap-[14px]">
                                     <button
                                         onClick={() => { setCurrentTab('dashboard'); window.scrollTo({ top: 0 }); }}
                                         className="text-left rounded focus:outline-none focus:ring-2 focus:ring-brand-500"
@@ -2573,7 +2573,7 @@ const QcmSection = ({ qcmData, filterLabel, onFilterChange, filterOptions, showF
                                         alt=""
                                         aria-hidden="true"
                                         draggable="false"
-                                        className="pointer-events-none select-none h-8 w-auto object-contain shrink-0 bg-transparent border-0 shadow-none align-middle"
+                                        className="pointer-events-none select-none w-[90px] h-auto object-contain shrink-0 bg-transparent border-0 shadow-none align-middle -translate-y-0.5"
                                     />
                                 </div>
                             </div>
